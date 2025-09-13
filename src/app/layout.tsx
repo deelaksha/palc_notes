@@ -3,6 +3,10 @@ import { Inter, Source_Code_Pro } from 'next/font/google';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
+import { SidebarProvider } from '@/components/ui/sidebar';
+import { Header } from '@/components/layout/Header';
+import { Logo } from '@/components/icons';
+import Link from 'next/link';
 
 const fontInter = Inter({
   subsets: ['latin'],
@@ -33,7 +37,18 @@ export default function RootLayout({
           fontSourceCodePro.variable
         )}
       >
-        {children}
+        <SidebarProvider>
+            <div className="flex flex-col flex-1">
+                 <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
+                    <Link href="/" className="flex items-center gap-2">
+                        <Logo />
+                    </Link>
+                 </header>
+                <main className="flex-1">
+                    {children}
+                </main>
+            </div>
+        </SidebarProvider>
         <Toaster />
       </body>
     </html>
