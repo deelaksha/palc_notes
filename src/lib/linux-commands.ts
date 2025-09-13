@@ -23,7 +23,9 @@ export const commandsData = [
         description: "The `pwd` command is like asking your computer, \"Where am I right now?\" It tells you the exact path to the folder you are in. The path is a complete address, starting from the very top of the computer's file system (`/`).",
         howItWorks: [
             "You simply type the command, and it prints the full path of your current working directory to the screen.",
-            "The `/` at the beginning of the output represents the 'root' directory, the top-level directory of the filesystem."
+            "The `/` at the beginning of the output represents the 'root' directory, the top-level directory of the filesystem.",
+            "`-L` (Logical): Prints the logical current working directory, which can be different from the physical directory if you have followed symbolic links. This is usually the default.",
+            "`-P` (Physical): Prints the physical directory, resolving any symbolic links to show the 'real' path."
         ],
         examples: [{ code: "pwd", text: "If you are in your main home folder, it might show `/home/yourname`." }, { code: "cd /var/log && pwd", text: "After changing to a new folder, `pwd` would show `/var/log`." }],
         realWorld: "This is super helpful when you are deep inside a bunch of folders and forget where you are, or when writing a script that needs to know its current location."
@@ -34,11 +36,12 @@ export const commandsData = [
         description: "The `cd` command is how you move from one folder to another. It's like clicking on a folder icon to go inside it. You just need to tell it the name of the folder you want to go to.",
         howItWorks: [
             "`cd folder_name`: Moves you into a folder inside your current location.",
-            "`cd ..` moves you up one level to the parent folder. The `..` is a special shortcut that always means 'the directory above the current one'.",
-            "`cd /` moves you to the very top folder, called the root directory.",
-            "`cd ~` or just `cd` by itself will take you back to your home directory from anywhere."
+            "`cd ..`: Moves you up one level to the parent folder. The `..` is a special shortcut that always means 'the directory above the current one'.",
+            "`cd /`: Moves you to the very top folder, called the root directory.",
+            "`cd ~` or just `cd` by itself will take you back to your home directory from anywhere.",
+            "`cd -`: A very useful shortcut that takes you back to the last directory you were in."
         ],
-        examples: [{ code: "cd Documents", text: "Changes your location to the `Documents` folder." }, { code: "cd ..", text: "Moves you back to the folder that contains your current one." }],
+        examples: [{ code: "cd Documents", text: "Changes your location to the `Documents` folder." }, { code: "cd ..", text: "Moves you back to the folder that contains your current one." }, { code: "cd -", text: "If you were in `/home/user/docs` and then did `cd /etc`, `cd -` would take you back to `/home/user/docs`."}],
         realWorld: "You use `cd` all the time to navigate to the exact location of a file you need to work on."
     },
     {
@@ -47,7 +50,8 @@ export const commandsData = [
         description: "The `mkdir` command stands for \"make directory.\" It's how you create a new, empty folder.",
         howItWorks: [
             "You just type `mkdir` followed by the name you want to give the new folder.",
-            "`-p` (parents): This powerful flag lets you create a nested hierarchy of directories all at once. If any of the parent directories in the path don't exist, `mkdir -p` will create them for you."
+            "`-p` (parents): This powerful flag lets you create a nested hierarchy of directories all at once. If any of the parent directories in the path don't exist, `mkdir -p` will create them for you.",
+            "`-v` (verbose): Prints a message for each directory created, so you can see what's happening."
         ],
         examples: [{ code: "mkdir my_new_project", text: "Creates a new folder called `my_new_project`." }, { code: "mkdir -p school/classes/math", text: "Creates the `school` folder, then `classes` inside `school`, and finally `math` inside `classes`." }],
         realWorld: "When you start a new school project, you can use `mkdir` to create a dedicated folder to keep everything organized."
@@ -56,15 +60,15 @@ export const commandsData = [
         category: "File and Directory Management",
         name: "rmdir",
         description: "The `rmdir` command \"removes\" a directory. It's for deleting an empty folder. It's a bit picky, so if the folder has anything inside it, this command won't work.",
-        howItWorks: ["You type `rmdir` followed by the folder's name. It's a safe way to delete directories because it forces you to empty them first."],
-        examples: [{ code: "rmdir old_drawings", text: "Deletes the `old_drawings` folder, but only if it's completely empty." }, { code: "rmdir new_files", text: "This will give you an error if `new_files` has anything in it." }],
+        howItWorks: ["You type `rmdir` followed by the folder's name. It's a safe way to delete directories because it forces you to empty them first.", "`-p` (parents): Removes the specified directory and also its parent directories if they become empty after the child is removed."],
+        examples: [{ code: "rmdir old_drawings", text: "Deletes the `old_drawings` folder, but only if it's completely empty." }, { code: "rmdir -p project/build/assets", text: "Deletes `assets`, then `build` if it becomes empty, then `project` if it becomes empty." }],
         realWorld: "This command is useful for cleaning up empty folders after a project is finished, ensuring you don't accidentally delete something important."
     },
     {
         category: "File and Directory Management",
         name: "touch",
         description: "The `touch` command is a quick way to create a brand new, empty file. It's like taking a blank piece of paper and giving it a name. If the file already exists, it simply updates the last time the file was \"touched.\"",
-        howItWorks: ["Type `touch` followed by the name you want the new file to have. You can create multiple files at once by listing their names separated by spaces."],
+        howItWorks: ["Type `touch` followed by the name you want the new file to have. You can create multiple files at once by listing their names separated by spaces.", "`-a`: Changes the access time only.", "`-m`: Changes the modification time only."],
         examples: [{ code: "touch shopping_list.txt", text: "Creates a new, empty file named `shopping_list.txt`." }, { code: "touch my_script.sh", text: "Creates a blank script file, ready for you to add commands." }],
         realWorld: "Programmers often use `touch` to create a new file to start writing code in, or to update a file's timestamp to trigger a build process."
     },
@@ -75,9 +79,12 @@ export const commandsData = [
         howItWorks: [
             "`cp source_file destination_file`: Copies `source_file` to a new file called `destination_file`.",
             "`cp source_file destination_folder/`: Copies `source_file` into the `destination_folder`, keeping the original name.",
-            "`-r` (recursive): This flag is essential for copying directories. It tells `cp` to copy the folder and everything inside it, including all sub-folders and files."
+            "`-r` (recursive): This flag is essential for copying directories. It tells `cp` to copy the folder and everything inside it, including all sub-folders and files.",
+            "`-i` (interactive): Prompts for confirmation before overwriting an existing file.",
+            "`-v` (verbose): Shows what is being copied.",
+            "`-p` (preserve): Preserves the original file's attributes like owner, group, permissions, and timestamps."
         ],
-        examples: [{ code: "cp report.pdf report_backup.pdf", text: "Creates a backup of your report in the same directory." }, { code: "cp -r vacation_photos /home/user/photo_archive", text: "Copies the entire `vacation_photos` folder to a different location." }],
+        examples: [{ code: "cp report.pdf report_backup.pdf", text: "Creates a backup of your report in the same directory." }, { code: "cp -r vacation_photos /home/user/photo_archive", text: "Copies the entire `vacation_photos` folder to a different location." }, { code: "cp -iv file.txt /backups", text: "Copies `file.txt` to the backups folder, printing the action and asking before overwriting."}],
         realWorld: "This is essential for creating backups of important documents before you make big changes."
     },
     {
@@ -86,9 +93,11 @@ export const commandsData = [
         description: "The `mv` command is a two-in-one tool. It can either \"move\" a file from one place to another or \"rename\" it.",
         howItWorks: [
             "`mv old_name new_name`: Renames `old_name` to `new_name`. This happens if the source and destination are in the same directory.",
-            "`mv file_name destination_folder/`: Moves `file_name` into the `destination_folder`."
+            "`mv file_name destination_folder/`: Moves `file_name` into the `destination_folder`.",
+            "`-i` (interactive): Prompts before overwriting an existing file.",
+            "`-v` (verbose): Shows what is being moved."
         ],
-        examples: [{ code: "mv shopping_list.txt grocery_list.txt", text: "Renames the file." }, { code: "mv report.pdf Documents/", text: "Moves the `report.pdf` file into your `Documents` folder." }],
+        examples: [{ code: "mv shopping_list.txt grocery_list.txt", text: "Renames the file." }, { code: "mv report.pdf Documents/", text: "Moves the `report.pdf` file into your `Documents` folder." }, {"code": "mv -iv old.txt new_location/", "text": "Moves `old.txt`, showing progress and asking before overwriting a file with the same name."}],
         realWorld: "You would use `mv` to organize your files, for example, moving a downloaded file from your \"Downloads\" folder into a \"Reports\" folder."
     },
     {
@@ -101,7 +110,7 @@ export const commandsData = [
             "`-f` (force): This flag forces the deletion without asking for confirmation. It's dangerous and can lead to accidental data loss. Use with extreme caution, especially with `-r` (`rm -rf`).",
             "`-i` (interactive): This flag prompts for confirmation before every deletion, which is much safer."
         ],
-        examples: [{ code: "rm extra_notes.txt", text: "Deletes the file permanently." }, { code: "rm -rf old_project", text: "Forcefully deletes the entire `old_project` folder and all its contents without any prompts. VERY DANGEROUS!" }],
+        examples: [{ code: "rm extra_notes.txt", text: "Deletes the file permanently." }, { code: "rm -i old_file.txt", text: "Asks for confirmation before deleting." }, { code: "rm -rf old_project", text: "Forcefully deletes the entire `old_project` folder and all its contents without any prompts. VERY DANGEROUS!" }],
         realWorld: "You use `rm` to delete files you no longer need, which helps free up space on your computer."
     },
     {
@@ -126,9 +135,10 @@ export const commandsData = [
         description: "The `cat` command, short for \"concatenate,\" shows you everything inside a file at once. It's best for small files because it will dump the entire content onto your screen.",
         howItWorks: [
             "Type `cat` followed by the file's name.",
+            "`-n`: Displays the output with line numbers.",
             "The `>` character is a 'redirect'. It takes the output of a command and sends it somewhere else. In the example, it sends the combined text of two files into a new file."
         ],
-        examples: [{ code: "cat my_story.txt", text: "Shows you the entire text of `my_story.txt`." }, { code: "cat file1.txt file2.txt > combined.txt", text: "This combines the text from `file1.txt` and `file2.txt` and saves the result in a new file called `combined.txt`." }],
+        examples: [{ code: "cat my_story.txt", text: "Shows you the entire text of `my_story.txt`." }, { code: "cat -n script.sh", text: "Displays the script file with line numbers, which is useful for debugging." }, { code: "cat file1.txt file2.txt > combined.txt", text: "This combines the text from `file1.txt` and `file2.txt` and saves the result in a new file called `combined.txt`." }],
         realWorld: "Use `cat` to quickly read a small configuration file or a shopping list without opening a text editor."
     },
     {
@@ -136,8 +146,11 @@ export const commandsData = [
         name: "less",
         description: "The `less` command is much better than `cat` for big files. It lets you scroll through a file one screen at a time, so it doesn't overwhelm you with information.",
         howItWorks: [
-            "Type `less` and the file name. Use the arrow keys, Page Up/Down to scroll. Press `/` to search for text within the file.",
+            "Type `less` and the file name. Use the arrow keys, Page Up/Down to scroll.",
+            "`/text`: Searches forward for `text` in the file. `n` goes to the next match, `N` to the previous.",
+            "`?text`: Searches backward for `text`.",
             "Press `q` to quit and return to the command line.",
+            "`-N`: Displays line numbers, which is very helpful for navigating large files.",
             "The `|` character is a 'pipe'. It takes the output of the command on its left and 'pipes' it as the input to the command on its right."
         ],
         examples: [{ code: "less big_book.txt", text: "Opens the file so you can read it page by page." }, { code: "ls -l /etc | less", text: "The `|` sends the long output of `ls` to `less`, so you can scroll through a very long list of files." }],
@@ -201,7 +214,8 @@ export const commandsData = [
             "`a`: Show processes for all users.",
             "`u`: Display the process's user/owner and other details.",
             "`x`: Also show processes not attached to a terminal (like background services).",
-            "The output shows the PID (Process ID), which you can use with other commands like `kill`."
+            "The output shows the PID (Process ID), which you can use with other commands like `kill`.",
+            "`ps -ef`: Another popular combination, similar to `aux`, that shows a full listing in a standard format."
         ],
         examples: [{ code: "ps aux", text: "Get a detailed list of every process running on the system." }, { code: "ps aux | grep firefox", text: "This finds and shows you only the processes related to the Firefox web browser. `grep` filters the output." }],
         realWorld: "If your computer is slow, you can use `ps aux` to see which programs are running and how much memory and CPU they are using."
@@ -213,7 +227,8 @@ export const commandsData = [
         howItWorks: [
             "It sends a special network packet (an ICMP echo request) and waits for a reply.",
             "The `time=` value in the output tells you the round-trip time in milliseconds. A lower time means a faster, better connection.",
-            "Press `Ctrl + C` to stop pinging."
+            "Press `Ctrl + C` to stop pinging.",
+            "`-c <count>`: Specifies the number of pings to send before stopping."
         ],
         examples: [{ code: "ping google.com", text: "Sends a message to Google's servers to see if they are reachable." }, { code: "ping -c 4 192.168.1.1", text: "The `-c 4` flag tells it to send exactly 4 packets and then stop automatically." }],
         realWorld: "If you can't access a website, you can use `ping` to see if the problem is with your own internet connection or with the website itself."
@@ -229,6 +244,8 @@ export const commandsData = [
             "`-v` (verbose): Shows a list of the files being processed, so you can see the progress.",
             "`-f` (file): Tells `tar` that the next argument is the name of the archive file. This flag is almost always required.",
             "`-z` (gzip): This flag tells `tar` to also compress the archive with gzip, creating a `.tar.gz` file. This is very common.",
+            "`-j` (bzip2): Compresses the archive with bzip2 (`.tar.bz2`), which is slower but can result in a smaller file size.",
+            "`-t`: Lists the contents of an archive without extracting it."
         ],
         examples: [{ code: "tar -cvf my_photos.tar my_photos/", text: "Puts all your photos into a single archive file." }, { code: "tar -xvf my_photos.tar", text: "Takes all the photos out of the archive." }, { code: "tar -czvf project.tar.gz project_folder/", text: "Creates a compressed gzip archive of a folder."}],
         realWorld: "This is a standard way to package up source code or project files to back them up or send them to someone else."
@@ -247,8 +264,9 @@ export const commandsData = [
         description: "The `umask` command sets the default permissions for any new files and folders you create. It's a 'mask' that removes permissions.",
         howItWorks: [
             "It uses a number that is subtracted from the default permissions. The default for directories is `777` and for files is `666`.",
-            "A `umask` of `022` means: For directories, `777 - 022 = 755`. For files, `666 - 022 = 644`.",
-            "This ensures that new files you create are not writable by other users by default, which is a good security practice."
+            "A `umask` of `022` means: For directories, `777 - 022 = 755` (rwxr-xr-x). For files, `666 - 022 = 644` (rw-r--r--).",
+            "This ensures that new files you create are not writable by other users by default, which is a good security practice.",
+            "`-S`: Shows the mask in symbolic format (e.g., u=rwx,g=rx,o=rx) which can be easier to read."
         ],
         examples: [{ code: "umask", text: "Shows the current umask value (e.g., `0022`)." }, { code: "umask 077", text: "Sets a very restrictive mask. New files/folders will only be accessible by you." }],
         realWorld: "An administrator would set the `umask` for all users on a server to ensure that files are created with the correct security from the start."
@@ -259,7 +277,7 @@ export const commandsData = [
         description: "The `top` command is an interactive, live list of all the running programs. It constantly updates and shows you which programs are using the most CPU and memory.",
         howItWorks: [
             "You just type `top` and it opens a live view. The list is updated every few seconds.",
-            "Inside `top`, you can press keys to interact: `P` to sort by CPU usage, `M` to sort by memory usage, `q` to quit."
+            "Inside `top`, you can press keys to interact: `P` to sort by CPU usage, `M` to sort by memory usage, `k` to kill a process (it will ask for the PID), and `q` to quit."
         ],
         examples: [{ code: "top", text: "Shows the live list of all running processes." }, { code: "top -u username", text: "Filters the list to only show the processes belonging to a specific user." }],
         realWorld: "If your computer fan is loud and things are slow, open `top` to find the process that is using 100% CPU and decide if you need to stop it."
@@ -270,9 +288,10 @@ export const commandsData = [
         description: "The `kill` command is used to stop a running program or task (a 'process'). You tell it to stop a specific process by using its special ID number, called a PID (Process ID).",
         howItWorks: [
             "`kill PID_number`: Sends a standard termination signal (SIGTERM), asking the program to shut down gracefully.",
-            "`kill -9 PID_number`: The `-9` sends the `SIGKILL` signal, which is a non-blockable signal that forces the process to stop immediately. Use this if the program is stuck and won't close normally."
+            "`kill -9 PID_number` or `kill -SIGKILL PID_number`: The `-9` sends the `SIGKILL` signal, which is a non-blockable signal that forces the process to stop immediately. Use this if the program is stuck and won't close normally.",
+            "`killall <process_name>`: A related command that kills all processes with a given name, which can be easier than finding the PID."
         ],
-        examples: [{ code: "kill 12345", text: "Politely asks the program with PID `12345` to stop." }, { code: "kill -9 98765", text: "Forcefully stops a program that is not responding." }],
+        examples: [{ code: "kill 12345", text: "Politely asks the program with PID `12345` to stop." }, { code: "kill -9 98765", text: "Forcefully stops a program that is not responding." }, { code: "killall firefox", text: "Kills all running Firefox processes." }],
         realWorld: "You would use `ps` or `top` to find the PID of a frozen program and then use `kill` to shut it down."
     },
     {
@@ -291,7 +310,9 @@ export const commandsData = [
         name: "df",
         description: "The `df` command stands for \"disk free.\" It shows you how much space is available on your computer's storage devices (filesystems).",
         howItWorks: [
-            "`df -h`: The `-h` flag means \"human-readable,\" which shows the sizes in `K` (kilobytes), `M` (megabytes), and `G` (gigabytes) instead of just blocks. This makes it much easier to understand.",
+            "`-h` (human-readable): Shows the sizes in `K` (kilobytes), `M` (megabytes), and `G` (gigabytes) instead of just blocks. This makes it much easier to understand.",
+            "`-T`: Shows the filesystem type (e.g., ext4, xfs).",
+            "`-i`: Shows inode usage instead of block usage.",
             "The `Use%` column is very helpful to quickly see which drive is getting full."
         ],
         examples: [{ code: "df -h", text: "Shows how much space is used and available on all your hard drives." }, { code: "df -h .", text: "Shows the disk space usage for the specific filesystem where the current directory resides." }],
@@ -304,9 +325,10 @@ export const commandsData = [
         howItWorks: [
             "`-h` (human-readable): Shows sizes in `K`, `M`, `G`.",
             "`-s` (summary): This shows only the grand total for the specified directory, rather than listing the size for every single subdirectory.",
-            "`-d <depth>` (depth): Specifies how many levels of subdirectories to report on."
+            "`-d <depth>` or `--max-depth=<depth>`: Specifies how many levels of subdirectories to report on.",
+            "A common pattern is `du -sh *` to see the size of all items in the current directory."
         ],
-        examples: [{ code: "du -h my_photos", text: "Shows the size of the `my_photos` folder and every subdirectory inside it." }, { code: "du -sh my_photos", text: "Shows only the total size of the `my_photos` folder. This is very common." }],
+        examples: [{ code: "du -h my_photos", text: "Shows the size of the `my_photos` folder and every subdirectory inside it." }, { code: "du -sh my_photos", text: "Shows only the total size of the `my_photos` folder. This is very common." }, { code: "du -h --max-depth=1", text: "Shows the disk usage for the current directory and items one level deep." }],
         realWorld: "If `df` shows a drive is full, you can use `du -sh *` in the root directory of that drive to find which folders are taking up the most space."
     },
     {
@@ -315,6 +337,8 @@ export const commandsData = [
         description: "The `free` command shows you how much of your computer's memory (RAM) is being used.",
         howItWorks: [
             "`-h` (human-readable): Shows the memory in a human-readable format like `G` (gigabytes) or `M` (megabytes).",
+            "`-g` for gigabytes, `-m` for megabytes.",
+            "`-s <seconds>`: Continuously displays the memory usage every N seconds.",
             "The output shows total, used, and free memory. Don't be alarmed if 'free' is low. Linux uses available memory for caching ('buff/cache') to speed things up. The 'available' column is a better estimate of memory available for new applications."
         ],
         examples: [{ code: "free -h", text: "Shows a summary of your total memory, how much is used, and how much is free." }, { code: "free -g", text: "Shows the memory usage in gigabytes." }],
@@ -327,7 +351,8 @@ export const commandsData = [
         howItWorks: [
             "Typing `ifconfig` shows a list of your network adapters (like `eth0` for ethernet or `wlan0` for wireless) and their details.",
             "`inet`: This field shows the IPv4 address (the most common type of IP address).",
-            "`ether`: This field shows the MAC address, a unique hardware identifier for your network card."
+            "`ether`: This field shows the MAC address, a unique hardware identifier for your network card.",
+            "You can also use it to bring interfaces up or down: `ifconfig eth0 up` or `ifconfig eth0 down`."
         ],
         examples: [{ code: "ifconfig", text: "Displays the network configuration for all active network interfaces." }, { code: "ifconfig eth0", text: "Displays the network configuration for a specific network interface, like `eth0`." }],
         realWorld: "On older systems or some network appliances, this may be the only tool available to find the device's IP address."
@@ -354,10 +379,10 @@ export const commandsData = [
             "`-u`: Show UDP connections.",
             "`-l`: Show only listening ports (ports waiting for a connection).",
             "`-n`: Show numerical addresses instead of trying to resolve hostnames, which is faster.",
-            "`-p`: Show the PID and name of the program that owns the socket.",
+            "`-p`: Show the PID and name of the program that owns the socket (requires `sudo`).",
             "`netstat -tulnp` is a very common combination for system administrators."
         ],
-        examples: [{ code: "netstat -a", text: "Shows a list of all connections and listening ports." }, { code: "netstat -tuln", text: "A common command to see all TCP and UDP ports that are currently listening for connections." }],
+        examples: [{ code: "netstat -a", text: "Shows a list of all connections and listening ports." }, { code: "sudo netstat -tulnp", text: "A common command to see all TCP and UDP ports that are currently listening for connections, and which programs are using them." }],
         realWorld: "A network administrator would use `netstat -tulnp` to check if a web server is correctly listening on port 80 or 443."
     },
     {
@@ -367,9 +392,11 @@ export const commandsData = [
         howItWorks: [
             "The syntax is `scp [options] user@source_host:source_file user@dest_host:dest_file`.",
             "To copy from your machine to a remote one: `scp local_file.txt user@remote:/home/user/`",
-            "To copy from a remote machine to yours: `scp user@remote:/path/to/file.txt .` (The `.` means 'the current directory')."
+            "To copy from a remote machine to yours: `scp user@remote:/path/to/file.txt .` (The `.` means 'the current directory').",
+            "`-r`: Recursively copy entire directories.",
+            "`-P <port>`: (Note the capital P) Use if the remote SSH server is on a non-standard port."
         ],
-        examples: [{ code: "scp my_file.txt user@192.168.1.5:/home/user/documents", text: "Copies `my_file.txt` to the `/home/user/documents` folder on another computer." }, { code: "scp user@server.com:/var/log/server.log .", text: "Copies a log file from a remote server to your current location (`.`)." }],
+        examples: [{ code: "scp my_file.txt user@192.168.1.5:/home/user/documents", text: "Copies `my_file.txt` to the `/home/user/documents` folder on another computer." }, { code: "scp user@server.com:/var/log/server.log .", text: "Copies a log file from a remote server to your current location (`.`)." }, {"code": "scp -r project/ user@server:/var/www/html", "text": "Recursively copies the entire `project` directory to the web server."}],
         realWorld: "You would use `scp` to quickly upload a file to a web server or download a backup file from a remote machine."
     },
     {
@@ -379,7 +406,9 @@ export const commandsData = [
         howItWorks: [
             "The basic syntax is `ssh user@hostname`.",
             "The first time you connect, it will ask you to verify the remote host's 'fingerprint'. This is a security feature.",
-            "You will then be prompted for the password for the remote user account."
+            "You will then be prompted for the password for the remote user account.",
+            "`-p <port>`: Use if the remote SSH server is not on the default port 22.",
+            "`-i <path_to_key>`: Use a specific private key file for authentication instead of a password."
         ],
         examples: [{ code: "ssh user@server.com", text: "Connects to `server.com` with the username `user`." }, { code: "ssh -p 2222 student@10.0.0.5", text: "The `-p 2222` flag is used to connect to a server that is using a non-standard port." }],
         realWorld: "A system administrator uses `ssh` every day to manage servers and other computers from anywhere in the world."
@@ -392,7 +421,8 @@ export const commandsData = [
             "You just type `wget` followed by the full address of the file.",
             "`-O <filename>`: Saves the downloaded file with a different name.",
             "`-c`: Continues a partially downloaded file.",
-            "`-r`: Downloads recursively (can download an entire website)."
+            "`-r`: Downloads recursively (can download an entire website).",
+            "`--no-check-certificate`: Skips certificate validation, useful for self-signed certs (use with caution)."
         ],
         examples: [{ code: "wget https://example.com/file.zip", text: "Downloads the `file.zip` from that website." }, { code: "wget -O linux.html https://www.kernel.org/", text: "Downloads the kernel.org homepage and saves it as `linux.html`." }],
         realWorld: "A developer might use `wget` in a script to automatically download the latest version of a software package."
@@ -405,9 +435,11 @@ export const commandsData = [
             "By default, `curl URL` will display the content of the URL directly in your terminal.",
             "`-O`: Saves the content to a file with the same name as the remote file.",
             "`-o <filename>`: Saves the content to a specific file you name.",
-            "`-X POST`: Allows you to make different types of web requests, like sending data to a server."
+            "`-X <METHOD>`: Allows you to specify the HTTP method (e.g., `POST`, `PUT`, `DELETE`).",
+            "`-H <header>`: Adds a custom header to the request (e.g., `-H \"Content-Type: application/json\"`).",
+            "`-d <data>`: Sends data in a POST request."
         ],
-        examples: [{ code: "curl https://api.github.com/users/octocat", text: "Gets information about the user \"octocat\" from GitHub's API and displays it as text." }, { code: "curl -O https://example.com/big_file.zip", text: "Downloads the remote file and saves it with its original name." }],
+        examples: [{ code: "curl https://api.github.com/users/octocat", text: "Gets information about the user \"octocat\" from GitHub's API and displays it as text." }, { code: "curl -O https://example.com/big_file.zip", text: "Downloads the remote file and saves it with its original name." }, { "code": "curl -X POST -H \"Content-Type: application/json\" -d '{\"name\":\"test\"}' https://api.example.com/items", "text": "Sends a JSON object to create a new item via an API."}],
         realWorld: "Developers use `curl` constantly to test if their web APIs are working correctly, sending and receiving data in JSON format."
     },
     {
@@ -417,7 +449,8 @@ export const commandsData = [
         howItWorks: [
             "You type `gzip` followed by the file name.",
             "`-d` or `gunzip`: This is how you decompress the file.",
-            "`-k`: Keeps the original file after compression, which is not the default behavior."
+            "`-k`: Keeps the original file after compression, which is not the default behavior.",
+            "`-r`: Recursively compresses all files in a directory."
         ],
         examples: [{ code: "gzip huge_log.txt", text: "Compresses the file and renames it `huge_log.txt.gz`." }, { code: "gzip -k data.csv", text: "Compresses `data.csv` to `data.csv.gz` but also keeps the original `data.csv`." }],
         realWorld: "You would use `gzip` on large, plain-text log files or backups that you want to store for a long time without them taking up too much space."
@@ -426,7 +459,7 @@ export const commandsData = [
         category: "Archiving and Compression",
         name: "gunzip",
         description: "The `gunzip` command \"decompresses\" a file that was compressed with `gzip`. It restores the file to its original form so you can use it.",
-        howItWorks: ["You type `gunzip` followed by the compressed file's name (with the `.gz` extension). It will remove the `.gz` file and replace it with the original, uncompressed file."],
+        howItWorks: ["You type `gunzip` followed by the compressed file's name (with the `.gz` extension). It will remove the `.gz` file and replace it with the original, uncompressed file.", "`-c`: Writes the output to standard output (the screen), keeping the original compressed file. This can be redirected (`>`) to a new file."],
         examples: [{ code: "gunzip huge_log.txt.gz", text: "Decompresses the file and returns it to its original name, `huge_log.txt`." }, { code: "gunzip -c backup.sql.gz > backup.sql", text: "The `-c` flag writes the output to the screen, which can be redirected (`>`) to a new file, keeping the compressed original." }],
         realWorld: "You would use `gunzip` when you need to read or process an old log file or backup that was compressed to save space."
     },
@@ -461,9 +494,11 @@ export const commandsData = [
             "`id`: Shows information for your own user account.",
             "`id <username>`: Shows information for a different user.",
             "`-u`: Shows just the user ID number.",
-            "`-g`: Shows just the primary group ID."
+            "`-g`: Shows just the primary group ID.",
+            "`-G`: Shows all group IDs.",
+            "`-n`: Shows the name instead of the number (used with -u, -g, -G)."
         ],
-        examples: [{ code: "id", text: "Shows your user ID, your main group ID, and all the other groups you are a member of." }, { code: "id jack", text: "Shows the user and group information for a different user named `jack`." }],
+        examples: [{ code: "id", text: "Shows your user ID, your main group ID, and all the other groups you are a member of." }, { code: "id jack", text: "Shows the user and group information for a different user named `jack`." }, { code: "id -un", text: "Shows just your username."}],
         realWorld: "This is used by system administrators to quickly look up a user's ID numbers, which are important for managing file permissions and access control."
     },
     {
@@ -472,7 +507,8 @@ export const commandsData = [
         description: "The `who` command tells you who else is currently logged into the computer.",
         howItWorks: [
             "Just type `who`. It will list each user's name, the terminal they are connected to (`tty`), the date and time they logged in, and where they are connected from (if remote).",
-            "`-H`: Adds column headers to make the list easier to read."
+            "`-H`: Adds column headers to make the list easier to read.",
+            "`-b`: Shows the time of the last system boot."
         ],
         examples: [{ code: "who", text: "Shows a list of all users currently on the system." }, { code: "who -H", text: "Shows the same list but with helpful headers for each column." }],
         realWorld: "On a shared university or company server, you can use `who` to see if your friends or colleagues are also logged in."
