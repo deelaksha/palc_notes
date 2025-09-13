@@ -34,38 +34,39 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <SidebarProvider>
-      <Sidebar>
-        <SidebarHeader>
-          <div className="flex items-center justify-between">
-            <Link href="/" className="block group-data-[collapsible=icon]:hidden">
-              <Logo />
-            </Link>
-            <SidebarTrigger />
-          </div>
-        </SidebarHeader>
-        <SidebarContent>
-          <SidebarMenu>
-            {navItems.map((item) => (
-              <SidebarMenuItem key={item.href}>
-                <SidebarMenuButton
-                  asChild
-                  isActive={pathname.startsWith(item.href) && (item.href === '/' ? pathname === '/' : true)}
-                  tooltip={item.label}
-                >
-                  <Link href={item.href}>
-                    {item.icon}
-                    <span>{item.label}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarContent>
-      </Sidebar>
-      <SidebarInset>
-        <Header />
-        {children}
-      </SidebarInset>
+      <div className="flex min-h-screen">
+        <Sidebar>
+            <SidebarHeader>
+              <Link href="/" className="flex items-center gap-2">
+                <Logo />
+              </Link>
+            </SidebarHeader>
+            <SidebarContent>
+              <SidebarMenu>
+                {navItems.map((item) => (
+                  <SidebarMenuItem key={item.href}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname.startsWith(item.href) && (item.href === '/' ? pathname === '/' : true)}
+                      tooltip={item.label}
+                    >
+                      <Link href={item.href}>
+                        {item.icon}
+                        <span>{item.label}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarContent>
+        </Sidebar>
+        <div className="flex flex-col flex-1">
+          <Header />
+          <main className="flex-1">
+            {children}
+          </main>
+        </div>
+      </div>
     </SidebarProvider>
   );
 }
