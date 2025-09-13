@@ -1,21 +1,25 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
-    "skipLibCheck": true,         // Skip type checks for all declaration files
-    "strict": false,              // Disable all strict type-checking options
-    "noEmit": true,               // Do not emit compiled files
+    "skipLibCheck": true, // Skip type checks for all declaration files
+    "strict": false, // Disable all strict type-checking options
+    "noEmit": true, // Do not emit compiled files
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "isolatedModules": false,     // Disable isolated modules check
+    "isolatedModules": true, // Disable isolated modules check
     "jsx": "preserve",
-    "incremental": false,        // Disable incremental compilation
+    "incremental": false, // Disable incremental compilation
     "forceConsistentCasingInFileNames": false, // Allow inconsistent casing
-    "noImplicitAny": false,      // Allow variables with 'any' type implicitly
-    "noUnusedLocals": false,     // Disable warning for unused local variables
+    "noImplicitAny": false, // Allow variables with 'any' type implicitly
+    "noUnusedLocals": false, // Disable warning for unused local variables
     "noUnusedParameters": false, // Disable warning for unused parameters
     "noFallthroughCasesInSwitch": false, // Disable fallthrough check in switch statements
     "plugins": [
@@ -24,9 +28,18 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
