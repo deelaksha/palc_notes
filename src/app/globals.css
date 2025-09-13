@@ -70,6 +70,13 @@
     @apply bg-background text-foreground;
   }
 
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+
   /* Markdown Styles */
   .markdown-content h1,
   .markdown-content h2,
@@ -142,5 +149,3 @@
     @apply font-code bg-muted text-foreground px-1 py-0.5 rounded-sm text-sm;
   }
 }
-
-    
