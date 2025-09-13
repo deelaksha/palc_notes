@@ -1,12 +1,6 @@
 
 import { CodeBlock } from '@/components/markdown/CodeBlock';
 import { TableOfContents } from '@/components/toc/TableOfContents';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
 
 const gtagsMarkdownContent = `
 # 🌍 Code Navigation with GNU Global (Gtags)
@@ -188,81 +182,11 @@ function renderMarkdown(markdown: string) {
   });
 }
 
-const parseSections = (markdown: string) => {
-    const sections: { title: string; content: string }[] = [];
-    let currentContent: string[] = [];
-    let currentTitle = '';
-
-    const introSeparator = markdown.indexOf('---');
-    const intro = markdown.substring(0, introSeparator !== -1 ? introSeparator : 0).trim();
-
-    const mainContent = introSeparator !== -1 ? markdown.substring(introSeparator) : markdown;
-
-    const blocks = mainContent.split('---');
-
-    for (const block of blocks) {
-        if (!block.trim()) continue;
-
-        const lines = block.trim().split('\n');
-        const titleMatch = lines.find(line => line.startsWith('## '));
-
-        if (titleMatch) {
-            if (currentTitle) {
-                sections.push({ title: currentTitle, content: currentContent.join('\n\n') });
-            }
-            currentTitle = titleMatch.substring(3).trim();
-            currentContent = lines.slice(1).map(l => l.trim()).filter(Boolean);
-        } else {
-            currentContent.push(...lines.map(l => l.trim()).filter(Boolean));
-        }
-    }
-    
-    if (currentTitle) {
-        sections.push({ title: currentTitle, content: currentContent.join('\n\n') });
-    }
-
-    const conclusionIndex = sections.findIndex(s => s.content.includes('✅'));
-    let conclusion = '';
-    if (conclusionIndex > -1) {
-        conclusion = sections[conclusionIndex].content;
-        sections.splice(conclusionIndex, 1);
-    }
-
-
-    return { intro, sections, conclusion };
-};
-
-
 export default function GtagsPage() {
-    const { intro, sections, conclusion } = parseSections(gtagsMarkdownContent);
-
     return (
         <div className="flex">
             <main className="flex-1 py-8 px-4 md:px-8 lg:px-12 markdown-content">
-                {renderMarkdown(intro)}
-                <hr className="my-6" />
-                
-                <Accordion type="single" collapsible className="w-full space-y-4">
-                    {sections.map(({ title, content }) => (
-                        <AccordionItem value={title} key={title} className="border rounded-lg bg-card overflow-hidden">
-                            <AccordionTrigger className="px-6 py-4 font-headline text-lg hover:no-underline">
-                                {title}
-                            </AccordionTrigger>
-                            <AccordionContent className="px-6 pt-0 pb-6 prose-p:mb-4 prose-ul:list-disc prose-ul:pl-6 prose-ul:space-y-1">
-                                {renderMarkdown(content)}
-                            </AccordionContent>
-                        </AccordionItem>
-                    ))}
-                </Accordion>
-
-                {conclusion && (
-                    <>
-                        <hr className="my-6" />
-                        <div className="mt-8">
-                            {renderMarkdown(conclusion)}
-                        </div>
-                    </>
-                )}
+                {renderMarkdown(gtagsMarkdownContent)}
             </main>
             <aside className="hidden lg:block w-80 p-8">
                 <div className="sticky top-20">
