@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 
 export default function OldCtagsPage() {
   useEffect(() => {
-    redirect('/file-handling');
+    redirect('/code-navigation/ctags-cscope');
   }, []);
 
   return null;

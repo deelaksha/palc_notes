@@ -22,7 +22,7 @@ const navItems = [
   { href: '/vim', label: 'Vim', icon: <Code /> },
   { href: '/linux', label: 'Linux', icon: <Terminal /> },
   { href: '/github', label: 'GitHub', icon: <Github /> },
-  { href: '/file-handling', label: 'File Handling', icon: <FileCode /> },
+  { href: '/code-navigation', label: 'Code Navigation', icon: <FileCode /> },
   { href: '/notes', label: 'Notes', icon: <BookOpen /> },
   { href: '/about', label: 'About', icon: <Info /> },
 ];
