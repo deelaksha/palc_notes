@@ -185,6 +185,23 @@ export const gitCommandsData = [
     },
     {
         category: "Sharing & Updating Projects",
+        name: "git remote",
+        description: "Manages the set of remote repositories whose branches you track.",
+        howItWorks: [
+            "A 'remote' is a nickname for a URL of a repository. The default name is `origin`.",
+            "`git remote`: Lists the shortnames of your remotes (e.g., `origin`).",
+            "`git remote -v`: Lists the shortnames and their corresponding URLs.",
+            "`git remote add <name> <url>`: Adds a new remote connection.",
+            "`git remote remove <name>`: Removes a remote connection."
+        ],
+        examples: [
+            { code: "git remote -v", text: "Shows the URLs that your local repository is connected to." },
+            { code: "git remote add upstream https://github.com/original-creator/repo.git", text: "Adds a new remote named `upstream` to track the original project you forked from." }
+        ],
+        realWorld: "When you fork a project, you'll have an `origin` remote pointing to your fork. You would add an `upstream` remote to fetch updates from the original project and keep your fork in sync."
+    },
+    {
+        category: "Sharing & Updating Projects",
         name: "git fetch",
         description: "Downloads commits, files, and refs from a remote repository into your local repo, but does not merge them.",
         howItWorks: [

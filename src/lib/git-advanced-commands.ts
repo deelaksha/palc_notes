@@ -90,6 +90,22 @@ export const gitAdvancedCommandsData = [
         realWorld: "Your website was working perfectly last week, but today you find a major bug. You have hundreds of commits between then and now. Instead of checking them one by one, you use `git bisect` to find the culprit in just a handful of steps, saving hours of tedious work."
     },
     {
+        category: "Recovery and Inspection",
+        name: "git blame",
+        description: "The 'Who-did-it' Detective. It shows you who last modified each line of a file, which commit they did it in, and when.",
+        howItWorks: [
+            "When you run `git blame <file>`, Git goes through the history of that file.",
+            "For every single line, it figures out which commit was the last one to touch that line.",
+            "It then displays the file's content, with each line prefixed by the commit hash, the author's name, and the timestamp of the change.",
+            "It helps you understand the context of a line of code and find the right person to ask questions about it."
+        ],
+        examples: [
+            { code: "git blame style.css", text: "Shows the author and commit for every line in `style.css`." },
+            { code: "git blame -L 10,20 main.js", text: "Shows the blame information only for lines 10 through 20 of `main.js`." }
+        ],
+        realWorld: "You find a confusing line of code in a large project. Instead of guessing why it's there, you run `git blame` on the file. You see that your colleague Jane wrote it 6 months ago in a commit named 'Fix critical login bug'. Now you know who to ask and what feature it relates to."
+    },
+    {
         category: "Working Directory Management",
         name: "git stash",
         description: "The 'Magic Pocket'. It lets you temporarily save your current uncommitted changes so you can switch to another task, without having to make a messy, unfinished commit.",
@@ -107,6 +123,23 @@ export const gitAdvancedCommandsData = [
             { code: 'git stash apply', text: "Applies the stashed changes but keeps them in the stash list in case you need them again." }
         ],
         realWorld: "This is used daily. You're coding a new feature when you notice a small, unrelated bug. You `git stash` your work, switch branches, fix the bug, commit, switch back, and `git stash pop` to continue right where you left off. It keeps your commits clean and focused on one task at a time."
+    },
+    {
+        category: "Working Directory Management",
+        name: "git worktree",
+        description: "The 'Parallel Universe'. It allows you to have multiple working directories linked to the same repository, each on a different branch.",
+        howItWorks: [
+            "Instead of stashing changes and switching branches in one folder, `git worktree` creates a new folder that is a clean checkout of another branch.",
+            "`git worktree add ../hotfix main`: This creates a new folder named `hotfix` one directory up (`../`), and checks out the `main` branch inside it.",
+            "You can now `cd ../hotfix`, do your work, commit, and push, all without affecting your original project folder.",
+            "When you're done, you can remove the worktree with `git worktree remove <path>`."
+        ],
+        examples: [
+            { code: "git worktree add ../fix-bug-123", text: "Creates a new folder named `fix-bug-123` in the parent directory and checks out the current branch there." },
+            { code: "git worktree list", text: "Shows all your active worktrees." },
+            { code: "git worktree remove ../fix-bug-123", text: "Removes the worktree after you're done with it." }
+        ],
+        realWorld: "You are working on a long-running feature but need to urgently fix a bug on the `main` branch. Instead of stashing, you run `git worktree add ../hotfix main`. You can now go to the `hotfix` folder, make your changes, and create a pull request, all while your original feature branch folder remains untouched and running."
     },
     {
         category: "Tagging and Releasing",
