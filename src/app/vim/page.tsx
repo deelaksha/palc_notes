@@ -1,4 +1,5 @@
-import { CodeBlock } from '@/components/markdown/CodeBlock';
+
+import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
 import { TableOfContents } from '@/components/toc/TableOfContents';
 import {
   Accordion,
@@ -205,7 +206,7 @@ export default function VimPage() {
             </main>
             <aside className="hidden lg:block w-80 p-8">
                 <div className="sticky top-20">
-                    <TableOfContents content={vimTutorialContent + commandDetails.map(c => `## ${c.title}`).join('\n')} />
+                    <TableOfContents content={vimTutorialContent + commandDetails.map(c => `## ${c.title}`).join('\\n')} />
                 </div>
             </aside>
         </div>
