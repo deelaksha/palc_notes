@@ -197,31 +197,32 @@ Use these keys like arrow keys:
 // A simple and naive markdown to JSX renderer.
 function renderMarkdown(markdown: string) {
   if (!markdown) return null;
-  const sections = markdown.trim().split('\n\n');
-  return sections.map((section, index) => {
-    if (section.startsWith('### ')) {
-        const id = section.substring(4).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
-        return <h3 key={index} id={id} className="font-headline text-xl font-semibold mt-6 mb-3">{section.substring(4)}</h3>;
+  const blocks = markdown.trim().split(/\n{2,}/);
+  
+  return blocks.map((block, index) => {
+    if (block.startsWith('### ')) {
+        const id = block.substring(4).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+        return <h3 key={index} id={id} className="font-headline text-xl font-semibold mt-6 mb-3">{block.substring(4)}</h3>;
     }
-    if (section.startsWith('## ')) {
-        const id = section.substring(3).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
-        return <h2 key={index} id={id} className="font-headline text-2xl font-bold mt-8 mb-4 pb-2 border-b">{section.substring(3)}</h2>;
+    if (block.startsWith('## ')) {
+        const id = block.substring(3).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+        return <h2 key={index} id={id} className="font-headline text-2xl font-bold mt-8 mb-4 pb-2 border-b">{block.substring(3)}</h2>;
     }
-    if (section.startsWith('# ')) {
-      const id = section.substring(2).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
-      return <h1 key={index} id={id} className="font-headline text-4xl font-extrabold mt-4 mb-6 pb-2 border-b">{section.substring(2)}</h1>;
+    if (block.startsWith('# ')) {
+      const id = block.substring(2).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+      return <h1 key={index} id={id} className="font-headline text-4xl font-extrabold mt-4 mb-6 pb-2 border-b">{block.substring(2)}</h1>;
     }
-    if (section.startsWith('---')) {
+    if (block.startsWith('---')) {
       return <hr key={index} className="my-6" />;
     }
-    if (section.startsWith('- ')) {
-      const items = section.split('\n').map((item, i) => (
+    if (block.startsWith('- ')) {
+      const items = block.split('\n').map((item, i) => (
         <li key={i} dangerouslySetInnerHTML={{ __html: item.substring(2).replace(/`(.*?)`/g, '<code>$1</code>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
       ));
       return <ul key={index} className="list-disc pl-6 space-y-1 mb-4">{items}</ul>;
     }
-    if (section.match(/^\d+\./)) {
-        const items = section.split('\n').map((item, i) => {
+    if (block.match(/^\d+\./)) {
+        const items = block.split('\n').map((item, i) => {
             const content = item.substring(item.indexOf('.') + 2);
             if (content.includes('`vim notes.txt`')) {
                 return <li key={i}>Open Vim: <CodeBlock>vim notes.txt</CodeBlock></li>;
@@ -230,8 +231,8 @@ function renderMarkdown(markdown: string) {
         });
         return <ol key={index} className="list-decimal pl-6 space-y-1 mb-4">{items}</ol>;
     }
-    if (section.startsWith('|')) {
-        const rows = section.split('\n');
+    if (block.startsWith('|')) {
+        const rows = block.split('\n');
         const headers = rows[0].split('|').slice(1, -1).map(h => h.trim());
         const body = rows.slice(2);
 
@@ -257,7 +258,7 @@ function renderMarkdown(markdown: string) {
         );
     }
 
-    return <p key={index} className="mb-4 leading-relaxed" dangerouslySetInnerHTML={{ __html: section.replace(/`(.*?)`/g, '<code>$1</code>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/👉/g, '<span class="mr-2">👉</span>') }} />;
+    return <p key={index} className="mb-4 leading-relaxed" dangerouslySetInnerHTML={{ __html: block.replace(/`(.*?)`/g, '<code>$1</code>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/👉/g, '<span class="mr-2">👉</span>') }} />;
   });
 }
 
@@ -270,7 +271,7 @@ export default function VimPage() {
         const titleMatch = sectionContent.match(/^##\s.*$/m);
         if (titleMatch) {
             const title = titleMatch[0].substring(3).trim();
-            const contentWithoutTitle = sectionContent.replace(/^##\s.*$/m, '').trim();
+            const contentWithoutTitle = sectionContent.substring(titleMatch[0].length).trim();
             acc.push({ title: title, content: contentWithoutTitle });
         }
         return acc;
@@ -282,6 +283,7 @@ export default function VimPage() {
         <div className="flex">
             <main className="flex-1 py-8 px-4 md:px-8 lg:px-12 markdown-content">
                 {renderMarkdown(intro)}
+                <hr className="my-6" />
                 
                 <Accordion type="multiple" className="w-full space-y-4" defaultValue={defaultActiveItems}>
                     {groupedSections.map(({ title, content }) => (
@@ -296,6 +298,7 @@ export default function VimPage() {
                     ))}
                 </Accordion>
 
+                <hr className="my-6" />
                 <div className="mt-8">
                     {renderMarkdown(conclusion)}
                 </div>
