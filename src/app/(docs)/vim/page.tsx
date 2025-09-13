@@ -267,44 +267,65 @@ function renderMarkdown(markdown: string) {
   });
 }
 
-export default function VimPage() {
-    const sections = vimMarkdownContent.split('---').map(s => s.trim()).filter(Boolean);
-    const intro = sections.shift() || '';
-    const conclusion = sections.pop() || '';
+const parseSections = (markdown: string) => {
+    const lines = markdown.split('\n');
+    const sections: { title: string; content: string }[] = [];
+    let currentContent: string[] = [];
+    let intro = '';
+    let conclusion = '';
+    let isIntro = true;
+    let isConclusion = false;
 
-    const groupedSections = sections.reduce((acc, sectionContent) => {
-        const titleMatch = sectionContent.match(/^##\s.*$/m);
-        if (titleMatch) {
-            const title = titleMatch[0].substring(3).trim();
-            const contentWithoutTitle = sectionContent.substring(titleMatch[0].length).trim();
-            acc.push({ title: title, content: contentWithoutTitle });
-        } else if(sectionContent.match(/^#\s.*$/m)) {
-            // This is the main title, ignore for accordion
-        }
-        else {
-             // Fallback for content that doesn't match the ## structure, like the practice scenario
-            const firstLine = sectionContent.split('\n')[0];
-            const titleMatch = firstLine.match(/^##\s.*$/m) || firstLine.match(/^#\s.*$/m);
-            if(titleMatch) {
-                const title = titleMatch[0].substring(titleMatch[0].indexOf(' ')).trim();
-                 acc.push({ title, content: sectionContent });
-            }
-        }
-        return acc;
-    }, [] as { title: string; content: string }[]);
+    const mainTitleMatch = lines[0].match(/^#\s.*/);
+    if(mainTitleMatch){
+        intro = mainTitleMatch[0];
+    }
     
-    // Manually add the last section if it wasn't picked up
-    const lastSectionRaw = sections[sections.length -1];
-    if (lastSectionRaw && lastSectionRaw.startsWith('## 🎯 Practice Scenario')) {
-        const title = '🎯 Practice Scenario';
-        const content = lastSectionRaw.substring(lastSectionRaw.indexOf('\n')).trim();
-        if (!groupedSections.find(s => s.title === title)) {
-             groupedSections.push({ title, content });
+    for (const line of lines) {
+        if (line.startsWith('---')) {
+            if (isIntro) {
+                isIntro = false;
+            }
+            continue;
+        }
+
+        const titleMatch = line.match(/^##\s.*$/);
+        if (titleMatch) {
+            if (currentContent.length > 0) {
+                const lastSection = sections[sections.length - 1];
+                if(lastSection) {
+                    lastSection.content = currentContent.join('\n');
+                }
+            }
+            currentContent = [];
+            sections.push({ title: titleMatch[0].substring(3).trim(), content: '' });
+        } else if (!isIntro) {
+             if (line.startsWith('✅')) {
+                isConclusion = true;
+            }
+            if (isConclusion) {
+                conclusion += line + '\n';
+            } else {
+                 currentContent.push(line);
+            }
         }
     }
 
+    if (currentContent.length > 0 && sections.length > 0) {
+       sections[sections.length -1].content = currentContent.join('\n').trim();
+    }
+    
+    // Handle intro and main title separately
+    const firstSectionSeparator = markdown.indexOf('---');
+    const fullIntro = markdown.substring(0, firstSectionSeparator).trim();
 
-    const defaultActiveItems = groupedSections.map(s => s.title);
+
+    return { intro: fullIntro, sections, conclusion: conclusion.trim() };
+};
+
+export default function VimPage() {
+    const { intro, sections, conclusion } = parseSections(vimMarkdownContent);
+    const defaultActiveItems = sections.map(s => s.title);
 
     return (
         <div className="flex">
@@ -313,7 +334,7 @@ export default function VimPage() {
                 <hr className="my-6" />
                 
                 <Accordion type="multiple" className="w-full space-y-4" defaultValue={defaultActiveItems}>
-                    {groupedSections.map(({ title, content }) => (
+                    {sections.map(({ title, content }) => (
                         <AccordionItem value={title} key={title} className="border rounded-lg bg-card overflow-hidden">
                             <AccordionTrigger className="px-6 py-4 font-headline text-lg hover:no-underline">
                                 {title}
@@ -339,3 +360,4 @@ export default function VimPage() {
     );
 }
 
+    
