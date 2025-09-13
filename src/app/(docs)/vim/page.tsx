@@ -1,4 +1,3 @@
-
 import { CodeBlock } from '@/components/markdown/CodeBlock';
 import { TableOfContents } from '@/components/toc/TableOfContents';
 import {
@@ -201,7 +200,18 @@ function renderMarkdown(markdown: string) {
   const blocks = markdown.trim().split(/\n{2,}/);
   
   const renderInlines = (text: string) => {
-    return text.replace(/`(.*?)`/g, '<code>$1</code>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/👉/g, '<span class="mr-2">👉</span>');
+    // Escape HTML to prevent XSS
+    const escapedText = text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+      
+    return escapedText
+      .replace(/`([^`]+)`/g, '<code class="font-code bg-muted text-foreground px-1 py-0.5 rounded-sm text-sm">$1</code>')
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/👉/g, '<span class="mr-2">👉</span>');
   }
 
   return blocks.map((block, index) => {

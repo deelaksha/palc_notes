@@ -1,5 +1,4 @@
-
-import { CodeBlock } from '@/components/markdown/CodeBlock';
+import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
 import { TableOfContents } from '@/components/toc/TableOfContents';
 
 const lspMarkdownContent = `
@@ -76,7 +75,7 @@ Setting up LSP in Vim or Neovim requires a few components:
 
 👉 **When to use which?**
 -   **LSP**: The modern default for daily development. Its real-time feedback and intelligent features are invaluable for writing and refactoring code.
--   **Ctags/Gtags**: Still incredibly useful for quickly exploring a new or unfamiliar codebase where you just want to jump around and get a lay of the land without setting up a full LSP environment. Their speed is unmatched for simple "go to definition."
+-   **Ctags/Gtags**: Still incredibly useful for quickly exploring a new or unfamiliar codebase where you just want to get a lay of the land without setting up a full LSP environment. Their speed is unmatched for simple "go to definition."
 
 ---
 
@@ -92,96 +91,11 @@ Setting up LSP in Vim or Neovim requires a few components:
 ✅ LSP brings the power of a full-featured IDE into the terminal, providing a development experience that is both lightweight and deeply intelligent.
 `;
 
-// A simple and naive markdown to JSX renderer.
-function renderMarkdown(markdown: string) {
-  if (!markdown) return null;
-  // Split by newline and then process blocks
-  const blocks = markdown.trim().split(/\n{2,}/);
-
-  const renderInlines = (text: string) => {
-    // Escape HTML to prevent XSS
-    const escapedText = text
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
-      
-    return escapedText
-      .replace(/`([^`]+)`/g, '<code class="font-code bg-muted text-foreground px-1 py-0.5 rounded-sm text-sm">$1</code>')
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/👉/g, '<span class="mr-2">👉</span>');
-  }
-
-  return blocks.map((block, index) => {
-    if (block.startsWith('<CodeBlock>')) {
-      const code = block.replace(/<\/?CodeBlock>/g, '');
-      return <CodeBlock key={index}>{code}</CodeBlock>;
-    }
-    if (block.startsWith('### ')) {
-        const id = block.substring(4).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
-        return <h3 key={index} id={id} className="font-headline text-xl font-semibold mt-6 mb-3" dangerouslySetInnerHTML={{ __html: renderInlines(block.substring(4)) }} />;
-    }
-    if (block.startsWith('## ')) {
-        const id = block.substring(3).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
-        return <h2 key={index} id={id} className="font-headline text-2xl font-bold mt-8 mb-4 pb-2 border-b" dangerouslySetInnerHTML={{ __html: renderInlines(block.substring(3)) }} />;
-    }
-    if (block.startsWith('# ')) {
-      const id = block.substring(2).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
-      return <h1 key={index} id={id} className="font-headline text-4xl font-extrabold mt-4 mb-6 pb-2 border-b" dangerouslySetInnerHTML={{ __html: renderInlines(block.substring(2)) }} />;
-    }
-    if (block.startsWith('---')) {
-      return <hr key={index} className="my-6" />;
-    }
-    if (block.startsWith('- ')) {
-      const items = block.split('\n').map((item, i) => (
-        <li key={i} dangerouslySetInnerHTML={{ __html: renderInlines(item.substring(2)) }} />
-      ));
-      return <ul key={index} className="list-disc pl-6 space-y-1 mb-4">{items}</ul>;
-    }
-    if (block.match(/^\d+\./)) {
-        const items = block.split('\n').map((item, i) => {
-            const content = item.substring(item.indexOf('.') + 2);
-            return <li key={i} dangerouslySetInnerHTML={{ __html: renderInlines(content) }} />
-        });
-        return <ol key={index} className="list-decimal pl-6 space-y-1 mb-4">{items}</ol>;
-    }
-    if (block.startsWith('|')) {
-        const rows = block.split('\n');
-        const headers = rows[0].split('|').slice(1, -1).map(h => h.trim());
-        const body = rows.slice(2);
-
-        return (
-            <div key={index} className="overflow-x-auto my-4 border rounded-lg">
-                <table className="w-full">
-                    <thead>
-                        <tr className="bg-muted">
-                            {headers.map((header, i) => <th key={i} className="p-3 text-left font-semibold">{header}</th>)}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {body.map((row, i) => (
-                            <tr key={i} className="border-t">
-                                {row.split('|').slice(1, -1).map((cell, j) => (
-                                    <td key={j} className="p-3" dangerouslySetInnerHTML={{ __html: renderInlines(cell.trim()) }} />
-                                ))}
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-        );
-    }
-
-    return <p key={index} className="mb-4 leading-relaxed" dangerouslySetInnerHTML={{ __html: renderInlines(block) }} />;
-  });
-}
-
 export default function LspPage() {
     return (
         <div className="flex">
             <main className="flex-1 py-8 px-4 md:px-8 lg:px-12 markdown-content">
-                {renderMarkdown(lspMarkdownContent)}
+                <MarkdownRenderer markdown={lspMarkdownContent} />
             </main>
             <aside className="hidden lg:block w-80 p-8">
                 <div className="sticky top-20">
