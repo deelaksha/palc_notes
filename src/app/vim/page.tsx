@@ -98,8 +98,8 @@ Use these keys like arrow keys:
 | \`?word\` | Search backward for “word” |
 | \`n\` | Jump to next match |
 | \`N\` | Jump to previous match |
-| \`:%s/old/new/g\` | Replace all “old” with “new” |
-| \`:%s/old/new/gc\` | Replace with confirmation |
+| \`:%s/old/new/g\` | Replace all “old” with “new” |% - range | s - Stands for substitute (replace).| g - Stands for global
+| \`:%s/old/new/gc\` | Replace with confirmation | c - confirmation for each word
 
 👉 Example: Type \`/error\` to find the word “error” in your file. Press \`n\` to go to the next match.
 

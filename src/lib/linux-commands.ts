@@ -61,7 +61,7 @@ export const commandsData = [
         name: "rmdir",
         description: "The `rmdir` command \"removes\" a directory. It's for deleting an empty folder. It's a bit picky, so if the folder has anything inside it, this command won't work.",
         howItWorks: ["You type `rmdir` followed by the folder's name. It's a safe way to delete directories because it forces you to empty them first.", "`-p` (parents): Removes the specified directory and also its parent directories if they become empty after the child is removed."],
-        examples: [{ code: "rmdir old_drawings", text: "Deletes the `old_drawings` folder, but only if it's completely empty." }, { code: "rmdir -p project/build/assets", text: "Deletes `assets`, then `build` if it becomes empty, then `project` if it becomes empty." }],
+        examples: [{ code: "rmdir old_drawings", text: "Deletes the `old_drawings` folder, but only if it's completely empty." }, { code: "rmdir -p project/build/assets", text: "Deletes `assets`, then `build` if it becomes empty, then `project` if it becomes empty. It will delete assets/. Then, if build/ is now empty, it will delete build/. Then, if project/ is now empty, it will delete project/." }],
         realWorld: "This command is useful for cleaning up empty folders after a project is finished, ensuring you don't accidentally delete something important."
     },
     {
@@ -106,7 +106,7 @@ export const commandsData = [
         description: "The `rm` command \"removes\" a file. It's like throwing a piece of paper in the trash, but there's no way to get it back, so you have to be very careful!",
         howItWorks: [
             "`rm file_name`: Deletes the specified file permanently.",
-            "`-r` (recursive): This flag is used to delete a directory and all of its contents. Without this flag, `rm` won't delete directories.",
+            "`-r` (recursive): This is used to delete a directory and all of its contents. Without this flag, `rm` won't delete directories.",
             "`-f` (force): This flag forces the deletion without asking for confirmation. It's dangerous and can lead to accidental data loss. Use with extreme caution, especially with `-r` (`rm -rf`).",
             "`-i` (interactive): This flag prompts for confirmation before every deletion, which is much safer."
         ],
