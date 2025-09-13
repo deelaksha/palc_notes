@@ -209,25 +209,45 @@ export const commandsData = [
         realWorld: "You use `rm` to clean up temporary files or delete old versions of a project to free up space. Always double-check your command before using `rm -rf`."
     },
     {
-        category: "File and Directory Management",
-        name: "find",
-        description: "The `find` command is your personal detective for files. It can search your entire system for files based on name, size, type, or when they were last changed.",
-        howItWorks: [
-            "The basic pattern is `find [where_to_look] [what_to_look_for] [what_to_do]`.",
-            "**-name \"pattern\"**: Searches by name. Use wildcards like `*` (matches anything) in quotes.",
-            "**-iname \"pattern\"**: Same as `-name` but ignores case (finds 'Report.pdf' and 'report.pdf').",
-            "**-type**: Searches for a specific type: `f` for files, `d` for directories.",
-            "**-size**: Searches by size. `+1G` for files larger than 1 gigabyte, `-100M` for smaller than 100 megabytes.",
-            "**-mtime -N**: Finds files modified within the last `N` days.",
-            "**-exec command {} \\;**: A powerful action that runs another command on each file that is found. The `{}` is a placeholder for the found file."
+        "category": "File and Directory Management",
+        "name": "find",
+        "description": "The find command is your personal detective for files. It can search your entire system for files based on name, size, type, or when they were last changed.",
+        "howItWorks": [
+          "The basic pattern is: find [where_to_look] [what_to_look_for] [what_to_do].",
+          "-name \"pattern\": Searches by name. Use wildcards like * (matches anything) in quotes.",
+          "-iname \"pattern\": Same as -name but ignores case (finds 'Report.pdf' and 'report.pdf').",
+          "-type [f|d]: Searches for a specific type. 'f' for files, 'd' for directories.",
+          "-size [+/-size]: Searches by size. '+1G' for files larger than 1 gigabyte, '-100M' for files smaller than 100 megabytes.",
+          "-mtime -N: Finds files modified within the last N days.",
+          "-exec command {} \\;: A powerful action that runs another command on each file that is found. The {} is a placeholder for the found file."
         ],
-        examples: [
-            { code: "find . -name \"*.jpg\"", text: "Searches the current folder (`.`) and all subfolders for any files that end with `.jpg`.  |. = current directory | | .. = parent directory | / = root directory |" }, 
-            { code: "find /home -type f -size +1G", text: "Searches the entire `/home` directory for files (`-type f`) that are bigger than 1 gigabyte (`+1G`)." }, 
-            { code: "find . -type f -name \"*.tmp\" -exec rm {} \\;", text: "Finds all temporary files (`.tmp`) and runs the `rm` command on each one to delete them."}
-        ],
-        realWorld: "If you saved an important report but can't remember where, `find ~ -iname \"*report*.pdf\"` will search your entire home directory to locate it for you."
-    },
+        "examples": [
+          {
+            "code": "find . -name \"*.jpg\"",
+            "text": "Searches the current folder (.) and all subfolders for any files that end with .jpg."
+          },
+          {
+            "code": "find /home -type f -size +1G",
+            "text": "Searches the entire /home directory for files (-type f) that are larger than 1 gigabyte (+1G)."
+          },
+          {
+            "code": "find . -type f -name \"*.tmp\" -exec rm {} \\;",
+            "text": "Finds all temporary files (*.tmp) and runs the rm command on each one to delete them."
+          },
+          {
+            "code": "find /var/log -type d -name \"apache*\"",
+            "text": "Searches the /var/log directory for any sub-folders (-type d) whose names start with 'apache'."
+          },
+          {
+            "code": "find . -type f -mtime -1",
+            "text": "Finds all files (-type f) in the current directory (.) that have been modified in the last 24 hours (-mtime -1)."
+          },
+          {
+            "code": "find /tmp -name \"*.log\" -size +10M",
+            "text": "Searches the /tmp folder for any files that end in .log and are larger than 10 megabytes."
+          }
+        ]
+      },      
     {
         category: "File Viewing and Editing",
         name: "cat",

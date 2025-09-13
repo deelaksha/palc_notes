@@ -56,7 +56,7 @@ These are characters with special meanings. They are the wizards of our language
 | \`\\\` | Backslash | **Escapes** a special character, treating it as a literal | \`\\.\` | Matches an actual dot "." |
 
 ### Escaping Characters
-What if you actually want to find a dot `.` or a plus `+`? You use a backslash \`\\\` to tell the engine, "Hey, this next character is just a normal guy, not a wizard."
+What if you actually want to find a dot \`.\` or a plus \`+\`? You use a backslash \`\\\` to tell the engine, "Hey, this next character is just a normal guy, not a wizard."
 
 - **Input Text**: "The file is file.txt"
 - **Regex Pattern**: \`file\\.txt\`
@@ -186,7 +186,7 @@ The pipe character \`|\` acts like an "OR". It lets you match one of several pos
 | **Email Validation** | \`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$\` | Starts with user chars, then @, then domain, then ., then TLD. (A simplified version). |
 | **US Phone Number** | \`\\(?\\d{3}\\)?[ -]?\\d{3}[ -]?\\d{4}\` | Matches formats like (123)-456-7890, 123-456-7890, 123 456 7890, 1234567890. |
 | **Date (YYYY-MM-DD)** | \`^\\d{4}-\\d{2}-\\d{2}$\` | Exactly 4 digits, a dash, 2 digits, a dash, 2 digits. Anchored to start/end. |
-| **URL (simple)** | \`https?:\/\/[\\w\\-.]+\\.\\w{2,}(\\/\\S*)?\` | Matches http/https, domain, and optional path. |
+| **URL (simple)** | \`https?:\\/\\/[\\w\\-.]+\\.\\w{2,}(\\/\\S*)?\` | Matches http/https, domain, and optional path. |
 | **Password Strength** | \`^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$\` | Requires at least one lowercase, one uppercase, one digit, and be at least 8 chars long. (Uses Lookaheads). |
 
 ---
