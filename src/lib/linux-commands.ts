@@ -7,12 +7,15 @@ export const commandsData = [
         howItWorks: [
             "By itself, `ls` shows a simple list of names.", 
             "Flags can be added for more detail. Flags are like special instructions that modify how a command works.",
-            "`-l` (long listing): This flag provides a detailed, multi-column output. Each column gives you specific information: file permissions, number of links, owner, group, file size (in bytes), modification date, and the file/directory name.",
-            "`-a` (all): This flag shows every file, including hidden or 'dotfiles' (files starting with a `.`). These files are often used for configuration and are hidden by default to keep your directories clean.",
-            "Flags can be combined, like `ls -la` to get a detailed list of all files including hidden ones."
+            "`-l` (long listing): Provides a detailed, multi-column output including permissions, owner, size, and modification date.",
+            "`-a` (all): Shows every file, including hidden 'dotfiles' (files starting with a `.`).",
+            "`-t` (time): Sorts the files by their last modification time, with the newest files appearing first.",
+            "`-r` (reverse): Reverses the order of the sort. For example, `ls -ltr` will list the oldest files last.",
+            "`-h` (human-readable): When used with `-l`, this flag prints file sizes in an easy-to-read format (e.g., `4.0K`, `1.2M`) instead of just bytes.",
+            "Flags can be combined. A very common combination is `ls -lart`, which lists all files (`a`) in a detailed long format (`l`), sorted by modification time (`t`), with the oldest appearing last (`r`)."
         ],
-        examples: [{ code: "ls -l", text: "Shows a detailed list of all visible files and folders." }, { code: "ls -a", text: "Shows all files, including hidden ones like `.bashrc`." }],
-        realWorld: "Before you start working in a new folder, you would use `ls -l` to check the existing files, their sizes, and permissions."
+        examples: [{ code: "ls -l", text: "Shows a detailed list of all visible files and folders." }, { code: "ls -a", text: "Shows all files, including hidden ones like `.bashrc`." }, { code: "ls -lart", text: "Lists all files, including hidden ones, in a detailed format, sorted by the oldest modification date last."}],
+        realWorld: "Before you start working in a new folder, you would use `ls -l` to check the existing files. If you want to see the most recently changed files, you'd use `ls -lt`."
     },
     {
         category: "File and Directory Management",
@@ -107,13 +110,15 @@ export const commandsData = [
         description: "The `find` command is like a powerful search engine for your computer's files. It can look for files based on their name, size, type, or when they were last changed.",
         howItWorks: [
             "The basic syntax is `find [path] [expression]`. The `path` tells `find` where to start looking (e.g., `.` for the current directory).",
-            "`-name \"pattern\"`: Searches for files based on their name. You can use wildcards like `*` (matches anything).",
+            "`-name \"pattern\"`: Searches for files based on their name. You can use wildcards like `*` (matches anything). The pattern should be in quotes.",
+            "`-iname \"pattern\"`: Same as `-name` but the search is case-insensitive.",
             "`-type`: Searches for a specific type. `f` for regular files, `d` for directories.",
             "`-size`: Searches for files of a certain size. `+1G` means larger than 1 gigabyte, `-100M` means smaller than 100 megabytes.",
-            "`-exec`: This allows you to run another command on each file that is found."
+            "`-mtime -N`: Finds files modified within the last `N` days. For example, `-mtime -7` finds files changed in the last week.",
+            "`-exec command {} \\;`: This allows you to run another command on each file that is found. The `{}` is replaced by the found file name."
         ],
-        examples: [{ code: "find . -name \"*.jpg\"", text: "This searches the current folder (`.`) and all folders inside it for any files that end with `.jpg`." }, { code: "find /home/user/documents -type f -size +1G", text: "This searches for files (`-type f`) in your `documents` folder that are bigger than 1 gigabyte (`+1G`)." }],
-        realWorld: "If you saved a document but can't remember where, `find . -name \"*report*.pdf\"` can help you locate it very quickly."
+        examples: [{ code: "find . -name \"*.jpg\"", text: "Searches the current folder (`.`) and all subfolders for any files that end with `.jpg`." }, { code: "find /home -type f -size +1G", text: "Searches for files (`-type f`) in the entire `/home` directory that are bigger than 1 gigabyte (`+1G`)." }, { code: "find . -type f -name \"*.tmp\" -exec rm {} \\;", text: "Finds all files ending in `.tmp` in the current directory and its subdirectories and deletes them."}],
+        realWorld: "If you saved a document but can't remember where, `find /home -iname \"*report*.pdf\"` can help you locate it very quickly, regardless of capitalization."
     },
     {
         category: "File Viewing and Editing",
@@ -166,13 +171,14 @@ export const commandsData = [
         name: "chmod",
         description: "The `chmod` command \"changes the mode\" or permissions of a file. Permissions decide who can do what with a file. There are three types of permissions: **r** (read), **w** (write), and **x** (execute). Permissions are given to three groups: the **owner** (u), the **group** (g), and **others** (o).",
         howItWorks: [
-            "Symbolic method: `chmod u+x file` adds execute permission for the user. `chmod g-w file` removes write permission for the group.",
-            "Numeric (octal) method: This is more common. Each permission has a number: `4` for read, `2` for write, `1` for execute. You add them up for each group (owner, group, others). For example, `7` (4+2+1) is full permission. `6` (4+2) is read/write. `5` (4+1) is read/execute.",
-            "`chmod 755 file`: Gives the owner read/write/execute (7), and the group and others read/execute (5). This is common for scripts and programs.",
-            "`chmod 644 file`: Gives the owner read/write (6), and everyone else read-only (4). This is common for text files and documents."
+            "Symbolic method: Uses letters to add (`+`), remove (`-`), or set (`=`) permissions. `chmod u+x file` adds execute permission for the user. `chmod g-w file` removes write permission for the group. `chmod o=r` sets permissions for others to read-only.",
+            "Numeric (octal) method: This is more common. Each permission has a number: `4` for read, `2` for write, `1` for execute. You add them up for each group (owner, group, others). For example, `7` (4+2+1) is full permission (rwx). `6` (4+2) is read/write (rw-). `5` (4+1) is read/execute (r-x).",
+            "`chmod 755 file`: Owner gets rwx (7), group gets r-x (5), others get r-x (5). This is very common for scripts and programs that need to be run by anyone.",
+            "`chmod 644 file`: Owner gets rw- (6), group gets r-- (4), others get r-- (4). This is very common for text files and documents that should be readable by everyone but only changed by the owner.",
+            "`-R` (Recursive): Applies the permission changes to a directory and all files and subdirectories inside it."
         ],
-        examples: [{ code: "chmod +x my_script.sh", text: "Adds execute permission, allowing you to run the script." }, { code: "chmod 600 private.key", text: "Makes a file readable and writable only by you, and no one else." }],
-        realWorld: "When you download a program or write a script, you almost always need to use `chmod +x` to make it runnable."
+        examples: [{ code: "chmod +x my_script.sh", text: "Adds execute permission for everyone, allowing you to run the script." }, { code: "chmod 600 private.key", text: "Makes a file readable and writable *only* by you, and no one else. This is important for sensitive files like SSH keys." }, { code: "chmod -R 755 public_html", text: "Recursively sets permissions for a web directory, making all folders browsable and all files executable." }],
+        realWorld: "When you download a program or write a script, you almost always need to use `chmod +x` to make it runnable. Setting correct permissions is a fundamental part of system security."
     },
     {
         category: "Permissions and Ownership",
@@ -193,7 +199,7 @@ export const commandsData = [
         howItWorks: [
             "`ps aux` is a common combination of flags:",
             "`a`: Show processes for all users.",
-            "`u`: Display the process's user/owner.",
+            "`u`: Display the process's user/owner and other details.",
             "`x`: Also show processes not attached to a terminal (like background services).",
             "The output shows the PID (Process ID), which you can use with other commands like `kill`."
         ],
