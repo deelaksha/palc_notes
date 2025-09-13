@@ -222,7 +222,7 @@ export const commandsData = [
             "**-exec command {} \\;**: A powerful action that runs another command on each file that is found. The `{}` is a placeholder for the found file."
         ],
         examples: [
-            { code: "find . -name \"*.jpg\"", text: "Searches the current folder (`.`) and all subfolders for any files that end with `.jpg`." }, 
+            { code: "find . -name \"*.jpg\"", text: "Searches the current folder (`.`) and all subfolders for any files that end with `.jpg`.  |. = current directory | | .. = parent directory | / = root directory |" }, 
             { code: "find /home -type f -size +1G", text: "Searches the entire `/home` directory for files (`-type f`) that are bigger than 1 gigabyte (`+1G`)." }, 
             { code: "find . -type f -name \"*.tmp\" -exec rm {} \\;", text: "Finds all temporary files (`.tmp`) and runs the `rm` command on each one to delete them."}
         ],

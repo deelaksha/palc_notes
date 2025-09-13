@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, BookOpen, Code, FileCode, GitBranchPlus, Github, Info, Terminal, Search } from 'lucide-react';
+import { ArrowRight, BookOpen, Code, FileCode, GitBranchPlus, Github, Info, Regex, Terminal, Search } from 'lucide-react';
 import Link from 'next/link';
 
 const categories = [
@@ -39,6 +39,12 @@ const categories = [
         description: 'Tools to search, understand, and navigate large codebases.',
         href: '/code-navigation',
         icon: <FileCode className="size-8" />,
+    },
+    {
+        name: 'Regex',
+        description: 'Master Regular Expressions from basics to advanced patterns.',
+        href: '/regex',
+        icon: <Regex className="size-8" />,
     },
     {
         name: 'Notes',

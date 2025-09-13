@@ -12,7 +12,7 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from '@/components/ui/sidebar';
-import { BookOpen, Code, FileCode, GitBranchPlus, Github, Home, Info, Terminal } from 'lucide-react';
+import { BookOpen, Code, FileCode, GitBranchPlus, Github, Home, Info, Regex, Terminal } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import './globals.css';
@@ -39,6 +39,7 @@ const navItems = [
   { href: '/github', label: 'GitHub', icon: <Github /> },
   { href: '/git-advanced', label: 'Git Advanced', icon: <GitBranchPlus /> },
   { href: '/code-navigation', label: 'Code Navigation', icon: <FileCode /> },
+  { href: '/regex', label: 'Regex', icon: <Regex /> },
   { href: '/notes', label: 'Notes', icon: <BookOpen /> },
   { href: '/about', label: 'About', icon: <Info /> },
 ];
