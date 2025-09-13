@@ -17,7 +17,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const navItems = [
-  { href: '/home', label: 'Home', icon: <Home /> },
+  { href: '/', label: 'Home', icon: <Home /> },
   { href: '/vim', label: 'Vim', icon: <Code /> },
   { href: '/linux', label: 'Linux', icon: <Terminal /> },
   { href: '/github', label: 'GitHub', icon: <Github /> },
@@ -35,7 +35,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
       <div className="flex min-h-screen">
         <Sidebar>
             <SidebarHeader>
-              <Link href="/home" className="flex items-center gap-2">
+              <Link href="/" className="flex items-center gap-2">
                 <Logo />
               </Link>
             </SidebarHeader>
@@ -45,7 +45,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
                   <SidebarMenuItem key={item.href}>
                     <SidebarMenuButton
                       asChild
-                      isActive={pathname === '/' ? item.href === '/home' : pathname.startsWith(item.href) && item.href !== '/home' || pathname === item.href}
+                      isActive={pathname === '/' ? item.href === '/' : pathname.startsWith(item.href) && item.href !== '/' || pathname === item.href}
                       tooltip={item.label}
                     >
                       <Link href={item.href}>
