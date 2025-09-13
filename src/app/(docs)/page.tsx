@@ -4,7 +4,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, BookOpen, Code, Terminal } from 'lucide-react';
+import { ArrowRight, BookOpen, Code, Github, Terminal } from 'lucide-react';
 import Link from 'next/link';
 
 const categories = [
@@ -19,6 +19,12 @@ const categories = [
     description: 'Essential commands and concepts.',
     href: '/linux',
     icon: <Terminal className="size-8" />,
+  },
+  {
+    name: 'GitHub',
+    description: 'Essential Git commands.',
+    href: '/github',
+    icon: <Github className="size-8" />,
   },
   {
     name: 'Notes',

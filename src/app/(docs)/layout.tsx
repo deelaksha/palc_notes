@@ -13,7 +13,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-import { BookOpen, Code, Home, Info, Search, Terminal } from 'lucide-react';
+import { BookOpen, Code, Github, Home, Info, Search, Terminal } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -21,6 +21,7 @@ const navItems = [
   { href: '/', label: 'Home', icon: <Home /> },
   { href: '/vim', label: 'Vim', icon: <Code /> },
   { href: '/linux', label: 'Linux', icon: <Terminal /> },
+  { href: '/github', label: 'GitHub', icon: <Github /> },
   { href: '/notes', label: 'Notes', icon: <BookOpen /> },
   { href: '/about', label: 'About', icon: <Info /> },
 ];
@@ -50,7 +51,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
               <SidebarMenuItem key={item.href}>
                 <SidebarMenuButton
                   asChild
-                  isActive={pathname === item.href}
+                  isActive={pathname.startsWith(item.href) && (item.href === '/' ? pathname === '/' : true)}
                   tooltip={item.label}
                 >
                   <Link href={item.href}>
