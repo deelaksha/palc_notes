@@ -196,6 +196,7 @@ Use these keys like arrow keys:
 
 // A simple and naive markdown to JSX renderer.
 function renderMarkdown(markdown: string) {
+  if (!markdown) return null;
   const sections = markdown.trim().split('\n\n');
   return sections.map((section, index) => {
     if (section.startsWith('### ')) {
@@ -260,60 +261,49 @@ function renderMarkdown(markdown: string) {
   });
 }
 
-function Section({ title, content }: { title: string; content: string }) {
-  const id = title.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
-  return (
-    <div id={id}>
-      {renderMarkdown(content)}
-    </div>
-  );
-}
-
 export default function VimPage() {
-    const sections = vimMarkdownContent
-    .split('---')
-    .map(s => s.trim())
-    .filter(Boolean);
+    const allSections = vimMarkdownContent.split('---').map(s => s.trim()).filter(Boolean);
+    
+    const intro = allSections.shift() || '';
+    const conclusion = allSections.pop() || '';
+    
+    const groupedSections = allSections.reduce((acc, sectionContent) => {
+        const titleMatch = sectionContent.match(/^##\s.*$/m);
+        if (titleMatch) {
+            const title = titleMatch[0].substring(3).trim();
+            const contentWithoutTitle = sectionContent.replace(/^##\s.*$/m, '').trim();
+            acc.push({ title: title, content: contentWithoutTitle });
+        }
+        return acc;
+    }, [] as { title: string; content: string }[]);
 
-  const intro = sections.shift() || '';
-  const conclusion = sections.pop() || '';
+    return (
+        <div className="flex">
+            <main className="flex-1 py-8 px-4 md:px-8 lg:px-12 markdown-content">
+                {renderMarkdown(intro)}
+                
+                <Accordion type="multiple" className="w-full space-y-4" defaultValue={groupedSections.map(s => s.title)}>
+                    {groupedSections.map(({ title, content }) => (
+                        <AccordionItem value={title} key={title} className="border rounded-lg bg-card overflow-hidden">
+                            <AccordionTrigger className="px-6 py-4 font-headline text-lg hover:no-underline">
+                                {title}
+                            </AccordionTrigger>
+                            <AccordionContent className="px-6 pt-0 pb-6">
+                                {renderMarkdown(content)}
+                            </AccordionContent>
+                        </AccordionItem>
+                    ))}
+                </Accordion>
 
-  const groupedSections = sections.reduce((acc, sectionContent) => {
-    const titleMatch = sectionContent.match(/^##\s.*$/m);
-    if (titleMatch) {
-      acc.push({ title: titleMatch[0].substring(3).trim(), content: sectionContent });
-    }
-    return acc;
-  }, [] as { title: string; content: string }[]);
-
-
-  return (
-    <div className="flex">
-      <main className="flex-1 py-8 px-4 md:px-8 lg:px-12 markdown-content">
-        {renderMarkdown(intro)}
-        
-        <Accordion type="multiple" className="w-full space-y-4" defaultValue={groupedSections.map(s => s.title)}>
-          {groupedSections.map(({ title, content }) => (
-            <AccordionItem value={title} key={title} className="border rounded-lg bg-card overflow-hidden">
-              <AccordionTrigger className="px-6 py-4 font-headline text-lg hover:no-underline">
-                {title}
-              </AccordionTrigger>
-              <AccordionContent className="px-6 pt-0 pb-6">
-                <Section title={title} content={content.replace(/^##\s.*$/m, '')} />
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-
-        <div className="mt-8">
-            {renderMarkdown(conclusion)}
+                <div className="mt-8">
+                    {renderMarkdown(conclusion)}
+                </div>
+            </main>
+            <aside className="hidden lg:block w-80 p-8">
+                <div className="sticky top-20">
+                    <TableOfContents content={vimMarkdownContent} />
+                </div>
+            </aside>
         </div>
-      </main>
-      <aside className="hidden lg:block w-80 p-8">
-        <div className="sticky top-20">
-          <TableOfContents content={vimMarkdownContent} />
-        </div>
-      </aside>
-    </div>
-  );
+    );
 }
