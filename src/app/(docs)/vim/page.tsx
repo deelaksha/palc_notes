@@ -325,7 +325,6 @@ const parseSections = (markdown: string) => {
 
 export default function VimPage() {
     const { intro, sections, conclusion } = parseSections(vimMarkdownContent);
-    const defaultActiveItems = sections.map(s => s.title);
 
     return (
         <div className="flex">
@@ -333,7 +332,7 @@ export default function VimPage() {
                 {renderMarkdown(intro)}
                 <hr className="my-6" />
                 
-                <Accordion type="multiple" className="w-full space-y-4" defaultValue={defaultActiveItems}>
+                <Accordion type="single" collapsible className="w-full space-y-4">
                     {sections.map(({ title, content }) => (
                         <AccordionItem value={title} key={title} className="border rounded-lg bg-card overflow-hidden">
                             <AccordionTrigger className="px-6 py-4 font-headline text-lg hover:no-underline">
@@ -359,5 +358,3 @@ export default function VimPage() {
         </div>
     );
 }
-
-    
