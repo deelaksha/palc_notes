@@ -1,5 +1,6 @@
 import { CodeBlock } from '@/components/markdown/CodeBlock';
 import { TableOfContents } from '@/components/toc/TableOfContents';
+import { Fragment } from 'react';
 
 const vimMarkdownContent = `
 # 📘 Vim Commands – Beginner Friendly Guide
@@ -27,7 +28,7 @@ Think of Vim modes like tools in a toolbox:
 Use these keys like arrow keys:
 
 | Command | What it does |
-|---------|--------------|
+|---|---|
 | \`h\` | Move left |
 | \`l\` | Move right |
 | \`j\` | Move down |
@@ -49,7 +50,7 @@ Use these keys like arrow keys:
 ## ✨ 3. Typing Text (Insert Mode)
 
 | Command | What it does |
-|---------|--------------|
+|---|---|
 | \`i\` | Start typing before cursor |
 | \`I\` | Start typing at beginning of line |
 | \`a\` | Start typing after cursor |
@@ -65,7 +66,7 @@ Use these keys like arrow keys:
 ## ✨ 4. Editing Text
 
 | Command | What it does |
-|---------|--------------|
+|---|---|
 | \`x\` | Delete character under cursor |
 | \`dw\` | Delete a word |
 | \`dd\` | Delete a whole line |
@@ -86,7 +87,7 @@ Use these keys like arrow keys:
 ## ✨ 5. Searching & Replacing
 
 | Command | What it does |
-|---------|--------------|
+|---|---|
 | \`/word\` | Search forward for “word” |
 | \`?word\` | Search backward for “word” |
 | \`n\` | Jump to next match |
@@ -103,7 +104,7 @@ Use these keys like arrow keys:
 ## ✨ 6. Selecting Text (Visual Mode)
 
 | Command | What it does |
-|---------|--------------|
+|---|---|
 | \`v\` | Select characters |
 | \`V\` | Select whole lines |
 | \`Ctrl + v\` | Select block/columns |
@@ -118,7 +119,7 @@ Use these keys like arrow keys:
 ## ✨ 7. File Commands
 
 | Command | What it does |
-|---------|--------------|
+|---|---|
 | \`:w\` | Save file |
 | \`:q\` | Quit |
 | \`:wq\` | Save and quit |
@@ -134,7 +135,7 @@ Use these keys like arrow keys:
 ## ✨ 8. Working with Windows & Tabs
 
 | Command | What it does |
-|---------|--------------|
+|---|---|
 | \`:split filename\` | Open file in new horizontal window |
 | \`:vsplit filename\` | Open file in new vertical window |
 | \`Ctrl + w, w\` | Switch between windows |
@@ -149,7 +150,7 @@ Use these keys like arrow keys:
 ## ✨ 9. Marks & Jumps
 
 | Command | What it does |
-|---------|--------------|
+|---|---|
 | \`m<a>\` | Mark a position with a letter (a, b, c…) |
 | \`'a\` | Jump to start of line of mark |
 | \`\`a\` | Jump to exact cursor position of mark |
@@ -161,7 +162,7 @@ Use these keys like arrow keys:
 ## ✨ 10. Useful Shortcuts
 
 | Command | What it does |
-|---------|--------------|
+|---|---|
 | \`.\` | Repeat last command |
 | \`>>\` | Indent line |
 | \`<<\` | Remove indentation |
@@ -187,653 +188,79 @@ Use these keys like arrow keys:
 ✅ With this, you can **move, edit, search, and manage files in Vim** like a beginner-friendly pro!
 `;
 
+// A simple and naive markdown to JSX renderer.
+// For a real-world scenario, you'd want to use a library like 'marked' or 'react-markdown'.
+function renderMarkdown(markdown: string) {
+  const sections = markdown.trim().split('\n\n');
+  return sections.map((section, index) => {
+    if (section.startsWith('# ')) {
+      const id = section.substring(2).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+      return <h1 key={index} id={id}>{section.substring(2)}</h1>;
+    }
+    if (section.startsWith('## ')) {
+        const id = section.substring(3).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+        return <h2 key={index} id={id}>{section.substring(3)}</h2>;
+    }
+    if (section.startsWith('### ')) {
+        const id = section.substring(4).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+        return <h3 key={index} id={id}>{section.substring(4)}</h3>;
+    }
+    if (section.startsWith('---')) {
+      return <hr key={index} />;
+    }
+    if (section.startsWith('- ')) {
+      const items = section.split('\n').map((item, i) => (
+        <li key={i} dangerouslySetInnerHTML={{ __html: item.substring(2).replace(/`(.*?)`/g, '<code>$1</code>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+      ));
+      return <ul key={index}>{items}</ul>;
+    }
+    if (section.match(/^\d+\./)) {
+        const items = section.split('\n').map((item, i) => {
+            const content = item.substring(item.indexOf('.') + 2);
+            if (content.includes('`vim notes.txt`')) {
+                return <li key={i}>Open Vim: <CodeBlock>vim notes.txt</CodeBlock></li>;
+            }
+            return <li key={i} dangerouslySetInnerHTML={{ __html: content.replace(/`(.*?)`/g, '<code>$1</code>') }} />
+        });
+        return <ol key={index}>{items}</ol>;
+    }
+    if (section.startsWith('|')) {
+        const rows = section.split('\n');
+        const headers = rows[0].split('|').slice(1, -1).map(h => h.trim());
+        // The third row is the separator `|---|---|`
+        const body = rows.slice(2);
+
+        return (
+            <div key={index} className="overflow-x-auto">
+                <table>
+                    <thead>
+                        <tr>
+                            {headers.map((header, i) => <th key={i}>{header}</th>)}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {body.map((row, i) => (
+                            <tr key={i}>
+                                {row.split('|').slice(1, -1).map((cell, j) => (
+                                    <td key={j} dangerouslySetInnerHTML={{ __html: cell.trim().replace(/`(.*?)`/g, '<code>$1</code>') }} />
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        );
+    }
+
+    return <p key={index} dangerouslySetInnerHTML={{ __html: section.replace(/`(.*?)`/g, '<code>$1</code>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />;
+  });
+}
+
 export default function VimPage() {
   return (
     <div className="flex">
       <main className="flex-1 py-8 px-4 md:px-8 lg:px-12 markdown-content">
-        <h1 id="-vim-commands--beginner-friendly-guide">
-          📘 Vim Commands – Beginner Friendly Guide
-        </h1>
-        <p>
-          Vim is a text editor used inside the terminal. At first, it feels
-          confusing, but once you understand the modes and commands, it becomes
-          very powerful.
-        </p>
-        <hr />
-        <h2 id="-1-modes-in-vim">✨ 1. Modes in Vim</h2>
-        <p>Think of Vim modes like tools in a toolbox:</p>
-        <ul>
-          <li>
-            <strong>Normal Mode (default)</strong> → move around and give
-            commands.
-          </li>
-          <li>
-            <strong>Insert Mode</strong> → type text like a regular editor.
-          </li>
-          <li>
-            <strong>Visual Mode</strong> → highlight and select text.
-          </li>
-          <li>
-            <strong>Command-Line Mode</strong> → run commands like save, quit,
-            search.
-          </li>
-          <li>
-            <strong>Replace Mode</strong> → type over existing text.
-          </li>
-        </ul>
-        <p>
-          👉 Example: When you open Vim, you’re in <strong>Normal Mode</strong>.
-          Press <code>i</code> to type, then press <code>Esc</code> to stop
-          typing.
-        </p>
-        <hr />
-        <h2 id="-2-moving-around-navigation">
-          ✨ 2. Moving Around (Navigation)
-        </h2>
-        <p>Use these keys like arrow keys:</p>
-        <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Command</th>
-                <th>What it does</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <code>h</code>
-                </td>
-                <td>Move left</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>l</code>
-                </td>
-                <td>Move right</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>j</code>
-                </td>
-                <td>Move down</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>k</code>
-                </td>
-                <td>Move up</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>0</code>
-                </td>
-                <td>Jump to beginning of line</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>^</code>
-                </td>
-                <td>Jump to first word in line</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>$</code>
-                </td>
-                <td>Jump to end of line</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>w</code>
-                </td>
-                <td>Jump forward word by word</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>b</code>
-                </td>
-                <td>Jump backward word by word</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>gg</code>
-                </td>
-                <td>Go to top of file</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>G</code>
-                </td>
-                <td>Go to bottom of file</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>Ctrl + d</code>
-                </td>
-                <td>Scroll down half a screen</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>Ctrl + u</code>
-                </td>
-                <td>Scroll up half a screen</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p>
-          👉 Example: If your file is very long, <code>gg</code> takes you to the
-          top and <code>G</code> takes you to the end.
-        </p>
-        <hr />
-        <h2 id="-3-typing-text-insert-mode">
-          ✨ 3. Typing Text (Insert Mode)
-        </h2>
-        <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Command</th>
-                <th>What it does</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <code>i</code>
-                </td>
-                <td>Start typing before cursor</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>I</code>
-                </td>
-                <td>Start typing at beginning of line</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>a</code>
-                </td>
-                <td>Start typing after cursor</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>A</code>
-                </td>
-                <td>Start typing at end of line</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>o</code>
-                </td>
-                <td>Create new line below and type</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>O</code>
-                </td>
-                <td>Create new line above and type</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>R</code>
-                </td>
-                <td>Replace text while typing</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p>
-          👉 Example: If you want to add a note below the current line, press{' '}
-          <code>o</code>, and a new line opens where you can type.
-        </p>
-        <hr />
-        <h2 id="-4-editing-text">✨ 4. Editing Text</h2>
-        <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Command</th>
-                <th>What it does</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <code>x</code>
-                </td>
-                <td>Delete character under cursor</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>dw</code>
-                </td>
-                <td>Delete a word</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>dd</code>
-                </td>
-                <td>Delete a whole line</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>2dd</code>
-                </td>
-                <td>Delete 2 lines</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>u</code>
-                </td>
-                <td>Undo last action</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>Ctrl + r</code>
-                </td>
-                <td>Redo undone change</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>yy</code>
-                </td>
-                <td>Copy (yank) a line</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>2yy</code>
-                </td>
-                <td>Copy 2 lines</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>yw</code>
-                </td>
-                <td>Copy a word</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>p</code>
-                </td>
-                <td>Paste after cursor</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>P</code>
-                </td>
-                <td>Paste before cursor</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>r&lt;char&gt;</code>
-                </td>
-                <td>Replace one character</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p>
-          👉 Example: If you typed something wrong, press <code>u</code> to undo
-          it. If you deleted by mistake, press <code>Ctrl + r</code> to bring it
-          back.
-        </p>
-        <hr />
-        <h2 id="-5-searching-replacing">✨ 5. Searching & Replacing</h2>
-        <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Command</th>
-                <th>What it does</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <code>/word</code>
-                </td>
-                <td>Search forward for “word”</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>?word</code>
-                </td>
-                <td>Search backward for “word”</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>n</code>
-                </td>
-                <td>Jump to next match</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>N</code>
-                </td>
-                <td>Jump to previous match</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>:%s/old/new/g</code>
-                </td>
-                <td>Replace all “old” with “new”</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>:%s/old/new/gc</code>
-                </td>
-                <td>Replace with confirmation</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p>
-          👉 Example: Type <code>/error</code> to find the word “error” in your
-          file. Press <code>n</code> to go to the next match.
-        </p>
-        <p>
-          👉 Example: If your file has many “cat” words,{' '}
-          <code>:%s/cat/dog/g</code> changes all cats into dogs.
-        </p>
-        <hr />
-        <h2 id="-6-selecting-text-visual-mode">
-          ✨ 6. Selecting Text (Visual Mode)
-        </h2>
-        <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Command</th>
-                <th>What it does</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <code>v</code>
-                </td>
-                <td>Select characters</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>V</code>
-                </td>
-                <td>Select whole lines</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>Ctrl + v</code>
-                </td>
-                <td>Select block/columns</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>y</code>
-                </td>
-                <td>Copy selection</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>d</code>
-                </td>
-                <td>Cut selection</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>p</code>
-                </td>
-                <td>Paste selection</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p>
-          👉 Example: Press <code>V</code> to highlight a line, then{' '}
-          <code>d</code> to delete it. Press <code>p</code> to paste it
-          somewhere else.
-        </p>
-        <hr />
-        <h2 id="-7-file-commands">✨ 7. File Commands</h2>
-        <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Command</th>
-                <th>What it does</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <code>:w</code>
-                </td>
-                <td>Save file</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>:q</code>
-                </td>
-                <td>Quit</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>:wq</code>
-                </td>
-                <td>Save and quit</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>:q!</code>
-                </td>
-                <td>Quit without saving</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>:x</code>
-                </td>
-                <td>Save and quit (same as <code>:wq</code>)</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>:e filename</code>
-                </td>
-                <td>Open another file</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>:saveas newfile</code>
-                </td>
-                <td>Save as new file</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p>
-          👉 Example: If you edited a file and want to quit, type{' '}
-          <code>:wq</code>. If you don’t want to save, type <code>:q!</code>.
-        </p>
-        <hr />
-        <h2 id="-8-working-with-windows-tabs">
-          ✨ 8. Working with Windows & Tabs
-        </h2>
-        <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Command</th>
-                <th>What it does</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <code>:split filename</code>
-                </td>
-                <td>Open file in new horizontal window</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>:vsplit filename</code>
-                </td>
-                <td>Open file in new vertical window</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>Ctrl + w, w</code>
-                </td>
-                <td>Switch between windows</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>:tabnew filename</code>
-                </td>
-                <td>Open file in new tab</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>gt</code>
-                </td>
-                <td>Next tab</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>gT</code>
-                </td>
-                <td>Previous tab</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p>
-          👉 Example: If you want to compare two files, use{' '}
-          <code>:vsplit file2.txt</code> and both files show side by side.
-        </p>
-        <hr />
-        <h2 id="-9-marks-jumps">✨ 9. Marks & Jumps</h2>
-        <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Command</th>
-                <th>What it does</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <code>m&lt;a&gt;</code>
-                </td>
-                <td>Mark a position with a letter (a, b, c…)</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>&apos;a</code>
-                </td>
-                <td>Jump to start of line of mark</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>``a</code>
-                </td>
-                <td>Jump to exact cursor position of mark</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p>
-          👉 Example: If you are editing a long file, type <code>ma</code> to
-          mark a spot. Later type <code>&apos;a</code> to quickly return.
-        </p>
-        <hr />
-        <h2 id="-10-useful-shortcuts">✨ 10. Useful Shortcuts</h2>
-        <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Command</th>
-                <th>What it does</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <code>.</code>
-                </td>
-                <td>Repeat last command</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>&gt;&gt;</code>
-                </td>
-                <td>Indent line</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>&lt;&lt;</code>
-                </td>
-                <td>Remove indentation</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>:set number</code>
-                </td>
-                <td>Show line numbers</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>:set nonumber</code>
-                </td>
-                <td>Hide line numbers</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>:syntax on</code>
-                </td>
-                <td>Enable syntax highlighting</td>
-              </tr>
-              <tr>
-                <td>
-                  <code>:syntax off</code>
-                </td>
-                <td>Disable syntax highlighting</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p>
-          👉 Example: If you want to repeat deleting a line multiple times, type{' '}
-          <code>dd</code> once and then press <code>.</code> to repeat.
-        </p>
-        <hr />
-        <h2 id="-practice-scenario">🎯 Practice Scenario</h2>
-        <ol>
-          <li>
-            Open Vim: <CodeBlock>vim notes.txt</CodeBlock>
-          </li>
-          <li>
-            Press <code>i</code> → type: <code>Hello, this is my note.</code>
-          </li>
-          <li>
-            Press <code>Esc</code> → type <code>o</code> → new line opens → type{' '}
-            <code>Another note.</code>
-          </li>
-          <li>
-            Type <code>/note</code> → finds the word “note.”
-          </li>
-          <li>
-            Type <code>:%s/note/task/g</code> → replaces “note” with “task.”
-          </li>
-          <li>
-            Press <code>:wq</code> → saves and quits.
-          </li>
-        </ol>
-        <hr />
-        <p>
-          ✅ With this, you can{' '}
-          <strong>move, edit, search, and manage files in Vim</strong> like a
-          beginner-friendly pro!
-        </p>
+        {renderMarkdown(vimMarkdownContent)}
       </main>
       <aside className="hidden lg:block w-80 p-8">
         <div className="sticky top-20">
