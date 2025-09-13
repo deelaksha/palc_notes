@@ -5,6 +5,10 @@ import Link from 'next/link';
 import { commandsData } from '@/lib/linux-commands';
 import { Input } from '@/components/ui/input';
 
+type GroupedCommands = {
+  [key: string]: typeof commandsData;
+};
+
 export default function LinuxPage() {
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -14,6 +18,15 @@ export default function LinuxPage() {
       cmd.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
       cmd.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const groupedCommands = filteredCommands.reduce((acc, command) => {
+    const { category } = command;
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(command);
+    return acc;
+  }, {} as GroupedCommands);
 
   return (
     <main className="flex-1 p-4 md:p-8 lg:p-12">
@@ -38,27 +51,28 @@ export default function LinuxPage() {
       </div>
 
       {filteredCommands.length > 0 ? (
-        <div
-          id="command-grid"
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto"
-        >
-          {filteredCommands.map((command, index) => (
-            <Link
-              href={`/linux/${command.name}`}
-              key={command.name}
-              className="command-card-container group"
-            >
-              <div className="bg-card rounded-xl p-6 shadow-lg border border-border hover:border-primary hover:shadow-primary/20 transition-all duration-300 h-full">
-                <div className="flex items-center justify-between">
-                  <span className="text-3xl font-bold text-muted-foreground/50 opacity-50 font-code">
-                    {index + 1}.
-                  </span>
-                  <h2 className="text-3xl font-semibold text-foreground font-code mr-auto ml-4">
-                    {command.name}
-                  </h2>
-                </div>
+        <div className="max-w-4xl mx-auto space-y-12">
+          {Object.entries(groupedCommands).map(([category, commands]) => (
+            <section key={category}>
+              <h2 className="text-2xl font-headline font-bold mb-6 pb-2 border-b">
+                {category}
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {commands.map((command) => (
+                  <Link
+                    href={`/linux/${command.name}`}
+                    key={command.name}
+                    className="command-card-container group"
+                  >
+                    <div className="bg-card rounded-lg p-4 shadow-md border border-border hover:border-primary hover:shadow-primary/10 transition-all duration-300 h-full flex items-center justify-center">
+                      <h3 className="text-xl font-semibold text-foreground font-code">
+                        {command.name}
+                      </h3>
+                    </div>
+                  </Link>
+                ))}
               </div>
-            </Link>
+            </section>
           ))}
         </div>
       ) : (
