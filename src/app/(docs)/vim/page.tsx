@@ -179,7 +179,7 @@ Use these keys like arrow keys:
 1. Open Vim: \`vim notes.txt\`
 2. Press \`i\` → type: \`Hello, this is my note.\`
 3. Press \`Esc\` → type \`o\` → new line opens → type \`Another note.\`
-4. Type \`/note\` → finds the word “note.”
+4. Press \`Esc\` → type \`/note\` → finds the word “note.”
 5. Type \`:%s/note/task/g\` → replaces “note” with “task.”
 6. Press \`:wq\` → saves and quits.
 
@@ -193,17 +193,17 @@ Use these keys like arrow keys:
 function renderMarkdown(markdown: string) {
   const sections = markdown.trim().split('\n\n');
   return sections.map((section, index) => {
-    if (section.startsWith('# ')) {
-      const id = section.substring(2).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
-      return <h1 key={index} id={id}>{section.substring(2)}</h1>;
+    if (section.startsWith('### ')) {
+        const id = section.substring(4).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+        return <h3 key={index} id={id}>{section.substring(4)}</h3>;
     }
     if (section.startsWith('## ')) {
         const id = section.substring(3).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
         return <h2 key={index} id={id}>{section.substring(3)}</h2>;
     }
-    if (section.startsWith('### ')) {
-        const id = section.substring(4).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
-        return <h3 key={index} id={id}>{section.substring(4)}</h3>;
+    if (section.startsWith('# ')) {
+      const id = section.substring(2).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+      return <h1 key={index} id={id}>{section.substring(2)}</h1>;
     }
     if (section.startsWith('---')) {
       return <hr key={index} />;
