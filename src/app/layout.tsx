@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Logo } from '@/components/icons';
@@ -34,18 +35,36 @@ const fontSourceCodePro = Source_Code_Pro({
 
 const navItems = [
   { href: '/', label: 'Home', icon: <Home /> },
-  { href: '/vim', label: 'Vim', icon: <Code /> },
-  { href: '/linux', label: 'Linux', icon: <Terminal /> },
-  { href: '/github', label: 'GitHub', icon: <Github /> },
-  { href: '/git-advanced', label: 'Git Advanced', icon: <GitBranchPlus /> },
-  { href: '/code-navigation', label: 'Code Navigation', icon: <FileCode /> },
+  { href: '/docs/vim', label: 'Vim', icon: <Code /> },
+  { href: '/docs/linux', label: 'Linux', icon: <Terminal /> },
+  { href: '/docs/github', label: 'GitHub', icon: <Github /> },
+  { href: '/docs/git-advanced', label: 'Git Advanced', icon: <GitBranchPlus /> },
+  { href: '/docs/code-navigation', label: 'Code Navigation', icon: <FileCode /> },
   { href: '/regex', label: 'Regex', icon: <Regex /> },
-  { href: '/notes', label: 'Notes', icon: <BookOpen /> },
-  { href: '/about', label: 'About', icon: <Info /> },
+  { href: '/docs/notes', label: 'Notes', icon: <BookOpen /> },
+  { href: '/docs/about', label: 'About', icon: <Info /> },
 ];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const isDocsPage = pathname.startsWith('/docs');
+
+  if (isDocsPage) {
+    return (
+      <html lang="en" className="dark">
+        <body
+          className={cn(
+            'min-h-screen bg-background font-body antialiased',
+            fontInter.variable,
+            fontSourceCodePro.variable
+          )}
+        >
+          {children}
+          <Toaster />
+        </body>
+      </html>
+    );
+  }
 
   return (
     <html lang="en" className="dark">
@@ -70,7 +89,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                       <SidebarMenuItem key={item.href}>
                         <SidebarMenuButton
                           asChild
-                          isActive={pathname === item.href}
+                          isActive={pathname.startsWith(item.href) && item.href !== '/'}
                           tooltip={item.label}
                         >
                           <Link href={item.href}>
