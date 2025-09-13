@@ -1,6 +1,8 @@
+
 'use client';
 
 import { Logo } from '@/components/icons';
+import { Header } from '@/components/layout/Header';
 import {
   Sidebar,
   SidebarContent,
@@ -13,7 +15,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-import { BookOpen, Code, FileCode, Github, Home, Info, Search, Terminal, GitBranchPlus } from 'lucide-react';
+import { BookOpen, Code, FileCode, GitBranchPlus, Github, Home, Info, Search, Terminal } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -39,7 +41,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
             <Link href="/" className="block group-data-[collapsible=icon]:hidden">
               <Logo />
             </Link>
-            <SidebarTrigger />
+            <SidebarTrigger className="hidden md:flex" />
           </div>
 
           <div className="relative mt-2">
@@ -66,7 +68,10 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
           </SidebarMenu>
         </SidebarContent>
       </Sidebar>
-      <SidebarInset>{children}</SidebarInset>
+      <SidebarInset>
+        <Header />
+        {children}
+      </SidebarInset>
     </SidebarProvider>
   );
 }
