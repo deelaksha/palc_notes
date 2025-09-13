@@ -238,7 +238,7 @@ export const gitCommandsData = [
             "It displays a list of commits in reverse chronological order.",
             "`--oneline`: Condenses each commit to a single line, showing the commit hash and message.",
             "`--graph`: Displays a text-based graph of the commit history, showing branches and merges.",
-            "`--pretty=format:"..."`: Allows for custom formatting of the output.",
+            "`--pretty=format:\"...\"`: Allows for custom formatting of the output.",
             "`<branch1>..<branch2>`: Shows commits that are in `branch2` but not in `branch1`."
         ],
         examples: [
