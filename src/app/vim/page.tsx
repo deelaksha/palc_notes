@@ -1,5 +1,4 @@
 
-import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
 import { TableOfContents } from '@/components/toc/TableOfContents';
 import {
   Accordion,
@@ -55,7 +54,7 @@ Navigation in Vim is designed to keep your hands on the home row, making you fas
 | \`w\` | (word) | **Jump Forward by Word**: Moves to the beginning of the next word. Punctuation is treated as a word. |
 | \`b\` | (back) | **Jump Backward by Word**: Moves to the beginning of the previous word. |
 | \`gg\` | (go go) | **Go to Top of File**: Moves the cursor to the first line of the file. An easy way to remember is "Good Game" to restart. |
-| \`G\` | (Go) | **Go to End of File**: Moves the cursor to the last line of thefile. |
+| \`G\` | (Go) | **Go to End of File**: Moves the cursor to the last line of the file. |
 | \`Ctrl+d\` | (down) | **Scroll Down Half Page**: Moves the view down by half a screen. |
 | \`Ctrl+u\` | (up) | **Scroll Up Half Page**: Moves the view up by half a screen. |
 
