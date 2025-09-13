@@ -53,11 +53,11 @@ export default function CodeNavigationPage() {
             <div className="grid gap-6 md:grid-cols-2">
               {tools.map((tool) => (
                 <Link key={tool.name} href={tool.href} className="group">
-                  <Card className="h-full transition-all duration-300 ease-in-out group-hover:border-accent group-hover:shadow-lg group-hover:shadow-accent/10 group-hover:-translate-y-1">
+                  <Card className="h-full transition-all duration-300 ease-in-out group-hover:border-primary group-hover:shadow-lg group-hover:shadow-primary/10 group-hover:-translate-y-1">
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                          <div className="bg-accent/10 p-3 rounded-md text-accent">
+                          <div className="bg-muted p-3 rounded-md text-foreground">
                             {tool.icon}
                           </div>
                           <div>
@@ -69,7 +69,7 @@ export default function CodeNavigationPage() {
                             </CardDescription>
                           </div>
                         </div>
-                        <ArrowRight className="size-5 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-accent" />
+                        <ArrowRight className="size-5 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
                       </div>
                     </CardHeader>
                   </Card>
