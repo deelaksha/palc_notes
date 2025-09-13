@@ -1,4 +1,5 @@
 
+
 import {
   Card,
   CardDescription,
@@ -7,43 +8,42 @@ import {
 } from '@/components/ui/card';
 import { ArrowRight, BookOpen, Code, FileCode, GitBranchPlus, Github, Info, Terminal, Search } from 'lucide-react';
 import Link from 'next/link';
-import { Logo } from '@/components/icons';
 
 const categories = [
     {
         name: 'Vim',
         description: 'Master the powerful and efficient Vim text editor.',
-        href: '/docs/vim',
+        href: '/vim',
         icon: <Code className="size-8" />,
     },
     {
         name: 'Linux',
         description: 'Explore essential commands and concepts for the Linux terminal.',
-        href: '/docs/linux',
+        href: '/linux',
         icon: <Terminal className="size-8" />,
     },
     {
         name: 'GitHub',
         description: 'A comprehensive reference for core Git commands.',
-        href: '/docs/github',
+        href: '/github',
         icon: <Github className="size-8" />,
     },
     {
         name: 'Git Advanced',
         description: 'Unlock the next level of Git mastery with advanced commands.',
-        href: '/docs/git-advanced',
+        href: '/git-advanced',
         icon: <GitBranchPlus className="size-8" />,
     },
     {
         name: 'Code Navigation',
         description: 'Tools to search, understand, and navigate large codebases.',
-        href: '/docs/code-navigation',
+        href: '/code-navigation',
         icon: <FileCode className="size-8" />,
     },
     {
         name: 'Notes',
         description: 'A collection of miscellaneous tech notes and thoughts.',
-        href: '/docs/notes',
+        href: '/notes',
         icon: <BookOpen className="size-8" />,
     },
 ];
@@ -51,11 +51,6 @@ const categories = [
 export default function HomePage() {
   return (
     <div className="flex flex-col flex-1 bg-background">
-      <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
-          <Link href="/" className="flex items-center gap-2">
-              <Logo />
-          </Link>
-      </header>
       <main className="flex-1">
         <section id="categories" className="w-full py-16 md:py-24 bg-background">
           <div className="container px-4 md:px-6">
