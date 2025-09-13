@@ -126,7 +126,7 @@
   }
 
   .markdown-content table {
-    @apply w-full my-6 border-collapse;
+    @apply w-full my-6;
   }
 
   .markdown-content th,
@@ -135,10 +135,12 @@
   }
 
   .markdown-content th {
-    @apply bg-muted;
+    @apply bg-muted font-semibold;
   }
   
   .markdown-content code:not(pre > code) {
     @apply font-code bg-muted text-foreground px-1 py-0.5 rounded-sm text-sm;
   }
 }
+
+    

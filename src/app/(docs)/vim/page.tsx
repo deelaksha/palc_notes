@@ -1,6 +1,12 @@
+
 import { CodeBlock } from '@/components/markdown/CodeBlock';
 import { TableOfContents } from '@/components/toc/TableOfContents';
-import { Fragment } from 'react';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 
 const vimMarkdownContent = `
 # 📘 Vim Commands – Beginner Friendly Guide
@@ -189,30 +195,29 @@ Use these keys like arrow keys:
 `;
 
 // A simple and naive markdown to JSX renderer.
-// For a real-world scenario, you'd want to use a library like 'marked' or 'react-markdown'.
 function renderMarkdown(markdown: string) {
   const sections = markdown.trim().split('\n\n');
   return sections.map((section, index) => {
     if (section.startsWith('### ')) {
         const id = section.substring(4).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
-        return <h3 key={index} id={id}>{section.substring(4)}</h3>;
+        return <h3 key={index} id={id} className="font-headline text-xl font-semibold mt-6 mb-3">{section.substring(4)}</h3>;
     }
     if (section.startsWith('## ')) {
         const id = section.substring(3).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
-        return <h2 key={index} id={id}>{section.substring(3)}</h2>;
+        return <h2 key={index} id={id} className="font-headline text-2xl font-bold mt-8 mb-4 pb-2 border-b">{section.substring(3)}</h2>;
     }
     if (section.startsWith('# ')) {
       const id = section.substring(2).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
-      return <h1 key={index} id={id}>{section.substring(2)}</h1>;
+      return <h1 key={index} id={id} className="font-headline text-4xl font-extrabold mt-4 mb-6 pb-2 border-b">{section.substring(2)}</h1>;
     }
     if (section.startsWith('---')) {
-      return <hr key={index} />;
+      return <hr key={index} className="my-6" />;
     }
     if (section.startsWith('- ')) {
       const items = section.split('\n').map((item, i) => (
         <li key={i} dangerouslySetInnerHTML={{ __html: item.substring(2).replace(/`(.*?)`/g, '<code>$1</code>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
       ));
-      return <ul key={index}>{items}</ul>;
+      return <ul key={index} className="list-disc pl-6 space-y-1 mb-4">{items}</ul>;
     }
     if (section.match(/^\d+\./)) {
         const items = section.split('\n').map((item, i) => {
@@ -222,27 +227,26 @@ function renderMarkdown(markdown: string) {
             }
             return <li key={i} dangerouslySetInnerHTML={{ __html: content.replace(/`(.*?)`/g, '<code>$1</code>') }} />
         });
-        return <ol key={index}>{items}</ol>;
+        return <ol key={index} className="list-decimal pl-6 space-y-1 mb-4">{items}</ol>;
     }
     if (section.startsWith('|')) {
         const rows = section.split('\n');
         const headers = rows[0].split('|').slice(1, -1).map(h => h.trim());
-        // The third row is the separator `|---|---|`
         const body = rows.slice(2);
 
         return (
-            <div key={index} className="overflow-x-auto">
-                <table>
+            <div key={index} className="overflow-x-auto my-4 border rounded-lg">
+                <table className="w-full">
                     <thead>
-                        <tr>
-                            {headers.map((header, i) => <th key={i}>{header}</th>)}
+                        <tr className="bg-muted">
+                            {headers.map((header, i) => <th key={i} className="p-3 text-left font-semibold">{header}</th>)}
                         </tr>
                     </thead>
                     <tbody>
                         {body.map((row, i) => (
-                            <tr key={i}>
+                            <tr key={i} className="border-t">
                                 {row.split('|').slice(1, -1).map((cell, j) => (
-                                    <td key={j} dangerouslySetInnerHTML={{ __html: cell.trim().replace(/`(.*?)`/g, '<code>$1</code>') }} />
+                                    <td key={j} className="p-3" dangerouslySetInnerHTML={{ __html: cell.trim().replace(/`(.*?)`/g, '<code>$1</code>') }} />
                                 ))}
                             </tr>
                         ))}
@@ -252,15 +256,58 @@ function renderMarkdown(markdown: string) {
         );
     }
 
-    return <p key={index} dangerouslySetInnerHTML={{ __html: section.replace(/`(.*?)`/g, '<code>$1</code>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />;
+    return <p key={index} className="mb-4 leading-relaxed" dangerouslySetInnerHTML={{ __html: section.replace(/`(.*?)`/g, '<code>$1</code>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/👉/g, '<span class="mr-2">👉</span>') }} />;
   });
 }
 
+function Section({ title, content }: { title: string; content: string }) {
+  const id = title.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+  return (
+    <div id={id}>
+      {renderMarkdown(content)}
+    </div>
+  );
+}
+
 export default function VimPage() {
+    const sections = vimMarkdownContent
+    .split('---')
+    .map(s => s.trim())
+    .filter(Boolean);
+
+  const intro = sections.shift() || '';
+  const conclusion = sections.pop() || '';
+
+  const groupedSections = sections.reduce((acc, sectionContent) => {
+    const titleMatch = sectionContent.match(/^##\s.*$/m);
+    if (titleMatch) {
+      acc.push({ title: titleMatch[0].substring(3).trim(), content: sectionContent });
+    }
+    return acc;
+  }, [] as { title: string; content: string }[]);
+
+
   return (
     <div className="flex">
       <main className="flex-1 py-8 px-4 md:px-8 lg:px-12 markdown-content">
-        {renderMarkdown(vimMarkdownContent)}
+        {renderMarkdown(intro)}
+        
+        <Accordion type="multiple" className="w-full space-y-4" defaultValue={groupedSections.map(s => s.title)}>
+          {groupedSections.map(({ title, content }) => (
+            <AccordionItem value={title} key={title} className="border rounded-lg bg-card overflow-hidden">
+              <AccordionTrigger className="px-6 py-4 font-headline text-lg hover:no-underline">
+                {title}
+              </AccordionTrigger>
+              <AccordionContent className="px-6 pt-0 pb-6">
+                <Section title={title} content={content.replace(/^##\s.*$/m, '')} />
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+
+        <div className="mt-8">
+            {renderMarkdown(conclusion)}
+        </div>
       </main>
       <aside className="hidden lg:block w-80 p-8">
         <div className="sticky top-20">
@@ -270,3 +317,5 @@ export default function VimPage() {
     </div>
   );
 }
+
+    
