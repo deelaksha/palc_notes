@@ -33,6 +33,7 @@ const pattern = /[a-z]+@[a-z]+\\.[a-z]+/;
 const match = text.match(pattern);
 console.log(match[0]); // "test@example.com"
 </CodeBlock>
+
 <CodeBlock>
 # Python
 import re

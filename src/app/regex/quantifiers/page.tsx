@@ -59,7 +59,7 @@ To make a quantifier **Lazy**, you add a question mark \`?\` after it (\`*?\`, \
     4.  The lazy quantifier expands its match one character at a time. It matches 'h', then checks for \`>\`. No. It matches '1', then checks for \`>\`. Yes!
 - **Output**: The engine finds two matches: \`<h1>\` and \`</h1>\`.
 
-- **Pitfall**: Using greedy quantifiers like \`.*\`, especially with patterns that can be found multiple times in a string, is a common source of bugs. When in doubt, start with a lazy quantifier (\`.*?_
+- **Pitfall**: Using greedy quantifiers like \`.*\`, especially with patterns that can be found multiple times in a string, is a common source of bugs. When in doubt, start with a lazy quantifier (\`.*?_\
 \`) or a more specific negated character set (\`[^>]*\`). The pattern \`<[^>]*>\` is often a better and more efficient way to match an HTML tag than \`<.*?>\`.
 `;
 
