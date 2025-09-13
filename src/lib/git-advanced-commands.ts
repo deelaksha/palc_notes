@@ -38,6 +38,23 @@ export const gitAdvancedCommandsData = [
     },
     {
         category: "Recovery and Inspection",
+        name: "git reset",
+        description: "The 'Time Machine'. It moves the current branch pointer to a different commit, optionally changing your files to match.",
+        howItWorks: [
+            "This command can un-stage files, un-commit changes, or completely reset your work to a previous state. It has three main modes:",
+            "`--soft`: Moves the branch pointer but does NOT touch your staged files or your working directory. Your code stays as it is, but Git now thinks you are at an older commit.",
+            "`--mixed` (default): Moves the branch pointer and unstages all your changes. Your code files are NOT changed, but you'll have to `git add` them again if you want to re-commit them.",
+            "`--hard`: **DANGEROUS!** Moves the branch pointer and completely changes your staged files AND your working files to match the commit you reset to. Any uncommitted work will be lost forever."
+        ],
+        examples: [
+            { code: 'git reset HEAD~1', text: "This is a `--mixed` reset by default. It 'un-commits' your last commit but leaves the changes in your working directory." },
+            { code: 'git reset --soft HEAD~1', text: "Un-commits the last commit, but keeps all your changes staged, ready to be committed again." },
+            { code: "git reset --hard a1b2c3d4", text: "Destroys all current changes and makes your project folder identical to how it was at commit `a1b2c3d4`. Use with caution!" }
+        ],
+        realWorld: "The most common use is `git reset <file>` to unstage a file you accidentally added. The most dangerous use is `git reset --hard` to throw away a series of bad commits and start over from a known good point. If you do this by mistake, `git reflog` is your only hope!"
+    },
+    {
+        category: "Recovery and Inspection",
         name: "git reflog",
         description: "Your 'Safety Net'. It shows a log of everywhere `HEAD` (your current position) has been. It's a lifesaver if you think you've lost work or a commit.",
         howItWorks: [
