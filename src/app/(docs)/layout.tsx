@@ -8,7 +8,6 @@ import {
   SidebarContent,
   SidebarHeader,
   SidebarInset,
-  SidebarInput,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -41,12 +40,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
             <Link href="/" className="block group-data-[collapsible=icon]:hidden">
               <Logo />
             </Link>
-            <SidebarTrigger className="hidden md:flex" />
-          </div>
-
-          <div className="relative mt-2">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <SidebarInput placeholder="Search..." className="pl-9" />
+            <SidebarTrigger />
           </div>
         </SidebarHeader>
         <SidebarContent>
