@@ -262,12 +262,11 @@ function renderMarkdown(markdown: string) {
 }
 
 export default function VimPage() {
-    const allSections = vimMarkdownContent.split('---').map(s => s.trim()).filter(Boolean);
-    
-    const intro = allSections.shift() || '';
-    const conclusion = allSections.pop() || '';
-    
-    const groupedSections = allSections.reduce((acc, sectionContent) => {
+    const sections = vimMarkdownContent.split('---').map(s => s.trim()).filter(Boolean);
+    const intro = sections.shift() || '';
+    const conclusion = sections.pop() || '';
+
+    const groupedSections = sections.reduce((acc, sectionContent) => {
         const titleMatch = sectionContent.match(/^##\s.*$/m);
         if (titleMatch) {
             const title = titleMatch[0].substring(3).trim();
@@ -277,12 +276,14 @@ export default function VimPage() {
         return acc;
     }, [] as { title: string; content: string }[]);
 
+    const defaultActiveItems = groupedSections.map(s => s.title);
+
     return (
         <div className="flex">
             <main className="flex-1 py-8 px-4 md:px-8 lg:px-12 markdown-content">
                 {renderMarkdown(intro)}
                 
-                <Accordion type="multiple" className="w-full space-y-4" defaultValue={groupedSections.map(s => s.title)}>
+                <Accordion type="multiple" className="w-full space-y-4" defaultValue={defaultActiveItems}>
                     {groupedSections.map(({ title, content }) => (
                         <AccordionItem value={title} key={title} className="border rounded-lg bg-card overflow-hidden">
                             <AccordionTrigger className="px-6 py-4 font-headline text-lg hover:no-underline">
