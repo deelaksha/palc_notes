@@ -197,27 +197,32 @@ Use these keys like arrow keys:
 // A simple and naive markdown to JSX renderer.
 function renderMarkdown(markdown: string) {
   if (!markdown) return null;
+  // Split by newline and then process blocks
   const blocks = markdown.trim().split(/\n{2,}/);
   
+  const renderInlines = (text: string) => {
+    return text.replace(/`(.*?)`/g, '<code>$1</code>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/👉/g, '<span class="mr-2">👉</span>');
+  }
+
   return blocks.map((block, index) => {
     if (block.startsWith('### ')) {
         const id = block.substring(4).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
-        return <h3 key={index} id={id} className="font-headline text-xl font-semibold mt-6 mb-3">{block.substring(4)}</h3>;
+        return <h3 key={index} id={id} className="font-headline text-xl font-semibold mt-6 mb-3" dangerouslySetInnerHTML={{ __html: renderInlines(block.substring(4)) }} />;
     }
     if (block.startsWith('## ')) {
         const id = block.substring(3).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
-        return <h2 key={index} id={id} className="font-headline text-2xl font-bold mt-8 mb-4 pb-2 border-b">{block.substring(3)}</h2>;
+        return <h2 key={index} id={id} className="font-headline text-2xl font-bold mt-8 mb-4 pb-2 border-b" dangerouslySetInnerHTML={{ __html: renderInlines(block.substring(3)) }} />;
     }
     if (block.startsWith('# ')) {
       const id = block.substring(2).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
-      return <h1 key={index} id={id} className="font-headline text-4xl font-extrabold mt-4 mb-6 pb-2 border-b">{block.substring(2)}</h1>;
+      return <h1 key={index} id={id} className="font-headline text-4xl font-extrabold mt-4 mb-6 pb-2 border-b" dangerouslySetInnerHTML={{ __html: renderInlines(block.substring(2)) }} />;
     }
     if (block.startsWith('---')) {
       return <hr key={index} className="my-6" />;
     }
     if (block.startsWith('- ')) {
       const items = block.split('\n').map((item, i) => (
-        <li key={i} dangerouslySetInnerHTML={{ __html: item.substring(2).replace(/`(.*?)`/g, '<code>$1</code>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+        <li key={i} dangerouslySetInnerHTML={{ __html: renderInlines(item.substring(2)) }} />
       ));
       return <ul key={index} className="list-disc pl-6 space-y-1 mb-4">{items}</ul>;
     }
@@ -227,7 +232,7 @@ function renderMarkdown(markdown: string) {
             if (content.includes('`vim notes.txt`')) {
                 return <li key={i}>Open Vim: <CodeBlock>vim notes.txt</CodeBlock></li>;
             }
-            return <li key={i} dangerouslySetInnerHTML={{ __html: content.replace(/`(.*?)`/g, '<code>$1</code>') }} />
+            return <li key={i} dangerouslySetInnerHTML={{ __html: renderInlines(content) }} />
         });
         return <ol key={index} className="list-decimal pl-6 space-y-1 mb-4">{items}</ol>;
     }
@@ -248,7 +253,7 @@ function renderMarkdown(markdown: string) {
                         {body.map((row, i) => (
                             <tr key={i} className="border-t">
                                 {row.split('|').slice(1, -1).map((cell, j) => (
-                                    <td key={j} className="p-3" dangerouslySetInnerHTML={{ __html: cell.trim().replace(/`(.*?)`/g, '<code>$1</code>') }} />
+                                    <td key={j} className="p-3" dangerouslySetInnerHTML={{ __html: renderInlines(cell.trim()) }} />
                                 ))}
                             </tr>
                         ))}
@@ -258,7 +263,7 @@ function renderMarkdown(markdown: string) {
         );
     }
 
-    return <p key={index} className="mb-4 leading-relaxed" dangerouslySetInnerHTML={{ __html: block.replace(/`(.*?)`/g, '<code>$1</code>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/👉/g, '<span class="mr-2">👉</span>') }} />;
+    return <p key={index} className="mb-4 leading-relaxed" dangerouslySetInnerHTML={{ __html: renderInlines(block) }} />;
   });
 }
 
@@ -273,9 +278,31 @@ export default function VimPage() {
             const title = titleMatch[0].substring(3).trim();
             const contentWithoutTitle = sectionContent.substring(titleMatch[0].length).trim();
             acc.push({ title: title, content: contentWithoutTitle });
+        } else if(sectionContent.match(/^#\s.*$/m)) {
+            // This is the main title, ignore for accordion
+        }
+        else {
+             // Fallback for content that doesn't match the ## structure, like the practice scenario
+            const firstLine = sectionContent.split('\n')[0];
+            const titleMatch = firstLine.match(/^##\s.*$/m) || firstLine.match(/^#\s.*$/m);
+            if(titleMatch) {
+                const title = titleMatch[0].substring(titleMatch[0].indexOf(' ')).trim();
+                 acc.push({ title, content: sectionContent });
+            }
         }
         return acc;
     }, [] as { title: string; content: string }[]);
+    
+    // Manually add the last section if it wasn't picked up
+    const lastSectionRaw = sections[sections.length -1];
+    if (lastSectionRaw && lastSectionRaw.startsWith('## 🎯 Practice Scenario')) {
+        const title = '🎯 Practice Scenario';
+        const content = lastSectionRaw.substring(lastSectionRaw.indexOf('\n')).trim();
+        if (!groupedSections.find(s => s.title === title)) {
+             groupedSections.push({ title, content });
+        }
+    }
+
 
     const defaultActiveItems = groupedSections.map(s => s.title);
 
@@ -311,3 +338,4 @@ export default function VimPage() {
         </div>
     );
 }
+
