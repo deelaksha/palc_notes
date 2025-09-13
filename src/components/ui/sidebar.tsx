@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -112,6 +113,7 @@ const SidebarProvider = React.forwardRef<
       return () => window.removeEventListener("keydown", handleKeyDown)
     }, [toggleSidebar])
 
+
     // We add a state so that we can do data-state="expanded" or "collapsed".
     // This makes it easier to style the sidebar with Tailwind classes.
     const state = open ? "expanded" : "collapsed"
@@ -121,7 +123,7 @@ const SidebarProvider = React.forwardRef<
         state,
         open,
         setOpen,
-        isMobile,
+        isMobile: !!isMobile,
         openMobile,
         setOpenMobile,
         toggleSidebar,
@@ -263,7 +265,30 @@ const SidebarTrigger = React.forwardRef<
   React.ElementRef<typeof Button>,
   React.ComponentProps<typeof Button>
 >(({ className, onClick, ...props }, ref) => {
-  const { toggleSidebar } = useSidebar()
+  const { toggleSidebar, isMobile } = useSidebar()
+  const [isMounted, setIsMounted] = React.useState(false);
+
+  React.useEffect(() => {
+      setIsMounted(true);
+  }, []);
+
+
+  if (!isMounted && isMobile) {
+      return (
+          <Button
+              ref={ref}
+              data-sidebar="trigger"
+              variant="ghost"
+              size="icon"
+              className={cn("h-7 w-7", className)}
+              disabled
+              {...props}
+          >
+              <PanelLeft />
+              <span className="sr-only">Toggle Sidebar</span>
+          </Button>
+      );
+  }
 
   return (
     <Button
