@@ -7,6 +7,7 @@ import {
 } from '@/components/ui/card';
 import { ArrowRight, BookOpen, Code, FileCode, GitBranchPlus, Github, Info, Terminal, Search } from 'lucide-react';
 import Link from 'next/link';
+import { Logo } from '@/components/icons';
 
 const categories = [
     {
@@ -50,6 +51,11 @@ const categories = [
 export default function HomePage() {
   return (
     <div className="flex flex-col flex-1 bg-background">
+      <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
+          <Link href="/" className="flex items-center gap-2">
+              <Logo />
+          </Link>
+      </header>
       <main className="flex-1">
         <section id="categories" className="w-full py-16 md:py-24 bg-background">
           <div className="container px-4 md:px-6">
