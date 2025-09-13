@@ -7,14 +7,12 @@ import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
-  SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
-  SidebarTrigger,
 } from '@/components/ui/sidebar';
-import { BookOpen, Code, FileCode, GitBranchPlus, Github, Home, Info, Search, Terminal } from 'lucide-react';
+import { BookOpen, Code, FileCode, GitBranchPlus, Github, Home, Info, Terminal } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -47,7 +45,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
                   <SidebarMenuItem key={item.href}>
                     <SidebarMenuButton
                       asChild
-                      isActive={pathname.startsWith(item.href) && (item.href === '/' ? pathname === '/' : true)}
+                      isActive={pathname === '/' ? item.href === '/' : pathname.startsWith(item.href) && item.href !== '/'}
                       tooltip={item.label}
                     >
                       <Link href={item.href}>
