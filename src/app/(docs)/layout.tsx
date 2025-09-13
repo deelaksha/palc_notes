@@ -17,7 +17,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const navItems = [
-  { href: '/home', label: 'Home', icon: <Home /> },
+  { href: '/', label: 'Home', icon: <Home /> },
   { href: '/vim', label: 'Vim', icon: <Code /> },
   { href: '/linux', label: 'Linux', icon: <Terminal /> },
   { href: '/github', label: 'GitHub', icon: <Github /> },
