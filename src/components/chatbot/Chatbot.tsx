@@ -3,16 +3,19 @@
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { MessageSquare, X, Send, Bot, Loader2 } from 'lucide-react';
+import { MessageSquare, X, Send, Bot, Loader2, Sparkles, BrainCircuit } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { contextualChat } from '@/ai/flows/contextual-chat';
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
+import type { Quiz } from '@/ai/flows/quiz-generator';
+import { generateQuiz } from '@/ai/flows/quiz-generator';
 
 type Message = {
   role: 'user' | 'bot';
   content: string;
 };
 
+type QuizState = 'idle' | 'loading' | 'active' | 'finished';
 
 export function Chatbot({ pageContent }: { pageContent: string }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,6 +23,10 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const [quiz, setQuiz] = useState<Quiz | null>(null);
+  const [quizState, setQuizState] = useState<QuizState>('idle');
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -29,12 +36,51 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
     scrollToBottom();
   }, [messages]);
 
+  const handleStartQuiz = async () => {
+    setMessages([]);
+    setQuizState('loading');
+    setMessages([{ role: 'bot', content: 'Generating a quiz for you based on this page... Good luck!'}]);
+    try {
+        const result = await generateQuiz({ context: pageContent });
+        setQuiz(result);
+        setCurrentQuestionIndex(0);
+        setQuizState('active');
+    } catch (error) {
+        console.error('Quiz generation error:', error);
+        setMessages([{ role: 'bot', content: 'Sorry, I couldn\'t generate a quiz right now. Please try again later.' }]);
+        setQuizState('idle');
+    }
+  }
+
+  const handleAnswerQuestion = (selectedIndex: number) => {
+    if (!quiz) return;
+
+    const currentQuestion = quiz.questions[currentQuestionIndex];
+    const isCorrect = selectedIndex === currentQuestion.correctAnswer;
+    const feedbackMessage = {
+      role: 'bot' as const,
+      content: isCorrect
+        ? `Correct! 🎉\n\n**Explanation:** ${currentQuestion.explanation}`
+        : `Not quite. The correct answer was **${currentQuestion.options[currentQuestion.correctAnswer]}**.\n\n**Explanation:** ${currentQuestion.explanation}`,
+    };
+    setMessages((prev) => [...prev, feedbackMessage]);
+
+    if (currentQuestionIndex < quiz.questions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    } else {
+      setQuizState('finished');
+      setMessages((prev) => [...prev, { role: 'bot', content: 'You have completed the quiz! Feel free to ask more questions or start another quiz.'}]);
+    }
+  };
+
+
   const handleSendMessage = async () => {
     if (input.trim() === '' || isLoading) return;
 
     const userMessage = { role: 'user' as const, content: input };
     const newMessages = [...messages, userMessage];
     setMessages(newMessages);
+    const question = input;
     setInput('');
     setIsLoading(true);
 
@@ -42,10 +88,16 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
       const result = await contextualChat({
         context: pageContent,
         history: newMessages.slice(0, -1),
-        question: input
+        question: question
       });
+      
       const botMessage = { role: 'bot' as const, content: result.answer };
       setMessages((prev) => [...prev, botMessage]);
+
+      if (result.isQuizRequest) {
+        handleStartQuiz();
+      }
+
     } catch (error) {
       console.error('Chatbot error:', error);
       const errorMessage = { role: 'bot' as const, content: 'Sorry, something went wrong. Please try again.' };
@@ -54,6 +106,30 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
       setIsLoading(false);
     }
   };
+
+  const renderQuizQuestion = () => {
+    if (!quiz || quizState !== 'active') return null;
+
+    const question = quiz.questions[currentQuestionIndex];
+    return (
+      <div className="flex flex-col gap-3">
+        <div className="flex gap-3 justify-start">
+          <BrainCircuit className="size-6 text-primary flex-shrink-0" />
+          <div className="max-w-xs md:max-w-sm rounded-lg px-4 py-2 bg-muted">
+            <p className="font-bold mb-2">{question.question}</p>
+          </div>
+        </div>
+        <div className="flex flex-col items-end gap-2">
+            {question.options.map((option, index) => (
+                <Button key={index} variant="outline" className="w-full justify-start" onClick={() => handleAnswerQuestion(index)}>
+                    {option}
+                </Button>
+            ))}
+        </div>
+      </div>
+    );
+  };
+
 
   return (
     <>
@@ -77,10 +153,10 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
                 </Button>
               </header>
               <div className="flex-1 p-4 overflow-y-auto space-y-4">
-                {messages.length === 0 ? (
+                {(messages.length === 0 && quizState === 'idle') ? (
                   <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
                     <MessageSquare className="size-12 mb-2" />
-                    <p>Ask me anything about this page!</p>
+                    <p>Ask me anything about this page, or type "quiz me" to test your knowledge!</p>
                   </div>
                 ) : (
                   messages.map((message, index) => (
@@ -94,7 +170,7 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
                     </div>
                   ))
                 )}
-                 {isLoading && (
+                 {(isLoading || quizState === 'loading') && (
                     <div className="flex justify-start gap-3">
                         <Bot className="size-6 text-primary flex-shrink-0" />
                         <div className="bg-muted rounded-lg px-4 py-3 flex items-center">
@@ -102,34 +178,42 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
                         </div>
                     </div>
                  )}
+                 {renderQuizQuestion()}
                 <div ref={messagesEndRef} />
               </div>
               <footer className="p-4 border-t">
-                <div className="relative">
-                  <Textarea
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        handleSendMessage();
-                      }
-                    }}
-                    placeholder="Ask a question..."
-                    className="pr-12 resize-none"
-                    rows={1}
-                    disabled={isLoading}
-                  />
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8"
-                    onClick={handleSendMessage}
-                    disabled={isLoading || input.trim() === ''}
-                  >
-                    <Send className="size-5" />
-                  </Button>
-                </div>
+                { quizState !== 'active' ? (
+                  <div className="relative">
+                    <Textarea
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
+                          handleSendMessage();
+                        }
+                      }}
+                      placeholder="Ask a question..."
+                      className="pr-12 resize-none"
+                      rows={1}
+                      disabled={isLoading}
+                    />
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8"
+                      onClick={handleSendMessage}
+                      disabled={isLoading || input.trim() === ''}
+                    >
+                      <Send className="size-5" />
+                    </Button>
+                  </div>
+                  ) : (
+                    <div className="text-center text-sm text-muted-foreground">
+                        Select an option above to answer the quiz question.
+                    </div>
+                  )
+                }
               </footer>
             </div>
           </motion.div>
@@ -143,7 +227,7 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
         className="fixed bottom-4 right-4 sm:right-8 z-50"
       >
         <Button size="icon" className="rounded-full w-14 h-14 shadow-lg" onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? <X className="size-7" /> : <Bot className="size-7" />}
+          {isOpen ? <X className="size-7" /> : <Sparkles className="size-7" />}
         </Button>
       </motion.div>
     </>
