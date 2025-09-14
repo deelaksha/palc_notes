@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -11,7 +12,7 @@
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 
-export const ContextualChatInputSchema = z.object({
+const ContextualChatInputSchema = z.object({
   context: z
     .string()
     .describe('The content of the documentation page to use as context.'),
@@ -19,7 +20,7 @@ export const ContextualChatInputSchema = z.object({
 });
 export type ContextualChatInput = z.infer<typeof ContextualChatInputSchema>;
 
-export const ContextualChatOutputSchema = z.object({
+const ContextualChatOutputSchema = z.object({
   answer: z.string().describe('The answer to the question, based only on the provided context.'),
 });
 export type ContextualChatOutput = z.infer<typeof ContextualChatOutputSchema>;
