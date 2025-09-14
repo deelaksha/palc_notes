@@ -1,3 +1,4 @@
+
 import type { Config } from 'tailwindcss';
 
 export default {
@@ -27,6 +28,7 @@ export default {
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
+          nested: 'hsl(var(--card-nested))',
         },
         popover: {
           DEFAULT: 'hsl(var(--popover))',
@@ -72,6 +74,13 @@ export default {
           border: 'hsl(var(--sidebar-border))',
           ring: 'hsl(var(--sidebar-ring))',
         },
+        // Gaming Theme from User Request
+        'code-bg': 'var(--code-bg)',
+        'code-text': 'var(--code-text)',
+        command: 'var(--command-color)',
+        tag: 'var(--tag-color)',
+        label: 'var(--label-color)',
+        tips: 'var(--tips-color)',
       },
       borderRadius: {
         lg: 'var(--radius)',

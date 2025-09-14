@@ -8,6 +8,7 @@
     --foreground: 210 29% 7%;
     --card: 210 29% 98%;
     --card-foreground: 210 29% 7%;
+    --card-nested: 210 29% 92%;
     --popover: 210 29% 98%;
     --popover-foreground: 210 29% 7%;
     --primary: 244 80% 63%;
@@ -31,10 +32,11 @@
   }
 
   .dark {
-    --background: 210 29% 7%;
+    --background: 210 30% 8%;
     --foreground: 210 17% 91%;
-    --card: 212 28% 10%;
+    --card: 212 28% 12%;
     --card-foreground: 210 17% 91%;
+    --card-nested: 212 28% 15%;
     --popover: 212 28% 10%;
     --popover-foreground: 210 17% 91%;
     --primary: 244 80% 63%;
@@ -58,6 +60,14 @@
     --sidebar-accent-foreground: 210 17% 91%;
     --sidebar-border: 210 18% 20%;
     --sidebar-ring: 244 80% 63%;
+
+    /* Gaming Theme from User Request */
+    --code-bg: #1E1E2F;
+    --code-text: #C5A5C5;
+    --command-color: #00FFAA;
+    --tag-color: #FFAA00;
+    --label-color: #FF5555;
+    --tips-color: #AAAAFF;
   }
 }
 

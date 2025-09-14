@@ -1,164 +1,173 @@
 
-import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
-import { TableOfContents } from '@/components/toc/TableOfContents';
-
-const gitSetupMarkdownContent = `
-# 🚀 Git Setup: Your Coding Time Machine!
-
-Welcome, adventurer! This guide will help you set up Git, a powerful time machine for your code. It lets you save your progress, go back to previous versions, and work with others without messing up anyone's work. Let's get your time machine powered up!
-
----
-
-## ✨ Step 1 – Install the Time Machine (Git)
-
-First, we need to install the Git software on your computer.
-
-1.  **Update Your Computer's App Store List**:
-    <CodeBlock>sudo apt update</CodeBlock>
-    This command tells your computer to get the latest list of available software, like updating an app store catalog.
-
-2.  **Install Git**:
-    <CodeBlock>sudo apt install git</CodeBlock>
-    This downloads and installs the Git program.
-
-3.  **Check if it Worked**:
-    <CodeBlock>git --version</CodeBlock>
-    If you see something like \`git version 2.34.1\`, it means your time machine is installed and ready!
-
----
-
-## ✨ Step 2 – Create Your Time Traveler ID
-
-Every time you save your work (a "commit"), Git stamps your name on it. You need to tell Git who you are.
-
-1.  **Set Your Name**:
-    <CodeBlock>git config --global user.name "Your Name"</CodeBlock>
-    Replace "Your Name" with your actual name. This is your official Time Traveler name.
-
-2.  **Set Your Email**:
-    <CodeBlock>git config --global user.email "your.email@example.com"</CodeBlock>
-    Replace this with your email. This is how others can contact you about your work.
-
-3.  **Check Your ID Card**:
-    <CodeBlock>git config --list</CodeBlock>
-    This shows your Git settings. Make sure your name and email are correct!
-
----
-
-## ✨ Step 3 – Get Your Secret Key (SSH)
-
-An SSH key is like a secret, unbreakable key to your online code castles (like GitHub). It proves you are who you say you are, so you don't have to type your password every time.
-
-1.  **Create the Key**: We'll use a modern, super-secure key type.
-    <CodeBlock>ssh-keygen -t ed25519 -C "your.email@example.com"</CodeBlock>
-
-2.  **Where to Save It?**: The computer will ask where to save the key. Just press **Enter** to accept the default spot. It will be hidden in a folder called \`.ssh\`.
-
-3.  **Create a Password for Your Key (Optional)**:
-    It will ask for a "passphrase." This is a password for your secret key itself. It's an extra layer of security. It's a good idea to add one!
-
----
-
-## ✨ Step 4 – Put the Key in Your Keychain (SSH Agent)
-
-The SSH agent is a little helper program that holds onto your secret key so you don't have to enter your passphrase all the time.
-
-1.  **Start the Keychain Helper**:
-    <CodeBlock>eval "$(ssh-agent -s)"</CodeBlock>
-    This command wakes up the agent.
-
-2.  **Add Your Key to the Keychain**:
-    <CodeBlock>ssh-add ~/.ssh/id_ed25519</CodeBlock>
-    This adds your newly created secret key to the agent. If you set a passphrase, it will ask you for it now.
-
----
-
-## ✨ Step 5 – Give Your Public Key to GitHub
-
-Your secret key has two parts: a private key (which you NEVER share) and a public key (which you give to websites like GitHub).
-
-1.  **Copy Your Public Key**:
-    <CodeBlock>cat ~/.ssh/id_ed25519.pub</CodeBlock>
-    This command displays your public key. It's a long string of random-looking characters. Copy the entire thing.
-
-2.  **Add it to GitHub**:
-    - Go to GitHub.com.
-    - Click your profile picture in the top-right, then go to **Settings**.
-    - In the menu on the left, click **"SSH and GPG keys"**.
-    - Click **"New SSH key"**.
-    - Give it a **Title** (like "My Laptop").
-    - Paste your copied public key into the big "Key" box and click **"Add SSH key"**.
-
----
-
-## ✨ Step 6 – Create Your First Time Capsule (Repository)
-
-Let's start a new project and save our first moment in time.
-
-1.  **Go to Your Project Folder**:
-    <CodeBlock>cd /path/to/your/project</CodeBlock>
-
-2.  **Turn on the Time Machine**:
-    <CodeBlock>git init</CodeBlock>
-    This creates a hidden \`.git\` folder where all the time travel magic happens.
-
-3.  **Pack Your Bags (Add Files)**:
-    <CodeBlock>git add .</CodeBlock>
-    This tells Git, "Get ready to save everything in this folder."
-
-4.  **Take the Snapshot (Commit)**:
-    <CodeBlock>git commit -m "Initial commit"</CodeBlock>
-    This saves your first snapshot with a message describing what you did.
-
----
-
-## ✨ Step 7 – Connect to Your Online Castle (Remote)
-
-Now, let's connect your local project to the one on GitHub.
-
-1.  **Tell Git Where Your Castle Is**:
-    On your GitHub repository page, click the "Code" button and copy the SSH URL. It will look like \`git@github.com:username/repository.git\`.
-    <CodeBlock>git remote add origin git@github.com:username/repository.git</CodeBlock>
-    This creates a shortcut named \`origin\` that points to your online repository.
-
-2.  **Send Your First Snapshot Up**:
-    <CodeBlock>git push -u origin main</CodeBlock>
-    This "pushes" your saved changes up to GitHub for the first time.
-
----
-
-## ✨ Step 8 – Test Your Secret Key Connection
-
-Let's make sure your computer can talk to GitHub securely.
-
-1.  **Run the Test**:
-    <CodeBlock>ssh -T git@github.com</CodeBlock>
-
-2.  **Check the Message**:
-    You should see a message like: \`Hi username! You've successfully authenticated...\` This means your secret key is working perfectly!
-
----
-
-## 💡 Pro Tips
-
-- **Keep Your Keys Safe**: Never, ever share your private key (\`id_ed25519\`). It's the key to all your code castles!
-- **One Key, Many Castles**: You can use the same SSH key for GitHub, GitLab, and other services.
-- **Automate the Agent**: You can configure your computer to start the \`ssh-agent\` automatically every time you open a terminal, so you don't have to do it manually.
-
-You are now a certified Git Time Traveler, ready to code without fear!
-`;
+import { CodeBlock } from '@/components/markdown/CodeBlock';
 
 export default function GitSetupPage() {
-    return (
-        <div className="flex">
-            <main className="flex-1 py-8 px-4 md:px-8 lg:px-12 markdown-content">
-                <MarkdownRenderer markdown={gitSetupMarkdownContent} />
-            </main>
-            <aside className="hidden lg:block w-80 p-8">
-                <div className="sticky top-20">
-                    <TableOfContents content={gitSetupMarkdownContent} />
-                </div>
-            </aside>
+  return (
+    <div className="max-w-4xl mx-auto p-4 md:p-8 space-y-8">
+      <header className="text-center">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-foreground mb-2 font-headline">
+          The Git Quest
+        </h1>
+        <p className="text-lg text-muted-foreground">
+          Your path to becoming a code champion!
+        </p>
+      </header>
+
+      <section className="bg-card p-6 md:p-8 rounded-2xl shadow-xl border border-border">
+        <h2 className="text-3xl font-bold text-foreground mb-6 pb-2 border-b-2 border-primary">
+          Chapter 1: Forging Your Identity
+        </h2>
+        <div className="space-y-6">
+          <p className="text-muted-foreground">
+            Before you can embark on your quest, you must introduce yourself to
+            the Git world. This is like creating your hero's profile!
+          </p>
+          <ol className="list-none space-y-8">
+            <li>
+              <h3 className="text-2xl font-bold text-command mb-2">
+                1. Set Your Hero's Name
+              </h3>
+              <p className="text-muted-foreground mb-4">
+                This tells Git your name so all your achievements are properly
+                credited.
+              </p>
+              <CodeBlock className="bg-code-bg text-code-text">
+                <span className="text-command">git config --global user.name</span>{' '}
+                <span className="text-label">"Your Name"</span>
+              </CodeBlock>
+              <div className="mt-4 p-4 rounded-xl bg-card-nested border-l-4 border-l-blue-400">
+                <h4 className="text-xl font-bold text-foreground mb-2">
+                  Breaking Down the Spell
+                </h4>
+                <ul className="list-disc list-inside text-muted-foreground space-y-2">
+                  <li>
+                    <span className="text-command font-bold">git config</span>:
+                    The main spell. It lets you change your Git settings.
+                  </li>
+                  <li>
+                    <span className="text-tag font-bold">--global</span>: A
+                    powerful tag. This tells Git to apply this setting to{' '}
+                    <span className="italic">all</span> of your projects, not just
+                    the current one.
+                  </li>
+                  <li>
+                    <span className="text-label font-bold">"Your Name"</span>:
+                    The value of the spell. This is the information you are
+                    giving to Git.
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li>
+              <h3 className="text-2xl font-bold text-command mb-2">
+                2. Set Your Hero's Email
+              </h3>
+              <p className="text-muted-foreground mb-4">
+                Your email is a unique identifier, like your hero ID, that Git
+                uses to link your actions to your account.
+              </p>
+              <CodeBlock className="bg-code-bg text-code-text">
+                <span className="text-command">git config --global user.email</span>{' '}
+                <span className="text-label">"your.email@example.com"</span>
+              </CodeBlock>
+            </li>
+          </ol>
+          <div className="p-4 rounded-xl bg-card-nested border-l-4 border-l-yellow-400">
+            <p>
+              <span className="text-tips font-bold">Tips:</span> Always use the
+              name and email you plan to use on platforms like GitHub to keep
+              your profile consistent.
+            </p>
+          </div>
         </div>
-    );
+      </section>
+
+      <section className="bg-card p-6 md:p-8 rounded-2xl shadow-xl border border-border">
+        <h2 className="text-3xl font-bold text-foreground mb-6 pb-2 border-b-2 border-primary">
+          Chapter 2: Crafting Your Master Key (SSH)
+        </h2>
+        <div className="space-y-6">
+          <p className="text-muted-foreground">
+            This is your most important item! An SSH key is like a secret magic
+            key that lets you connect to places like GitHub without needing a
+            password every single time.
+          </p>
+          <ol className="list-none space-y-8">
+             <li>
+                <h3 className="text-2xl font-bold text-command mb-2">1. Check for an Existing Key</h3>
+                <p className="text-muted-foreground mb-4">Before forging a new key, check if you already have one! This command lists all the items in your magic <code>~/.ssh</code> bag.</p>
+                <CodeBlock className="bg-code-bg text-code-text">
+                    <span className="text-command">ls</span> <span className="text-tag">-al</span> <span className="text-label">~/.ssh</span>
+                </CodeBlock>
+                <div className="mt-4 p-4 rounded-xl bg-card-nested border-l-4 border-l-blue-400">
+                    <h4 className="text-xl font-bold text-foreground mb-2">Breaking Down the Spell</h4>
+                    <ul className="list-disc list-inside text-muted-foreground space-y-2">
+                        <li><span className="text-command font-bold">ls</span>: The <span className="text-tag">list</span> command. This is the main action, telling your computer to show you all the items in a folder.</li>
+                        <li><span className="text-tag">-a</span>: The <span className="text-tag">all</span> tag. This tells the command to show <strong>all</strong> files, including the hidden ones. Hidden files have names that start with a period, like <code>.ssh</code>, and they are usually kept secret from a normal view.</li>
+                        <li><span className="text-tag">-l</span>: The <span className="text-tag">long</span> tag. This asks for a detailed, long-form list. Instead of just a list of names, you'll see extra information like file permissions, size, and creation date.</li>
+                        <li><span className="text-label">~/.ssh</span>: This is the location of the magic bag you are looking inside. The <span className="text-tag">~</span> is a shortcut for your hero's home directory.</li>
+                    </ul>
+                </div>
+                <p className="text-muted-foreground mt-2">Look for files named <span className="text-tag font-mono">id_ed25519.pub</span> or <span className="text-tag font-mono">id_rsa.pub</span>. If you see one, you can skip to step 3!</p>
+            </li>
+            <li>
+              <h3 className="text-2xl font-bold text-command mb-2">
+                2. Generate the Master Key
+              </h3>
+              <p className="text-muted-foreground mb-4">
+                Run this spell in your terminal. It will create a key pair: a private key (for you) and a public key (for others to know you by).
+              </p>
+              <CodeBlock className="bg-code-bg text-code-text">
+                <span className="text-command">ssh-keygen</span>{' '}
+                <span className="text-tag">-t</span> ed25519{' '}
+                <span className="text-tag">-C</span>{' '}
+                <span className="text-label">"your.email@example.com"</span>
+              </CodeBlock>
+               <div className="mt-4 p-4 rounded-xl bg-card-nested border-l-4 border-l-blue-400">
+                  <h4 className="text-xl font-bold text-white mb-2">Breaking Down the Spell</h4>
+                  <ul className="list-disc list-inside text-muted-foreground space-y-2">
+                      <li><span className="text-command font-bold">ssh-keygen</span>: The main spell. It's the command that creates your master SSH key.</li>
+                      <li><span className="text-tag font-bold">-t</span>: The <span className="text-tag">type</span> tag. This tells the spell what kind of key to create. We use `ed25519` because it's a strong and secure type of key.</li>
+                      <li><span className="text-tag font-bold">-C</span>: The <span className="text-tag">comment</span> tag. This lets you add a helpful note to your key, usually your email address, to remind you who it belongs to.</li>
+                  </ul>
+              </div>
+            </li>
+            <li>
+              <h3 className="text-2xl font-bold text-command mb-2">
+                3. Add the Key to GitHub
+              </h3>
+              <p className="text-muted-foreground mb-4">
+                Now, you must deliver the public part of your key to the GitHub Citadel so it recognizes you.
+              </p>
+              <ul className="list-disc list-inside space-y-4 text-muted-foreground">
+                <li>
+                  First, reveal your public key's contents with this command:
+                  <CodeBlock className="bg-code-bg text-code-text mt-2">
+                    <span className="text-command">cat</span>{' '}
+                    <span className="text-label">~/.ssh/id_ed25519.pub</span>
+                  </CodeBlock>
+                   <div className="mt-4 p-4 rounded-xl bg-card-nested border-l-4 border-l-blue-400">
+                        <h4 className="text-xl font-bold text-white mb-2">Breaking Down the Spell</h4>
+                        <p className="text-muted-foreground"><span className="text-command font-bold">cat</span>: This is a powerful spell that will display the contents of a file directly in your terminal. We use it to view the public part of your new key so you can copy it.</p>
+                    </div>
+                </li>
+                <li>
+                  Next, copy the entire key that appears in your terminal.
+                </li>
+                <li>
+                  Go to your GitHub <span className="text-tag">Settings</span> {'>'}{' '}
+                  <span className="text-tag">SSH and GPG keys</span>, and click on{' '}
+                  <span className="text-tag">New SSH key</span>.
+                </li>
+                <li>
+                  Paste your public key into the box and give it a title (like
+                  "My Gaming PC"). Click <span className="text-tag">Add SSH key</span>.
+                </li>
+              </ul>
+            </li>
+          </ol>
+        </div>
+      </section>
+    </div>
+  );
 }
