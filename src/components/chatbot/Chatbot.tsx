@@ -21,7 +21,7 @@ export function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true); // Hardcoded to true for debugging
 
   const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -59,6 +59,8 @@ export function Chatbot() {
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      {/* The trigger is removed for this diagnostic step */}
+      {/*
       <SheetTrigger asChild>
         <Button
           size="icon"
@@ -68,6 +70,7 @@ export function Chatbot() {
           <span className="sr-only">Open Chat</span>
         </Button>
       </SheetTrigger>
+      */}
       <SheetContent
         className="flex h-full flex-col p-0 w-full max-w-lg md:max-w-2xl bg-gradient-futuristic"
         side="right"
