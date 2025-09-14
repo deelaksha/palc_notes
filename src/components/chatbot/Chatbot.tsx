@@ -38,23 +38,8 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
   }, [messages]);
 
   const handleGenerateNewQuiz = async (isContinuation: boolean) => {
-    if (isContinuation) {
-        setMessages((prev) => [...prev, { role: 'bot', content: 'Great job! Generating a new set of questions for you now...'}]);
-    } else {
-        setMessages([]);
-        setMessages([{ role: 'bot', content: 'Generating a quiz for you based on this page... Good luck!'}]);
-    }
-    setQuizState('loading');
-    try {
-        const result = await generateQuiz({ context: pageContent });
-        setQuiz(result);
-        setCurrentQuestionIndex(0);
-        setQuizState('active');
-    } catch (error) {
-        console.error('Quiz generation error:', error);
-        setMessages([{ role: 'bot', content: 'Sorry, I couldn\'t generate a quiz right now. Please try again later.' }]);
-        setQuizState('idle');
-    }
+    // This functionality is temporarily disabled.
+    setMessages([{ role: 'bot', content: 'I apologize, but all AI features are temporarily disabled due to API rate limits.' }]);
   };
 
   const handleStopQuiz = () => {
@@ -90,19 +75,12 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
 
     const userMessage = { role: 'user' as const, content: input };
     setMessages((prev) => [...prev, userMessage]);
-    const question = input;
     setInput('');
     setIsLoading(true);
 
     try {
-      // Route to quiz flow if user asks for it
-      if (question.toLowerCase().includes('quiz') || question.toLowerCase().includes('test me')) {
-        handleGenerateNewQuiz(false);
-      } else {
-        // Inform user that general chat is temporarily disabled
-        const botMessage = { role: 'bot' as const, content: "I apologize, but the general chat feature is temporarily disabled due to API rate limits. You can still ask me to 'quiz you' on the page content!" };
+        const botMessage = { role: 'bot' as const, content: "I apologize, but all AI features (including chat and quizzes) are temporarily disabled due to API rate limits. The engineers are working on a more permanent solution." };
         setMessages((prev) => [...prev, botMessage]);
-      }
     } catch (error) {
       console.error('Chatbot error:', error);
       const errorMessage = { role: 'bot' as const, content: 'Sorry, something went wrong. Please try again.' };
@@ -154,11 +132,11 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
                         <X className="size-5" />
                     </Button>
                  </div>
-                {(messages.length === 0 && quizState === 'idle') ? (
+                {(messages.length === 0) ? (
                   <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
                     <MessageSquare className="size-12 mb-2" />
                     <p className="font-bold text-lg">NoteMark Assistant</p>
-                    <p>Ask me to "quiz me" to test your knowledge on the page content!</p>
+                    <p>All AI features are temporarily disabled due to API rate limits.</p>
                   </div>
                 ) : (
                   messages.map((message, index) => (
@@ -173,7 +151,7 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
                     </div>
                   ))
                 )}
-                 {(isLoading || quizState === 'loading') && (
+                 {isLoading && (
                     <div className="flex justify-start gap-3">
                         <Bot className="size-6 text-primary flex-shrink-0" />
                         <div className="bg-muted rounded-lg px-4 py-3 flex items-center">
@@ -185,14 +163,6 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
                 <div ref={messagesEndRef} />
               </div>
               <footer className="p-4 border-t border-border/50 bg-background/80">
-                { quizState === 'active' ? (
-                    <div className="flex justify-center">
-                        <Button variant="destructive" onClick={handleStopQuiz}>
-                            <ShieldClose className="mr-2" />
-                            Stop Quiz
-                        </Button>
-                    </div>
-                ) : (
                   <div className="relative">
                     <Textarea
                       value={input}
@@ -203,7 +173,7 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
                           handleSendMessage();
                         }
                       }}
-                      placeholder="Type 'quiz me' to start a quiz..."
+                      placeholder="AI features are temporarily disabled..."
                       className="pr-12 resize-none bg-transparent"
                       rows={1}
                       disabled={isLoading}
@@ -218,8 +188,6 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
                       <Send className="size-5" />
                     </Button>
                   </div>
-                  )
-                }
               </footer>
             </div>
           </motion.div>
