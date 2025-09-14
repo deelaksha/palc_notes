@@ -1,128 +1,287 @@
 
-import { CodeBlock } from '@/components/markdown/CodeBlock';
+import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
+import { TableOfContents } from '@/components/toc/TableOfContents';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
+
+const vimMarkdownContent = `
+# 📘 Vim Commands – Beginner Friendly Guide
+
+Vim is a text editor used inside the terminal. At first, it feels confusing, but once you understand the modes and commands, it becomes very powerful.
+
+---
+
+## ✨ 1. Modes in Vim
+
+Think of Vim modes like tools in a toolbox:
+
+- **Normal Mode (default)** → move around and give commands.
+- **Insert Mode** → type text like a regular editor.
+- **Visual Mode** → highlight and select text.
+- **Command-Line Mode** → run commands like save, quit, search.
+- **Replace Mode** → type over existing text.
+
+👉 Example: When you open Vim, you’re in **Normal Mode**. Press \`i\` to type, then press \`Esc\` to stop typing.
+
+---
+
+## ✨ 2. Moving Around (Navigation)
+
+Use these keys like arrow keys:
+
+| Command | What it does |
+|---|---|
+| \`h\` | Move left |
+| \`l\` | Move right |
+| \`j\` | Move down |
+| \`k\` | Move up |
+| \`0\` | Jump to beginning of line |
+| \`^\` | Jump to first word in line |
+| \`$\` | Jump to end of line |
+| \`w\` | Jump forward word by word |
+| \`b\` | Jump backward word by word |
+| \`gg\` | Go to top of file |
+| \`G\` | Go to bottom of file |
+| \`Ctrl + d\` | Scroll down half a screen |
+| \`Ctrl + u\` | Scroll up half a screen |
+
+👉 Example: If your file is very long, \`gg\` takes you to the top and \`G\` takes you to the end.
+
+---
+
+## ✨ 3. Typing Text (Insert Mode)
+
+| Command | What it does |
+|---|---|
+| \`i\` | Start typing before cursor |
+| \`I\` | Start typing at beginning of line |
+| \`a\` | Start typing after cursor |
+| \`A\` | Start typing at end of line |
+| \`o\` | Create new line below and type |
+| \`O\` | Create new line above and type |
+| \`R\` | Replace text while typing |
+
+👉 Example: If you want to add a note below the current line, press \`o\`, and a new line opens where you can type.
+
+---
+
+## ✨ 4. Editing Text
+
+| Command | What it does |
+|---|---|
+| \`x\` | Delete character under cursor |
+| \`dw\` | Delete a word |
+| \`dd\` | Delete a whole line |
+| \`2dd\` | Delete 2 lines |
+| \`u\` | Undo last action |
+| \`Ctrl + r\` | Redo undone change |
+| \`yy\` | Copy (yank) a line |
+| \`2yy\` | Copy 2 lines |
+| \`yw\` | Copy a word |
+| \`p\` | Paste after cursor |
+| \`P\` | Paste before cursor |
+| \`r<char>\` | Replace one character |
+
+👉 Example: If you typed something wrong, press \`u\` to undo it. If you deleted by mistake, press \`Ctrl + r\` to bring it back.
+
+---
+
+## ✨ 5. Searching & Replacing
+
+| Command | What it does |
+|---|---|
+| \`/word\` | Search forward for “word” |
+| \`?word\` | Search backward for “word” |
+| \`n\` | Jump to next match |
+| \`N\` | Jump to previous match |
+| \`:%s/old/new/g\` | Replace all “old” with “new” |% - range | s - Stands for substitute (replace).| g - Stands for global
+| \`:%s/old/new/gc\` | Replace with confirmation | c - confirmation for each word
+
+👉 Example: Type \`/error\` to find the word “error” in your file. Press \`n\` to go to the next match.
+
+👉 Example: If your file has many “cat” words, \`:%s/cat/dog/g\` changes all cats into dogs.
+
+---
+
+## ✨ 6. Selecting Text (Visual Mode)
+
+| Command | What it does |
+|---|---|
+| \`v\` | Select characters |
+| \`V\` | Select whole lines |
+| \`Ctrl + v\` | Select block/columns |
+| \`y\` | Copy selection |
+| \`d\` | Cut selection |
+| \`p\` | Paste selection |
+
+👉 Example: Press \`V\` to highlight a line, then \`d\` to delete it. Press \`p\` to paste it somewhere else.
+
+---
+
+## ✨ 7. File Commands
+
+| Command | What it does |
+|---|---|
+| \`:w\` | Save file |
+| \`:q\` | Quit |
+| \`:wq\` | Save and quit |
+| \`:q!\` | Quit without saving |
+| \`:x\` | Save and quit (same as \`:wq\`) |
+| \`:e filename\` | Open another file |
+| \`:saveas newfile\` | Save as new file |
+
+👉 Example: If you edited a file and want to quit, type \`:wq\`. If you don’t want to save, type \`:q!\`.
+
+---
+
+## ✨ 8. Working with Windows & Tabs
+
+| Command | What it does |
+|---|---|
+| \`:split filename\` | Open file in new horizontal window |
+| \`:vsplit filename\` | Open file in new vertical window |
+| \`Ctrl + w, w\` | Switch between windows |
+| \`:tabnew filename\` | Open file in new tab |
+| \`gt\` | Next tab |
+| \`gT\` | Previous tab |
+
+👉 Example: If you want to compare two files, use \`:vsplit file2.txt\` and both files show side by side.
+
+---
+
+## ✨ 9. Marks & Jumps
+
+| Command | What it does |
+|---|---|
+| \`m<a>\` | Mark a position with a letter (a, b, c…) |
+| \`'a\` | Jump to start of line of mark |
+| \`\`a\` | Jump to exact cursor position of mark |
+
+👉 Example: If you are editing a long file, type \`ma\` to mark a spot. Later type \`'a\` to quickly return.
+
+---
+
+## ✨ 10. Useful Shortcuts
+
+| Command | What it does |
+|---|---|
+| \`.\` | Repeat last command |
+| \`>>\` | Indent line |
+| \`<<\` | Remove indentation |
+| \`:set number\` | Show line numbers |
+| \`:set nonumber\` | Hide line numbers |
+| \`:syntax on\` | Enable syntax highlighting |
+| \`:syntax off\` | Disable syntax highlighting |
+
+👉 Example: If you want to repeat deleting a line multiple times, type \`dd\` once and then press \`.\` to repeat.
+
+---
+
+## 🎯 Practice Scenario
+1. Open Vim: \`vim notes.txt\`
+2. Press \`i\` → type: \`Hello, this is my note.\`
+3. Press \`Esc\` → type \`o\` → new line opens → type \`Another note.\`
+4. Press \`Esc\` → type \`/note\` → finds the word “note.”
+5. Type \`:%s/note/task/g\` → replaces “note” with “task.”
+6. Press \`:wq\` → saves and quits.
+
+---
+
+✅ With this, you can **move, edit, search, and manage files in Vim** like a beginner-friendly pro!
+`;
+
+const parseSections = (markdown: string) => {
+    const lines = markdown.split('\n');
+    const sections: { title: string; content: string }[] = [];
+    let currentContent: string[] = [];
+    let intro = '';
+    let conclusion = '';
+    let isIntro = true;
+    let isConclusion = false;
+
+    const mainTitleMatch = lines[0].match(/^#\s.*/);
+    if(mainTitleMatch){
+        intro = mainTitleMatch[0];
+    }
+    
+    for (const line of lines) {
+        if (line.startsWith('---')) {
+            if (isIntro) {
+                isIntro = false;
+            }
+            continue;
+        }
+
+        const titleMatch = line.match(/^##\s.*$/);
+        if (titleMatch) {
+            if (currentContent.length > 0) {
+                const lastSection = sections[sections.length - 1];
+                if(lastSection) {
+                    lastSection.content = currentContent.join('\n');
+                }
+            }
+            currentContent = [];
+            sections.push({ title: titleMatch[0].substring(3).trim(), content: '' });
+        } else if (!isIntro) {
+             if (line.startsWith('✅')) {
+                isConclusion = true;
+            }
+            if (isConclusion) {
+                conclusion += line + '\n';
+            } else {
+                 currentContent.push(line);
+            }
+        }
+    }
+
+    if (currentContent.length > 0 && sections.length > 0) {
+       sections[sections.length -1].content = currentContent.join('\n').trim();
+    }
+    
+    // Handle intro and main title separately
+    const firstSectionSeparator = markdown.indexOf('---');
+    const fullIntro = markdown.substring(0, firstSectionSeparator).trim();
+
+
+    return { intro: fullIntro, sections, conclusion: conclusion.trim() };
+};
 
 export default function VimPage() {
-  return (
-    <div className="max-w-4xl mx-auto p-4 md:p-8 space-y-8">
-      <header className="text-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-foreground mb-2 font-headline">
-          The Vim Grimoire
-        </h1>
-        <p className="text-lg text-muted-foreground">
-          Unlock the ancient and powerful magic of the Vim editor.
-        </p>
-      </header>
+    const { intro, sections, conclusion } = parseSections(vimMarkdownContent);
 
-      <section className="bg-card p-6 md:p-8 rounded-2xl shadow-xl border border-border">
-        <h2 className="text-3xl font-bold text-foreground mb-6 pb-2 border-b-2 border-primary">
-          Chapter 1: The Five Modes of Power
-        </h2>
-        <div className="space-y-4 text-muted-foreground">
-          <p>
-            Vim is unlike other editors. It has different 'modes' for different tasks. Mastering them is the key to speed!
-          </p>
-          <ul className="list-disc list-inside space-y-2">
-            <li><strong>Normal Mode</strong>: The default mode. Your keyboard keys are powerful spells for moving, deleting, and copying.</li>
-            <li><strong>Insert Mode</strong>: The 'typing' mode. Press `i` to enter it and type text like normal. Press `Esc` to return to Normal Mode.</li>
-            <li><strong>Visual Mode</strong>: The 'selection' mode. Press `v` to highlight text to copy or delete.</li>
-            <li><strong>Command-Line Mode</strong>: The 'master control' mode. Press `:` in Normal Mode to enter commands like saving (`:w`) or quitting (`:q`).</li>
-            <li><strong>Replace Mode</strong>: The 'overwrite' mode. Press `R` to type over existing text.</li>
-          </ul>
-        </div>
-        <div className="mt-6 p-4 rounded-xl bg-card-nested border-l-4 border-l-yellow-400">
-          <p><span className="text-tips font-bold">Quest Tip:</span> The `Esc` key is your sacred artifact. It always returns you to the safety of Normal Mode.</p>
-        </div>
-      </section>
+    return (
+        <div className="flex">
+            <main className="flex-1 py-8 px-4 md:px-8 lg:px-12 markdown-content">
+                <MarkdownRenderer markdown={intro} />
+                <hr className="my-6" />
+                
+                <Accordion type="single" collapsible className="w-full space-y-4">
+                    {sections.map(({ title, content }) => (
+                        <AccordionItem value={title} key={title} className="border rounded-lg bg-card overflow-hidden">
+                            <AccordionTrigger className="px-6 py-4 font-headline text-lg hover:no-underline">
+                                {title}
+                            </AccordionTrigger>
+                            <AccordionContent className="px-6 pt-0 pb-6">
+                                <MarkdownRenderer markdown={content} />
+                            </AccordionContent>
+                        </AccordionItem>
+                    ))}
+                </Accordion>
 
-      <section className="bg-card p-6 md:p-8 rounded-2xl shadow-xl border border-border">
-        <h2 className="text-3xl font-bold text-foreground mb-6 pb-2 border-b-2 border-secondary-accent">
-          Chapter 2: Movement Spells
-        </h2>
-        <div className="space-y-6 text-muted-foreground">
-          <p>In Normal Mode, you never need the mouse. Your hands stay on the keyboard, making you a faster coder.</p>
-          <div className="grid md:grid-cols-2 gap-x-8 gap-y-4">
-              <div>
-                  <h4 className="font-bold text-lg mb-2 text-command">Basic Movement:</h4>
-                  <ul className="list-disc list-inside space-y-1">
-                      <li>`h`: Move left</li>
-                      <li>`j`: Move down</li>
-                      <li>`k`: Move up</li>
-                      <li>`l`: Move right</li>
-                  </ul>
-              </div>
-              <div>
-                  <h4 className="font-bold text-lg mb-2 text-command">Jumping Spells:</h4>
-                  <ul className="list-disc list-inside space-y-1">
-                      <li>`w`: Jump forward to the start of the next word.</li>
-                      <li>`b`: Jump backward to the start of the previous word.</li>
-                      <li>`0`: Jump to the beginning of the line.</li>
-                      <li>`$`: Jump to the end of the line.</li>
-                      <li>`gg`: Teleport to the very top of the file.</li>
-                      <li>`G`: Teleport to the very bottom of the file.</li>
-                  </ul>
-              </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-card p-6 md:p-8 rounded-2xl shadow-xl border border-border">
-        <h2 className="text-3xl font-bold text-foreground mb-6 pb-2 border-b-2 border-tertiary-accent">
-          Chapter 3: Editing and Alteration
-        </h2>
-        <div className="space-y-6 text-muted-foreground">
-          <p>These spells let you shape and mold your text with incredible efficiency.</p>
-          <ul className="list-none space-y-4">
-            <li>
-                <h4 className="text-lg font-bold text-command">Entering Insert Mode:</h4>
-                <p>`i`: Start typing before the cursor. `a`: Start typing after the cursor. `o`: Create a new line below and start typing.</p>
-            </li>
-            <li>
-              <h4 className="text-lg font-bold text-command">Deletion Spells:</h4>
-              <p>`x`: Delete the character under the cursor. `dw`: Delete a whole word. `dd`: Delete an entire line.</p>
-            </li>
-            <li>
-              <h4 className="text-lg font-bold text-command">Copy & Paste (Yank & Put):</h4>
-              <p>`yy`: Yank (copy) the current line. `p`: Put (paste) the copied text after the cursor.</p>
-            </li>
-            <li>
-              <h4 className="text-lg font-bold text-command">Undo & Redo:</h4>
-              <p>`u`: Undo the last action. `Ctrl + r`: Redo an undone change.</p>
-            </li>
-          </ul>
-           <div className="mt-6 p-4 rounded-xl bg-card-nested border-l-4 border-l-yellow-400">
-             <p><span className="text-tips font-bold">Quest Tip:</span> Combine numbers with spells! `2dd` deletes two lines. `3yy` yanks three lines. `5j` moves down 5 lines. This is the secret to Vim's power!</p>
-           </div>
-        </div>
-      </section>
-
-       <section className="bg-card p-6 md:p-8 rounded-2xl shadow-xl border border-border">
-        <h2 className="text-3xl font-bold text-foreground mb-6 pb-2 border-b-2 border-primary-accent">
-          Chapter 4: The All-Seeing Eye (Search & Replace)
-        </h2>
-        <div className="space-y-6 text-muted-foreground">
-           <p>Quickly find and alter any text in your ancient scrolls.</p>
-           <ul className="list-none space-y-4">
-              <li>
-                <h4 className="text-lg font-bold text-command">Searching:</h4>
-                <p>In Normal Mode, type `/search-term` and press Enter to search forward. Press `n` for the next match, and `N` for the previous one.</p>
-              </li>
-              <li>
-                <h4 className="text-lg font-bold text-command">Replacing:</h4>
-                <p>This is a master-level command-line spell.</p>
-                <CodeBlock className="bg-code-bg text-code-text">:%s/old_word/new_word/g</CodeBlock>
-                <div className="mt-4 p-4 rounded-xl bg-card-nested border-l-4 border-l-blue-400">
-                    <h4 className="text-xl font-bold text-white mb-2">Breaking Down the Spell</h4>
-                    <ul className="list-disc list-inside space-y-2">
-                        <li><span className="text-tag font-bold">:%s</span>: The 'substitute' spell for the whole file.</li>
-                        <li><span className="text-label font-bold">/old_word/</span>: The text you want to find.</li>
-                        <li><span className="text-label font-bold">/new_word/</span>: The text you want to replace it with.</li>
-                        <li><span className="text-tag font-bold">/g</span>: The 'global' flag, meaning replace every instance on each line, not just the first one.</li>
-                    </ul>
+                <hr className="my-6" />
+                <div className="mt-8">
+                    <MarkdownRenderer markdown={conclusion} />
                 </div>
-              </li>
-           </ul>
+            </main>
+            <aside className="hidden lg:block w-80 p-8">
+                <div className="sticky top-20">
+                    <TableOfContents content={vimMarkdownContent} />
+                </div>
+            </aside>
         </div>
-      </section>
-    </div>
-  );
+    );
 }
