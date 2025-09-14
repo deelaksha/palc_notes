@@ -12,7 +12,7 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from '@/components/ui/sidebar';
-import { BookOpen, Code, FileCode, Github, Home, Info, Regex, Terminal } from 'lucide-react';
+import { BookOpen, Code, FileCode, GitBranch, Github, Home, Info, Regex, Terminal } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import './globals.css';
@@ -20,7 +20,6 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import { Inter, Source_Code_Pro } from 'next/font/google';
 import { Chatbot } from '@/components/chatbot/Chatbot';
-
 
 const fontInter = Inter({
   subsets: ['latin'],
@@ -32,11 +31,11 @@ const fontSourceCodePro = Source_Code_Pro({
   variable: '--font-source-code-pro',
 });
 
-
 const navItems = [
   { href: '/', label: 'Home', icon: <Home /> },
   { href: '/docs/vim', label: 'Vim', icon: <Code /> },
   { href: '/docs/linux', label: 'Linux', icon: <Terminal /> },
+  { href: '/docs/git-setup', label: 'Git Setup', icon: <GitBranch /> },
   { href: '/docs/github', label: 'Git Tutorial', icon: <Github /> },
   { href: '/docs/code-navigation', label: 'Code Navigation', icon: <FileCode /> },
   { href: '/regex', label: 'Regex', icon: <Regex /> },
@@ -46,24 +45,6 @@ const navItems = [
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isDocsPage = pathname.startsWith('/docs');
-
-  if (isDocsPage) {
-    return (
-      <html lang="en" className="dark">
-        <body
-          className={cn(
-            'min-h-screen bg-background font-body antialiased',
-            fontInter.variable,
-            fontSourceCodePro.variable
-          )}
-        >
-          {children}
-          <Toaster />
-        </body>
-      </html>
-    );
-  }
 
   return (
     <html lang="en" className="dark">
@@ -88,7 +69,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                       <SidebarMenuItem key={item.href}>
                         <SidebarMenuButton
                           asChild
-                          isActive={pathname.startsWith(item.href) && item.href !== '/'}
+                          isActive={pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))}
                           tooltip={item.label}
                         >
                           <Link href={item.href}>

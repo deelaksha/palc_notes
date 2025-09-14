@@ -4,10 +4,9 @@
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { Bot, MessageCircle, Send, User } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Sheet,
   SheetContent,
@@ -26,14 +25,11 @@ export function Chatbot() {
 
   const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!input.trim() || isLoading) return;
+    if (!input.trim()) return;
 
-    const userMessage: Message = {
-      role: 'user',
-      content: input,
-    };
+    const userMessage: Message = { role: 'user', content: input };
+    const newMessages = [...messages, userMessage];
 
-    const newMessages: Message[] = [...messages, userMessage];
     setMessages(newMessages);
     setInput('');
     setIsLoading(true);
@@ -79,7 +75,7 @@ export function Chatbot() {
         <SheetHeader className="p-4 border-b border-white/10">
           <SheetTitle className="text-glow">NoteMark Assistant</SheetTitle>
         </SheetHeader>
-        <div className="flex-1 flex flex-col-reverse overflow-y-auto p-4">
+        <div className="flex flex-1 flex-col-reverse overflow-y-auto p-4">
           <div className="space-y-6">
             {isLoading && (
               <div className="flex items-start gap-4">
@@ -97,7 +93,7 @@ export function Chatbot() {
                 </div>
               </div>
             )}
-            {messages.slice().reverse().map((message, index) => (
+            {messages.map((message, index) => (
               <div
                 key={index}
                 className={cn(
