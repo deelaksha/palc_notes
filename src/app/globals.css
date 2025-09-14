@@ -159,6 +159,18 @@
   }
   
   .markdown-content code:not(pre > code) {
-    @apply font-code bg-muted text-foreground px-1 py-0.5 rounded-sm text-sm;
+    @apply font-code bg-code-bg text-tag px-1 py-0.5 rounded-sm text-sm;
+  }
+  
+  .markdown-content .command {
+    @apply text-command;
+  }
+
+  .markdown-content .tag {
+    @apply text-tag;
+  }
+
+  .markdown-content .label {
+    @apply text-label;
   }
 }
