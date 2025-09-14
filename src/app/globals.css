@@ -64,10 +64,10 @@
 
     /* Gaming Theme from User Request */
     --code-bg: #1E1E2F;
-    --code-text: #C5A5C5;
-    --command-color: #00FFAA;
-    --tag-color: #FFAA00;
-    --label-color: #FF5555;
+    --code-text: #D4D4D4;
+    --command-color: #569CD6; /* Blue for main command */
+    --tag-color: #9CDCFE;     /* Light blue for flags/tags */
+    --label-color: #CE9178;   /* Orange for values/strings */
     --tips-color: #AAAAFF;
     --primary-accent: hsl(244 80% 63%);
     --secondary-accent: hsl(171 68% 51%);

@@ -32,7 +32,8 @@ export default function GitSetupPage() {
                 credited.
               </p>
               <CodeBlock className="bg-code-bg text-code-text">
-                <span className="text-command">git config --global user.name</span>{' '}
+                <span className="text-command">git config</span>{' '}
+                <span className="text-tag">--global</span> <span className="text-command">user.name</span>{' '}
                 <span className="text-label">"Your Name"</span>
               </CodeBlock>
               <div className="mt-4 p-4 rounded-xl bg-card-nested border-l-4 border-l-blue-400">
@@ -92,9 +93,9 @@ export default function GitSetupPage() {
             key that lets you connect to places like GitHub without needing a
             password every single time.
           </p>
-          <ol className="list-none space-y-8">
+          <ol className="list-decimal pl-5 space-y-8">
              <li>
-                <h3 className="text-2xl font-bold text-command mb-2">1. Check for an Existing Key</h3>
+                <h3 className="text-2xl font-bold text-command mb-2">Check for an Existing Key</h3>
                 <p className="text-muted-foreground mb-4">Before forging a new key, check if you already have one! This command lists all the items in your magic <code>~/.ssh</code> bag.</p>
                 <CodeBlock className="bg-code-bg text-code-text">
                     <span className="text-command">ls</span> <span className="text-tag">-al</span> <span className="text-label">~/.ssh</span>
@@ -108,18 +109,18 @@ export default function GitSetupPage() {
                         <li><span className="text-label">~/.ssh</span>: This is the location of the magic bag you are looking inside. The <span className="text-tag">~</span> is a shortcut for your hero's home directory.</li>
                     </ul>
                 </div>
-                <p className="text-muted-foreground mt-2">Look for files named <span className="text-tag font-mono">id_ed25519.pub</span> or <span className="text-tag font-mono">id_rsa.pub</span>. If you see one, you can skip to step 3!</p>
+                <p className="text-muted-foreground mt-2">Look for files named <code className="font-code bg-code-bg text-tag px-1 py-0.5 rounded-sm text-sm">id_ed25519.pub</code> or <code className="font-code bg-code-bg text-tag px-1 py-0.5 rounded-sm text-sm">id_rsa.pub</code>. If you see one, you can skip to step 3!</p>
             </li>
             <li>
               <h3 className="text-2xl font-bold text-command mb-2">
-                2. Generate the Master Key
+                Generate the Master Key
               </h3>
               <p className="text-muted-foreground mb-4">
                 Run this spell in your terminal. It will create a key pair: a private key (for you) and a public key (for others to know you by).
               </p>
               <CodeBlock className="bg-code-bg text-code-text">
                 <span className="text-command">ssh-keygen</span>{' '}
-                <span className="text-tag">-t</span> ed25519{' '}
+                <span className="text-tag">-t</span> <span className="text-label">ed25519</span>{' '}
                 <span className="text-tag">-C</span>{' '}
                 <span className="text-label">"your.email@example.com"</span>
               </CodeBlock>
@@ -134,7 +135,7 @@ export default function GitSetupPage() {
             </li>
             <li>
               <h3 className="text-2xl font-bold text-command mb-2">
-                3. Add the Key to GitHub
+                Add the Key to GitHub
               </h3>
               <p className="text-muted-foreground mb-4">
                 Now, you must deliver the public part of your key to the GitHub Citadel so it recognizes you.
