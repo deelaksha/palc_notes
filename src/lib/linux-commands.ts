@@ -10,12 +10,15 @@ export const commandsData = [
             "**-l (The Magnifying Glass)**: Shows a detailed 'long' list with permissions, owner, size, and last-touched date.",
             "**-a (The Secret-Detector)**: Reveals *all* files, including hidden ones that start with a dot (`.`), like secret configuration scrolls.",
             "**-h (The Humanizer)**: Used with `-l`, this makes file sizes easy to read (e.g., `4K`, `1.2M`) instead of giant numbers.",
-            "Combine them for superpowers! `ls -lah` shows all files in a detailed, human-readable list."
+            "**-t (The Time-Sorter)**: Sorts the files by the last time they were touched, showing the newest ones first.",
+            "**-R (The Explorer)**: Recursively lists everything in the current folder, and then everything inside those folders, and so on.",
+            "Combine them for superpowers! `ls -laht` shows all files in a detailed, time-sorted, human-readable list."
         ],
         examples: [
             { code: "ls -l", text: "Shows a detailed list of all visible files and folders." }, 
             { code: "ls -a", text: "Reveals all hidden magic scrolls in your current directory." }, 
-            { code: "ls -lah", text: "The classic combo: shows everything in a detailed, easy-to-read format."}
+            { code: "ls -laht", text: "The pro combo: shows everything in a detailed, time-sorted, easy-to-read format. Great for seeing what you just worked on." },
+            { code: "ls -R", text: "Lists all files in the current directory and all its subdirectories, giving you a full map of the area."}
         ],
         realWorld: "Whenever you teleport to a new directory, `ls -lah` is the first spell you'll cast to get your bearings and see what you can work with."
     },
@@ -29,7 +32,8 @@ export const commandsData = [
         ],
         examples: [
             { code: "pwd", text: "If you are in your hero's home folder, it might print `/home/yourname`." }, 
-            { code: "cd /var/log && pwd", text: "After teleporting to a new folder, `pwd` confirms your location by printing `/var/log`." }
+            { code: "cd /var/log && pwd", text: "After teleporting to a new folder, `pwd` confirms your location by printing `/var/log`." },
+            { code: "CURRENT_DIRECTORY=$(pwd)", text: "A scripting spell! This saves your current location into a variable that you can use later in a script." }
         ],
         realWorld: "This is super helpful when you get lost deep inside a project. It's also essential in magic scripts that need to know their own location to find other enchanted items (files)."
     },
@@ -45,7 +49,7 @@ export const commandsData = [
         ],
         examples: [
             { code: "cd Documents", text: "Teleports you into your `Documents` folder." }, 
-            { code: "cd ..", text: "Moves you up one level. If you're in `/home/user/docs`, this takes you to `/home/user`." }, 
+            { code: "cd ../../", text: "Jumps up two levels in the directory tree." },
             { code: "cd", text: "Instantly teleports you home, no matter how lost you are." },
             { code: "cd -", text: "If you just jumped from your `Downloads` folder to your `Projects` folder, `cd -` would zap you right back to `Downloads`."}
         ],
@@ -61,6 +65,7 @@ export const commandsData = [
         ],
         examples: [
             { code: "mkdir my_new_quest", text: "Creates a new folder for your adventure." }, 
+            { code: "mkdir docs assets images", text: "Creates three folders at the same time in your current location." },
             { code: "mkdir -p kingdom/castle/throne_room", text: "Creates the `kingdom` folder, then `castle` inside it, and finally `throne_room` inside that, all in one go!" }
         ],
         realWorld: "When starting any new coding project, you'll use `mkdir` to create a dedicated folder and subfolders like `src` for code and `assets` for images."
@@ -71,7 +76,8 @@ export const commandsData = [
         description: "The `rmdir` (Remove Directory) spell is a cautious way to delete **empty** folders. If a folder has any treasures (files) inside, this spell will fail, protecting you from accidents.",
         howItWorks: ["You cast `rmdir` on a folder. It only works if the folder is completely empty."],
         examples: [
-            { code: "rmdir empty_dungeon", text: "Deletes the `empty_dungeon` folder because there are no monsters or treasures inside."}
+            { code: "rmdir empty_dungeon", text: "Deletes the `empty_dungeon` folder because there are no monsters or treasures inside."},
+            { code: "rmdir folder1 folder2", text: "Attempts to delete two empty folders at once."}
         ],
         realWorld: "Useful for cleanup scripts where you want to safely remove temporary directories only after you're sure they are empty."
     },
@@ -85,7 +91,8 @@ export const commandsData = [
         ],
         examples: [
             { code: "touch shopping_list.txt", text: "Creates a new, empty file, ready for you to add your shopping list." }, 
-            { code: "touch index.html style.css script.js", text: "A pro-gamer move to create three essential files for a new web project all at once." }
+            { code: "touch index.html style.css script.js", text: "A pro-gamer move to create three essential files for a new web project all at once." },
+            { code: "touch existing_file.txt", text: "If the file already exists, this command updates its 'last modified' timestamp to the current time, without changing its content."}
         ],
         realWorld: "Developers use `touch` constantly to create new files for their code. It's also used in scripts to create 'lock' files to signal that a process is running."
     },
@@ -96,11 +103,13 @@ export const commandsData = [
         howItWorks: [
             "`cp source_file destination_file`: Copies a file and can give the copy a new name.",
             "`cp source_file destination_folder/`: Copies the file into a folder, keeping its name.",
-            "**-r (The Replicator)**: The essential flag for copying folders. It *recursively* copies a folder and everything inside it."
+            "**-r (The Replicator)**: The essential flag for copying folders. It *recursively* copies a folder and everything inside it.",
+            "**-v (Verbose)**: Shows you exactly what files are being copied, step-by-step."
         ],
         examples: [
             { code: "cp report.pdf report_backup.pdf", text: "Makes a quick backup of your report before you make big changes." }, 
-            { code: "cp -r vacation_photos /home/user/photo_archive/", text: "Uses the `-r` spell to copy the entire `vacation_photos` folder and all its contents to your archive." }
+            { code: "cp -r vacation_photos /home/user/photo_archive/", text: "Uses the `-r` spell to copy the entire `vacation_photos` folder and all its contents to your archive." },
+            { code: "cp -rv source_folder/ destination_folder/", text: "Copies a folder recursively and shows you each file as it's being copied, giving you a progress report."}
         ],
         realWorld: "You'll use `cp` daily to back up important files, duplicate project templates, or move images and assets around."
     },
@@ -110,11 +119,13 @@ export const commandsData = [
         description: "The `mv` (Move) spell is a two-in-one tool: it can either move a file to a new folder, or it can simply rename it.",
         howItWorks: [
             "**To Rename**: `mv old_name new_name`.",
-            "**To Move**: `mv file_name destination_folder/`."
+            "**To Move**: `mv file_name destination_folder/`.",
+            "**-i (Interactive)**: Prompts you for confirmation before overwriting an existing file."
         ],
         examples: [
             { code: "mv draft.txt final_report.txt", text: "Renames your file from a draft to the final version." }, 
-            { code: "mv secret_map.jpg ~/safe_chest/", text: "Moves your secret map into your main 'safe_chest' folder." }
+            { code: "mv secret_map.jpg ~/safe_chest/", text: "Moves your secret map into your main 'safe_chest' folder." },
+            { code: "mv -i my_script.sh scripts/", text: "Moves your script into the scripts folder, but will ask 'overwrite?' if a file with the same name is already there."}
         ],
         realWorld: "You use `mv` constantly to organize your files, like moving a downloaded file from 'Downloads' to your 'Projects' folder, or to fix a typo in a filename."
     },
@@ -130,7 +141,7 @@ export const commandsData = [
         ],
         examples: [
             { code: "rm old_idea.txt", text: "Deletes the file permanently." }, 
-            { code: "rm -i sensitive_document.doc", text: "Asks for confirmation before deleting an important file." },
+            { code: "rm -i sensitive_document.doc", text: "Asks for confirmation before deleting an important file. This is a much safer way to delete things!" },
             { code: "rm -r temp_project", text: "Deletes the `temp_project` folder and everything inside it." },
             { code: "rm -rf old_project", text: "Forcefully deletes the entire `old_project` folder without any prompts. VERY DANGEROUS! Double-check your spelling before using this." }
         ],
@@ -143,6 +154,7 @@ export const commandsData = [
         "howItWorks": [
           "The basic spell is: `find [where_to_look] [what_to_look_for] [what_to_do]`.",
           "`-name \"pattern\"`: Searches by name. Use wildcards like `*` (matches anything) in quotes.",
+          "`-iname \"pattern\"`: Case-insensitive search by name.",
           "`-type f`: Searches only for files.",
           "`-type d`: Searches only for directories (folders).",
           "`-size +1G`: Finds files larger than 1 gigabyte.",
@@ -151,6 +163,7 @@ export const commandsData = [
         ],
         "examples": [
           { "code": "find . -name \"*.jpg\"", "text": "Searches the current folder (`.`) for any files that end with `.jpg`." },
+          { "code": "find . -iname \"report.*\"", "text": "Finds files named `report.txt`, `Report.docx`, etc., ignoring whether the letters are uppercase or lowercase." },
           { "code": "find /home -type f -size +1G", "text": "Searches the entire `/home` directory for files (`-type f`) that are larger than 1 gigabyte (`+1G`)." },
           { "code": "find . -type f -name \"*.tmp\" -exec rm {} \\;", "text": "Finds all temporary files (`*.tmp`) and casts the `rm` spell on each one to delete them." }
         ],
@@ -168,7 +181,8 @@ export const commandsData = [
         examples: [
             { code: "cat instructions.txt", text: "Shows the entire text of `instructions.txt`." }, 
             { code: "cat -n magic_script.sh", text: "Displays your script with line numbers, useful for finding errors." }, 
-            { code: "cat chapter1.txt chapter2.txt > full_story.txt", text: "Combines two story chapters into one single file." }
+            { code: "cat chapter1.txt chapter2.txt > full_story.txt", text: "Combines two story chapters into one single file using the `>` redirection spell." },
+            { code: "cat file.txt | grep 'error'", text: "Displays the file's content, then sends it through a 'grep' filter to only show lines containing the word 'error'."}
         ],
         realWorld: "Use `cat` to quickly check a small configuration file or to see the contents of a short script without opening an editor."
     },
@@ -180,6 +194,8 @@ export const commandsData = [
             "Cast `less` on a file. Use arrow keys or Page Up/Down to scroll.",
             "`/text`: Searches forward for `text`. Press `n` for the next match.",
             "`?text`: Searches backward.",
+            "`G`: Jumps to the end of the file.",
+            "`g`: Jumps to the beginning of the file.",
             "`q`: Press `q` to quit and return to your terminal."
         ],
         examples: [
@@ -194,7 +210,9 @@ export const commandsData = [
         description: "The `head` spell shows you just the 'head' or the first few lines of a scroll. By default, it shows the first 10 lines.",
         howItWorks: ["`-n <number>`: Lets you specify exactly how many lines to see from the top."],
         examples: [
-            { code: "head -n 5 recipe_book.txt", text: "Quickly shows the first 5 recipes in your book to see what's for dinner." }
+            { code: "head recipe_book.txt", text: "Shows the first 10 lines of the recipe book." },
+            { code: "head -n 5 recipe_book.txt", text: "Quickly shows the first 5 recipes in your book to see what's for dinner." },
+            { code: "head -n 1 data.csv", text: "Shows only the very first line of a CSV file, which is usually the header row with column titles."}
         ],
         realWorld: "Essential for peeking at the first few lines of a huge CSV data file to understand its column headers before you write a script to process it."
     },
@@ -208,7 +226,8 @@ export const commandsData = [
         ],
         examples: [
             { code: "tail -n 20 notes.txt", text: "Shows the last 20 lines of notes you wrote." }, 
-            { code: "tail -f /var/log/game_server.log", text: "Lets you watch a live game server's log, seeing player actions and errors as they happen." }
+            { code: "tail -f /var/log/game_server.log", text: "Lets you watch a live game server's log, seeing player actions and errors as they happen." },
+            { code: "tail -n 100 access.log | grep '404'", text: "Shows the last 100 lines of a web server log, and filters them to only show '404 Not Found' errors."}
         ],
         realWorld: "A developer will always have a terminal open running `tail -f` on their app's log file to watch for issues in real time while they are coding."
     },
@@ -220,11 +239,14 @@ export const commandsData = [
             "It uses numbers to represent permissions: `4` for read, `2` for write, `1` for execute.",
             "You give a three-digit number: the first is for the owner, the second for the group, and the third for everyone else.",
             "`chmod 755 script.sh`: `7` (4+2+1) for owner (read, write, execute), `5` (4+1) for group (read, execute), `5` for others. Perfect for programs.",
-            "`chmod 644 document.txt`: `6` (4+2) for owner (read, write), `4` for everyone else (read-only). Perfect for documents."
+            "`chmod 644 document.txt`: `6` (4+2) for owner (read, write), `4` for everyone else (read-only). Perfect for documents.",
+            "You can also use letters: `u` (user/owner), `g` (group), `o` (others), `a` (all). And `+` (add permission), `-` (remove permission)."
         ],
         examples: [
             { code: "chmod +x my_script.sh", text: "A quick way to add 'eXecute' permission, allowing you to run the script." }, 
-            { code: "chmod 600 private_diary.txt", text: "Makes a file readable and writable *only* by you (6 for owner, 0 for group, 0 for others). Essential for private files." }
+            { code: "chmod 755 my_script.sh", text: "The numeric way to make a script executable by you, and readable/executable by others." },
+            { code: "chmod 600 private_diary.txt", text: "Makes a file readable and writable *only* by you (6 for owner, 0 for group, 0 for others). Essential for private files." },
+            { code: "chmod u=rwx,g=r,o=r my_app", text: "An alternative way to set permissions: gives the user read/write/execute, and the group/others only read access."}
         ],
         realWorld: "When you download a program or write a script, you almost always need to cast `chmod +x` on it to make it runnable."
     },
@@ -252,10 +274,12 @@ export const commandsData = [
             "**a**: Show processes for all users.",
             "**u**: Display detailed, user-friendly info.",
             "**x**: Show processes not attached to a terminal (background ghosts).",
+            "`ps -ef` is another popular combination that shows a full listing in a different format.",
             "The output shows the PID (Process ID), a unique number for each program, which you can use with `kill`."
         ],
         examples: [
             { code: "ps aux", text: "Get a detailed list of every single process running on the system." }, 
+            { code: "ps -ef", text: "Another way to see all running processes, often used in scripts." },
             { code: "ps aux | grep firefox", text: "This finds and shows you only the processes related to the Firefox browser. `grep` acts as a filter." }
         ],
         realWorld: "If your computer is suddenly slow, you'd use `ps aux` to see which program is being greedy and using up all the CPU or memory."
@@ -283,12 +307,14 @@ export const commandsData = [
             "You combine spell flags:",
             "**-c (Create)**, **-x (Extract)**, **-v (Verbose/show files)**, **-f (File name is next)**.",
             "**-z (Gzip)**: Compresses the backpack to make it smaller (`.tar.gz`).",
+            "**-t (List)**: Lists the contents of an archive without extracting it.",
             "Memorize this: `tar -czvf archive-name.tar.gz folder-to-archive/` (Create a zipped, verbose file).",
             "And this: `tar -xzvf archive-name.tar.gz` (Extract a zipped, verbose file)."
         ],
         examples: [
             { code: "tar -czvf project.tar.gz my_project/", text: "Creates a compressed backpack named `project.tar.gz` from your `my_project` folder." },
-            { code: "tar -xzvf project.tar.gz", text: "Unpacks the `project.tar.gz` backpack into your current location." }
+            { code: "tar -xzvf project.tar.gz", text: "Unpacks the `project.tar.gz` backpack into your current location." },
+            { code: "tar -tf my_archive.tar.gz", text: "Lists all the files inside the archive so you can see what's in it before you unpack it."}
         ],
         realWorld: "This is the standard way to package up a project's code for sharing or backups. When you download code for a Linux program, it's almost always a `.tar.gz` file."
     },
@@ -345,7 +371,8 @@ export const commandsData = [
         ],
         examples: [
             { code: "kill 12345", text: "Politely asks the program with PID `12345` to stop." }, 
-            { code: "kill -9 98765", text: "Forcefully terminates a program that is frozen and won't respond." }
+            { code: "kill -9 98765", text: "Forcefully terminates a program that is frozen and won't respond." },
+            { code: "pkill firefox", text: "A related spell, `pkill`, kills a program by its name instead of its PID, which can be easier!"}
         ],
         realWorld: "You use `ps` or `top` to find the PID of a frozen application, and then you use `kill` (or `kill -9` if it's really stuck) to shut it down."
     },
@@ -387,6 +414,7 @@ export const commandsData = [
             "A very common spell is `du -sh *` to see the size of all items in your current location."
         ],
         examples: [
+            { code: "du -h my_document.txt", text: "Shows the size of a single file." },
             { code: "du -sh my_large_folder", text: "Shows only the total size of `my_large_folder`." }, 
             { code: "du -sh * | sort -rh", text: "A powerful combo that lists all folders and files in your current location, sorted by the largest at the top!" }
         ],
@@ -414,7 +442,8 @@ export const commandsData = [
             "**inet**: This shows your IPv4 address (the most common type, e.g., `192.168.1.100`)."
         ],
         examples: [
-            { code: "ip a", text: "A common and much shorter alias for `ip addr show`, displaying detailed info about all your network connections." }
+            { code: "ip a", text: "A common and much shorter alias for `ip addr show`, displaying detailed info about all your network connections." },
+            { code: "ip -4 a", text: "Shows information for IPv4 addresses only."}
         ],
         realWorld: "This is the standard, go-to command for finding your IP address on any modern Linux system, which you need to connect to games or other computers."
     },
@@ -459,7 +488,8 @@ export const commandsData = [
             "Once you're in, you can run any command on the remote machine."
         ],
         examples: [
-            { code: "ssh student@school-server.edu", text: "Connects to your school's server with the username `student`." }
+            { code: "ssh student@school-server.edu", text: "Connects to your school's server with the username `student`." },
+            { code: "ssh user@hostname 'ls -l'", text: "Runs the `ls -l` command on the remote server without starting a full interactive session."}
         ],
         realWorld: "A system administrator uses `ssh` all day to manage remote servers across the globe. It's the #1 tool for remote server management."
     },
@@ -474,7 +504,8 @@ export const commandsData = [
         ],
         examples: [
             { code: "wget https://example.com/cool_game.zip", text: "Downloads `cool_game.zip` into your current folder." }, 
-            { code: "wget -O awesome.html https://www.google.com", text: "Downloads Google's homepage and saves it as `awesome.html`." }
+            { code: "wget -O awesome.html https://www.google.com", text: "Downloads Google's homepage and saves it as `awesome.html`." },
+            { code: "wget -c http://releases.ubuntu.com/22.04/ubuntu-22.04.3-desktop-amd64.iso", text: "Resumes downloading a large file like an Ubuntu installer if it was interrupted." }
         ],
         realWorld: "You can use `wget` in a script to automatically download a daily data file from a website for processing."
     },
@@ -490,7 +521,8 @@ export const commandsData = [
         ],
         examples: [
             { code: "curl https://api.github.com/users/google", text: "Gets information about the 'google' user on GitHub and displays the data in the terminal." }, 
-            { code: "curl -O https://example.com/important_file.zip", text: "Downloads the remote file and saves it locally." }
+            { code: "curl -O https://example.com/important_file.zip", text: "Downloads the remote file and saves it locally." },
+            { code: "curl -I https://www.google.com", text: "Shows only the headers of a web page, which is useful for debugging."}
         ],
         realWorld: "Developers use `curl` constantly to test if their web APIs are working correctly, sending and receiving data without needing a browser."
     },
@@ -563,7 +595,8 @@ export const commandsData = [
         ],
         examples: [
             { code: "id", text: "Shows your user ID, your main group, and all other groups you are a member of." }, 
-            { code: "id jessica", text: "Shows the user and group information for the user `jessica`." }
+            { code: "id jessica", text: "Shows the user and group information for the user `jessica`." },
+            { code: "id -u", text: "Shows only your numerical user ID."}
         ],
         realWorld: "System admins use this to quickly check if a user is in the correct group to have permission to access a certain file or program."
     },
@@ -578,6 +611,7 @@ export const commandsData = [
         ],
         examples: [
             { code: "who", text: "Shows a list of all users currently on the system." }, 
+            { code: "who -H", text: "Shows the same list but with helpful column titles like NAME and LINE." },
             { code: "who am i", text: "Shows just your own session information."}
         ],
         realWorld: "On a shared university or company server, you can use `who` to see if your friends or colleagues are also logged in and working."
@@ -614,6 +648,7 @@ export const commandsData = [
         ],
         examples: [
             { code: "vim new_script.sh", text: "Opens a new script file in Vim." },
+            { code: "vim +10 my_file.txt", text: "Opens the file and jumps directly to line 10." },
             { code: "vim /etc/nginx/nginx.conf", text: "A common use case for a system admin is editing a server configuration file with Vim's powerful features." }
         ],
         realWorld: "Experienced developers and system administrators use Vim for everything from writing code to editing configuration files because of its speed and power. The ability to edit without using a mouse is a huge productivity boost."
