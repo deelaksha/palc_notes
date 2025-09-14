@@ -146,7 +146,7 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
             transition={{ duration: 0.3, ease: 'easeOut' }}
             className='fixed inset-0 z-50 w-full h-full'
           >
-            <div className="bg-background/80 backdrop-blur-sm flex flex-col h-full w-full rounded-none">
+            <div className="bg-background/50 backdrop-blur-sm flex flex-col h-full w-full rounded-none">
               <div className="flex-1 p-4 overflow-y-auto space-y-4 relative">
                  <div className="absolute top-2 right-2 z-10 flex gap-2">
                     <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="h-8 w-8">
