@@ -169,6 +169,8 @@ export const commandsData = [
           "The basic spell is: `find [where_to_look] [what_to_look_for] [what_to_do]`.",
           "`-name \"pattern\"`: Searches by name. Use wildcards like `*` (matches anything) in quotes.",
           "`-iname \"pattern\"`: Case-insensitive search by name.",
+          "`-regex \"pattern\"`: Searches the full file path using a regular expression, which is a more powerful way to pattern match.",
+          "`-iregex \"pattern\"`: Case-insensitive search using a regular expression.",
           "`-type f`: Searches only for files.",
           "`-type d`: Searches only for directories (folders).",
           "`-size +1G`: Finds files larger than 1 gigabyte.",
@@ -178,6 +180,7 @@ export const commandsData = [
         "examples": [
           { "code": "find . -name \"*.jpg\"", "text": "Searches the current folder (`.`) for any files that end with `.jpg`." },
           { "code": "find . -iname \"report.*\"", "text": "Finds files named `report.txt`, `Report.docx`, etc., ignoring whether the letters are uppercase or lowercase." },
+          { "code": "find . -regex '.*\\(jpeg\\|jpg\\)$'", "text": "Uses a regular expression to find all files ending in `jpeg` or `jpg`." },
           { "code": "find /home -type f -size +1G", "text": "Searches the entire `/home` directory for files (`-type f`) that are larger than 1 gigabyte (`+1G`)." },
           { "code": "find . -type f -name \"*.tmp\" -exec rm {} \\;", "text": "Finds all temporary files (`*.tmp`) and casts the `rm` spell on each one to delete them." },
           { "code": "find /var/log -name \"*.log\" -mtime +30", "text": "Finds all log files in `/var/log` that are older than 30 days."}
