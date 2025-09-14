@@ -76,24 +76,33 @@ You don't have to choose! The best workflow uses both tools for what they do bes
 -   Use **Ctags** for its lightning-fast "go to definition" with \`Ctrl + ]\`, as this is the most frequent navigation action you'll perform.
 -   Use **Cscope** for its powerful analytical queries (\`:cs find c\`, \`:cs find d\`, etc.) when you need to understand the context, usage, and impact of your code.
 
-### Combined Generation
+### Generating Both Databases
+Here’s how to generate everything in one go from your project's root directory:
 1.  **Generate a file list for Cscope**:
     <CodeBlock>find . -name "*.c" -o -name "*.h" > cscope.files</CodeBlock>
-2.  **Generate both databases in one go**:
+2.  **Generate both the Ctags and Cscope databases**:
     <CodeBlock>
 ctags -R .
 cscope -b -k -i cscope.files
 </CodeBlock>
 
-### Practice Scenario
-1.  Navigate to a C project directory.
-2.  Generate both databases using the commands above.
-3.  Open a source file: \`vim main.c\`
-4.  Add the cscope database to Vim: \`:cs add cscope.out\`
-5.  Place your cursor on a function call and press \`Ctrl + ]\` to instantly jump to its definition.
-6.  Press \`Ctrl + T\` to jump back to where you were.
-7.  Now, find all functions that call that same function: \`:cs find c <function_name>\`
-8.  Vim presents a list of results. Type a number from the list and press Enter to jump to that new location.
+---
+
+## 🎯 Practice Scenario
+
+Let's put it all together in a real-world scenario.
+
+1.  **Navigate** to a C project directory in your terminal.
+2.  **Generate** both databases using the two commands from the section above.
+3.  **Open** a source file in Vim:
+    <CodeBlock>vim main.c</CodeBlock>
+4.  **Add** the cscope database to your Vim session:
+    <CodeBlock>:cs add cscope.out</CodeBlock>
+5.  **Go to Definition**: Place your cursor on a function call and press \`Ctrl + ]\` to instantly jump to its definition (using Ctags).
+6.  **Jump Back**: Press \`Ctrl + T\` to return to where you were.
+7.  **Find Callers**: Now, find all functions that call that same function using Cscope:
+    <CodeBlock>:cs find c <function_name></CodeBlock>
+8.  **Navigate Results**: Vim will present a list of every location where the function is called. Type a number from the list and press Enter to jump to that new location.
 
 ✅ By mastering the combination of ctags for speed and cscope for power, you can navigate massive, multi-file codebases with the same ease as a small script, dramatically boosting your productivity and understanding.
 `;
