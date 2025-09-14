@@ -70,7 +70,7 @@ export const contextualChat = ai.defineFlow(
     
     const structuredOutput = contextualResponse.output;
 
-    if (structuredOutput?.isContextual) {
+    if (structuredOutput?.isContextual && input.context) {
       return structuredOutput.answer;
     } else {
       // If the question is not about the page content, fall back to the general chat.
