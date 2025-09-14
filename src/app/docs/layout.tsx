@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Logo } from '@/components/icons';
@@ -13,7 +12,7 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from '@/components/ui/sidebar';
-import { BookOpen, Code, FileCode, GitBranch, GitBranchPlus, Github, Home, Info, Regex, Terminal } from 'lucide-react';
+import { BookOpen, Code, FileCode, GitBranch, Github, Home, Info, Regex, Terminal } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -22,8 +21,7 @@ const navItems = [
   { href: '/docs/vim', label: 'Vim', icon: <Code /> },
   { href: '/docs/linux', label: 'Linux', icon: <Terminal /> },
   { href: '/docs/git-setup', label: 'Git Setup', icon: <GitBranch /> },
-  { href: '/docs/github', label: 'GitHub', icon: <Github /> },
-  { href: '/docs/git-advanced', label: 'Git Advanced', icon: <GitBranchPlus /> },
+  { href: '/docs/github', label: 'Git Tutorial', icon: <Github /> },
   { href: '/docs/code-navigation', label: 'Code Navigation', icon: <FileCode /> },
   { href: '/regex', label: 'Regex', icon: <Regex /> },
   { href: '/docs/notes', label: 'Notes', icon: <BookOpen /> },

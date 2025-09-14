@@ -1,3 +1,4 @@
+
 import { gitCommandsData } from '@/lib/git-commands';
 import { notFound } from 'next/navigation';
 import { CodeBlock } from '@/components/markdown/CodeBlock';
@@ -8,7 +9,7 @@ import { Button } from '@/components/ui/button';
 
 export function generateStaticParams() {
   return gitCommandsData.map((command) => ({
-    command: command.name,
+    command: command.name.replace(/\s+/g, '-'),
   }));
 }
 

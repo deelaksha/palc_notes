@@ -24,7 +24,7 @@ export const gitCommandsData = [
     {
         category: "Getting & Creating Projects",
         name: "git init",
-        description: "Initializes a new, empty Git repository or reinitializes an existing one.",
+        description: "Initializes a new, empty Git repository or reinitializes an existing one. It's like creating a new, empty photo album before you start taking pictures.",
         howItWorks: [
             "Running `git init` in a directory creates a new hidden subdirectory named `.git`.",
             "The `.git` directory contains all the necessary repository files — a Git repository skeleton.",
@@ -39,7 +39,7 @@ export const gitCommandsData = [
     {
         category: "Getting & Creating Projects",
         name: "git clone",
-        description: "Creates a local copy of a remote repository that already exists.",
+        description: "Creates a local copy of a remote repository that already exists. It's like borrowing a book from a library to read on your own computer.",
         howItWorks: [
             "`git clone <url>`: Copies the entire history of the repository from the given URL.",
             "The URL can be HTTPS (`https://...`) or SSH (`git@...`).",
@@ -55,7 +55,7 @@ export const gitCommandsData = [
     {
         category: "Basic Snapshotting",
         name: "git add",
-        description: "Adds file contents to the staging area (also known as the 'index') for the next commit.",
+        description: "Adds file contents to the staging area (also known as the 'index') for the next commit. Think of it like putting items in a box before you ship them.",
         howItWorks: [
             "Git doesn't automatically include changes in a commit. You must first 'stage' them with `git add`.",
             "This allows you to be selective about what changes you include in each commit, leading to more organized and atomic commits.",
@@ -73,7 +73,7 @@ export const gitCommandsData = [
     {
         category: "Basic Snapshotting",
         name: "git commit",
-        description: "Records the staged changes to the repository's history.",
+        description: "Records the staged changes to the repository's history. It's like taking a photo of your project at a specific moment.",
         howItWorks: [
             "A commit is a snapshot of your staged files at a point in time. Each commit has a unique ID and a message.",
             "`-m \"<message>\"`: Allows you to provide a commit message directly on the command line. This is the most common way to commit.",
@@ -90,7 +90,7 @@ export const gitCommandsData = [
     {
         category: "Basic Snapshotting",
         name: "git status",
-        description: "Displays the state of the working directory and the staging area.",
+        description: "Displays the state of the working directory and the staging area. It's like asking Git, 'What's happening right now?'",
         howItWorks: [
             "It shows which files are staged, which are modified but not staged, and which are untracked.",
             "It provides helpful hints on what Git commands to use next.",
@@ -103,24 +103,9 @@ export const gitCommandsData = [
         realWorld: "This is one of the most frequently used Git commands. You use it constantly to check the current state of your project and see what you need to commit."
     },
     {
-        category: "Basic Snapshotting",
-        name: "git rm",
-        description: "Removes files from the working directory and the staging area.",
-        howItWorks: [
-            "This command is like running `rm` on the command line and then running `git add` on the removal.",
-            "`--cached`: Removes the file only from the staging area (index) but keeps it in your working directory. This is useful for 'untracking' a file without deleting it.",
-            "`-f`: Forces the removal of a file that has been modified and staged."
-        ],
-        examples: [
-            { code: "git rm temp.log", text: "Deletes `temp.log` and stages the deletion." },
-            { code: "git rm --cached config.js", text: "Untracks `config.js` but leaves the file on your disk. Useful if you accidentally added a sensitive file." }
-        ],
-        realWorld: "Used when you want to delete a file and have Git record that deletion in the next commit."
-    },
-     {
         category: "Branching & Merging",
         name: "git branch",
-        description: "Lists, creates, or deletes branches.",
+        description: "Lists, creates, or deletes branches. Think of a branch as a separate timeline for your project.",
         howItWorks: [
             "`git branch`: Lists all local branches and highlights the current one.",
             "`git branch <branch-name>`: Creates a new branch pointing to the current commit, but does not switch to it.",
@@ -138,7 +123,7 @@ export const gitCommandsData = [
     {
         category: "Branching & Merging",
         name: "git checkout",
-        description: "Switches branches or restores working tree files.",
+        description: "Switches branches or restores working tree files. It's like changing the channel to work on a different timeline.",
         howItWorks: [
             "`git checkout <branch-name>`: Switches your working directory to the state of the specified branch.",
             "`-b <new-branch-name>`: Creates a new branch and immediately switches to it. This is a very common shortcut for `git branch <name>` followed by `git checkout <name>`.",
@@ -154,7 +139,7 @@ export const gitCommandsData = [
     {
         category: "Branching & Merging",
         name: "git merge",
-        description: "Joins two or more development histories (branches) together.",
+        description: "Joins two or more development histories (branches) together. It's like taking two different story timelines and combining them into one.",
         howItWorks: [
             "First, `checkout` the branch you want to merge changes *into* (e.g., `main`).",
             "Then run `git merge <branch-to-merge-from>` (e.g., `git merge new-feature`).",
@@ -170,7 +155,7 @@ export const gitCommandsData = [
     {
         category: "Branching & Merging",
         name: "git rebase",
-        description: "Re-applies commits from one branch on top of another branch. It's an alternative to merging for integrating changes.",
+        description: "Re-applies commits from one branch on top of another branch. It's like re-telling your story based on a new starting point, making the history cleaner.",
         howItWorks: [
             "Rebase rewrites the project history by creating brand new commits for each commit in the original branch.",
             "The main benefit is a cleaner, more linear project history compared to merge commits.",
@@ -186,7 +171,7 @@ export const gitCommandsData = [
     {
         category: "Sharing & Updating Projects",
         name: "git remote",
-        description: "Manages the set of remote repositories whose branches you track.",
+        description: "Manages the set of remote repositories whose branches you track. A 'remote' is like a nickname for a project's URL.",
         howItWorks: [
             "A 'remote' is a nickname for a URL of a repository. The default name is `origin`.",
             "`git remote`: Lists the shortnames of your remotes (e.g., `origin`).",
@@ -203,7 +188,7 @@ export const gitCommandsData = [
     {
         category: "Sharing & Updating Projects",
         name: "git fetch",
-        description: "Downloads commits, files, and refs from a remote repository into your local repo, but does not merge them.",
+        description: "Downloads commits, files, and refs from a remote repository into your local repo, but does not merge them. It's like getting the latest mail, but leaving it in the mailbox to read later.",
         howItWorks: [
             "It downloads the data from the remote repository but doesn't change your local working directory.",
             "This gives you a chance to review the changes before integrating them into your local branches.",
@@ -219,7 +204,7 @@ export const gitCommandsData = [
     {
         category: "Sharing & Updating Projects",
         name: "git pull",
-        description: "Fetches changes from a remote repository and then automatically merges them into your current branch.",
+        description: "Fetches changes from a remote repository and then automatically merges them into your current branch. It's like `git fetch` and `git merge` in one command.",
         howItWorks: [
             "`git pull` is essentially a shortcut for `git fetch` followed by `git merge FETCH_HEAD`.",
             "`git pull origin main`: Fetches from the `main` branch on the `origin` remote and merges it into your current local branch.",
@@ -234,7 +219,7 @@ export const gitCommandsData = [
     {
         category: "Sharing & Updating Projects",
         name: "git push",
-        description: "Uploads your local branch commits to a remote repository.",
+        description: "Uploads your local branch commits to a remote repository. It's how you share your work with others.",
         howItWorks: [
             "`git push <remote> <branch>`: Pushes the specified branch to the specified remote.",
             "`-u` or `--set-upstream`: Sets up a tracking relationship between your local branch and the remote branch. After the first push with `-u`, you can just use `git push` from that branch.",
@@ -250,7 +235,7 @@ export const gitCommandsData = [
     {
         category: "Inspection & Comparison",
         name: "git log",
-        description: "Shows the commit history.",
+        description: "Shows the commit history. It's like looking through the pages of a diary to see everything that's happened.",
         howItWorks: [
             "It displays a list of commits in reverse chronological order.",
             "`--oneline`: Condenses each commit to a single line, showing the commit hash and message.",
@@ -268,7 +253,7 @@ export const gitCommandsData = [
     {
         category: "Inspection & Comparison",
         name: "git diff",
-        description: "Shows the differences between commits, branches, or files.",
+        description: "Shows the differences between commits, branches, or files. It's like playing 'spot the difference' with your code.",
         howItWorks: [
             "`git diff`: Shows unstaged changes in your working directory (what you've changed but not `git add`'ed).",
             "`--staged` or `--cached`: Shows changes that are staged but not yet committed (what you've `git add`'ed).",
@@ -281,5 +266,88 @@ export const gitCommandsData = [
             { code: "git diff main..feature-branch", text: "Shows all the changes made on `feature-branch` since it diverged from `main`." }
         ],
         realWorld: "Crucial for reviewing your own work before committing, and for comparing different versions of your code to understand what has changed."
+    },
+    {
+        category: "Advanced",
+        name: "git reset",
+        description: "The 'Time Machine'. It moves the current branch pointer to a different commit, optionally changing your files to match.",
+        howItWorks: [
+            "This command can un-stage files, un-commit changes, or completely reset your work to a previous state. It has three main modes:",
+            "`--soft`: Moves the branch pointer but does NOT touch your staged files or your working directory. Your code stays as it is, but Git now thinks you are at an older commit.",
+            "`--mixed` (default): Moves the branch pointer and unstages all your changes. Your code files are NOT changed, but you'll have to `git add` them again if you want to re-commit them.",
+            "`--hard`: **DANGEROUS!** Moves the branch pointer and completely changes your staged files AND your working files to match the commit you reset to. Any uncommitted work will be lost forever."
+        ],
+        examples: [
+            { code: 'git reset HEAD~1', text: "This is a `--mixed` reset by default. It 'un-commits' your last commit but leaves the changes in your working directory." },
+            { code: 'git reset --soft HEAD~1', text: "Un-commits the last commit, but keeps all your changes staged, ready to be committed again." },
+            { code: "git reset --hard a1b2c3d4", text: "Destroys all current changes and makes your project folder identical to how it was at commit `a1b2c3d4`. Use with caution!" }
+        ],
+        realWorld: "The most common use is `git reset <file>` to unstage a file you accidentally added. The most dangerous use is `git reset --hard` to throw away a series of bad commits and start over from a known good point. If you do this by mistake, `git reflog` is your only hope!"
+    },
+    {
+        category: "Advanced",
+        name: "git revert",
+        description: "Creates a new commit that undoes the changes from a previous commit. It's a safe way to undo, because it doesn't change history.",
+        howItWorks: [
+            "`git revert` doesn't delete commits. Instead, it looks at the changes in an old commit and creates a *new* commit that does the exact opposite.",
+            "If the old commit added a line, the revert commit will remove that line.",
+            "This is safer than `git reset` for shared branches because it doesn't rewrite history that others may have already pulled."
+        ],
+        examples: [
+            { code: "git revert HEAD", text: "Creates a new commit that undoes the changes of the very last commit." },
+            { code: "git revert a1b2c3d4", text: "Creates a new commit that reverses the changes made in commit `a1b2c3d4`." }
+        ],
+        realWorld: "Imagine a bug was introduced in a commit that was pushed to the main branch. Instead of using `reset` and rewriting history for everyone, you would use `git revert` to create a new commit that fixes the bug by undoing the bad changes. The history remains intact and the fix is clear to everyone."
+    },
+    {
+        category: "Advanced",
+        name: "git stash",
+        description: "The 'Magic Pocket'. It lets you temporarily save your current uncommitted changes so you can switch to another task, without having to make a messy, unfinished commit.",
+        howItWorks: [
+            "Imagine you are in the middle of working on a feature, but your boss asks for an urgent bug fix.",
+            "`git stash`: Takes all your changes (both staged and unstaged) and puts them in a 'magic pocket', leaving your working directory clean (back to how it was at the last commit).",
+            "You can then switch branches, fix the bug, and commit your fix.",
+            "`git stash pop` or `git stash apply`: When you're ready to continue your feature, this command takes the changes out of the magic pocket and applies them back to your working directory.",
+            "`git stash list`: Shows you all the things you've saved in your stash."
+        ],
+        examples: [
+            { code: 'git stash', text: "Saves your current changes away." },
+            { code: 'git stash save "working on new nav bar"', text: "Saves your changes with a descriptive message." },
+            { code: 'git stash pop', text: "Applies the most recently stashed changes and removes them from the stash list." },
+            { code: 'git stash apply', text: "Applies the stashed changes but keeps them in the stash list in case you need them again." }
+        ],
+        realWorld: "This is used daily. You're coding a new feature when you notice a small, unrelated bug. You `git stash` your work, switch branches, fix the bug, commit, switch back, and `git stash pop` to continue right where you left off. It keeps your commits clean and focused on one task at a time."
+    },
+    {
+        category: "Advanced",
+        name: "git tag",
+        description: "A 'Bookmark' for Important Commits. It allows you to mark specific points in your history as being important, typically used for version releases like `v1.0`.",
+        howItWorks: [
+            "A tag is just a pointer to a specific commit. Unlike a branch, it doesn't move.",
+            "`git tag <tag-name>`: Creates a simple, 'lightweight' tag at your current commit.",
+            "`git tag -a <tag-name> -m \"<message>\"`: Creates an 'annotated' tag. This is better because it's stored as a full object in Git with a message, author, and date. It's like a fancy, official bookmark.",
+            "By default, `git push` does not push tags. You have to push them explicitly."
+        ],
+        examples: [
+            { code: 'git tag v1.0.0', text: "Creates a lightweight tag at the current commit." },
+            { code: 'git tag -a v1.0.1 -m "Version 1.0.1 release"', text: "Creates an official, annotated tag for a new version." },
+            { code: 'git push origin --tags', text: "Pushes all your local tags to the remote server so everyone can see them." }
+        ],
+        realWorld: "When a company releases a new version of their software, they create a tag for that commit (e.g., `v2.5.3`). This makes it easy for anyone to check out the exact code for that specific version in the future, even if hundreds of other commits have been added since."
+    },
+    {
+        category: "Advanced",
+        name: "git cherry-pick",
+        description: "The 'Copy-Paste for Commits'. It lets you pick a single commit from one branch and apply it onto another branch.",
+        howItWorks: [
+            "Imagine one of your friends made a really cool drawing on their branch, but you don't want all their other drawings, just that one.",
+            "First, you find the unique ID (hash) of the commit you want using `git log` on their branch.",
+            "Then, you switch back to your branch (`git checkout my-branch`).",
+            "Finally, you run `git cherry-pick <commit-hash>` to copy that one change over."
+        ],
+        examples: [
+            { code: "git cherry-pick a1b2c3d4", text: "Applies the commit with the hash `a1b2c3d4` to your current branch." }
+        ],
+        realWorld: "Imagine a bug is fixed on the main development branch (`develop`), but you need that same fix *right now* on an older, stable version of the software that's live. You can `cherry-pick` just the bug-fix commit onto the stable branch without bringing over all the other new, unfinished features."
     }
 ];

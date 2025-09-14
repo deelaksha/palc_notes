@@ -6,38 +6,32 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, BookOpen, Code, FileCode, GitBranchPlus, Github, Info, Regex, Terminal, Search } from 'lucide-react';
+import { ArrowRight, BookOpen, Code, FileCode, Github, Info, Regex, Terminal } from 'lucide-react';
 import Link from 'next/link';
 
 const categories = [
     {
         name: 'Vim',
         description: 'Master the powerful and efficient Vim text editor.',
-        href: '/vim',
+        href: '/docs/vim',
         icon: <Code className="size-8" />,
     },
     {
         name: 'Linux',
         description: 'Explore essential commands and concepts for the Linux terminal.',
-        href: '/linux',
+        href: '/docs/linux',
         icon: <Terminal className="size-8" />,
     },
     {
-        name: 'GitHub',
-        description: 'A comprehensive reference for core Git commands.',
-        href: '/github',
+        name: 'Git Tutorial',
+        description: 'A comprehensive, interactive reference for all Git commands.',
+        href: '/docs/github',
         icon: <Github className="size-8" />,
-    },
-    {
-        name: 'Git Advanced',
-        description: 'Unlock the next level of Git mastery with advanced commands.',
-        href: '/git-advanced',
-        icon: <GitBranchPlus className="size-8" />,
     },
     {
         name: 'Code Navigation',
         description: 'Tools to search, understand, and navigate large codebases.',
-        href: '/code-navigation',
+        href: '/docs/code-navigation',
         icon: <FileCode className="size-8" />,
     },
     {
@@ -49,7 +43,7 @@ const categories = [
     {
         name: 'Notes',
         description: 'A collection of miscellaneous tech notes and thoughts.',
-        href: '/notes',
+        href: '/docs/notes',
         icon: <BookOpen className="size-8" />,
     },
 ];
