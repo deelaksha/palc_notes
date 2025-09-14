@@ -38,10 +38,14 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
     scrollToBottom();
   }, [messages]);
 
-  const handleStartQuiz = async () => {
-    setMessages([]);
+  const handleGenerateNewQuiz = async (isContinuation: boolean) => {
+    if (isContinuation) {
+        setMessages((prev) => [...prev, { role: 'bot', content: 'Great job! Generating a new set of questions for you now...'}]);
+    } else {
+        setMessages([]);
+        setMessages([{ role: 'bot', content: 'Generating a quiz for you based on this page... Good luck!'}]);
+    }
     setQuizState('loading');
-    setMessages([{ role: 'bot', content: 'Generating a quiz for you based on this page... Good luck!'}]);
     try {
         const result = await generateQuiz({ context: pageContent });
         setQuiz(result);
@@ -52,7 +56,7 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
         setMessages([{ role: 'bot', content: 'Sorry, I couldn\'t generate a quiz right now. Please try again later.' }]);
         setQuizState('idle');
     }
-  }
+  };
 
   const handleStopQuiz = () => {
     setQuizState('idle');
@@ -76,9 +80,8 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
     if (currentQuestionIndex < quiz.questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
-      // Loop back to the first question to make the quiz continuous
-      setCurrentQuestionIndex(0);
-      setMessages((prev) => [...prev, { role: 'bot', content: "Let's go again! Here's the first question."}]);
+      // Regenerate the quiz with new questions for a continuous loop
+      handleGenerateNewQuiz(true);
     }
   };
 
@@ -104,7 +107,7 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
       setMessages((prev) => [...prev, botMessage]);
 
       if (result.isQuizRequest) {
-        handleStartQuiz();
+        handleGenerateNewQuiz(false);
       }
 
     } catch (error) {
