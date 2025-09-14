@@ -15,6 +15,7 @@ import {
 import { BookOpen, Code, FileCode, GitBranch, Github, Home, Info, Regex, Terminal } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { Chatbot } from '@/components/chatbot/Chatbot';
 
 const navItems = [
   { href: '/', label: 'Home', icon: <Home /> },
@@ -64,6 +65,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
           <main className="flex-1">
             {children}
           </main>
+          <Chatbot />
         </div>
       </div>
     </SidebarProvider>

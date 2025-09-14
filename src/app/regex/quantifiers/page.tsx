@@ -70,11 +70,6 @@ export default function RegexQuantifiersPage() {
             <main className="flex-1">
                 <MarkdownRenderer markdown={content} />
             </main>
-            <aside className="hidden lg:block w-96 pl-8">
-                <div className="sticky top-24">
-                    <Chatbot pageContext={content} />
-                </div>
-            </aside>
         </div>
     );
 }

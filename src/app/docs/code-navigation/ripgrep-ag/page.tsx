@@ -122,11 +122,6 @@ export default function RipgrepAgPage() {
             <main className="flex-1 py-8 px-4 md:px-8 lg:px-12 markdown-content">
                 <MarkdownRenderer markdown={ripgrepAgMarkdownContent} />
             </main>
-            <aside className="hidden lg:block w-96 p-8">
-                <div className="sticky top-24">
-                    <Chatbot pageContext={ripgrepAgMarkdownContent} />
-                </div>
-            </aside>
         </div>
     );
 }

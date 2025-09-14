@@ -6,7 +6,6 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Chatbot } from '@/components/chatbot/Chatbot';
 
 export function generateStaticParams() {
   return gitCommandsData.map((command) => ({
@@ -114,11 +113,6 @@ ${command.realWorld}
         </div>
       </section>
     </div>
-      <aside className="hidden lg:block w-96 p-8">
-        <div className="sticky top-24">
-            <Chatbot pageContext={pageContent} />
-        </div>
-      </aside>
     </div>
   );
 }

@@ -20,6 +20,7 @@ import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import { Inter, Source_Code_Pro } from 'next/font/google';
+import { Chatbot } from '@/components/chatbot/Chatbot';
 
 
 const fontInter = Inter({
@@ -109,6 +110,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </div>
         </SidebarProvider>
+        <Chatbot />
         <Toaster />
       </body>
     </html>
