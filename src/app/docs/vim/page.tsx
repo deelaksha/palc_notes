@@ -185,7 +185,7 @@ Use these keys like arrow keys:
 ## 🎯 Practice Scenario
 1. Open Vim: \`vim notes.txt\`
 2. Press \`i\` → type: \`Hello, this is my note.\`
-3. Press \`Esc\` → type \`o\` → new line opens → type \`Another note.\`
+3. Press \`o\` → new line opens → type \`Another note.\`
 4. Press \`Esc\` → type \`/note\` → finds the word “note.”
 5. Type \`:%s/note/task/g\` → replaces “note” with “task.”
 6. Press \`:wq\` → saves and quits.
@@ -196,59 +196,42 @@ Use these keys like arrow keys:
 `;
 
 const parseSections = (markdown: string) => {
-    const lines = markdown.split('\n');
     const sections: { title: string; content: string }[] = [];
     let currentContent: string[] = [];
-    let intro = '';
+
+    // Split markdown by section headers
+    const rawSections = markdown.split(/\n(?=##\s)/);
+
+    const intro = rawSections.length > 0 ? rawSections.shift()! : '';
     let conclusion = '';
-    let isIntro = true;
-    let isConclusion = false;
 
-    const mainTitleMatch = lines[0].match(/^#\s.*/);
-    if(mainTitleMatch){
-        intro = mainTitleMatch[0];
-    }
-    
-    for (const line of lines) {
-        if (line.startsWith('---')) {
-            if (isIntro) {
-                isIntro = false;
-            }
-            continue;
-        }
-
-        const titleMatch = line.match(/^##\s.*$/);
+    rawSections.forEach((section, index) => {
+        const lines = section.split('\n');
+        const titleMatch = lines[0].match(/^##\s.*$/);
         if (titleMatch) {
-            if (currentContent.length > 0) {
-                const lastSection = sections[sections.length - 1];
-                if(lastSection) {
-                    lastSection.content = currentContent.join('\n');
-                }
-            }
-            currentContent = [];
-            sections.push({ title: titleMatch[0].substring(3).trim(), content: '' });
-        } else if (!isIntro) {
-             if (line.startsWith('✅')) {
-                isConclusion = true;
-            }
-            if (isConclusion) {
-                conclusion += line + '\n';
+            const title = titleMatch[0].substring(3).trim();
+            const content = lines.slice(1).join('\n').trim();
+
+            const practiceScenarioIdentifier = '## 🎯 Practice Scenario';
+            if (section.startsWith(practiceScenarioIdentifier)) {
+                // This and all subsequent sections are part of the conclusion
+                conclusion += section.replace(practiceScenarioIdentifier, `## ${title}`) + '\n\n';
             } else {
-                 currentContent.push(line);
+                 sections.push({ title: title, content });
             }
         }
+    });
+
+    // Check last section for conclusion marker
+    const lastSection = sections[sections.length - 1];
+    if (lastSection && lastSection.content.includes('✅')) {
+        const conclusionMarkerIndex = lastSection.content.indexOf('✅');
+        conclusion = lastSection.content.substring(conclusionMarkerIndex);
+        lastSection.content = lastSection.content.substring(0, conclusionMarkerIndex).trim();
     }
 
-    if (currentContent.length > 0 && sections.length > 0) {
-       sections[sections.length -1].content = currentContent.join('\n').trim();
-    }
-    
-    // Handle intro and main title separately
-    const firstSectionSeparator = markdown.indexOf('---');
-    const fullIntro = markdown.substring(0, firstSectionSeparator).trim();
 
-
-    return { intro: fullIntro, sections, conclusion: conclusion.trim() };
+    return { intro: intro.trim(), sections, conclusion: conclusion.trim() };
 };
 
 export default function VimPage() {
@@ -258,9 +241,8 @@ export default function VimPage() {
         <div className="flex">
             <main className="flex-1 py-8 px-4 md:px-8 lg:px-12 markdown-content">
                 <MarkdownRenderer markdown={intro} />
-                <hr className="my-6" />
                 
-                <Accordion type="single" collapsible className="w-full space-y-4">
+                <Accordion type="single" collapsible className="w-full space-y-4 mt-6">
                     {sections.map(({ title, content }) => (
                         <AccordionItem value={title} key={title} className="border rounded-lg bg-card overflow-hidden">
                             <AccordionTrigger className="px-6 py-4 font-headline text-lg hover:no-underline">
@@ -273,7 +255,6 @@ export default function VimPage() {
                     ))}
                 </Accordion>
 
-                <hr className="my-6" />
                 <div className="mt-8">
                     <MarkdownRenderer markdown={conclusion} />
                 </div>
