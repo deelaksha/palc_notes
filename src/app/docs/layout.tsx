@@ -13,7 +13,7 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from '@/components/ui/sidebar';
-import { BookOpen, Code, FileCode, GitBranchPlus, Github, Home, Info, Regex, Terminal } from 'lucide-react';
+import { BookOpen, Code, FileCode, GitBranch, GitBranchPlus, Github, Home, Info, Regex, Terminal } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -21,6 +21,7 @@ const navItems = [
   { href: '/', label: 'Home', icon: <Home /> },
   { href: '/docs/vim', label: 'Vim', icon: <Code /> },
   { href: '/docs/linux', label: 'Linux', icon: <Terminal /> },
+  { href: '/docs/git-setup', label: 'Git Setup', icon: <GitBranch /> },
   { href: '/docs/github', label: 'GitHub', icon: <Github /> },
   { href: '/docs/git-advanced', label: 'Git Advanced', icon: <GitBranchPlus /> },
   { href: '/docs/code-navigation', label: 'Code Navigation', icon: <FileCode /> },
