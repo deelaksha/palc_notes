@@ -184,4 +184,31 @@
   .dark .label-text {
     @apply text-label;
   }
+
+  /* Chatbot Markdown Styles */
+  .prose {
+    color: inherit;
+  }
+  .prose code:not(pre > code) {
+     @apply font-code bg-code-bg text-keyword px-1 py-0.5 rounded-sm text-sm;
+  }
+  .prose strong {
+    color: inherit;
+  }
+  .prose p, .prose ul, .prose ol, .prose li {
+    margin: 0;
+    padding: 0;
+  }
+  .prose ul, .prose ol {
+    @apply list-inside my-2;
+  }
+  .prose ul {
+    @apply list-disc;
+  }
+  .prose ol {
+    @apply list-decimal;
+  }
+  .prose li {
+    @apply mb-1;
+  }
 }
