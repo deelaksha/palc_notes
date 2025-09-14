@@ -37,49 +37,51 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   return (
-    <SidebarProvider>
-      <div className="flex min-h-screen">
-        <Sidebar>
-            <SidebarHeader>
-              <Link href="/" className="flex items-center gap-2">
-                <Logo />
-              </Link>
-            </SidebarHeader>
-            <SidebarContent>
-              <SidebarMenu>
-                {navItems.map((item) => (
-                  <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={pathname.startsWith(item.href) && item.href !== '/'}
-                      tooltip={item.label}
-                    >
-                      <Link href={item.href}>
-                        {item.icon}
-                        <span>{item.label}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarContent>
-        </Sidebar>
-        <div className="flex flex-col flex-1">
-          <Header />
-          <main className="flex-1">
-            {children}
-          </main>
-           <Sheet open={isChatOpen} onOpenChange={setIsChatOpen}>
-              <ChatbotTrigger />
-              <SheetContent 
-                className="flex h-full flex-col p-0 sm:max-w-lg md:max-w-2xl bg-gradient-futuristic"
-                side="right"
-              >
-                <Chatbot />
-              </SheetContent>
-          </Sheet>
+    <>
+      <SidebarProvider>
+        <div className="flex min-h-screen">
+          <Sidebar>
+              <SidebarHeader>
+                <Link href="/" className="flex items-center gap-2">
+                  <Logo />
+                </Link>
+              </SidebarHeader>
+              <SidebarContent>
+                <SidebarMenu>
+                  {navItems.map((item) => (
+                    <SidebarMenuItem key={item.href}>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={pathname.startsWith(item.href) && item.href !== '/'}
+                        tooltip={item.label}
+                      >
+                        <Link href={item.href}>
+                          {item.icon}
+                          <span>{item.label}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarContent>
+          </Sidebar>
+          <div className="flex flex-col flex-1">
+            <Header />
+            <main className="flex-1">
+              {children}
+            </main>
+          </div>
         </div>
-      </div>
-    </SidebarProvider>
+      </SidebarProvider>
+      <Sheet open={isChatOpen} onOpenChange={setIsChatOpen}>
+        <ChatbotTrigger />
+        <SheetContent 
+          className="flex h-full flex-col p-0 sm:max-w-lg md:max-w-2xl bg-gradient-futuristic"
+          side="right"
+        >
+          <Chatbot />
+        </SheetContent>
+      </Sheet>
+    </>
   );
 }
