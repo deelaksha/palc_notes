@@ -276,6 +276,61 @@ export const commandsData = [
         realWorld: "A developer will always have a terminal open running `tail -f` on their app's log file to watch for issues in real time while they are coding."
     },
     {
+        category: "File Viewing and Editing",
+        name: "wc",
+        description: "The `wc` (word count) spell is a quick way to count the number of lines, words, and characters in a file without having to read it all.",
+        howItWorks: [
+            "**-l (Lines)**: Counts only the number of lines.",
+            "**-w (Words)**: Counts only the number of words.",
+            "**-c (Bytes/Characters)**: Counts only the number of bytes (characters)."
+        ],
+        examples: [
+            { code: "wc my_essay.txt", text: "Shows the number of lines, words, and characters in your essay." },
+            { code: "wc -l my_essay.txt", text: "Quickly checks how many lines long your essay is." },
+            { code: "ls -1 | wc -l", text: "A powerful combination that lists files (one per line) and pipes the output to `wc -l` to count how many files are in the current directory." }
+        ],
+        realWorld: "Used to quickly check the length of a log file or a data set. It's also frequently used in scripts to count items from the output of other commands."
+    },
+    {
+        category: "File Viewing and Editing",
+        name: "nano",
+        description: "Nano is a simple, beginner-friendly text editor that runs inside your terminal. It's like a basic notebook where you can easily write and edit text or code.",
+        howItWorks: [
+            "Open or create a file by typing `nano filename.txt`.",
+            "A list of the most important commands is always shown at the bottom of the screen.",
+            "`Ctrl + O`: 'Write Out' (Save the file).",
+            "`Ctrl + X`: Exit the editor. It will ask if you want to save your changes if you haven't.",
+            "`Ctrl + W`: 'Where is' (Find text).",
+            "`Ctrl + K`: 'Kut' (Cut a line of text).",
+            "`Ctrl + U`: 'Unkut' (Paste a line of text)."
+        ],
+        examples: [
+            { code: "nano my_story.txt", text: "Opens `my_story.txt` in the nano editor, ready for you to write." },
+            { code: "sudo nano /etc/hosts", text: "Opens a system configuration file for editing. You might need `sudo` for this." },
+            { code: "nano -l my_script.sh", text: "Opens a script file with line numbers displayed, which is great for coding." }
+        ],
+        realWorld: "Perfect for quickly editing a configuration file on a remote server or for beginners who find Vim too complex. It provides a straightforward editing experience without a steep learning curve."
+    },
+    {
+        category: "File Viewing and Editing",
+        name: "vim",
+        description: "Vim is a legendary and powerful text editor. It has different 'modes' for navigating and editing, making it incredibly fast once you learn the basics. It's the choice of many coding wizards.",
+        howItWorks: [
+            "Vim starts in **Normal Mode**, where keys are commands (e.g., `j` to move down, `x` to delete a character).",
+            "Press `i` to enter **Insert Mode** to type text normally.",
+            "Press `Esc` to return to Normal Mode.",
+            "In Normal Mode, type `:` to enter **Command-Line Mode** at the bottom of the screen.",
+            "`:w` to save (write), `:q` to quit, `:wq` to save and quit, `:q!` to force quit without saving."
+        ],
+        examples: [
+            { code: "vim new_script.sh", text: "Opens a new script file in Vim." },
+            { code: "vim +10 my_file.txt", text: "Opens the file and jumps directly to line 10." },
+            { code: "vim /etc/nginx/nginx.conf", text: "A common use case for a system admin is editing a server configuration file with Vim's powerful features." },
+            { code: "vim -O file1.txt file2.txt", text: "Opens two files side-by-side in a vertical split, which is great for comparing them."}
+        ],
+        realWorld: "Experienced developers and system administrators use Vim for everything from writing code to editing configuration files because of its speed and power. The ability to edit without using a mouse is a huge productivity boost."
+    },
+    {
         category: "Permissions and Ownership",
         name: "chmod",
         description: "The `chmod` (change mode) spell is the gatekeeper of permissions. Permissions decide who can **r**ead, **w**rite, and e**x**ecute a file or folder.",
@@ -312,6 +367,22 @@ export const commandsData = [
         realWorld: "Used by system admins to make sure programs (like a web server) have permission to access the files they need to do their job."
     },
     {
+        category: "Permissions and Ownership",
+        name: "umask",
+        description: "The `umask` spell sets the default magic shield (permissions) for any new files and folders you create. It 'masks' or blocks certain permissions from being set automatically for safety.",
+        howItWorks: [
+            "It uses a number that is 'subtracted' from the system defaults (`777` for folders, `666` for files).",
+            "A common `umask` is `022`. For new folders, the permission is `777 - 022 = 755`. For new files, it's `666 - 022 = 644`.",
+            "This is great for security because it ensures new files aren't writable by other users by default."
+        ],
+        examples: [
+            { code: "umask", text: "Shows your current default permission mask (e.g., `0022`)." }, 
+            { code: "umask 077", text: "Sets a very restrictive mask. New files and folders you create will only be accessible by you." },
+            { code: "umask -S", text: "Shows the mask in a more human-readable, symbolic format (like `u=rwx,g=rx,o=rx`)."}
+        ],
+        realWorld: "A system admin configures the default `umask` on a shared server to enforce a security policy from the moment a file is created."
+    },
+    {
         category: "Process and System Management",
         name: "ps",
         description: "The `ps` (process status) spell takes a snapshot of all the programs and tasks currently running on your computer, like seeing all the ghosts in a haunted house.",
@@ -330,71 +401,6 @@ export const commandsData = [
             { code: "ps -u myuser", text: "Shows all processes currently being run by the user `myuser`." }
         ],
         realWorld: "If your computer is suddenly slow, you'd use `ps aux` to see which program is being greedy and using up all the CPU or memory."
-    },
-    {
-        category: "Networking and Connectivity",
-        name: "ping",
-        description: "The `ping` spell is like shouting 'Marco!' across the internet and waiting for another computer to reply 'Polo!'. It checks if a server is online and how fast the connection is.",
-        howItWorks: [
-            "It sends a small magic packet and measures the time it takes to get a reply in milliseconds. Lower time is better!",
-            "Press `Ctrl + C` to stop pinging.",
-            "**-c <count>**: Pings a specific number of times and then stops."
-        ],
-        examples: [
-            { code: "ping google.com", text: "Sends pings to Google to check your internet connection." }, 
-            { code: "ping -c 4 192.168.1.1", text: "Pings your home router exactly 4 times to test your local network." },
-            { code: "ping -c 5 -W 1 8.8.8.8", text: "Pings Google's DNS server 5 times, but waits only 1 second for a reply on each ping."}
-        ],
-        realWorld: "If a website isn't loading, the first thing to do is `ping` it. If you get a reply, the server is online and the problem is something else."
-    },
-    {
-        category: "Archiving and Compression",
-        name: "tar",
-        description: "The `tar` (tape archive) spell is the master packer. It bundles many files and folders into one single archive file (a 'tarball'), like putting all your camping gear into one big backpack.",
-        howItWorks: [
-            "You combine spell flags:",
-            "**-c (Create)**, **-x (Extract)**, **-v (Verbose/show files)**, **-f (File name is next)**.",
-            "**-z (Gzip)**: Compresses the backpack to make it smaller (`.tar.gz`).",
-            "**-j (Bzip2)**: Uses bzip2 compression, often smaller but slower (`.tar.bz2`).",
-            "**-t (List)**: Lists the contents of an archive without extracting it.",
-            "Memorize this: `tar -czvf archive-name.tar.gz folder-to-archive/` (Create a zipped, verbose file).",
-            "And this: `tar -xzvf archive-name.tar.gz` (Extract a zipped, verbose file)."
-        ],
-        examples: [
-            { code: "tar -czvf project.tar.gz my_project/", text: "Creates a compressed backpack named `project.tar.gz` from your `my_project` folder." },
-            { code: "tar -xzvf project.tar.gz", text: "Unpacks the `project.tar.gz` backpack into your current location." },
-            { code: "tar -tf my_archive.tar.gz", text: "Lists all the files inside the archive so you can see what's in it before you unpack it."},
-            { code: "tar -xvf archive.tar.gz -C /path/to/destination", text: "Extracts an archive into a completely different directory."}
-        ],
-        realWorld: "This is the standard way to package up a project's code for sharing or backups. When you download code for a Linux program, it's almost always a `.tar.gz` file."
-    },
-    {
-        category: "User Management",
-        name: "whoami",
-        description: "The `whoami` spell is the simplest identity check. It answers the question, 'Who am I in this magical world?' by printing your current username.",
-        howItWorks: ["Just cast the spell. It has no other options."],
-        examples: [
-            { code: "whoami", text: "If you are logged in as `student`, it will print `student`." }, 
-            { code: "sudo whoami", text: "When run with `sudo`, it will print `root`, because `sudo` makes you the all-powerful 'root' user for that one command." },
-            { code: "if [ \"$(whoami)\" != \"root\" ]; then echo \"You are not the root user!\"; fi", text: "A script example checking if the current user is not the root user." }
-        ],
-        realWorld: "Extremely useful in scripts to verify that the script is being run by the correct hero before it attempts to do something dangerous, like modify system files."
-    },
-    {
-        category: "Permissions and Ownership",
-        name: "umask",
-        description: "The `umask` spell sets the default magic shield (permissions) for any new files and folders you create. It 'masks' or blocks certain permissions from being set automatically for safety.",
-        howItWorks: [
-            "It uses a number that is 'subtracted' from the system defaults (`777` for folders, `666` for files).",
-            "A common `umask` is `022`. For new folders, the permission is `777 - 022 = 755`. For new files, it's `666 - 022 = 644`.",
-            "This is great for security because it ensures new files aren't writable by other users by default."
-        ],
-        examples: [
-            { code: "umask", text: "Shows your current default permission mask (e.g., `0022`)." }, 
-            { code: "umask 077", text: "Sets a very restrictive mask. New files and folders you create will only be accessible by you." },
-            { code: "umask -S", text: "Shows the mask in a more human-readable, symbolic format (like `u=rwx,g=rx,o=rx`)."}
-        ],
-        realWorld: "A system admin configures the default `umask` on a shared server to enforce a security policy from the moment a file is created."
     },
     {
         category: "Process and System Management",
@@ -494,6 +500,22 @@ export const commandsData = [
             { code: "free -h -s 5", text: "Displays the memory usage and refreshes the numbers every 5 seconds. Press Ctrl-C to stop."}
         ],
         realWorld: "If your computer is acting slow, you use `free -h` to check if you've run out of available RAM and need to close some applications."
+    },
+    {
+        category: "Networking and Connectivity",
+        name: "ping",
+        description: "The `ping` spell is like shouting 'Marco!' across the internet and waiting for another computer to reply 'Polo!'. It checks if a server is online and how fast the connection is.",
+        howItWorks: [
+            "It sends a small magic packet and measures the time it takes to get a reply in milliseconds. Lower time is better!",
+            "Press `Ctrl + C` to stop pinging.",
+            "**-c <count>**: Pings a specific number of times and then stops."
+        ],
+        examples: [
+            { code: "ping google.com", text: "Sends pings to Google to check your internet connection." }, 
+            { code: "ping -c 4 192.168.1.1", text: "Pings your home router exactly 4 times to test your local network." },
+            { code: "ping -c 5 -W 1 8.8.8.8", text: "Pings Google's DNS server 5 times, but waits only 1 second for a reply on each ping."}
+        ],
+        realWorld: "If a website isn't loading, the first thing to do is `ping` it. If you get a reply, the server is online and the problem is something else."
     },
     {
         category: "Networking and Connectivity",
@@ -603,6 +625,27 @@ export const commandsData = [
     },
     {
         category: "Archiving and Compression",
+        name: "tar",
+        description: "The `tar` (tape archive) spell is the master packer. It bundles many files and folders into one single archive file (a 'tarball'), like putting all your camping gear into one big backpack.",
+        howItWorks: [
+            "You combine spell flags:",
+            "**-c (Create)**, **-x (Extract)**, **-v (Verbose/show files)**, **-f (File name is next)**.",
+            "**-z (Gzip)**: Compresses the backpack to make it smaller (`.tar.gz`).",
+            "**-j (Bzip2)**: Uses bzip2 compression, often smaller but slower (`.tar.bz2`).",
+            "**-t (List)**: Lists the contents of an archive without extracting it.",
+            "Memorize this: `tar -czvf archive-name.tar.gz folder-to-archive/` (Create a zipped, verbose file).",
+            "And this: `tar -xzvf archive-name.tar.gz` (Extract a zipped, verbose file)."
+        ],
+        examples: [
+            { code: "tar -czvf project.tar.gz my_project/", text: "Creates a compressed backpack named `project.tar.gz` from your `my_project` folder." },
+            { code: "tar -xzvf project.tar.gz", text: "Unpacks the `project.tar.gz` backpack into your current location." },
+            { code: "tar -tf my_archive.tar.gz", text: "Lists all the files inside the archive so you can see what's in it before you unpack it."},
+            { code: "tar -xvf archive.tar.gz -C /path/to/destination", text: "Extracts an archive into a completely different directory."}
+        ],
+        realWorld: "This is the standard way to package up a project's code for sharing or backups. When you download code for a Linux program, it's almost always a `.tar.gz` file."
+    },
+    {
+        category: "Archiving and Compression",
         name: "gzip",
         description: "The `gzip` spell compresses a file to make it much smaller, like a shrink ray. It replaces the original file with a compressed version ending in `.gz`.",
         howItWorks: [
@@ -667,6 +710,18 @@ export const commandsData = [
     },
     {
         category: "User Management",
+        name: "whoami",
+        description: "The `whoami` spell is the simplest identity check. It answers the question, 'Who am I in this magical world?' by printing your current username.",
+        howItWorks: ["Just cast the spell. It has no other options."],
+        examples: [
+            { code: "whoami", text: "If you are logged in as `student`, it will print `student`." }, 
+            { code: "sudo whoami", text: "When run with `sudo`, it will print `root`, because `sudo` makes you the all-powerful 'root' user for that one command." },
+            { code: "if [ \"$(whoami)\" != \"root\" ]; then echo \"You are not the root user!\"; fi", text: "A script example checking if the current user is not the root user." }
+        ],
+        realWorld: "Extremely useful in scripts to verify that the script is being run by the correct hero before it attempts to do something dangerous, like modify system files."
+    },
+    {
+        category: "User Management",
         name: "id",
         description: "The `id` spell reveals a user's true identity: their user ID (uid), their primary group (gid), and all the other secret societies (groups) they belong to.",
         howItWorks: [
@@ -700,44 +755,5 @@ export const commandsData = [
             { code: "who am i", text: "Shows just your own session information."}
         ],
         realWorld: "On a shared university or company server, you can use `who` to see if your friends or colleagues are also logged in and working."
-    },
-    {
-        category: "File Viewing and Editing",
-        name: "nano",
-        description: "Nano is a simple, beginner-friendly text editor that runs inside your terminal. It's like a basic notebook where you can easily write and edit text or code.",
-        howItWorks: [
-            "Open or create a file by typing `nano filename.txt`.",
-            "A list of the most important commands is always shown at the bottom of the screen.",
-            "`Ctrl + O`: 'Write Out' (Save the file).",
-            "`Ctrl + X`: Exit the editor. It will ask if you want to save your changes if you haven't.",
-            "`Ctrl + W`: 'Where is' (Find text).",
-            "`Ctrl + K`: 'Kut' (Cut a line of text).",
-            "`Ctrl + U`: 'Unkut' (Paste a line of text)."
-        ],
-        examples: [
-            { code: "nano my_story.txt", text: "Opens `my_story.txt` in the nano editor, ready for you to write." },
-            { code: "sudo nano /etc/hosts", text: "Opens a system configuration file for editing. You might need `sudo` for this." },
-            { code: "nano -l my_script.sh", text: "Opens a script file with line numbers displayed, which is great for coding." }
-        ],
-        realWorld: "Perfect for quickly editing a configuration file on a remote server or for beginners who find Vim too complex. It provides a straightforward editing experience without a steep learning curve."
-    },
-    {
-        category: "File Viewing and Editing",
-        name: "vim",
-        description: "Vim is a legendary and powerful text editor. It has different 'modes' for navigating and editing, making it incredibly fast once you learn the basics. It's the choice of many coding wizards.",
-        howItWorks: [
-            "Vim starts in **Normal Mode**, where keys are commands (e.g., `j` to move down, `x` to delete a character).",
-            "Press `i` to enter **Insert Mode** to type text normally.",
-            "Press `Esc` to return to Normal Mode.",
-            "In Normal Mode, type `:` to enter **Command-Line Mode** at the bottom of the screen.",
-            "`:w` to save (write), `:q` to quit, `:wq` to save and quit, `:q!` to force quit without saving."
-        ],
-        examples: [
-            { code: "vim new_script.sh", text: "Opens a new script file in Vim." },
-            { code: "vim +10 my_file.txt", text: "Opens the file and jumps directly to line 10." },
-            { code: "vim /etc/nginx/nginx.conf", text: "A common use case for a system admin is editing a server configuration file with Vim's powerful features." },
-            { code: "vim -O file1.txt file2.txt", text: "Opens two files side-by-side in a vertical split, which is great for comparing them."}
-        ],
-        realWorld: "Experienced developers and system administrators use Vim for everything from writing code to editing configuration files because of its speed and power. The ability to edit without using a mouse is a huge productivity boost."
     }
 ];
