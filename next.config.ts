@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
   experimental: {
     turbo: {
       loaders: {
-        '**/*.prompt': 'raw-loader',
+        '**/*.prompt': ['raw-loader'],
       },
     },
   },
