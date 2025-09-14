@@ -24,7 +24,7 @@ const QuizQuestionSchema = z.object({
   explanation: z.string().describe('A brief explanation of why the answer is correct.'),
 });
 
-export const QuizSchema = z.object({
+const QuizSchema = z.object({
   questions: z.array(QuizQuestionSchema).describe('An array of 3-5 quiz questions.'),
 });
 export type Quiz = z.infer<typeof QuizSchema>;
