@@ -1,3 +1,4 @@
+
 import { commandsData } from '@/lib/linux-commands';
 import { notFound } from 'next/navigation';
 import { CodeBlock } from '@/components/markdown/CodeBlock';
@@ -40,55 +41,54 @@ export default function CommandDetailPage({
 
   return (
     <div className="max-w-4xl mx-auto p-4 md:p-8">
-        <Button asChild variant="ghost" className="mb-4">
+        <Button asChild variant="ghost" className="mb-8">
             <Link href="/docs/linux">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to All Commands
             </Link>
         </Button>
-      <header className="mb-12">
-        <div className="flex items-center gap-4 mb-2">
-            <h1 className="text-4xl md:text-5xl font-bold text-primary font-code">
-            {command.name}
-            </h1>
-            <Badge variant="secondary">{command.category}</Badge>
-        </div>
+
+      <header className="text-center mb-12">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-foreground mb-2 font-headline">
+          The <span className="text-primary">{command.name}</span> Spell
+        </h1>
         <p className="text-lg text-muted-foreground">{command.description}</p>
+        <Badge variant="secondary" className="mt-2">{command.category}</Badge>
       </header>
 
-      <div className="space-y-8">
-        <div>
-          <h2 className="font-headline text-2xl font-bold mt-8 mb-4 pb-2 border-b">
-            How it works:
-          </h2>
-          <ul className="list-disc list-inside text-muted-foreground space-y-2">
-            {command.howItWorks.map((item, index) => (
-              <li key={index}>{renderTextWithCode(item)}</li>
-            ))}
-          </ul>
+      <section className="bg-card p-6 md:p-8 rounded-2xl shadow-xl border border-border mb-8">
+        <h2 className="text-3xl font-bold text-foreground mb-6 pb-2 border-b-2 border-primary">
+          How It Works
+        </h2>
+        <div className="space-y-4 text-muted-foreground">
+          {command.howItWorks.map((item, index) => (
+            <p key={index}>{renderTextWithCode(item)}</p>
+          ))}
         </div>
+      </section>
 
-        <div>
-          <h2 className="font-headline text-2xl font-bold mt-8 mb-4 pb-2 border-b">
-            Examples:
-          </h2>
-          <div className="space-y-6">
-            {command.examples.map((ex, index) => (
-              <div key={index}>
-                <CodeBlock>{ex.code}</CodeBlock>
-                <p className="text-muted-foreground mt-2">{ex.text}</p>
-              </div>
-            ))}
-          </div>
+      <section className="bg-card p-6 md:p-8 rounded-2xl shadow-xl border border-border mb-8">
+        <h2 className="text-3xl font-bold text-foreground mb-6 pb-2 border-b-2 border-primary">
+          Examples
+        </h2>
+        <div className="space-y-6">
+          {command.examples.map((ex, index) => (
+            <div key={index}>
+              <CodeBlock className="bg-code-bg text-code-text">
+                {ex.code}
+              </CodeBlock>
+              <p className="text-muted-foreground mt-2">{ex.text}</p>
+            </div>
+          ))}
         </div>
+      </section>
 
-        <div>
-          <h2 className="font-headline text-2xl font-bold mt-8 mb-4 pb-2 border-b">
-            Real-world application:
-          </h2>
-          <p className="text-muted-foreground">{command.realWorld}</p>
-        </div>
-      </div>
+      <section className="bg-card p-6 md:p-8 rounded-2xl shadow-xl border border-border">
+        <h2 className="text-3xl font-bold text-foreground mb-6 pb-2 border-b-2 border-primary">
+          Real-World Quest
+        </h2>
+        <p className="text-muted-foreground">{command.realWorld}</p>
+      </section>
     </div>
   );
 }
