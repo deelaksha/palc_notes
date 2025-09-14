@@ -10,9 +10,15 @@ import Link from 'next/link';
 
 const tools = [
   {
-    name: 'Ctags & Cscope',
-    description: 'Classic, fast, and reliable indexers for symbol definition and usage lookup.',
-    href: '/docs/code-navigation/ctags-cscope',
+    name: 'Ctags',
+    description: 'A classic, fast, and reliable indexer for symbol definition lookup.',
+    href: '/docs/code-navigation/ctags',
+    icon: <Code className="size-8" />,
+  },
+  {
+    name: 'Cscope',
+    description: 'A powerful tool for finding symbol usages, callers, and callees.',
+    href: '/docs/code-navigation/cscope',
     icon: <Code className="size-8" />,
   },
   {
