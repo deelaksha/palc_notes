@@ -17,6 +17,11 @@ const nextConfig: NextConfig = {
     ],
   },
   experimental: {
+    turbo: {
+      loaders: {
+        '**/*.prompt': 'raw-loader',
+      },
+    },
   },
   webpack(config, { isServer }) {
     config.ignoreWarnings = [
