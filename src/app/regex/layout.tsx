@@ -2,6 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { Chatbot } from '@/components/chatbot/Chatbot';
 
 export default function RegexLayout({ children }: { children: React.ReactNode }) {
   return (

@@ -1,5 +1,6 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
+import { Chatbot } from '@/components/chatbot/Chatbot';
 
 const content = `
 # 🧙‍♂️ The Basics: Characters & Sets
@@ -79,5 +80,10 @@ Character sets, or character classes, let you match one character from a specifi
 `;
 
 export default function RegexBasicsPage() {
-  return <MarkdownRenderer markdown={content} />;
+    return (
+        <>
+            <MarkdownRenderer markdown={content} />
+            <Chatbot pageContent={content} />
+        </>
+    );
 }

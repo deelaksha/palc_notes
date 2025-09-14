@@ -1,5 +1,6 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
+import { Chatbot } from '@/components/chatbot/Chatbot';
 
 const content = `
 # ⚓️ Anchors & Boundaries
@@ -63,5 +64,10 @@ The anchor \`\\B\` is the opposite of \`\\b\`. It matches any position that is *
 `;
 
 export default function RegexAnchorsPage() {
-  return <MarkdownRenderer markdown={content} />;
+    return (
+        <>
+            <MarkdownRenderer markdown={content} />
+            <Chatbot pageContent={content} />
+        </>
+    );
 }

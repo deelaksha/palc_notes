@@ -1,5 +1,6 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
+import { Chatbot } from '@/components/chatbot/Chatbot';
 
 const content = `
 # 🧙‍♂️ Advanced Magic: Lookarounds
@@ -88,5 +89,10 @@ This powerful combination lets you enforce multiple conditions on the same strin
 `;
 
 export default function RegexAdvancedPage() {
-  return <MarkdownRenderer markdown={content} />;
+    return (
+        <>
+            <MarkdownRenderer markdown={content} />
+            <Chatbot pageContent={content} />
+        </>
+    );
 }

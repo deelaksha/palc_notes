@@ -1,5 +1,6 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
+import { Chatbot } from '@/components/chatbot/Chatbot';
 
 const content = `
 # 🔢 Quantifiers: Greedy vs. Lazy
@@ -64,5 +65,10 @@ To make a quantifier **Lazy**, you add a question mark \`?\` after it (\`*?\`, \
 `;
 
 export default function RegexQuantifiersPage() {
-  return <MarkdownRenderer markdown={content} />;
+    return (
+        <>
+            <MarkdownRenderer markdown={content} />
+            <Chatbot pageContent={content} />
+        </>
+    );
 }

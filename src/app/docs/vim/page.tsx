@@ -7,6 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { Chatbot } from '@/components/chatbot/Chatbot';
 
 const vimMarkdownContent = `
 # 📘 Vim Commands – Beginner Friendly Guide
@@ -282,6 +283,7 @@ export default function VimPage() {
                     <TableOfContents content={vimMarkdownContent} />
                 </div>
             </aside>
+            <Chatbot pageContent={vimMarkdownContent} />
         </div>
     );
 }
