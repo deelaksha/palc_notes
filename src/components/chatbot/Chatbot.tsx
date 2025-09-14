@@ -1,143 +1,145 @@
 
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { MessageSquare, X, Send, Bot, Loader2, Sparkles, BrainCircuit, ShieldClose } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
+import { Input } from '@/components/ui/input';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { Bot, Send, User } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 
 type Message = {
-  role: 'user' | 'bot';
-  content: string;
+  id: string;
+  text: string;
+  role: 'user' | 'assistant';
+  isQuizQuestion?: boolean;
+  options?: string[];
+  quizState?: 'correct' | 'incorrect' | 'answered';
 };
 
-export function Chatbot({ pageContent }: { pageContent: string }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
+const initialBotMessage =
+  "I'm the NoteMark Assistant. The AI chat and quiz features are temporarily disabled due to API rate limits. We are working to restore them. Thanks for your patience!";
+
+export function Chatbot({ pageContext }: { pageContext?: string }) {
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: 'initial-bot-message',
+      text: initialBotMessage,
+      role: 'assistant',
+    },
+  ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+  const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!input.trim() || isLoading) return;
 
-  const handleSendMessage = async () => {
-    if (input.trim() === '' || isLoading) return;
-
-    const userMessage = { role: 'user' as const, content: input };
+    const userMessage: Message = { id: `user-${Date.now()}`, text: input, role: 'user' };
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
 
-    try {
-        const botMessage = { role: 'bot' as const, content: "I apologize, but all AI features (including chat and quizzes) are temporarily disabled due to API rate limits. The engineers are working on a more permanent solution." };
-        setMessages((prev) => [...prev, botMessage]);
-    } catch (error) {
-      console.error('Chatbot error:', error);
-      const errorMessage = { role: 'bot' as const, content: 'Sorry, something went wrong. Please try again.' };
-      setMessages((prev) => [...prev, errorMessage]);
-    } finally {
+    // Simulate a bot response for disabled state
+    setTimeout(() => {
+      const botMessage: Message = {
+        id: `bot-${Date.now()}`,
+        text: 'The AI features are currently disabled.',
+        role: 'assistant',
+      };
+      setMessages((prev) => [...prev, botMessage]);
       setIsLoading(false);
-    }
+    }, 500);
   };
 
-  return (
-    <>
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: 'easeOut' }}
-            className='fixed inset-0 z-50 w-full h-full'
-          >
-            <div className="bg-background/80 backdrop-blur-lg flex flex-col h-full w-full rounded-none">
-              <div className="flex-1 p-4 overflow-y-auto space-y-4 relative">
-                 <div className="absolute top-2 right-2 z-10 flex gap-2">
-                    <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="h-8 w-8">
-                        <X className="size-5" />
-                    </Button>
-                 </div>
-                {(messages.length === 0) ? (
-                  <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
-                    <ShieldClose className="size-12 mb-2" />
-                    <p className="font-bold text-lg">AI Features Disabled</p>
-                    <p>All AI features are temporarily disabled due to API rate limits.</p>
-                  </div>
-                ) : (
-                  messages.map((message, index) => (
-                    <div key={index} className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                      {message.role === 'bot' && <Bot className="size-6 text-primary flex-shrink-0" />}
-                      <div className={cn(
-                          'max-w-xs md:max-w-sm rounded-lg px-4 py-2 markdown-content',
-                          message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'
-                      )}>
-                          <MarkdownRenderer markdown={message.content} />
-                      </div>
-                    </div>
-                  ))
-                )}
-                 {isLoading && (
-                    <div className="flex justify-start gap-3">
-                        <Bot className="size-6 text-primary flex-shrink-0" />
-                        <div className="bg-muted rounded-lg px-4 py-3 flex items-center">
-                            <Loader2 className="size-5 animate-spin text-muted-foreground" />
-                        </div>
-                    </div>
-                 )}
-                <div ref={messagesEndRef} />
-              </div>
-              <footer className="p-4 border-t border-border/50 bg-background/80">
-                  <div className="relative">
-                    <Textarea
-                      value={input}
-                      onChange={(e) => setInput(e.target.value)}
-                      onKeyPress={(e) => {
-                        if (e.key === 'Enter' && !e.shiftKey) {
-                          e.preventDefault();
-                          handleSendMessage();
-                        }
-                      }}
-                      placeholder="AI features are temporarily disabled..."
-                      className="pr-12 resize-none bg-transparent"
-                      rows={1}
-                      disabled={isLoading || true}
-                    />
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8"
-                      onClick={handleSendMessage}
-                      disabled={isLoading || input.trim() === '' || true}
-                    >
-                      <Send className="size-5" />
-                    </Button>
-                  </div>
-              </footer>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+  useEffect(() => {
+    if (scrollAreaRef.current) {
+      scrollAreaRef.current.scrollTo({
+        top: scrollAreaRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+  }, [messages]);
 
-      <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ delay: 0.5, type: 'spring', stiffness: 260, damping: 20 }}
-        className="fixed bottom-4 right-4 sm:right-8 z-50"
-      >
-        <Button size="icon" className="rounded-full w-14 h-14 shadow-lg" onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? <X className="size-7" /> : <Sparkles className="size-7" />}
-        </Button>
-      </motion.div>
-    </>
+  return (
+    <div className="flex h-full max-h-[80vh] flex-col rounded-lg border bg-card text-card-foreground shadow-sm">
+      <div className="p-4 border-b">
+        <h2 className="font-headline text-lg font-semibold">NoteMark Assistant</h2>
+      </div>
+      <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
+        <div className="space-y-4">
+          {messages.map((message) => (
+            <div
+              key={message.id}
+              className={cn(
+                'flex items-start gap-3',
+                message.role === 'user' ? 'justify-end' : ''
+              )}
+            >
+              {message.role === 'assistant' && (
+                <Avatar className="h-8 w-8 border">
+                  <AvatarFallback>
+                    <Bot className="h-5 w-5" />
+                  </AvatarFallback>
+                </Avatar>
+              )}
+              <div
+                className={cn(
+                  'max-w-[80%] rounded-lg p-3 text-sm',
+                  message.role === 'user'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-muted'
+                )}
+              >
+                <p>{message.text}</p>
+              </div>
+              {message.role === 'user' && (
+                <Avatar className="h-8 w-8 border">
+                  <AvatarFallback>
+                    <User className="h-5 w-5" />
+                  </AvatarFallback>
+                </Avatar>
+              )}
+            </div>
+          ))}
+          {isLoading && (
+            <div className="flex items-start gap-3">
+              <Avatar className="h-8 w-8 border">
+                <AvatarFallback>
+                  <Bot className="h-5 w-5" />
+                </AvatarFallback>
+              </Avatar>
+              <div className="max-w-[80%] rounded-lg p-3 text-sm bg-muted">
+                <div className="flex items-center gap-2">
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-foreground" />
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-foreground animation-delay-200" />
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-foreground animation-delay-400" />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </ScrollArea>
+      <div className="p-4 border-t">
+        <form onSubmit={handleSendMessage} className="flex items-center gap-2">
+          <Input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="AI features are disabled..."
+            className="flex-1"
+            disabled={true}
+          />
+          <Button type="submit" size="icon" disabled={true}>
+            <Send className="h-4 w-4" />
+            <span className="sr-only">Send</span>
+          </Button>
+        </form>
+      </div>
+    </div>
   );
 }

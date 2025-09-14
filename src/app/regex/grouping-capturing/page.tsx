@@ -1,5 +1,6 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
+import { Chatbot } from '@/components/chatbot/Chatbot';
 
 const content = `
 # 📦 Grouping & Capturing
@@ -74,8 +75,15 @@ In modern regex engines, you can give your capture groups names, which makes you
 
 export default function RegexGroupingPage() {
     return (
-        <>
-            <MarkdownRenderer markdown={content} />
-        </>
+        <div className="flex">
+            <main className="flex-1">
+                <MarkdownRenderer markdown={content} />
+            </main>
+            <aside className="hidden lg:block w-96 pl-8">
+                <div className="sticky top-24">
+                    <Chatbot pageContext={content} />
+                </div>
+            </aside>
+        </div>
     );
 }

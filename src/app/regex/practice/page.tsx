@@ -1,5 +1,6 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
+import { Chatbot } from '@/components/chatbot/Chatbot';
 
 const content = `
 # 🌟 Common Patterns & Practice
@@ -89,8 +90,15 @@ Capture the content inside double quotes.
 
 export default function RegexPracticePage() {
     return (
-        <>
-            <MarkdownRenderer markdown={content} />
-        </>
+        <div className="flex">
+            <main className="flex-1">
+                <MarkdownRenderer markdown={content} />
+            </main>
+            <aside className="hidden lg:block w-96 pl-8">
+                <div className="sticky top-24">
+                    <Chatbot pageContext={content} />
+                </div>
+            </aside>
+        </div>
     );
 }

@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { Chatbot } from '@/components/chatbot/Chatbot';
 
 export function generateStaticParams() {
   return gitCommandsData.map((command) => ({
@@ -37,9 +38,27 @@ export default function CommandDetailPage({
       return part;
     });
   };
+  
+  const pageContent = `
+# ${command.name}
+
+**Category**: ${command.category}
+**Description**: ${command.description}
+
+## How it works:
+${command.howItWorks.join('\n')}
+
+## Examples:
+${command.examples.map(ex => `### ${ex.text}\n\`\`\`\n${ex.code}\n\`\`\``).join('\n\n')}
+
+## Real-world application:
+${command.realWorld}
+`;
+
 
   return (
-    <div className="max-w-4xl mx-auto p-4 md:p-8 space-y-8">
+    <div className="flex">
+    <div className="max-w-4xl mx-auto p-4 md:p-8 space-y-8 flex-1">
       <Button asChild variant="ghost" className="mb-4">
         <Link href="/docs/github">
           <ArrowLeft className="mr-2 h-4 w-4" />
@@ -94,6 +113,12 @@ export default function CommandDetailPage({
           <p><span className="text-tips font-bold">Quest Tip:</span> Mastering the <code className="font-code bg-code-bg text-tag px-1 py-0.5 rounded-sm text-sm">{command.name}</code> spell will make you a true version control champion!</p>
         </div>
       </section>
+    </div>
+      <aside className="hidden lg:block w-96 p-8">
+        <div className="sticky top-24">
+            <Chatbot pageContext={pageContent} />
+        </div>
+      </aside>
     </div>
   );
 }

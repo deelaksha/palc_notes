@@ -1,6 +1,5 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
-import { TableOfContents } from '@/components/toc/TableOfContents';
 import {
   Accordion,
   AccordionContent,
@@ -277,11 +276,6 @@ export default function VimPage() {
                     <MarkdownRenderer markdown={conclusion} />
                 </div>
             </main>
-            <aside className="hidden lg:block w-80 p-8">
-                <div className="sticky top-20">
-                    <TableOfContents content={vimMarkdownContent} />
-                </div>
-            </aside>
         </div>
     );
 }

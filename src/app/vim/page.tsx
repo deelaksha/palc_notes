@@ -1,6 +1,4 @@
 
-import { CodeBlock } from '@/components/markdown/CodeBlock';
-import { TableOfContents } from '@/components/toc/TableOfContents';
 import {
   Accordion,
   AccordionContent,
@@ -241,7 +239,7 @@ function renderMarkdown(markdown: string) {
         const items = block.split('\n').map((item, i) => {
             const content = item.substring(item.indexOf('.') + 2);
             if (content.includes('`vim notes.txt`')) {
-                return <li key={i}>Open Vim: <CodeBlock>vim notes.txt</CodeBlock></li>;
+                return <li key={i}>Open Vim: <code className="font-code bg-muted text-foreground px-1 py-0.5 rounded-sm text-sm">vim notes.txt</code></li>;
             }
             return <li key={i} dangerouslySetInnerHTML={{ __html: renderInlines(content) }} />
         });
@@ -361,11 +359,6 @@ export default function VimPage() {
                     {renderMarkdown(conclusion)}
                 </div>
             </main>
-            <aside className="hidden lg:block w-80 p-8">
-                <div className="sticky top-20">
-                    <TableOfContents content={vimMarkdownContent} />
-                </div>
-            </aside>
         </div>
     );
 }

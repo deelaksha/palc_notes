@@ -16,7 +16,6 @@ const nextConfig: NextConfig = {
     ],
   },
   experimental: {
-    serverComponentsExternalPackages: [] as any,
   },
   webpack(config, { isServer }) {
     config.ignoreWarnings = [
