@@ -22,6 +22,7 @@ const prompt = ai.definePrompt(
     name: 'generalChatPrompt',
     input: { schema: GeneralChatInputSchema },
     output: { format: 'text' },
+    model: 'googleai/gemini-1.5-flash-latest',
     prompt: `
 You are a helpful and friendly AI assistant named NoteMark.
 Your personality is witty, knowledgeable, and slightly playful.

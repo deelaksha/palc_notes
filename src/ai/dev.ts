@@ -17,19 +17,19 @@ import generalChat from './prompts/general-chat.prompt';
 defineDotprompt({
   name: 'contextualChat',
   prompt: contextualChat,
-  model: ai.getModel('googleai/gemini-1.5-flash-latest'),
+  model: 'googleai/gemini-1.5-flash-latest',
 });
 
 defineDotprompt({
   name: 'quizGenerator',
   prompt: quizGenerator,
-  model: ai.getModel('googleai/gemini-1.5-flash-latest'),
+  model: 'googleai/gemini-1.5-flash-latest',
 });
 
 defineDotprompt({
   name: 'generalChat',
   prompt: generalChat,
-  model: ai.getModel('googleai/gemini-1.5-flash-latest'),
+  model: 'googleai/gemini-1.5-flash-latest',
 });
 
 
