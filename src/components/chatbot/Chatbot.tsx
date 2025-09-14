@@ -60,14 +60,10 @@ export function Chatbot() {
 
   useEffect(() => {
     if (scrollAreaRef.current) {
-      setTimeout(() => {
-        if (scrollAreaRef.current) {
-          scrollAreaRef.current.scrollTo({
+        scrollAreaRef.current.scrollTo({
             top: scrollAreaRef.current.scrollHeight,
             behavior: 'smooth',
-          });
-        }
-      }, 100);
+        });
     }
   }, [messages]);
 
