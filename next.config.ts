@@ -1,3 +1,4 @@
+
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
@@ -21,6 +22,12 @@ const nextConfig: NextConfig = {
     config.ignoreWarnings = [
       (warn) => warn.message.includes('ENOENT: no such file or directory'),
     ];
+
+    config.module.rules.push({
+      test: /\.prompt$/,
+      use: 'raw-loader',
+    });
+
     return config;
   },
 };

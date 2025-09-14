@@ -15,7 +15,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { generalChat } from '@/ai/flows/general-chat';
+import { contextualChat } from '@/ai/flows/contextual-chat';
 import type { Message } from '@/ai/schemas';
 
 export function Chatbot() {
@@ -39,11 +39,12 @@ export function Chatbot() {
     setIsLoading(true);
 
     try {
-      const response = await generalChat({
+      const response = await contextualChat({
         chatHistory: messages,
         question: input,
+        context: document.body.innerText,
       });
-      
+
       const botMessage: Message = {
         role: 'model',
         content: response,
@@ -64,8 +65,8 @@ export function Chatbot() {
   useEffect(() => {
     if (isOpen && scrollAreaRef.current) {
       setTimeout(() => {
-        if(scrollAreaRef.current) {
-         scrollAreaRef.current.scrollTo({
+        if (scrollAreaRef.current) {
+          scrollAreaRef.current.scrollTo({
             top: scrollAreaRef.current.scrollHeight,
             behavior: 'smooth',
           });
