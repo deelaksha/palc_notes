@@ -39,10 +39,13 @@ export function Chatbot() {
     setIsLoading(true);
 
     try {
-      const response = await generalChat({
-        chatHistory: messages,
-        question: input,
-      });
+      // Temporarily disabled to prevent API rate limit errors.
+      // const response = await generalChat({
+      //   chatHistory: messages,
+      //   question: input,
+      // });
+      const response = "The AI chat features are temporarily disabled due to API rate limits. Please try again later.";
+      
       const botMessage: Message = {
         role: 'model',
         content: response,
