@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
@@ -140,22 +141,17 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.9 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
-            className="fixed bottom-24 right-4 sm:right-8 z-50 w-[calc(100%-2rem)] max-w-sm"
+            className="fixed bottom-24 right-4 sm:right-8 z-50 w-[calc(100%-2rem)] max-w-md"
           >
-            <div className="bg-card border border-border rounded-xl shadow-2xl flex flex-col h-[60vh]">
-              <header className="flex items-center justify-between p-4 border-b">
-                <div className="flex items-center gap-2">
-                  <Bot className="text-primary size-6" />
-                  <h3 className="font-bold text-lg">NoteMark Assistant</h3>
-                </div>
-                <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="h-8 w-8">
+            <div className="bg-card border border-border rounded-xl shadow-2xl flex flex-col h-[70vh]">
+              <div className="flex-1 p-4 overflow-y-auto space-y-4 relative">
+                 <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="h-8 w-8 absolute top-2 right-2 z-10">
                   <X className="size-5" />
                 </Button>
-              </header>
-              <div className="flex-1 p-4 overflow-y-auto space-y-4">
                 {(messages.length === 0 && quizState === 'idle') ? (
                   <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
                     <MessageSquare className="size-12 mb-2" />
+                    <p className="font-bold text-lg">NoteMark Assistant</p>
                     <p>Ask me anything about this page, or type "quiz me" to test your knowledge!</p>
                   </div>
                 ) : (
