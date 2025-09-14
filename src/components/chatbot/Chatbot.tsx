@@ -6,11 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
-import { Bot, Send, User } from 'lucide-react';
+import { Bot, MessageCircle, Send, User } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import {
+  Sheet,
+  SheetContent,
   SheetHeader,
   SheetTitle,
+  SheetTrigger,
 } from '@/components/ui/sheet';
 import { contextualChat } from '@/ai/flows/contextual-chat';
 import type { Message } from '@/ai/schemas';
@@ -19,6 +22,7 @@ export function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
@@ -38,7 +42,6 @@ export function Chatbot() {
       const response = await contextualChat({
         chatHistory: messages,
         question: input,
-        context: typeof document !== 'undefined' ? document.body.innerText : '',
       });
 
       const botMessage: Message = {
@@ -68,7 +71,20 @@ export function Chatbot() {
   }, [messages]);
 
   return (
-    <>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetTrigger asChild>
+            <Button
+              size="icon"
+              className="fixed bottom-6 right-6 h-16 w-16 rounded-full shadow-lg bg-primary/80 backdrop-blur-md border-primary/50 border-2 hover:bg-primary text-primary-foreground animate-fade-in-up"
+            >
+              <MessageCircle className="h-8 w-8" />
+              <span className="sr-only">Open Chat</span>
+            </Button>
+        </SheetTrigger>
+        <SheetContent
+          className="flex h-full flex-col p-0 sm:max-w-lg md:max-w-2xl bg-gradient-futuristic"
+          side="right"
+        >
         <SheetHeader className="p-4 border-b border-white/10">
         <SheetTitle className="text-glow">NoteMark Assistant</SheetTitle>
         </SheetHeader>
@@ -144,6 +160,7 @@ export function Chatbot() {
             </Button>
         </form>
         </div>
-    </>
+        </SheetContent>
+    </Sheet>
   );
 }

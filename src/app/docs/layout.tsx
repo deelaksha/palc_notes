@@ -16,9 +16,6 @@ import { BookOpen, Code, FileCode, GitBranch, Github, Home, Info, Regex, Termina
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Chatbot } from '@/components/chatbot/Chatbot';
-import { useState } from 'react';
-import { Sheet, SheetContent } from '@/components/ui/sheet';
-import { ChatbotTrigger } from '@/components/chatbot/ChatbotTrigger';
 
 const navItems = [
   { href: '/', label: 'Home', icon: <Home /> },
@@ -34,7 +31,6 @@ const navItems = [
 
 export default function DocsLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const [isChatOpen, setIsChatOpen] = useState(false);
 
   return (
     <>
@@ -73,15 +69,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
           </div>
         </div>
       </SidebarProvider>
-      <Sheet open={isChatOpen} onOpenChange={setIsChatOpen}>
-        <ChatbotTrigger />
-        <SheetContent 
-          className="flex h-full flex-col p-0 sm:max-w-lg md:max-w-2xl bg-gradient-futuristic"
-          side="right"
-        >
-          <Chatbot />
-        </SheetContent>
-      </Sheet>
+      <Chatbot />
     </>
   );
 }

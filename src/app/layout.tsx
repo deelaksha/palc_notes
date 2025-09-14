@@ -21,9 +21,6 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import { Inter, Source_Code_Pro } from 'next/font/google';
 import { Chatbot } from '@/components/chatbot/Chatbot';
-import { useState } from 'react';
-import { Sheet, SheetContent } from '@/components/ui/sheet';
-import { ChatbotTrigger } from '@/components/chatbot/ChatbotTrigger';
 
 
 const fontInter = Inter({
@@ -51,7 +48,6 @@ const navItems = [
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isDocsPage = pathname.startsWith('/docs');
-  const [isChatOpen, setIsChatOpen] = useState(false);
 
   if (isDocsPage) {
     return (
@@ -114,15 +110,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </div>
         </SidebarProvider>
-         <Sheet open={isChatOpen} onOpenChange={setIsChatOpen}>
-            <ChatbotTrigger />
-            <SheetContent 
-              className="flex h-full flex-col p-0 sm:max-w-lg md:max-w-2xl bg-gradient-futuristic"
-              side="right"
-            >
-              <Chatbot />
-            </SheetContent>
-        </Sheet>
+        <Chatbot />
         <Toaster />
       </body>
     </html>
