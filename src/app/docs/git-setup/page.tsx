@@ -3,152 +3,149 @@ import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
 import { TableOfContents } from '@/components/toc/TableOfContents';
 
 const gitSetupMarkdownContent = `
-# 🚀 Git Setup Guide on Ubuntu
+# 🚀 Git Setup: Your Coding Time Machine!
 
-This guide explains how to install Git, configure it, generate SSH keys, and connect it to a remote repository like GitHub. Follow these steps from start to finish to get your Git environment ready.
+Welcome, adventurer! This guide will help you set up Git, a powerful time machine for your code. It lets you save your progress, go back to previous versions, and work with others without messing up anyone's work. Let's get your time machine powered up!
 
 ---
 
-## ✨ Step 1 – Install Git
+## ✨ Step 1 – Install the Time Machine (Git)
 
-First, we need to update our system's package list to make sure we get the latest version of Git. Then, we install it.
+First, we need to install the Git software on your computer.
 
-1.  **Update your packages**:
+1.  **Update Your Computer's App Store List**:
     <CodeBlock>sudo apt update</CodeBlock>
-    This command synchronizes your package list with the software sources.
+    This command tells your computer to get the latest list of available software, like updating an app store catalog.
 
 2.  **Install Git**:
     <CodeBlock>sudo apt install git</CodeBlock>
-    This downloads and installs the Git software package.
+    This downloads and installs the Git program.
 
-3.  **Verify the installation**:
+3.  **Check if it Worked**:
     <CodeBlock>git --version</CodeBlock>
-    If the installation was successful, this will print the installed Git version (e.g., \`git version 2.34.1\`).
+    If you see something like \`git version 2.34.1\`, it means your time machine is installed and ready!
 
 ---
 
-## ✨ Step 2 – Configure Git User
+## ✨ Step 2 – Create Your Time Traveler ID
 
-Now, you need to tell Git who you are. This information will be attached to every commit you make.
+Every time you save your work (a "commit"), Git stamps your name on it. You need to tell Git who you are.
 
-1.  **Set your name**:
+1.  **Set Your Name**:
     <CodeBlock>git config --global user.name "Your Name"</CodeBlock>
-    Replace "Your Name" with your actual name. This is how you will be identified as the author of your commits.
+    Replace "Your Name" with your actual name. This is your official Time Traveler name.
 
-2.  **Set your email**:
+2.  **Set Your Email**:
     <CodeBlock>git config --global user.email "your.email@example.com"</CodeBlock>
-    Replace this with the email address you want to associate with your commits (ideally the same one you use for GitHub or GitLab).
+    Replace this with your email. This is how others can contact you about your work.
 
-3.  **Check your configuration**:
+3.  **Check Your ID Card**:
     <CodeBlock>git config --list</CodeBlock>
-    This command shows all your Git configuration settings. You can scroll through to verify that your \`user.name\` and \`user.email\` are set correctly.
+    This shows your Git settings. Make sure your name and email are correct!
 
 ---
 
-## ✨ Step 3 – Generate an SSH Key
+## ✨ Step 3 – Get Your Secret Key (SSH)
 
-An SSH key is like a secure, digital password that allows your computer to communicate with services like GitHub without you having to type your password every time. It's more secure and convenient.
+An SSH key is like a secret, unbreakable key to your online code castles (like GitHub). It proves you are who you say you are, so you don't have to type your password every time.
 
-1.  **Run the key generation command**:
-    We recommend using the modern and secure **Ed25519** algorithm.
+1.  **Create the Key**: We'll use a modern, super-secure key type.
     <CodeBlock>ssh-keygen -t ed25519 -C "your.email@example.com"</CodeBlock>
-    Alternatively, for older systems, you can use **RSA**:
-    <CodeBlock>ssh-keygen -t rsa -b 4096 -C "your.email@example.com"</CodeBlock>
 
-2.  **Save the key**:
-    When it asks "Enter a file in which to save the key," just press **Enter** to accept the default location (\`~/.ssh/id_ed25519\`).
+2.  **Where to Save It?**: The computer will ask where to save the key. Just press **Enter** to accept the default spot. It will be hidden in a folder called \`.ssh\`.
 
-3.  **Set a passphrase (optional but recommended)**:
-    When prompted, you can enter a secure passphrase. This adds an extra layer of security. If someone gains access to your computer, they still won't be able to use your SSH key without the passphrase.
+3.  **Create a Password for Your Key (Optional)**:
+    It will ask for a "passphrase." This is a password for your secret key itself. It's an extra layer of security. It's a good idea to add one!
 
 ---
 
-## ✨ Step 4 – Add SSH Key to the SSH Agent
+## ✨ Step 4 – Put the Key in Your Keychain (SSH Agent)
 
-The SSH agent is a background program that securely holds your private key and passphrase, so you don't have to re-enter it constantly.
+The SSH agent is a little helper program that holds onto your secret key so you don't have to enter your passphrase all the time.
 
-1.  **Start the agent**:
+1.  **Start the Keychain Helper**:
     <CodeBlock>eval "$(ssh-agent -s)"</CodeBlock>
-    This command starts the agent if it's not already running.
+    This command wakes up the agent.
 
-2.  **Add your key to the agent**:
+2.  **Add Your Key to the Keychain**:
     <CodeBlock>ssh-add ~/.ssh/id_ed25519</CodeBlock>
-    If you created an RSA key, the filename would be \`id_rsa\`. If you set a passphrase, you will be prompted to enter it here.
+    This adds your newly created secret key to the agent. If you set a passphrase, it will ask you for it now.
 
 ---
 
-## ✨ Step 5 – Add SSH Key to Your Git Hosting Service
+## ✨ Step 5 – Give Your Public Key to GitHub
 
-Now you need to give your public SSH key to your Git hosting service (like GitHub, GitLab, or Bitbucket).
+Your secret key has two parts: a private key (which you NEVER share) and a public key (which you give to websites like GitHub).
 
-1.  **Copy the public key**:
+1.  **Copy Your Public Key**:
     <CodeBlock>cat ~/.ssh/id_ed25519.pub</CodeBlock>
-    This command displays your public key. The output will be a long string of characters starting with \`ssh-ed25519...\`. Select and copy this entire string.
+    This command displays your public key. It's a long string of random-looking characters. Copy the entire thing.
 
-2.  **Add the key to your account**:
-    - Go to your Git hosting service's website (e.g., GitHub).
-    - Navigate to **Settings > SSH and GPG keys**.
-    - Click **"New SSH key"** or **"Add SSH key"**.
-    - Give it a descriptive title (e.g., "My Ubuntu Laptop").
-    - Paste the copied key into the "Key" field and save it.
+2.  **Add it to GitHub**:
+    - Go to GitHub.com.
+    - Click your profile picture in the top-right, then go to **Settings**.
+    - In the menu on the left, click **"SSH and GPG keys"**.
+    - Click **"New SSH key"**.
+    - Give it a **Title** (like "My Laptop").
+    - Paste your copied public key into the big "Key" box and click **"Add SSH key"**.
 
 ---
 
-## ✨ Step 6 – Initialize a Git Repository
+## ✨ Step 6 – Create Your First Time Capsule (Repository)
 
-Now let's create a project and make our first commit.
+Let's start a new project and save our first moment in time.
 
-1.  **Navigate to your project directory**:
+1.  **Go to Your Project Folder**:
     <CodeBlock>cd /path/to/your/project</CodeBlock>
-    Replace this with the actual path to your project folder.
 
-2.  **Initialize Git**:
+2.  **Turn on the Time Machine**:
     <CodeBlock>git init</CodeBlock>
-    This turns your project folder into a Git repository.
+    This creates a hidden \`.git\` folder where all the time travel magic happens.
 
-3.  **Add files to staging**:
+3.  **Pack Your Bags (Add Files)**:
     <CodeBlock>git add .</CodeBlock>
-    This stages all files in the current directory for the first commit.
+    This tells Git, "Get ready to save everything in this folder."
 
-4.  **Make the initial commit**:
+4.  **Take the Snapshot (Commit)**:
     <CodeBlock>git commit -m "Initial commit"</CodeBlock>
+    This saves your first snapshot with a message describing what you did.
 
 ---
 
-## ✨ Step 7 – Connect to a Remote Repository
+## ✨ Step 7 – Connect to Your Online Castle (Remote)
 
-Now, connect your local Git repository to the remote one you created on GitHub.
+Now, let's connect your local project to the one on GitHub.
 
-1.  **Add the remote**:
-    Go to your repository page on GitHub and copy the SSH URL. It will look like \`git@github.com:username/repository.git\`.
+1.  **Tell Git Where Your Castle Is**:
+    On your GitHub repository page, click the "Code" button and copy the SSH URL. It will look like \`git@github.com:username/repository.git\`.
     <CodeBlock>git remote add origin git@github.com:username/repository.git</CodeBlock>
-    This command creates a connection named \`origin\` pointing to your remote repository.
+    This creates a shortcut named \`origin\` that points to your online repository.
 
-2.  **Push your changes**:
+2.  **Send Your First Snapshot Up**:
     <CodeBlock>git push -u origin main</CodeBlock>
-    This sends your "Initial commit" to GitHub. If your default branch is named \`master\`, use \`git push -u origin master\` instead.
+    This "pushes" your saved changes up to GitHub for the first time.
 
 ---
 
-## ✨ Step 8 – Test the SSH Connection
+## ✨ Step 8 – Test Your Secret Key Connection
 
-Let's make sure your computer can successfully authenticate with GitHub.
+Let's make sure your computer can talk to GitHub securely.
 
-1.  **Run the test command**:
+1.  **Run the Test**:
     <CodeBlock>ssh -T git@github.com</CodeBlock>
 
-2.  **Check the output**:
-    You should see a message like: \`Hi username! You've successfully authenticated, but GitHub does not provide shell access.\` This means everything is working perfectly!
+2.  **Check the Message**:
+    You should see a message like: \`Hi username! You've successfully authenticated...\` This means your secret key is working perfectly!
 
 ---
 
-## 💡 Additional Tips
+## 💡 Pro Tips
 
-- **Secure Your Keys**: Your \`~/.ssh\` directory, especially your private key (\`id_ed25519\`), should be kept secret. Ensure its permissions are restrictive (\`chmod 700 ~/.ssh\` and \`chmod 600 ~/.ssh/id_ed25519\`).
-- **Multiple Keys**: You can use different SSH keys for different services (e.g., one for work, one for personal projects) by creating a config file at \`~/.ssh/config\`.
-- **SSH Agent on Startup**: To avoid running \`ssh-agent\` on every terminal start, you can add it to your shell's startup file (like \`~/.bashrc\` or \`~/.zshrc\`).
+- **Keep Your Keys Safe**: Never, ever share your private key (\`id_ed25519\`). It's the key to all your code castles!
+- **One Key, Many Castles**: You can use the same SSH key for GitHub, GitLab, and other services.
+- **Automate the Agent**: You can configure your computer to start the \`ssh-agent\` automatically every time you open a terminal, so you don't have to do it manually.
 
-You are now fully set up to use Git and SSH on Ubuntu!
+You are now a certified Git Time Traveler, ready to code without fear!
 `;
 
 export default function GitSetupPage() {
