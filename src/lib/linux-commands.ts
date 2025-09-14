@@ -14,7 +14,7 @@ export const commandsData = [
         ],
         examples: [
             { code: "ls -l", text: "Shows a detailed list of all visible files and folders." }, 
-            { code: "ls -a", text: "Reveals all hidden magic scrolls in your current directory." },
+            { code: "ls -a", text: "Reveals all hidden magic scrolls in your current directory." }, 
             { code: "ls -lah", text: "The classic combo: shows everything in a detailed, easy-to-read format."}
         ],
         realWorld: "Whenever you teleport to a new directory, `ls -lah` is the first spell you'll cast to get your bearings and see what you can work with."
@@ -84,7 +84,7 @@ export const commandsData = [
             "You can create many files at once by listing their names."
         ],
         examples: [
-            { code: "touch shopping_list.txt", text: "Creates a new, empty file, ready for you to add your shopping list." },
+            { code: "touch shopping_list.txt", text: "Creates a new, empty file, ready for you to add your shopping list." }, 
             { code: "touch index.html style.css script.js", text: "A pro-gamer move to create three essential files for a new web project all at once." }
         ],
         realWorld: "Developers use `touch` constantly to create new files for their code. It's also used in scripts to create 'lock' files to signal that a process is running."
@@ -99,7 +99,7 @@ export const commandsData = [
             "**-r (The Replicator)**: The essential flag for copying folders. It *recursively* copies a folder and everything inside it."
         ],
         examples: [
-            { code: "cp report.pdf report_backup.pdf", text: "Makes a quick backup of your report before you make big changes." },
+            { code: "cp report.pdf report_backup.pdf", text: "Makes a quick backup of your report before you make big changes." }, 
             { code: "cp -r vacation_photos /home/user/photo_archive/", text: "Uses the `-r` spell to copy the entire `vacation_photos` folder and all its contents to your archive." }
         ],
         realWorld: "You'll use `cp` daily to back up important files, duplicate project templates, or move images and assets around."
@@ -597,7 +597,7 @@ export const commandsData = [
         ],
         examples: [
             { code: "nano my_story.txt", text: "Opens `my_story.txt` in the nano editor, ready for you to write." },
-            { code: "nano /etc/hosts", text: "Opens a system configuration file for editing. You might need `sudo` for this." }
+            { code: "sudo nano /etc/hosts", text: "Opens a system configuration file for editing. You might need `sudo` for this." }
         ],
         realWorld: "Perfect for quickly editing a configuration file on a remote server or for beginners who find Vim too complex. It provides a straightforward editing experience without a steep learning curve."
     },
