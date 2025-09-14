@@ -3,351 +3,318 @@ export const gitCommandsData = [
     {
         category: "Setup and Configuration",
         name: "git config",
-        description: "Configures your Git installation. You can set user information, preferences, and define aliases.",
+        description: "This is the spell you cast to tell Git who you are! It sets up your hero profile so all your amazing work gets credited to you.",
         howItWorks: [
-            "Git stores configuration in three different files: system, global, and local.",
-            "`--global`: Applies settings to all repositories for the current user. Stored in `~/.gitconfig`.",
-            "`--local`: Applies settings to the current repository only. Stored in `.git/config` within the repository. This is the default.",
-            "`--system`: Applies settings to all users on the system. Stored in `/etc/gitconfig`.",
-            "`user.name`: Sets the name that will be attached to your commits.",
-            "`user.email`: Sets the email that will be attached to your commits.",
-            "`alias.<alias-name>`: Creates a shortcut for a longer Git command."
+            "Git keeps your settings in special scrolls. You can have a global scroll (`--global`) for all your adventures, or a local one for just your current quest.",
+            "`user.name`: Sets your hero name.",
+            "`user.email`: Sets your hero email, so everyone knows who to send fan mail to!",
+            "`alias.<short-name>`: Creates a magic shortcut for a long command spell."
         ],
         examples: [
-            { code: 'git config --global user.name "John Doe"', text: "Sets the global username for all your projects." },
-            { code: 'git config --global user.email "johndoe@example.com"', text: "Sets the global email for all your projects." },
-            { code: 'git config --global alias.co checkout', text: "Creates an alias `git co` for `git checkout`." },
-            { code: 'git config --local core.ignorecase false', text: "Makes filenames case-sensitive for this repository only." }
+            { code: 'git config --global user.name "Captain Coder"', text: "Tells Git your awesome hero name for all your future quests." },
+            { code: 'git config --global user.email "captain@coder.com"', text: "Sets the email that will be attached to all your contributions." },
+            { code: 'git config --global alias.co checkout', text: "Creates a super-fast spell `git co` that does the same thing as `git checkout`." }
         ],
-        realWorld: "This is the very first command you should run after installing Git to set up your identity. Setting global aliases for frequently used commands can significantly speed up your workflow."
+        realWorld: "This is the very first spell you cast after installing Git. It’s like creating your character before starting a new game!"
     },
     {
         category: "Getting & Creating Projects",
         name: "git init",
-        description: "Initializes a new, empty Git repository or reinitializes an existing one. It's like creating a new, empty photo album before you start taking pictures.",
+        description: "This command creates a brand new, empty treasure chest (`.git` folder) in your project. This chest will hold all the maps and save points of your code journey.",
         howItWorks: [
-            "Running `git init` in a directory creates a new hidden subdirectory named `.git`.",
-            "The `.git` directory contains all the necessary repository files — a Git repository skeleton.",
-            "No files in your project are tracked yet. You need to use `git add` to start tracking them."
+            "Running `git init` in your project folder officially starts your quest.",
+            "It creates a hidden `.git` folder where all the Git magic happens.",
+            "Your files are not in the chest yet! You still have to choose which ones to add."
         ],
         examples: [
-            { code: "git init", text: "Turns the current directory into a Git repository." },
-            { code: "git init my-new-project", text: "Creates a new directory named `my-new-project` and initializes a Git repository inside it." }
+            { code: "git init", text: "Turns your current folder into a Git-powered quest." },
+            { code: "git init my-awesome-quest", text: "Creates a new folder for your quest and puts the Git treasure chest inside it." }
         ],
-        realWorld: "This is the starting point for any new project that you want to place under version control."
+        realWorld: "This is the first step for any new project you want to protect with Git. It's like planting a flag and saying, 'This land is under my version control!'"
     },
     {
         category: "Getting & Creating Projects",
         name: "git clone",
-        description: "Creates a local copy of a remote repository that already exists. It's like borrowing a book from a library to read on your own computer.",
+        description: "This command is like a magic duplicator spell. It copies an entire project from a place like GitHub onto your own computer so you can work on it.",
         howItWorks: [
-            "`git clone <url>`: Copies the entire history of the repository from the given URL.",
-            "The URL can be HTTPS (`https://...`) or SSH (`git@...`).",
-            "It automatically creates a remote connection named `origin` pointing back to the original URL, which makes it easy to pull updates and push changes.",
-            "It also checks out a default branch (usually `main` or `master`) for you."
+            "`git clone <url>` copies the entire history of a project from a web link.",
+            "It automatically sets up a magical portal (called `origin`) back to the original project, so you can easily get updates or send your changes back.",
+            "It prepares the main path (the `main` or `master` branch) for you to start walking on."
         ],
         examples: [
-            { code: "git clone https://github.com/user/repo.git", text: "Clones a public repository from GitHub." },
-            { code: "git clone git@github.com:user/repo.git my-app", text: "Clones a repository using SSH and renames the local folder to `my-app`." }
+            { code: "git clone https://github.com/some-hero/cool-project.git", text: "Duplicates a cool project from GitHub onto your computer." },
+            { code: "git clone git@github.com:me/my-quest.git my-epic-adventure", text: "Duplicates your own project and gives the folder a new, epic name." }
         ],
-        realWorld: "This is the most common way to start working on a project that's already hosted on a platform like GitHub, GitLab, or Bitbucket."
+        realWorld: "This is how you join a team or start working on an open-source project. You clone it to get your own copy of the code."
     },
     {
         category: "Basic Snapshotting",
         name: "git add",
-        description: "Adds file contents to the staging area (also known as the 'index') for the next commit. Think of it like putting items in a box before you ship them.",
+        description: "Think of this as packing your bag for an adventure. You choose which files (or changes) you want to save. These chosen files are put into a waiting area called the 'staging area'.",
         howItWorks: [
-            "Git doesn't automatically include changes in a commit. You must first 'stage' them with `git add`.",
-            "This allows you to be selective about what changes you include in each commit, leading to more organized and atomic commits.",
-            "`git add <file>`: Stages a specific file.",
-            "`git add .`: Stages all new and modified files in the current directory and subdirectories.",
-            "`-p` or `--patch`: Allows you to interactively review and stage parts of a file (hunks) instead of the whole file."
+            "Git won't save anything until you `add` it to the staging area.",
+            "This lets you make many changes but only save the ones that belong together in one 'snapshot' (commit).",
+            "`git add <file>`: Puts a single item in your backpack.",
+            "`git add .`: Puts all new and changed items in your current location into your backpack."
         ],
         examples: [
-            { code: "git add index.html", text: "Stages the `index.html` file." },
-            { code: "git add .", text: "Stages all changes in the current directory tree." },
-            { code: "git add -p style.css", text: "Begins an interactive staging session for `style.css`." }
+            { code: "git add treasure-map.txt", text: "Packs the treasure map for your next save point." },
+            { code: "git add .", text: "Packs everything you've worked on in this area." }
         ],
-        realWorld: "You use `git add` right before every `git commit` to prepare your snapshot of changes."
+        realWorld: "You use `git add` right before you make a `git commit`. It’s the 'get ready' step before saving your progress."
     },
     {
         category: "Basic Snapshotting",
         name: "git commit",
-        description: "Records the staged changes to the repository's history. It's like taking a photo of your project at a specific moment.",
+        description: "This is the 'Save Game' button! It takes everything you packed with `git add` and saves it as a permanent snapshot in your project's history with a message explaining what you did.",
         howItWorks: [
-            "A commit is a snapshot of your staged files at a point in time. Each commit has a unique ID and a message.",
-            "`-m \"<message>\"`: Allows you to provide a commit message directly on the command line. This is the most common way to commit.",
-            "`-a`: Automatically stages all tracked, modified files before committing. This is a shortcut for `git add` on already tracked files, but it won't stage new (untracked) files.",
-            "`--amend`: Modifies the most recent commit. You can change the commit message or add more staged changes to it. Useful for fixing typos or mistakes."
+            "A commit is a 'save point' with a unique code and a message.",
+            "`-m \"<message>\"`: The `-m` stands for message. You must leave a short note about what you saved. This is super important!",
+            "`--amend`: This lets you fix your last save. You can change the message or add more items you forgot to pack."
         ],
         examples: [
-            { code: 'git commit -m "Add user login functionality"', text: "Commits the staged changes with a descriptive message." },
-            { code: 'git commit -am "Fix typo in header"', text: "Stages all modified tracked files and commits them." },
-            { code: 'git commit --amend -m "A better commit message"', text: "Replaces the last commit with a new one that has a corrected message." }
+            { code: 'git commit -m "Found the secret key!"', text: "Saves your game with a clear message about your achievement." },
+            { code: 'git commit --amend -m "Found the secret key and opened the door"', text: "Corrects your last save message to be more accurate." }
         ],
-        realWorld: "Committing is the core action of saving your work in Git. You do it every time you complete a logical unit of work."
+        realWorld: "You commit your work every time you finish a small, complete task. It creates a clean history that's easy to look back on."
     },
     {
         category: "Basic Snapshotting",
         name: "git status",
-        description: "Displays the state of the working directory and the staging area. It's like asking Git, 'What's happening right now?'",
+        description: "This command is like looking at your inventory screen. It tells you what's in your backpack (staged), what you're holding but haven't packed (modified), and what's lying on the ground (untracked).",
         howItWorks: [
-            "It shows which files are staged, which are modified but not staged, and which are untracked.",
-            "It provides helpful hints on what Git commands to use next.",
-            "`-s` or `--short`: Gives a much more compact output, useful for a quick overview."
+            "It shows which files are ready to be committed, which have changes that need to be `add`ed, and which new files Git doesn't know about yet.",
+            "`-s`: A shortcut for a shorter, more compact status report."
         ],
         examples: [
-            { code: "git status", text: "Shows a detailed status of your repository." },
-            { code: "git status -s", text: "Shows a short, two-column status output. `M` for modified, `??` for untracked, `A` for added to stage, etc." }
+            { code: "git status", text: "Gives you a full report on your current quest status." },
+            { code: "git status -s", text: "Shows a quick-glance list of what's going on." }
         ],
-        realWorld: "This is one of the most frequently used Git commands. You use it constantly to check the current state of your project and see what you need to commit."
+        realWorld: "This is one of the most used commands. You'll use it all the time to check your progress and see what you need to do next."
     },
     {
         category: "Branching & Merging",
         name: "git branch",
-        description: "Lists, creates, or deletes branches. Think of a branch as a separate timeline for your project.",
+        description: "A branch is like a parallel universe! You can create a new branch to try out a risky idea without messing up your main project timeline.",
         howItWorks: [
-            "`git branch`: Lists all local branches and highlights the current one.",
-            "`git branch <branch-name>`: Creates a new branch pointing to the current commit, but does not switch to it.",
-            "`-d <branch-name>`: Deletes a branch. Git will prevent you from deleting a branch that has not been fully merged.",
-            "`-D <branch-name>`: Forces the deletion of a branch, even if it hasn't been merged.",
-            "`-a`: Lists all branches, both local and remote-tracking."
+            "`git branch`: Shows you all the parallel universes (branches) you have and which one you're in.",
+            "`git branch <new-branch-name>`: Creates a new parallel universe, but you don't travel to it yet.",
+            "`-d <branch-name>`: Deletes a branch after you're done with it."
         ],
         examples: [
-            { code: "git branch", text: "Shows you all your local branches." },
-            { code: "git branch new-feature", text: "Creates a new branch called `new-feature`." },
-            { code: "git branch -d old-feature", text: "Deletes the `old-feature` branch after it has been merged." }
+            { code: "git branch", text: "Lists all your current timelines." },
+            { code: "git branch experiment-with-potions", text: "Creates a new timeline to safely test your potions." },
+            { code: "git branch -d experiment-with-potions", text: "Deletes the potion timeline after you've merged your discoveries." }
         ],
-        realWorld: "Branching is a core concept in Git. You create new branches to work on new features or bug fixes in isolation without disturbing the main codebase."
+        realWorld: "Every new feature or bug fix should be done in a new branch. This keeps your main codebase clean and stable."
     },
     {
         category: "Branching & Merging",
         name: "git checkout",
-        description: "Switches branches or restores working tree files. It's like changing the channel to work on a different timeline.",
+        description: "This is your teleporter! It lets you jump between your different branches (parallel universes).",
         howItWorks: [
-            "`git checkout <branch-name>`: Switches your working directory to the state of the specified branch.",
-            "`-b <new-branch-name>`: Creates a new branch and immediately switches to it. This is a very common shortcut for `git branch <name>` followed by `git checkout <name>`.",
-            "`git checkout -- <file>`: Discards changes in a specific file in your working directory, restoring it to the version from the last commit."
+            "`git checkout <branch-name>`: Jumps to that timeline.",
+            "`-b <new-branch-name>`: A super useful shortcut that creates a new branch *and* immediately teleports you to it.",
+            "`git checkout -- <file>`: A safety lever! It throws away all the changes you made to a file since your last save."
         ],
         examples: [
-            { code: "git checkout new-feature", text: "Switches to the `new-feature` branch." },
-            { code: 'git checkout -b bug-fix', text: "Creates a new branch named `bug-fix` and switches to it." },
-            { code: "git checkout -- style.css", text: "Reverts any uncommitted changes you made to `style.css`." }
+            { code: "git checkout experiment-with-potions", text: "Teleports you to your potion-making timeline." },
+            { code: 'git checkout -b fix-leaky-roof', text: "Creates a new timeline for fixing the roof and instantly takes you there." },
+            { code: "git checkout -- ingredients.txt", text: "You messed up the ingredients list, so you use this to magically restore it to your last saved version." }
         ],
-        realWorld: "You use `checkout` every time you need to switch contexts, whether it's to start a new feature, fix a bug, or review a colleague's work."
+        realWorld: "You use `checkout` whenever you need to switch what you're working on. It's a fundamental part of the daily Git workflow."
     },
     {
         category: "Branching & Merging",
         name: "git merge",
-        description: "Joins two or more development histories (branches) together. It's like taking two different story timelines and combining them into one.",
+        description: "This command magically combines your different timelines. When you're done with your experiment in a branch, you merge it back into your main timeline.",
         howItWorks: [
-            "First, `checkout` the branch you want to merge changes *into* (e.g., `main`).",
-            "Then run `git merge <branch-to-merge-from>` (e.g., `git merge new-feature`).",
-            "Git will try to automatically combine the histories. If both branches changed the same part of the same file, it results in a 'merge conflict' that you must resolve manually.",
-            "`--no-ff`: Prevents a 'fast-forward' merge. This creates a merge commit even if one is not strictly necessary, preserving the historical fact that a feature branch once existed."
+            "First, `checkout` the branch you want to bring the changes *into* (like `main`).",
+            "Then, run `git merge <branch-with-cool-stuff>`.",
+            "Git tries to automatically weave the stories together. If you and someone else changed the exact same line, you get a 'merge conflict' which you have to solve like a puzzle."
         ],
         examples: [
-            { code: "git merge new-feature", text: "Merges the `new-feature` branch into your current branch." },
-            { code: "git merge --no-ff feature-branch", text: "Merges `feature-branch` and creates an explicit merge commit." }
+            { code: "git merge experiment-with-potions", text: "Brings all your successful potion recipes into your main project." }
         ],
-        realWorld: "This is how you integrate a completed feature or bug fix from a separate branch back into your main line of development."
+        realWorld: "This is how features get added to the final product. You work in a branch, and when it's complete and tested, you merge it into the main `main` branch."
     },
     {
         category: "Branching & Merging",
         name: "git rebase",
-        description: "Re-applies commits from one branch on top of another branch. It's like re-telling your story based on a new starting point, making the history cleaner.",
+        description: "Rebase is like a time machine that tidies up your history. It takes your save points and neatly places them at the end of another timeline, creating a straight, clean story.",
         howItWorks: [
-            "Rebase rewrites the project history by creating brand new commits for each commit in the original branch.",
-            "The main benefit is a cleaner, more linear project history compared to merge commits.",
-            "`git rebase <base-branch>`: While on your feature branch, this command takes all your commits and re-plays them on top of the latest commit from `<base-branch>` (e.g., `main`).",
-            "`-i` or `--interactive`: Allows you to edit, squash (combine), reword, or reorder commits as they are being rebased. This is extremely powerful for cleaning up a messy history before merging."
+            "Instead of a messy merge, `rebase` makes it look like you did all your work *after* everyone else finished.",
+            "It makes the project history a clean, single line, which is easier to read.",
+            "`-i` (interactive): A super-powerful mode that lets you edit, combine, and reorder your past save points before showing them to others."
         ],
         examples: [
-            { code: "git rebase main", text: "While on a feature branch, updates it with the latest changes from `main`." },
-            { code: "git rebase -i HEAD~3", text: "Starts an interactive rebase session for the last 3 commits." }
+            { code: "git rebase main", text: "While on your feature branch, this updates it with the latest from the main timeline, putting your work neatly on top." },
+            { code: "git rebase -i HEAD~3", text: "Lets you clean up your last 3 save points before you share your work." }
         ],
-        realWorld: "Often used by developers to keep their feature branches up-to-date with the main branch, resulting in a cleaner history when the feature is finally merged. **Warning:** Never rebase a branch that has already been pushed and is being used by others, as it rewrites history."
+        realWorld: "Developers use rebase to keep their work clean before asking for it to be merged. **Warning:** Never use rebase on a branch that other people are also using! It rewrites history and can cause chaos."
     },
     {
         category: "Sharing & Updating Projects",
         name: "git remote",
-        description: "Manages the set of remote repositories whose branches you track. A 'remote' is like a nickname for a project's URL.",
+        description: "Manages your connections to other worlds (remote repositories). A 'remote' is just a nickname for a project's URL, like a speed-dial number.",
         howItWorks: [
-            "A 'remote' is a nickname for a URL of a repository. The default name is `origin`.",
-            "`git remote`: Lists the shortnames of your remotes (e.g., `origin`).",
-            "`git remote -v`: Lists the shortnames and their corresponding URLs.",
-            "`git remote add <name> <url>`: Adds a new remote connection.",
-            "`git remote remove <name>`: Removes a remote connection."
+            "The default nickname for the server you cloned from is `origin`.",
+            "`git remote -v`: Shows you all your speed-dial numbers and their full URLs.",
+            "`git remote add <name> <url>`: Adds a new portal to another project."
         ],
         examples: [
-            { code: "git remote -v", text: "Shows the URLs that your local repository is connected to." },
-            { code: "git remote add upstream https://github.com/original-creator/repo.git", text: "Adds a new remote named `upstream` to track the original project you forked from." }
+            { code: "git remote -v", text: "Lists all the remote castles you're connected to." },
+            { code: "git remote add upstream https://github.com/original-creator/repo.git", text: "Adds a connection to the original project you copied, so you can get updates from the original author." }
         ],
-        realWorld: "When you fork a project, you'll have an `origin` remote pointing to your fork. You would add an `upstream` remote to fetch updates from the original project and keep your fork in sync."
+        realWorld: "This is essential when you're contributing to someone else's project. `origin` is your copy, and `upstream` is their original."
     },
     {
         category: "Sharing & Updating Projects",
         name: "git fetch",
-        description: "Downloads commits, files, and refs from a remote repository into your local repo, but does not merge them. It's like getting the latest mail, but leaving it in the mailbox to read later.",
+        description: "This is like getting mail from another world but leaving it in the mailbox. It downloads all the new changes from a remote repository but doesn't mix them with your work yet.",
         howItWorks: [
-            "It downloads the data from the remote repository but doesn't change your local working directory.",
-            "This gives you a chance to review the changes before integrating them into your local branches.",
-            "`git fetch origin`: Fetches all branches from the 'origin' remote.",
-            "`--prune`: Removes any remote-tracking branches that no longer exist on the remote."
+            "It safely downloads all the new information.",
+            "This gives you a chance to look at the new changes (`origin/main`) before you decide to `merge` them into your own branches."
         ],
         examples: [
-            { code: "git fetch", text: "Fetches all updates from all your remotes." },
-            { code: "git fetch origin main", text: "Fetches only the `main` branch from the `origin` remote." }
+            { code: "git fetch", text: "Gets all the latest news from all your connected remote worlds." },
+            { code: "git fetch origin", text: "Gets all the latest news from the 'origin' castle." }
         ],
-        realWorld: "This is a safe way to see what others have been working on without having those changes automatically merged into your own branches. You can then inspect the fetched branches (e.g., `origin/main`) and decide how to integrate them."
+        realWorld: "This is a safe way to check for updates from your team. You `fetch` to see what they've done, then you can decide if you're ready to `merge` it."
     },
     {
         category: "Sharing & Updating Projects",
         name: "git pull",
-        description: "Fetches changes from a remote repository and then automatically merges them into your current branch. It's like `git fetch` and `git merge` in one command.",
+        description: "This is the 'get updates now' button! It does two things: it `fetches` the new changes from the remote world and immediately tries to `merge` them into your current timeline.",
         howItWorks: [
-            "`git pull` is essentially a shortcut for `git fetch` followed by `git merge FETCH_HEAD`.",
-            "`git pull origin main`: Fetches from the `main` branch on the `origin` remote and merges it into your current local branch.",
-            "`--rebase`: Instead of merging, it performs a rebase. `git pull --rebase` is a shortcut for `git fetch` followed by `git rebase`."
+            "`git pull` is a shortcut for `git fetch` followed by `git merge`.",
+            "`--rebase`: This is a popular alternative. It fetches and then does a `rebase` instead of a merge, keeping your history cleaner."
         ],
         examples: [
-            { code: "git pull", text: "Updates your current local branch with changes from its remote counterpart." },
-            { code: "git pull --rebase", text: "Fetches remote changes and re-applies your local commits on top of them, avoiding a merge commit." }
+            { code: "git pull", text: "Updates your current branch with all the latest changes from the remote server." },
+            { code: "git pull --rebase", text: "Updates your branch by neatly placing your work on top of the team's latest work." }
         ],
-        realWorld: "This is the command you use every day to keep your local repository up-to-date with the latest changes from your team."
+        realWorld: "This is what you do every morning when you start work to make sure you have the latest code from your team."
     },
     {
         category: "Sharing & Updating Projects",
         name: "git push",
-        description: "Uploads your local branch commits to a remote repository. It's how you share your work with others.",
+        description: "This command sends your saved-up changes from your computer up to the remote world (like GitHub) for everyone else to see.",
         howItWorks: [
-            "`git push <remote> <branch>`: Pushes the specified branch to the specified remote.",
-            "`-u` or `--set-upstream`: Sets up a tracking relationship between your local branch and the remote branch. After the first push with `-u`, you can just use `git push` from that branch.",
-            "`--force`: Forces the push. This can overwrite history on the remote and should be used with extreme caution. It's sometimes necessary when you've rebased a branch you previously pushed (and you're sure no one else has pulled it).",
-            "`--tags`: Pushes all of your local tags to the remote."
+            "`git push <remote> <branch>` sends your work to the right place.",
+            "`-u` (set upstream): The first time you push a new branch, use this flag to link your local branch with the remote one. After that, you can just use `git push`.",
+            "`--force`: A very dangerous spell! It forces your version of history onto the server, erasing whatever was there. Only use it if you're absolutely sure what you're doing."
         ],
         examples: [
-            { code: "git push origin main", text: "Pushes your local `main` branch to the `origin` remote." },
-            { code: "git push -u origin feature-branch", text: "Pushes `feature-branch` to `origin` and sets it up to track the remote branch." }
+            { code: "git push origin main", text: "Shares your local `main` timeline with the `origin` server." },
+            { code: "git push -u origin my-new-feature", text: "Shares your new feature for the first time and links the branches." }
         ],
-        realWorld: "This is how you share your completed work with your team. You push your feature branch to the remote repository so it can be reviewed and merged."
+        realWorld: "This is how you share your work with your team. You finish a feature, push the branch, and then someone can review your code."
     },
     {
         category: "Inspection & Comparison",
         name: "git log",
-        description: "Shows the commit history. It's like looking through the pages of a diary to see everything that's happened.",
+        description: "This is your time-traveling history book. It shows you a list of all the 'save points' (commits) you've made, from newest to oldest.",
         howItWorks: [
-            "It displays a list of commits in reverse chronological order.",
-            "`--oneline`: Condenses each commit to a single line, showing the commit hash and message.",
-            "`--graph`: Displays a text-based graph of the commit history, showing branches and merges.",
-            "`--pretty=format:\"...\"`: Allows for custom formatting of the output.",
-            "`<branch1>..<branch2>`: Shows commits that are in `branch2` but not in `branch1`."
+            "`--oneline`: A magic spell that shrinks each save point to a single line.",
+            "`--graph`: Draws cool lines to show how your different timelines (branches) have merged together.",
+            "`--pretty=format:\"...\"`: Lets you design your own custom history view!"
         ],
         examples: [
-            { code: "git log", text: "Shows the detailed commit history." },
-            { code: "git log --oneline --graph --decorate", text: "A popular combination for a concise, graphical view of the history." },
-            { code: "git log -p -2", text: "Shows the last two commits and the changes (patches) introduced in each." }
+            { code: "git log", text: "Shows a detailed history of every save." },
+            { code: "git log --oneline --graph", text: "Shows a neat, one-line graph of your project's entire history." }
         ],
-        realWorld: "Used to explore the history of a project, understand how it has evolved, and find out when specific changes were introduced."
+        realWorld: "You use `git log` to find out who changed a certain file, to see the progress of a project, or to find the ID of an old commit you want to revisit."
     },
     {
         category: "Inspection & Comparison",
         name: "git diff",
-        description: "Shows the differences between commits, branches, or files. It's like playing 'spot the difference' with your code.",
+        description: "This is your magic magnifying glass. It shows you the exact differences between two versions of your project. It's like a 'spot the difference' game for your code.",
         howItWorks: [
-            "`git diff`: Shows unstaged changes in your working directory (what you've changed but not `git add`'ed).",
-            "`--staged` or `--cached`: Shows changes that are staged but not yet committed (what you've `git add`'ed).",
-            "`git diff <branch1> <branch2>`: Shows the differences between the tips of two branches.",
-            "`git diff <commit1> <commit2>`: Shows changes between two specific commits."
+            "`git diff`: Shows what you've changed but haven't packed in your bag yet (haven't `add`ed).",
+            "`--staged`: Shows what's in your bag, ready for the next save point.",
+            "`git diff <branch1> <branch2>`: Shows you all the changes between two different timelines."
         ],
         examples: [
-            { code: "git diff", text: "Shows all the modifications you have not yet staged." },
-            { code: "git diff --staged", text: "Shows the changes you have staged and are ready to commit." },
-            { code: "git diff main..feature-branch", text: "Shows all the changes made on `feature-branch` since it diverged from `main`." }
+            { code: "git diff", text: "Shows all the edits you've made since your last save." },
+            { code: "git diff --staged", text: "Lets you double-check what you're about to commit." },
+            { code: "git diff main..my-feature", text: "Shows you all the work you did on your feature branch." }
         ],
-        realWorld: "Crucial for reviewing your own work before committing, and for comparing different versions of your code to understand what has changed."
+        realWorld: "Absolutely essential for reviewing your work before you save it. It helps you catch mistakes and write better commit messages."
     },
     {
         category: "Advanced",
         name: "git reset",
-        description: "The 'Time Machine'. It moves the current branch pointer to a different commit, optionally changing your files to match.",
+        description: "The 'Time-Turner'. This powerful and risky spell lets you travel back in time, changing your history. It has different levels of power.",
         howItWorks: [
-            "This command can un-stage files, un-commit changes, or completely reset your work to a previous state. It has three main modes:",
-            "`--soft`: Moves the branch pointer but does NOT touch your staged files or your working directory. Your code stays as it is, but Git now thinks you are at an older commit.",
-            "`--mixed` (default): Moves the branch pointer and unstages all your changes. Your code files are NOT changed, but you'll have to `git add` them again if you want to re-commit them.",
-            "`--hard`: **DANGEROUS!** Moves the branch pointer and completely changes your staged files AND your working files to match the commit you reset to. Any uncommitted work will be lost forever."
+            "`--soft`: You travel back, but you keep all your changes and your backpack is still packed (staged). You can make a new save from here.",
+            "`--mixed` (default): You travel back, and all your changes are unpacked from your bag and are now just lying on the floor (unstaged).",
+            "`--hard`: **EXTREMELY DANGEROUS!** You travel back and a tidal wave washes away all your recent work (staged and unstaged changes are destroyed forever). Only use this if you want to completely erase mistakes."
         ],
         examples: [
-            { code: 'git reset HEAD~1', text: "This is a `--mixed` reset by default. It 'un-commits' your last commit but leaves the changes in your working directory." },
-            { code: 'git reset --soft HEAD~1', text: "Un-commits the last commit, but keeps all your changes staged, ready to be committed again." },
-            { code: "git reset --hard a1b2c3d4", text: "Destroys all current changes and makes your project folder identical to how it was at commit `a1b2c3d4`. Use with caution!" }
+            { code: 'git reset HEAD~1', text: "Undoes your last commit, but leaves your changed files as-is. Good for fixing a mistaken commit." },
+            { code: "git reset --hard a1b2c3d4", text: "Destroys all your current work and makes your project folder look exactly like it did at the old save point `a1b2c3d4`. Be careful!" }
         ],
-        realWorld: "The most common use is `git reset <file>` to unstage a file you accidentally added. The most dangerous use is `git reset --hard` to throw away a series of bad commits and start over from a known good point. If you do this by mistake, `git reflog` is your only hope!"
+        realWorld: "Mostly used to 'un-stage' a file (`git reset <file>`). `reset --hard` is for when you've made a huge mess and want to start over from your last good save point."
     },
     {
         category: "Advanced",
         name: "git revert",
-        description: "Creates a new commit that undoes the changes from a previous commit. It's a safe way to undo, because it doesn't change history.",
+        description: "The 'Safe Undo'. Instead of destroying the past, `revert` creates a *new* save point that does the exact opposite of an old one. It's a much safer way to undo changes on a team project.",
         howItWorks: [
-            "`git revert` doesn't delete commits. Instead, it looks at the changes in an old commit and creates a *new* commit that does the exact opposite.",
-            "If the old commit added a line, the revert commit will remove that line.",
-            "This is safer than `git reset` for shared branches because it doesn't rewrite history that others may have already pulled."
+            "It doesn't delete history. It adds to it.",
+            "If an old commit added a line of code, the `revert` commit will remove that line.",
+            "This is safe for shared timelines because it doesn't rewrite the history that your teammates already have."
         ],
         examples: [
-            { code: "git revert HEAD", text: "Creates a new commit that undoes the changes of the very last commit." },
-            { code: "git revert a1b2c3d4", text: "Creates a new commit that reverses the changes made in commit `a1b2c3d4`." }
+            { code: "git revert HEAD", text: "Creates a new save point that undoes whatever you did in your very last one." },
+            { code: "git revert a1b2c3d4", text: "Finds the old save point `a1b2c3d4` and creates a new one that reverses all its changes." }
         ],
-        realWorld: "Imagine a bug was introduced in a commit that was pushed to the main branch. Instead of using `reset` and rewriting history for everyone, you would use `git revert` to create a new commit that fixes the bug by undoing the bad changes. The history remains intact and the fix is clear to everyone."
+        realWorld: "If a bug was accidentally sent to the main project, you would use `revert` to create a new commit that fixes it. The history clearly shows the mistake and the fix."
     },
     {
         category: "Advanced",
         name: "git stash",
-        description: "The 'Magic Pocket'. It lets you temporarily save your current uncommitted changes so you can switch to another task, without having to make a messy, unfinished commit.",
+        description: "The 'Pocket Dimension'. It lets you magically save your unfinished work without making a messy commit. Perfect for when you're interrupted with an urgent task.",
         howItWorks: [
-            "Imagine you are in the middle of working on a feature, but your boss asks for an urgent bug fix.",
-            "`git stash`: Takes all your changes (both staged and unstaged) and puts them in a 'magic pocket', leaving your working directory clean (back to how it was at the last commit).",
-            "You can then switch branches, fix the bug, and commit your fix.",
-            "`git stash pop` or `git stash apply`: When you're ready to continue your feature, this command takes the changes out of the magic pocket and applies them back to your working directory.",
-            "`git stash list`: Shows you all the things you've saved in your stash."
+            "`git stash`: Hides all your current changes in a secret pocket, leaving your project clean.",
+            "You can then switch timelines, fix a bug, and make a clean save.",
+            "`git stash pop`: When you return, this command pulls your work back out of the pocket dimension so you can continue where you left off."
         ],
         examples: [
-            { code: 'git stash', text: "Saves your current changes away." },
-            { code: 'git stash save "working on new nav bar"', text: "Saves your changes with a descriptive message." },
-            { code: 'git stash pop', text: "Applies the most recently stashed changes and removes them from the stash list." },
-            { code: 'git stash apply', text: "Applies the stashed changes but keeps them in the stash list in case you need them again." }
+            { code: 'git stash', text: "Hides your current work." },
+            { code: 'git stash save "Working on the new user profile page"', text: "Hides your work with a reminder of what you were doing." },
+            { code: 'git stash pop', text: "Brings your work back out of hiding." }
         ],
-        realWorld: "This is used daily. You're coding a new feature when you notice a small, unrelated bug. You `git stash` your work, switch branches, fix the bug, commit, switch back, and `git stash pop` to continue right where you left off. It keeps your commits clean and focused on one task at a time."
+        realWorld: "A daily tool for every developer. You're in the middle of a big feature when a tiny bug is reported. You `stash` your work, switch branches, fix the bug, commit, switch back, and `stash pop`. Genius!"
     },
     {
         category: "Advanced",
         name: "git tag",
-        description: "A 'Bookmark' for Important Commits. It allows you to mark specific points in your history as being important, typically used for version releases like `v1.0`.",
+        description: "The 'Bookmark'. A tag lets you put a permanent marker on a specific save point in your history, usually to mark a version release like `v1.0`.",
         howItWorks: [
-            "A tag is just a pointer to a specific commit. Unlike a branch, it doesn't move.",
-            "`git tag <tag-name>`: Creates a simple, 'lightweight' tag at your current commit.",
-            "`git tag -a <tag-name> -m \"<message>\"`: Creates an 'annotated' tag. This is better because it's stored as a full object in Git with a message, author, and date. It's like a fancy, official bookmark.",
-            "By default, `git push` does not push tags. You have to push them explicitly."
+            "A tag is a special pointer that doesn't move.",
+            "`git tag v1.0`: Creates a simple bookmark.",
+            "`git tag -a v1.0 -m \"Version 1.0 Release\"`: Creates a fancy, annotated bookmark with a message and author details. This is the best practice."
         ],
         examples: [
-            { code: 'git tag v1.0.0', text: "Creates a lightweight tag at the current commit." },
-            { code: 'git tag -a v1.0.1 -m "Version 1.0.1 release"', text: "Creates an official, annotated tag for a new version." },
-            { code: 'git push origin --tags', text: "Pushes all your local tags to the remote server so everyone can see them." }
+            { code: 'git tag -a v2.5 -m "Released version 2.5 with new features"', text: "Creates an official, annotated tag for a major release." },
+            { code: 'git push origin --tags', text: "You have to push tags separately to share your bookmarks with the team." }
         ],
-        realWorld: "When a company releases a new version of their software, they create a tag for that commit (e.g., `v2.5.3`). This makes it easy for anyone to check out the exact code for that specific version in the future, even if hundreds of other commits have been added since."
+        realWorld: "Every time a company releases a new version of their software, they create a tag. This allows anyone to go back and see the exact state of the code for that release."
     },
     {
         category: "Advanced",
         name: "git cherry-pick",
-        description: "The 'Copy-Paste for Commits'. It lets you pick a single commit from one branch and apply it onto another branch.",
+        description: "The 'Commit Teleporter'. This lets you grab a single save point from one timeline and copy-paste it onto another timeline.",
         howItWorks: [
-            "Imagine one of your friends made a really cool drawing on their branch, but you don't want all their other drawings, just that one.",
-            "First, you find the unique ID (hash) of the commit you want using `git log` on their branch.",
-            "Then, you switch back to your branch (`git checkout my-branch`).",
-            "Finally, you run `git cherry-pick <commit-hash>` to copy that one change over."
+            "You find the unique ID (hash) of the commit you want from another branch (using `git log`).",
+            "You `checkout` your own branch.",
+            "You run `git cherry-pick <commit-hash>` to pluck that one specific change and apply it to your timeline."
         ],
         examples: [
-            { code: "git cherry-pick a1b2c3d4", text: "Applies the commit with the hash `a1b2c3d4` to your current branch." }
+            { code: "git cherry-pick a1b2c3d4", text: "Copies the changes from the commit `a1b2c3d4` and applies them to your current branch." }
         ],
-        realWorld: "Imagine a bug is fixed on the main development branch (`develop`), but you need that same fix *right now* on an older, stable version of the software that's live. You can `cherry-pick` just the bug-fix commit onto the stable branch without bringing over all the other new, unfinished features."
+        realWorld: "A critical bug is fixed on the main development branch, but that fix is also needed on the old, stable version of the software. You can `cherry-pick` just that one bug-fix commit over to the stable branch without bringing any other new features with it."
     }
 ];
