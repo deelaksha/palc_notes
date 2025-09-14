@@ -20,7 +20,8 @@ export const commandsData = [
             { code: "ls -laht", text: "The pro combo: shows everything in a detailed, time-sorted, easy-to-read format. Great for seeing what you just worked on." },
             { code: "ls -R", text: "Lists all files in the current directory and all its subdirectories, giving you a full map of the area."},
             { code: "ls -lhS", text: "Lists files sorted by size, with the largest at the top. Perfect for finding what's eating your disk space!"},
-            { code: "ls -ld */", text: "Lists only the directories in your current location. The `d` flag prevents `ls` from looking inside them."}
+            { code: "ls -ld */", text: "Lists only the directories in your current location. The `d` flag prevents `ls` from looking inside them."},
+            { code: "ls -l | grep '\\.txt$'", text: "A powerful combination that lists files in long format, then uses `grep` to filter and show only the files that end with `.txt`."}
         ],
         realWorld: "Whenever you teleport to a new directory, `ls -lah` is the first spell you'll cast to get your bearings and see what you can work with."
     },
