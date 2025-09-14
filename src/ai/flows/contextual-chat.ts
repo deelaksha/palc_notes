@@ -15,29 +15,27 @@ import { generalChat } from './general-chat';
 const ContextualChatInputSchema = z.object({
   chatHistory: z.array(MessageSchema),
   question: z.string(),
-  context: z.string(),
+  context: z.string().optional(),
 });
 
 type ContextualChatInput = z.infer<typeof ContextualChatInputSchema>;
 
 const ContextualChatOutputSchema = z.object({
-  isContextual: z.boolean().describe('Whether the question can be answered from the provided context.'),
+  isContextual: z.boolean().describe('Whether the question can be answered from the provided context. If no context is provided, this should be false.'),
   answer: z.string().describe('The answer to the question. If isContextual is false, this will be an empty string.'),
 });
 
 const contextualChatPrompt = `
-You are an intelligent AI assistant.
+You are an intelligent AI assistant for a technical documentation website called NoteMark.
 Your goal is to determine if the user's question can be answered using the provided page content.
 
-Analyze the user's question and the page content below.
+If page content is provided, analyze the user's question and the content.
+If the question is about the provided page content, set "isContextual" to true and provide a comprehensive answer based *only* on that content. Do not use any outside knowledge.
 
-If the question is about the page content, set "isContextual" to true and provide a comprehensive answer based *only* on that content.
-Do not use any outside knowledge.
-
-If the question is a greeting, a general question, or cannot be answered using the page content, set "isContextual" to false and set "answer" to an empty string.
+If no page content is provided, or if the question is a greeting, a general question, or cannot be answered using the page content, set "isContextual" to false and set "answer" to an empty string.
 
 ## Page Content
-{{context}}
+{{{context}}}
 
 ## Chat History
 {{#each chatHistory}}

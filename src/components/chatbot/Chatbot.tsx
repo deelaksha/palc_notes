@@ -35,6 +35,8 @@ export function Chatbot() {
     setIsLoading(true);
 
     try {
+      // The 'context' is now optional and can be omitted.
+      // The AI flow will handle cases where context is not provided.
       const response = await contextualChat({
         chatHistory: messages,
         question: input,
