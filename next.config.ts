@@ -20,7 +20,7 @@ const nextConfig: NextConfig = {
     turbo: {
       rules: {
         '**/*.prompt': {
-          loader: 'raw-loader',
+          loaders: ['raw-loader'],
         },
       },
     },
