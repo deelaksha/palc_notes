@@ -66,7 +66,7 @@
     --radius: 0.5rem;
     --code-bg: hsl(220 20% 12%);
     --code-text: hsl(210 17% 91%);
-    --command: hsl(220 100% 70%);
+    --command: hsl(210 100% 70%);
     --keyword: hsl(170 80% 60%);
     --label: hsl(40 100% 70%);
     --tips: hsl(200 100% 70%);
@@ -187,28 +187,68 @@
 
   /* Chatbot Markdown Styles */
   .prose {
+    @apply text-sm max-w-none;
     color: inherit;
   }
+
+  .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+    @apply font-semibold leading-tight mt-4 mb-2;
+  }
+
+  .prose h1 { @apply text-lg; }
+  .prose h2 { @apply text-base; }
+  .prose h3 { @apply text-base; }
+
+  .prose p {
+    @apply my-2;
+  }
+
+  .prose a {
+    @apply text-primary/80 hover:text-primary;
+  }
+
+  .prose blockquote {
+    @apply border-l-4 border-primary/50 pl-3 italic my-2;
+  }
+
   .prose code:not(pre > code) {
      @apply font-code bg-code-bg text-keyword px-1 py-0.5 rounded-sm text-sm;
   }
+  
+  .prose pre {
+    @apply bg-code-bg p-3 rounded-md my-2 overflow-x-auto;
+  }
+
   .prose strong {
     color: inherit;
+    @apply font-semibold;
   }
-  .prose p, .prose ul, .prose ol, .prose li {
-    margin: 0;
-    padding: 0;
-  }
+
   .prose ul, .prose ol {
-    @apply list-inside my-2;
+    @apply my-2 pl-5;
   }
+
   .prose ul {
     @apply list-disc;
   }
+
   .prose ol {
     @apply list-decimal;
   }
+
   .prose li {
-    @apply mb-1;
+    @apply my-1;
+  }
+
+  .prose table {
+    @apply w-full my-2 text-xs border-collapse;
+  }
+
+  .prose th, .prose td {
+    @apply border p-2;
+  }
+
+  .prose th {
+    @apply bg-card-nested font-bold;
   }
 }
