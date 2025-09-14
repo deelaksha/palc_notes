@@ -7,7 +7,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { MessageSquare, X, Send, Bot, Loader2, Sparkles, BrainCircuit, ShieldClose } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { contextualChat } from '@/ai/flows/contextual-chat';
-import { generalChat } from '@/ai/flows/general-chat';
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
 import type { Quiz } from '@/ai/flows/quiz-generator';
 import { generateQuiz } from '@/ai/flows/quiz-generator';
@@ -98,28 +97,18 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
     setIsLoading(true);
 
     try {
-      // First, let the contextual model decide if the question is general or not.
-      const contextualResult = await contextualChat({
+      const result = await contextualChat({
         context: pageContent,
         history: newMessages.slice(0, -1),
         question: question
       });
       
-      if (contextualResult.isQuizRequest) {
-        const botMessage = { role: 'bot' as const, content: contextualResult.answer };
+      if (result.isQuizRequest) {
+        const botMessage = { role: 'bot' as const, content: result.answer };
         setMessages((prev) => [...prev, botMessage]);
         handleGenerateNewQuiz(false);
-      } else if (contextualResult.isGeneralQuestion) {
-        // If it's a general question, call the general knowledge model.
-        const generalResult = await generalChat({
-            history: newMessages.slice(0, -1),
-            question: question
-        });
-        const botMessage = { role: 'bot' as const, content: generalResult.answer };
-        setMessages((prev) => [...prev, botMessage]);
       } else {
-        // Otherwise, use the answer from the contextual model.
-        const botMessage = { role: 'bot' as const, content: contextualResult.answer };
+        const botMessage = { role: 'bot' as const, content: result.answer };
         setMessages((prev) => [...prev, botMessage]);
       }
 
@@ -185,9 +174,8 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
                     <div key={index} className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                       {message.role === 'bot' && <Bot className="size-6 text-primary flex-shrink-0" />}
                       <div className={cn(
-                          'max-w-xs md:max-w-sm rounded-lg px-4 py-2',
-                          message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted',
-                          'markdown-content'
+                          'max-w-xs md:max-w-sm rounded-lg px-4 py-2 markdown-content',
+                          message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'
                       )}>
                           <MarkdownRenderer markdown={message.content} />
                       </div>

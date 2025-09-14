@@ -28,7 +28,6 @@ type ContextualChatInput = z.infer<typeof ContextualChatInputSchema>;
 
 const ContextualChatOutputSchema = z.object({
   answer: z.string().describe('The answer to the question, based on the provided context.'),
-  isGeneralQuestion: z.boolean().describe('Whether the question is a general knowledge question unrelated to the context.'),
   isQuizRequest: z.boolean().describe('Whether the user is asking to be quizzed.'),
 });
 type ContextualChatOutput = z.infer<typeof ContextualChatOutputSchema>;
@@ -45,22 +44,17 @@ const prompt = ai.definePrompt({
   name: 'contextualChatPrompt',
   input: { schema: ContextualChatInputSchema },
   output: { schema: ContextualChatOutputSchema },
-  prompt: `You are an expert documentation assistant named "NoteMark Assistant". Your primary task is to determine if the user's question can be answered from the "Page Context" provided.
+  prompt: `You are an expert documentation assistant named "NoteMark Assistant". Your primary task is to answer the user's question.
 
-Analyze the user's question and the conversation history.
+Analyze the user's question, the conversation history, and the "Page Context" provided.
 
-1.  **If the question IS related to the "Page Context"**:
-    - Provide a helpful and accurate answer using ONLY the provided context.
-    - Set the \`isGeneralQuestion\` flag to \`false\`.
-    - Your answers should be formatted in simple markdown.
+1.  **Analyze the User's Intent**:
+    - First, determine if the user is asking for a quiz (e.g., "quiz me", "test my knowledge"). If so, set the \`isQuizRequest\` flag to \`true\` and provide a simple confirmation message like "Starting a quiz for you now!".
+    - If it's not a quiz request, proceed to the next step and set \`isQuizRequest\` to \`false\`.
 
-2.  **If the question IS NOT related to the "Page Context"**:
-    - Do NOT answer the question.
-    - Set the \`isGeneralQuestion\` flag to \`true\`.
-    - Set the \`answer\` field to a brief, generic confirmation like "Let me check on that for you."
-
-3.  **Special Command: Quizzes**:
-    - If the user asks for a quiz (e.g., "quiz me", "test my knowledge"), set the \`isQuizRequest\` flag to \`true\`, set \`isGeneralQuestion\` to \`false\`, and set the \`answer\` to a simple confirmation message like "Starting a quiz for you now!".
+2.  **Answer the Question**:
+    - **If the user's question IS related to the "Page Context"**: Provide a helpful and accurate answer using ONLY the provided context. Your answers should be formatted in simple markdown.
+    - **If the user's question IS NOT related to the "Page Context"**: Use your general knowledge to provide a helpful and accurate answer. Do not apologize for the context not being relevant. Format your answer in simple markdown.
 
 Page Context:
 ---
