@@ -4,12 +4,13 @@
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { MessageSquare, X, Send, Bot, Loader2, Sparkles, BrainCircuit } from 'lucide-react';
+import { MessageSquare, X, Send, Bot, Loader2, Sparkles, BrainCircuit, Maximize, Minimize } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { contextualChat } from '@/ai/flows/contextual-chat';
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
 import type { Quiz } from '@/ai/flows/quiz-generator';
 import { generateQuiz } from '@/ai/flows/quiz-generator';
+import { cn } from '@/lib/utils';
 
 type Message = {
   role: 'user' | 'bot';
@@ -24,6 +25,7 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [isFullScreen, setIsFullScreen] = useState(false);
 
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [quizState, setQuizState] = useState<QuizState>('idle');
@@ -141,13 +143,26 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.9 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
-            className="fixed bottom-24 right-4 sm:right-8 z-50 w-[calc(100%-2rem)] max-w-md"
+            className={cn(
+              'fixed z-50',
+              isFullScreen
+                ? 'inset-0 w-full h-full'
+                : 'bottom-24 right-4 sm:right-8 w-[calc(100%-2rem)] max-w-md'
+            )}
           >
-            <div className="bg-card border border-border rounded-xl shadow-2xl flex flex-col h-[70vh]">
+            <div className={cn(
+                "bg-card border border-border shadow-2xl flex flex-col",
+                isFullScreen ? "h-full w-full rounded-none" : "h-[70vh] rounded-xl"
+              )}>
               <div className="flex-1 p-4 overflow-y-auto space-y-4 relative">
-                 <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="h-8 w-8 absolute top-2 right-2 z-10">
-                  <X className="size-5" />
-                </Button>
+                 <div className="absolute top-2 right-2 z-10 flex gap-2">
+                    <Button variant="ghost" size="icon" onClick={() => setIsFullScreen(!isFullScreen)} className="h-8 w-8">
+                        {isFullScreen ? <Minimize className="size-5" /> : <Maximize className="size-5" />}
+                    </Button>
+                    <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="h-8 w-8">
+                        <X className="size-5" />
+                    </Button>
+                 </div>
                 {(messages.length === 0 && quizState === 'idle') ? (
                   <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
                     <MessageSquare className="size-12 mb-2" />
