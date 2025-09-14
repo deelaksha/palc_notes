@@ -81,6 +81,9 @@ export default {
         tag: 'var(--tag-color)',
         label: 'var(--label-color)',
         tips: 'var(--tips-color)',
+        'primary-accent': 'var(--primary-accent)',
+        'secondary-accent': 'var(--secondary-accent)',
+        'tertiary-accent': 'var(--tertiary-accent)',
       },
       borderRadius: {
         lg: 'var(--radius)',
