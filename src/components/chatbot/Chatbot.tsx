@@ -118,7 +118,9 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
         <div className="flex gap-3 justify-start">
           <BrainCircuit className="size-6 text-primary flex-shrink-0" />
           <div className="max-w-xs md:max-w-sm rounded-lg px-4 py-2 bg-muted">
-            <p className="font-bold mb-2">{question.question}</p>
+            <div className="markdown-content">
+              <MarkdownRenderer markdown={`**${question.question}**`} />
+            </div>
           </div>
         </div>
         <div className="flex flex-col items-end gap-2">
@@ -138,13 +140,13 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
             className='fixed inset-0 z-50 w-full h-full'
           >
-            <div className="bg-card border border-border shadow-2xl flex flex-col h-full w-full rounded-none">
+            <div className="bg-background/80 backdrop-blur-sm flex flex-col h-full w-full rounded-none">
               <div className="flex-1 p-4 overflow-y-auto space-y-4 relative">
                  <div className="absolute top-2 right-2 z-10 flex gap-2">
                     <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="h-8 w-8">
@@ -180,7 +182,7 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
                  {renderQuizQuestion()}
                 <div ref={messagesEndRef} />
               </div>
-              <footer className="p-4 border-t">
+              <footer className="p-4 border-t border-border/50 bg-background/80">
                 { quizState !== 'active' ? (
                   <div className="relative">
                     <Textarea
@@ -193,7 +195,7 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
                         }
                       }}
                       placeholder="Ask a question..."
-                      className="pr-12 resize-none"
+                      className="pr-12 resize-none bg-transparent"
                       rows={1}
                       disabled={isLoading}
                     />
