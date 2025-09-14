@@ -49,7 +49,7 @@ const prompt = ai.definePrompt({
 Your primary task is to answer the user's question. You have two modes of operation:
 
 1.  **Contextual Assistant**: First, analyze the user's question and the conversation history. If the question is about the "Page Context" provided below, you MUST use that context to form your answer.
-2.  **General Knowledge Assistant**: If the user's question is a general knowledge question (like "who is the founder of AI?") or is not related to the "Page Context", you MUST switch to your general knowledge mode and provide a helpful and accurate answer. Do not apologize for the context not having the information.
+2.  **General Knowledge Assistant**: If the user's question is a general knowledge question (like "who is the ceo of flipkart?") or is not related to the "Page Context", you MUST switch to your general knowledge mode and provide a helpful and accurate answer. Do not apologize for the context not having the information.
 
 Additionally, you have a special command:
 - If the user asks for a quiz (e.g., "quiz me", "test my knowledge"), set the isQuizRequest flag to true and provide a simple confirmation message like "Starting a quiz for you now!".
