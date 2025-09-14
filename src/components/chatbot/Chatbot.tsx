@@ -33,13 +33,15 @@ export function Chatbot() {
       role: 'user',
       content: input,
     };
-    setMessages((prev) => [...prev, userMessage]);
+
+    const newMessages: Message[] = [...messages, userMessage];
+    setMessages(newMessages);
     setInput('');
     setIsLoading(true);
 
     try {
       const response = await contextualChat({
-        chatHistory: [...messages, userMessage],
+        chatHistory: newMessages,
         question: input,
       });
 
@@ -67,7 +69,7 @@ export function Chatbot() {
         behavior: 'smooth',
       });
     }
-  }, [messages.length]); // Depend on the number of messages, which is stable.
+  }, [messages.length]);
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
