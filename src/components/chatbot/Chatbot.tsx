@@ -16,7 +16,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { generalChat } from '@/ai/flows/general-chat';
-import type { Message } from '@/ai/flows/general-chat';
+import type { Message } from '@/ai/schemas';
 
 export function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([]);
