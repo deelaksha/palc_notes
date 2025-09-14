@@ -107,15 +107,10 @@ export default {
             height: '0',
           },
         },
-        'gradient-xy': {
-            '0%, 100%': {
-                'background-size':'400% 400%',
-                'background-position': 'left center'
-            },
-            '50%': {
-                'background-size':'200% 200%',
-                'background-position': 'right center'
-            }
+        'gradient-animation': {
+          '0%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+          '100%': { backgroundPosition: '0% 50%' },
         },
         'fade-in-up': {
             'from': {
@@ -133,8 +128,21 @@ export default {
         'accordion-up': 'accordion-up 0.2s ease-out',
         'gradient-xy': 'gradient-xy 15s ease infinite',
         'fade-in-up': 'fade-in-up 0.5s ease-out forwards',
+        'gradient': 'gradient-animation 18s ease infinite',
+      },
+      textShadow: {
+        glow: '0 0 8px hsl(var(--primary) / 0.8)',
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-animate'),
+    function ({ addUtilities, theme }: { addUtilities: Function, theme: Function }) {
+      const newUtilities = {
+        '.text-shadow-glow': {
+          textShadow: theme('textShadow.glow'),
+        },
+      }
+      addUtilities(newUtilities, ['dark'])
+    }
+  ],
 } satisfies Config;

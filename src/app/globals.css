@@ -33,43 +33,43 @@
   }
 
   .dark {
-    --background: 210 30% 8%;
+    --background: 224 71% 4%;
     --foreground: 210 17% 91%;
     --card: 212 28% 12%;
     --card-foreground: 210 17% 91%;
     --card-nested: 212 28% 15%;
     --popover: 212 28% 10%;
     --popover-foreground: 210 17% 91%;
-    --primary: 244 80% 63%;
+    --primary: 150 100% 35%;
     --primary-foreground: 210 17% 91%;
     --secondary: 210 18% 15%;
     --secondary-foreground: 210 17% 91%;
     --muted: 210 18% 15%;
     --muted-foreground: 210 17% 60%;
-    --accent: 171 68% 51%;
+    --accent: 150 100% 25%;
     --accent-foreground: 210 29% 7%;
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 17% 91%;
     --border: 210 18% 20%;
     --input: 210 18% 20%;
-    --ring: 244 80% 63%;
+    --ring: 150 100% 35%;
     --sidebar-background: 210 29% 7%;
     --sidebar-foreground: 210 17% 91%;
-    --sidebar-primary: 244 80% 63%;
+    --sidebar-primary: 150 100% 35%;
     --sidebar-primary-foreground: 210 17% 91%;
     --sidebar-accent: 212 28% 10%;
     --sidebar-accent-foreground: 210 17% 91%;
     --sidebar-border: 210 18% 20%;
-    --sidebar-ring: 244 80% 63%;
+    --sidebar-ring: 150 100% 35%;
 
-    /* Gaming Theme from User Request */
-    --code-bg: #1E1E2F;
-    --code-text: #D4D4D4;
-    --command-color: #569CD6; /* Blue for main command */
-    --tag-color: #9CDCFE;     /* Light blue for flags/tags */
-    --label-color: #CE9178;   /* Orange for values/strings */
-    --tips-color: #AAAAFF;
-    --primary-accent: hsl(244 80% 63%);
+    /* Radium/Gaming Theme */
+    --code-bg: hsl(220 20% 12%);
+    --code-text: hsl(210 17% 91%);
+    --command-color: hsl(150 100% 45%);
+    --tag-color: hsl(170 80% 60%);
+    --label-color: hsl(40 100% 70%);
+    --tips-color: hsl(200 100% 70%);
+    --primary-accent: hsl(150 100% 35%);
     --secondary-accent: hsl(171 68% 51%);
     --tertiary-accent: hsl(27 87% 67%);
   }
@@ -81,6 +81,16 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  
+  .dark .text-glow {
+    text-shadow: 0 0 8px hsl(var(--primary) / 0.8);
+  }
+  
+  .bg-gradient-futuristic {
+    background: linear-gradient(300deg, hsl(224, 71%, 4%), hsl(210, 30%, 8%), hsl(260, 40%, 10%));
+    background-size: 180% 180%;
+    animation: gradient-animation 18s ease infinite;
   }
 
   .animation-delay-200 {

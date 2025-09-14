@@ -50,12 +50,12 @@ const categories = [
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 bg-background">
+    <div className="flex flex-col flex-1 bg-gradient-futuristic text-foreground">
       <main className="flex-1">
-        <section id="categories" className="w-full py-16 md:py-24 bg-background">
+        <section id="categories" className="w-full py-16 md:py-24">
           <div className="container px-4 md:px-6">
             <header className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-primary font-headline">
+              <h2 className="text-3xl md:text-4xl font-bold text-primary text-glow font-headline">
                 Explore Categories
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto mt-2">
