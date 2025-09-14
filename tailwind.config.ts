@@ -74,13 +74,13 @@ export default {
           border: 'hsl(var(--sidebar-border))',
           ring: 'hsl(var(--sidebar-ring))',
         },
-        // Gaming Theme from User Request
+        // Radium/Gaming Theme
         'code-bg': 'var(--code-bg)',
         'code-text': 'var(--code-text)',
-        command: 'var(--command-color)',
-        tag: 'var(--tag-color)',
-        label: 'var(--label-color)',
-        tips: 'var(--tips-color)',
+        'command': 'var(--command)',
+        'tag': 'var(--tag)',
+        'label': 'var(--label)',
+        'tips': 'var(--tips)',
         'primary-accent': 'var(--primary-accent)',
         'secondary-accent': 'var(--secondary-accent)',
         'tertiary-accent': 'var(--tertiary-accent)',

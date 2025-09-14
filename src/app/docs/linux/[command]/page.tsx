@@ -90,7 +90,7 @@ ${command.realWorld}
         <div className="space-y-8">
           {command.examples.map((ex, index) => (
             <div key={index}>
-              <h3 className="text-xl font-bold text-command mb-2">Example {index + 1}:</h3>
+              <h3 className="text-xl font-bold command-text mb-2">Example {index + 1}:</h3>
               <p className="text-muted-foreground mb-4">{ex.text}</p>
               <CodeBlock className="bg-code-bg text-code-text">
                 {ex.code}

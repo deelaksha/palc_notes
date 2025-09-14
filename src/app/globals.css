@@ -63,12 +63,13 @@
     --sidebar-ring: 150 100% 35%;
 
     /* Radium/Gaming Theme */
+    --radius: 0.5rem;
     --code-bg: hsl(220 20% 12%);
     --code-text: hsl(210 17% 91%);
-    --command-color: hsl(150 100% 45%);
-    --tag-color: hsl(170 80% 60%);
-    --label-color: hsl(40 100% 70%);
-    --tips-color: hsl(200 100% 70%);
+    --command: hsl(150 100% 45%);
+    --tag: hsl(170 80% 60%);
+    --label: hsl(40 100% 70%);
+    --tips: hsl(200 100% 70%);
     --primary-accent: hsl(150 100% 35%);
     --secondary-accent: hsl(171 68% 51%);
     --tertiary-accent: hsl(27 87% 67%);
@@ -171,16 +172,16 @@
   .markdown-content code:not(pre > code) {
     @apply font-code bg-code-bg text-tag px-1 py-0.5 rounded-sm text-sm;
   }
-  
-  .markdown-content .command {
+
+  .dark .command-text {
     @apply text-command;
   }
 
-  .markdown-content .tag {
+  .dark .tag-text {
     @apply text-tag;
   }
-
-  .markdown-content .label {
+  
+  .dark .label-text {
     @apply text-label;
   }
 }

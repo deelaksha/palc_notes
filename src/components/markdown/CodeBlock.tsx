@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Check, Copy } from 'lucide-react';
@@ -31,7 +32,7 @@ export const CodeBlock = ({
   return (
     <div
       className={cn(
-        'relative my-4 rounded-lg bg-card border font-code text-sm p-4 overflow-x-auto',
+        'relative my-4 rounded-lg bg-code-bg border font-code text-sm p-4 overflow-x-auto',
         className
       )}
     >

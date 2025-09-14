@@ -29,7 +29,7 @@ export default function CommandDetailPage({
     return parts.map((part, i) => {
       if (part.startsWith('`') && part.endsWith('`')) {
         return (
-          <code key={i} className="font-code bg-code-bg text-tag px-1 py-0.5 rounded-sm text-sm">
+          <code key={i} className="font-code bg-code-bg tag-text px-1 py-0.5 rounded-sm text-sm">
             {part.slice(1, -1)}
           </code>
         );
@@ -93,7 +93,7 @@ ${command.realWorld}
         <div className="space-y-8">
           {command.examples.map((ex, index) => (
             <div key={index}>
-              <h3 className="text-xl font-bold text-command mb-2">Example {index + 1}:</h3>
+              <h3 className="text-xl font-bold command-text mb-2">Example {index + 1}:</h3>
               <p className="text-muted-foreground mb-4">{ex.text}</p>
               <CodeBlock className="bg-code-bg text-code-text">
                 {ex.code}
@@ -109,7 +109,7 @@ ${command.realWorld}
         </h2>
         <p className="text-muted-foreground">{command.realWorld}</p>
         <div className="mt-6 p-4 rounded-xl bg-card-nested border-l-4 border-l-yellow-400">
-          <p><span className="text-tips font-bold">Quest Tip:</span> Mastering the <code className="font-code bg-code-bg text-tag px-1 py-0.5 rounded-sm text-sm">{command.name}</code> spell will make you a true version control champion!</p>
+          <p><span className="text-tips font-bold">Quest Tip:</span> Mastering the <code className="font-code bg-code-bg tag-text px-1 py-0.5 rounded-sm text-sm">{command.name}</code> spell will make you a true version control champion!</p>
         </div>
       </section>
     </div>
