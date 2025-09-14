@@ -8,9 +8,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { contextualChat } from '@/ai/flows/contextual-chat';
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
 
+type Message = {
+  role: 'user' | 'bot';
+  content: string;
+};
+
+
 export function Chatbot({ pageContent }: { pageContent: string }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<{ role: 'user' | 'bot'; content: string }[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -27,12 +33,17 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
     if (input.trim() === '' || isLoading) return;
 
     const userMessage = { role: 'user' as const, content: input };
-    setMessages((prev) => [...prev, userMessage]);
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
     setInput('');
     setIsLoading(true);
 
     try {
-      const result = await contextualChat({ context: pageContent, question: input });
+      const result = await contextualChat({
+        context: pageContent,
+        history: messages, // Pass the history before the new user message
+        question: input
+      });
       const botMessage = { role: 'bot' as const, content: result.answer };
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {

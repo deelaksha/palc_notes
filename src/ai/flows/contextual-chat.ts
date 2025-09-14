@@ -12,11 +12,17 @@
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 
+const ChatMessageSchema = z.object({
+    role: z.enum(['user', 'bot']),
+    content: z.string(),
+});
+
 const ContextualChatInputSchema = z.object({
   context: z
     .string()
     .describe('The content of the documentation page to use as context.'),
-  question: z.string().describe('The user\'s question about the content.'),
+  history: z.array(ChatMessageSchema).describe('The previous messages in the conversation.'),
+  question: z.string().describe('The user\'s current question about the content.'),
 });
 export type ContextualChatInput = z.infer<typeof ContextualChatInputSchema>;
 
@@ -42,16 +48,25 @@ const prompt = ai.definePrompt({
 Your task is to answer the user's question based ONLY on the context provided below. The context is a page from a tutorial for learning developer tools.
 
 - If the answer is found in the context, provide a clear and concise answer based on that information.
+- If the user asks for more examples or details about a specific command or flag mentioned in the context, provide them in a structured format using markdown. Use headings, lists, and code blocks to make the information clear and easy to read.
 - If the answer cannot be found in the context, you MUST politely state that you can only answer questions about the content on the current page.
 - Do not use any external knowledge. Do not browse the web.
 - Your answers should be formatted in simple markdown.
+- You have access to the conversation history. Use it to understand follow-up questions.
 
 Page Context:
 ---
 {{{context}}}
 ---
 
-User's Question:
+Conversation History:
+---
+{{#each history}}
+**{{role}}**: {{content}}
+{{/each}}
+---
+
+User's Current Question:
 "{{{question}}}"
 `,
 });
