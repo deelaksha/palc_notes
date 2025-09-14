@@ -17,7 +17,7 @@ const ChatMessageSchema = z.object({
     content: z.string(),
 });
 
-const ContextualChatInputSchema = z.object({
+export const ContextualChatInputSchema = z.object({
   context: z
     .string()
     .describe('The content of the documentation page to use as context.'),
@@ -27,7 +27,8 @@ const ContextualChatInputSchema = z.object({
 export type ContextualChatInput = z.infer<typeof ContextualChatInputSchema>;
 
 const ContextualChatOutputSchema = z.object({
-  answer: z.string().describe('The answer to the question, based on the provided context or general knowledge.'),
+  answer: z.string().describe('The answer to the question, based on the provided context.'),
+  isGeneralQuestion: z.boolean().describe('Whether the question is a general knowledge question unrelated to the context.'),
   isQuizRequest: z.boolean().describe('Whether the user is asking to be quizzed.'),
 });
 export type ContextualChatOutput = z.infer<typeof ContextualChatOutputSchema>;
@@ -44,17 +45,22 @@ const prompt = ai.definePrompt({
   name: 'contextualChatPrompt',
   input: { schema: ContextualChatInputSchema },
   output: { schema: ContextualChatOutputSchema },
-  prompt: `You are a helpful and friendly assistant on a documentation website. Your name is "NoteMark Assistant".
+  prompt: `You are an expert documentation assistant named "NoteMark Assistant". Your primary task is to determine if the user's question can be answered from the "Page Context" provided.
 
-Your primary task is to answer the user's question. You have two modes of operation:
+Analyze the user's question and the conversation history.
 
-1.  **Contextual Assistant**: First, analyze the user's question and the conversation history. If the question is about the "Page Context" provided below, you MUST use that context to form your answer.
-2.  **General Knowledge Assistant**: If the user's question is a general knowledge question (like "who is the ceo of flipkart?") or is not related to the "Page Context", you MUST switch to your general knowledge mode and provide a helpful and accurate answer. Do not apologize for the context not having the information.
+1.  **If the question IS related to the "Page Context"**:
+    - Provide a helpful and accurate answer using ONLY the provided context.
+    - Set the \`isGeneralQuestion\` flag to \`false\`.
+    - Your answers should be formatted in simple markdown.
 
-Additionally, you have a special command:
-- If the user asks for a quiz (e.g., "quiz me", "test my knowledge"), set the isQuizRequest flag to true and provide a simple confirmation message like "Starting a quiz for you now!".
+2.  **If the question IS NOT related to the "Page Context"**:
+    - Do NOT answer the question.
+    - Set the \`isGeneralQuestion\` flag to \`true\`.
+    - Set the \`answer\` field to a brief, generic confirmation like "Let me check on that for you."
 
-Your answers should always be formatted in simple markdown.
+3.  **Special Command: Quizzes**:
+    - If the user asks for a quiz (e.g., "quiz me", "test my knowledge"), set the \`isQuizRequest\` flag to \`true\`, set \`isGeneralQuestion\` to \`false\`, and set the \`answer\` to a simple confirmation message like "Starting a quiz for you now!".
 
 Page Context:
 ---
