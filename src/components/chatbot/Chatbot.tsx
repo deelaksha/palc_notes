@@ -7,16 +7,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { MessageSquare, X, Send, Bot, Loader2, Sparkles, BrainCircuit, ShieldClose } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
-import type { Quiz } from '@/ai/flows/quiz-generator';
-import { generateQuiz } from '@/ai/flows/quiz-generator';
 import { cn } from '@/lib/utils';
 
 type Message = {
   role: 'user' | 'bot';
   content: string;
 };
-
-type QuizState = 'idle' | 'loading' | 'active' | 'finished';
 
 export function Chatbot({ pageContent }: { pageContent: string }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,10 +21,6 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const [quiz, setQuiz] = useState<Quiz | null>(null);
-  const [quizState, setQuizState] = useState<QuizState>('idle');
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -36,39 +28,6 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-
-  const handleGenerateNewQuiz = async (isContinuation: boolean) => {
-    // This functionality is temporarily disabled.
-    setMessages([{ role: 'bot', content: 'I apologize, but all AI features are temporarily disabled due to API rate limits.' }]);
-  };
-
-  const handleStopQuiz = () => {
-    setQuizState('idle');
-    setQuiz(null);
-    setMessages((prev) => [...prev, { role: 'bot', content: 'Quiz stopped. Ask me anything else!'}]);
-  }
-
-  const handleAnswerQuestion = (selectedIndex: number) => {
-    if (!quiz) return;
-
-    const currentQuestion = quiz.questions[currentQuestionIndex];
-    const isCorrect = selectedIndex === currentQuestion.correctAnswer;
-    const feedbackMessage = {
-      role: 'bot' as const,
-      content: isCorrect
-        ? `Correct! 🎉\n\n**Explanation:** ${currentQuestion.explanation}`
-        : `Not quite. The correct answer was **${currentQuestion.options[currentQuestion.correctAnswer]}**.\n\n**Explanation:** ${currentQuestion.explanation}`,
-    };
-    setMessages((prev) => [...prev, feedbackMessage]);
-
-    if (currentQuestionIndex < quiz.questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-    } else {
-      // Regenerate the quiz with new questions for a continuous loop
-      handleGenerateNewQuiz(true);
-    }
-  };
-
 
   const handleSendMessage = async () => {
     if (input.trim() === '' || isLoading) return;
@@ -90,30 +49,6 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
     }
   };
 
-  const renderQuizQuestion = () => {
-    if (!quiz || quizState !== 'active') return null;
-
-    const question = quiz.questions[currentQuestionIndex];
-    return (
-      <div className="flex flex-col gap-3">
-        <div className="flex gap-3 justify-start">
-          <BrainCircuit className="size-6 text-primary flex-shrink-0" />
-          <div className="max-w-xs md:max-w-sm rounded-lg px-4 py-2 bg-muted markdown-content">
-            <MarkdownRenderer markdown={`**${question.question}**`} />
-          </div>
-        </div>
-        <div className="flex flex-col items-end gap-2">
-            {question.options.map((option, index) => (
-                <Button key={index} variant="outline" className="w-full justify-start" onClick={() => handleAnswerQuestion(index)}>
-                    {option}
-                </Button>
-            ))}
-        </div>
-      </div>
-    );
-  };
-
-
   return (
     <>
       <AnimatePresence>
@@ -134,8 +69,8 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
                  </div>
                 {(messages.length === 0) ? (
                   <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
-                    <MessageSquare className="size-12 mb-2" />
-                    <p className="font-bold text-lg">NoteMark Assistant</p>
+                    <ShieldClose className="size-12 mb-2" />
+                    <p className="font-bold text-lg">AI Features Disabled</p>
                     <p>All AI features are temporarily disabled due to API rate limits.</p>
                   </div>
                 ) : (
@@ -159,7 +94,6 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
                         </div>
                     </div>
                  )}
-                 {renderQuizQuestion()}
                 <div ref={messagesEndRef} />
               </div>
               <footer className="p-4 border-t border-border/50 bg-background/80">
@@ -176,14 +110,14 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
                       placeholder="AI features are temporarily disabled..."
                       className="pr-12 resize-none bg-transparent"
                       rows={1}
-                      disabled={isLoading}
+                      disabled={isLoading || true}
                     />
                     <Button
                       variant="ghost"
                       size="icon"
                       className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8"
                       onClick={handleSendMessage}
-                      disabled={isLoading || input.trim() === ''}
+                      disabled={isLoading || input.trim() === '' || true}
                     >
                       <Send className="size-5" />
                     </Button>

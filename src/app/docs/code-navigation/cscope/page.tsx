@@ -1,7 +1,6 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
 import { TableOfContents } from '@/components/toc/TableOfContents';
-import { Chatbot } from '@/components/chatbot/Chatbot';
 
 const cscopeMarkdownContent = `
 # 🏷️ Code Navigation with Cscope
@@ -119,7 +118,6 @@ export default function CscopePage() {
                     <TableOfContents content={cscopeMarkdownContent} />
                 </div>
             </aside>
-            <Chatbot pageContent={cscopeMarkdownContent} />
         </div>
     );
 }

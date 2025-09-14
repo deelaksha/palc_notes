@@ -1,6 +1,5 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
-import { Chatbot } from '@/components/chatbot/Chatbot';
 
 const content = `
 # 🧙‍♂️ The Basics: Characters & Sets
@@ -83,7 +82,6 @@ export default function RegexBasicsPage() {
     return (
         <>
             <MarkdownRenderer markdown={content} />
-            <Chatbot pageContent={content} />
         </>
     );
 }

@@ -1,7 +1,6 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
 import { TableOfContents } from '@/components/toc/TableOfContents';
-import { Chatbot } from '@/components/chatbot/Chatbot';
 
 const ctagsMarkdownContent = `
 # 🏷️ Code Navigation with Ctags
@@ -90,7 +89,6 @@ export default function CtagsPage() {
                     <TableOfContents content={ctagsMarkdownContent} />
                 </div>
             </aside>
-            <Chatbot pageContent={ctagsMarkdownContent} />
         </div>
     );
 }

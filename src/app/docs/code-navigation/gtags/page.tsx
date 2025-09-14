@@ -1,7 +1,6 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
 import { TableOfContents } from '@/components/toc/TableOfContents';
-import { Chatbot } from '@/components/chatbot/Chatbot';
 
 const gtagsMarkdownContent = `
 # 🌍 Code Navigation with GNU Global (Gtags)
@@ -110,7 +109,6 @@ export default function GtagsPage() {
                     <TableOfContents content={gtagsMarkdownContent} />
                 </div>
             </aside>
-            <Chatbot pageContent={gtagsMarkdownContent} />
         </div>
     );
 }

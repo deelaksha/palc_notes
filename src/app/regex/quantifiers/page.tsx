@@ -1,6 +1,5 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
-import { Chatbot } from '@/components/chatbot/Chatbot';
 
 const content = `
 # 🔢 Quantifiers: Greedy vs. Lazy
@@ -68,7 +67,6 @@ export default function RegexQuantifiersPage() {
     return (
         <>
             <MarkdownRenderer markdown={content} />
-            <Chatbot pageContent={content} />
         </>
     );
 }

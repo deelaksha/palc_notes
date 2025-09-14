@@ -1,6 +1,5 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
-import { Chatbot } from '@/components/chatbot/Chatbot';
 
 const content = `
 # ⚓️ Anchors & Boundaries
@@ -67,7 +66,6 @@ export default function RegexAnchorsPage() {
     return (
         <>
             <MarkdownRenderer markdown={content} />
-            <Chatbot pageContent={content} />
         </>
     );
 }

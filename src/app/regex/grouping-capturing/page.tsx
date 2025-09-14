@@ -1,6 +1,5 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
-import { Chatbot } from '@/components/chatbot/Chatbot';
 
 const content = `
 # 📦 Grouping & Capturing
@@ -77,7 +76,6 @@ export default function RegexGroupingPage() {
     return (
         <>
             <MarkdownRenderer markdown={content} />
-            <Chatbot pageContent={content} />
         </>
     );
 }
