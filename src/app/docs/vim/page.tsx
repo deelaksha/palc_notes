@@ -45,6 +45,7 @@ Use these keys like arrow keys:
 | \`b\` | Jump backward word by word |
 | \`gg\` | Go to top of file |
 | \`G\` | Go to bottom of file |
+| \`1G\` | Go to top of file (alternative) |
 | \`Ctrl + d\` | Scroll down half a screen |
 | \`Ctrl + u\` | Scroll up half a screen |
 
@@ -128,6 +129,7 @@ Use these keys like arrow keys:
 | \`:w\` | Save file |
 | \`:q\` | Quit |
 | \`:wq\` | Save and quit |
+| \`ZZ\` | Save and quit (alternative) |
 | \`:q!\` | Quit without saving |
 | \`:x\` | Save and quit (same as \`:wq\`) |
 | \`:e filename\` | Open another file |
