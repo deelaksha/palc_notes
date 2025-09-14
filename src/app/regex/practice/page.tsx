@@ -1,6 +1,7 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
 import { Chatbot } from '@/components/chatbot/Chatbot';
+import { allDocsContext } from '@/lib/all-docs-context';
 
 const content = `
 # 🌟 Common Patterns & Practice
@@ -92,7 +93,7 @@ export default function RegexPracticePage() {
     return (
         <>
             <MarkdownRenderer markdown={content} />
-            <Chatbot pageContent={content} />
+            <Chatbot pageContent={allDocsContext} />
         </>
     );
 }

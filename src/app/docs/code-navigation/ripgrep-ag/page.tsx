@@ -1,6 +1,8 @@
+
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
 import { TableOfContents } from '@/components/toc/TableOfContents';
 import { Chatbot } from '@/components/chatbot/Chatbot';
+import { allDocsContext } from '@/lib/all-docs-context';
 
 const ripgrepAgMarkdownContent = `
 # ⚡️ Fast Code Search with ripgrep (rg) and The Silver Searcher (ag)
@@ -127,7 +129,7 @@ export default function RipgrepAgPage() {
                     <TableOfContents content={ripgrepAgMarkdownContent} />
                 </div>
             </aside>
-            <Chatbot pageContent={ripgrepAgMarkdownContent} />
+            <Chatbot pageContent={allDocsContext} />
         </div>
     );
 }
