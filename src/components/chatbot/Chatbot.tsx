@@ -5,9 +5,8 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import { Bot, MessageCircle, Send, User, X } from 'lucide-react';
+import { Bot, MessageCircle, Send, User } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Sheet,
@@ -16,24 +15,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { generalChat } from '@/ai/flows/general-chat';
+import type { Message } from '@/ai/flows/general-chat';
 
-type Message = {
-  id: string;
-  text: string;
-  role: 'user' | 'assistant';
-};
-
-const initialBotMessage =
-  "I'm the NoteMark Assistant. The AI features are currently disabled due to API rate limits. We are working to restore them. Thanks for your patience!";
-
-export function Chatbot({ pageContext }: { pageContext?: string }) {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 'initial-bot-message',
-      text: initialBotMessage,
-      role: 'assistant',
-    },
-  ]);
+export function Chatbot() {
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -45,24 +31,33 @@ export function Chatbot({ pageContext }: { pageContext?: string }) {
     if (!input.trim() || isLoading) return;
 
     const userMessage: Message = {
-      id: `user-${Date.now()}`,
-      text: input,
       role: 'user',
+      content: input,
     };
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
 
-    // Simulate a bot response for disabled state
-    setTimeout(() => {
+    try {
+      const response = await generalChat({
+        chatHistory: messages,
+        question: input,
+      });
       const botMessage: Message = {
-        id: `bot-${Date.now()}`,
-        text: 'The AI features are currently disabled.',
-        role: 'assistant',
+        role: 'model',
+        content: response,
       };
       setMessages((prev) => [...prev, botMessage]);
+    } catch (error) {
+      console.error('Error fetching chat response:', error);
+      const errorMessage: Message = {
+        role: 'model',
+        content: 'Sorry, I encountered an error. Please try again.',
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
       setIsLoading(false);
-    }, 500);
+    }
   };
 
   useEffect(() => {
@@ -95,15 +90,15 @@ export function Chatbot({ pageContext }: { pageContext?: string }) {
         </SheetHeader>
         <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
           <div className="space-y-4">
-            {messages.map((message) => (
+            {messages.map((message, index) => (
               <div
-                key={message.id}
+                key={index}
                 className={cn(
                   'flex items-start gap-3',
                   message.role === 'user' ? 'justify-end' : ''
                 )}
               >
-                {message.role === 'assistant' && (
+                {message.role === 'model' && (
                   <Avatar className="h-8 w-8 border">
                     <AvatarFallback>
                       <Bot className="h-5 w-5" />
@@ -118,7 +113,7 @@ export function Chatbot({ pageContext }: { pageContext?: string }) {
                       : 'bg-muted'
                   )}
                 >
-                  <p>{message.text}</p>
+                  <p>{message.content}</p>
                 </div>
                 {message.role === 'user' && (
                   <Avatar className="h-8 w-8 border">
@@ -155,11 +150,11 @@ export function Chatbot({ pageContext }: { pageContext?: string }) {
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="AI features are disabled..."
+              placeholder="Ask me anything..."
               className="flex-1"
-              disabled={true}
+              disabled={isLoading}
             />
-            <Button type="submit" size="icon" disabled={true}>
+            <Button type="submit" size="icon" disabled={isLoading || !input.trim()}>
               <Send className="h-4 w-4" />
               <span className="sr-only">Send</span>
             </Button>
