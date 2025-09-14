@@ -22,7 +22,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { Inter, Source_Code_Pro } from 'next/font/google';
 import { Chatbot } from '@/components/chatbot/Chatbot';
 import { useState } from 'react';
-import { Sheet } from '@/components/ui/sheet';
+import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { ChatbotTrigger } from '@/components/chatbot/ChatbotTrigger';
 
 
@@ -116,7 +116,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </SidebarProvider>
          <Sheet open={isChatOpen} onOpenChange={setIsChatOpen}>
             <ChatbotTrigger />
-            <Chatbot isOpen={isChatOpen} onOpenChange={setIsChatOpen} />
+            <SheetContent 
+              className="flex h-full flex-col p-0 sm:max-w-lg md:max-w-2xl bg-gradient-futuristic"
+              side="right"
+            >
+              <Chatbot />
+            </SheetContent>
         </Sheet>
         <Toaster />
       </body>
