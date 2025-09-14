@@ -41,7 +41,7 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
     try {
       const result = await contextualChat({
         context: pageContent,
-        history: messages, // Pass the history before the new user message
+        history: newMessages.slice(0, -1),
         question: input
       });
       const botMessage = { role: 'bot' as const, content: result.answer };
