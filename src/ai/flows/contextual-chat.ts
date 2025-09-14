@@ -11,7 +11,6 @@ import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 import { MessageSchema } from '@/ai/schemas';
 import { generalChat } from './general-chat';
-import { defineDotprompt } from '@genkit-ai/dotprompt';
 
 const ContextualChatInputSchema = z.object({
   chatHistory: z.array(MessageSchema),
@@ -69,17 +68,15 @@ export const contextualChat = ai.defineFlow(
     outputSchema: z.string(),
   },
   async (input) => {
-    const contextualResponse = await contextualPrompt.generate({
-        input: input,
-    });
+    const contextualResponse = await contextualPrompt(input);
     
-    const structuredOutput = contextualResponse.output();
+    const structuredOutput = contextualResponse.output;
 
     if (structuredOutput?.isContextual) {
       return structuredOutput.answer;
     } else {
       // If the question is not about the page content, fall back to the general chat.
-      const generalResponse = await generalChat.invoke({
+      const generalResponse = await generalChat({
         chatHistory: input.chatHistory,
         question: input.question,
       });
