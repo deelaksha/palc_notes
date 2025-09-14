@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { MessageSquare, X, Send, Bot, Loader2, Sparkles, BrainCircuit, ShieldClose } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { generalChat } from '@/ai/flows/general-chat';
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
 import type { Quiz } from '@/ai/flows/quiz-generator';
 import { generateQuiz } from '@/ai/flows/quiz-generator';
@@ -90,8 +89,7 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
     if (input.trim() === '' || isLoading) return;
 
     const userMessage = { role: 'user' as const, content: input };
-    const newMessages = [...messages, userMessage];
-    setMessages(newMessages);
+    setMessages((prev) => [...prev, userMessage]);
     const question = input;
     setInput('');
     setIsLoading(true);
@@ -99,16 +97,10 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
     try {
       // Route to quiz flow if user asks for it
       if (question.toLowerCase().includes('quiz') || question.toLowerCase().includes('test me')) {
-        const botMessage = { role: 'bot' as const, content: "Starting a quiz for you now!" };
-        setMessages((prev) => [...prev, botMessage]);
         handleGenerateNewQuiz(false);
       } else {
-        // Default to general chat for all other questions
-        const result = await generalChat({
-          history: newMessages.slice(0, -1),
-          question: question
-        });
-        const botMessage = { role: 'bot' as const, content: result.answer };
+        // Inform user that general chat is temporarily disabled
+        const botMessage = { role: 'bot' as const, content: "I apologize, but the general chat feature is temporarily disabled due to API rate limits. You can still ask me to 'quiz you' on the page content!" };
         setMessages((prev) => [...prev, botMessage]);
       }
     } catch (error) {
@@ -166,7 +158,7 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
                   <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
                     <MessageSquare className="size-12 mb-2" />
                     <p className="font-bold text-lg">NoteMark Assistant</p>
-                    <p>Ask me anything about this page, or type "quiz me" to test your knowledge!</p>
+                    <p>Ask me to "quiz me" to test your knowledge on the page content!</p>
                   </div>
                 ) : (
                   messages.map((message, index) => (
@@ -211,7 +203,7 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
                           handleSendMessage();
                         }
                       }}
-                      placeholder="Ask a question..."
+                      placeholder="Type 'quiz me' to start a quiz..."
                       className="pr-12 resize-none bg-transparent"
                       rows={1}
                       disabled={isLoading}
