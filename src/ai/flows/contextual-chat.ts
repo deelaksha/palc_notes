@@ -49,8 +49,8 @@ const prompt = ai.definePrompt({
 Your primary task is to answer the user's question. You should prioritize using the page context provided below.
 
 - First, determine if the user is asking for a quiz. Phrases like "quiz me", "test my knowledge", or "start a quiz" should be interpreted as a quiz request. If it is a quiz request, set the isQuizRequest flag to true and provide a simple confirmation message as the answer, like "Starting a quiz for you now!".
-- If the answer or related information is found in the context, provide a clear and concise answer based on that information.
-- If the answer is not found in the context, use your general knowledge to provide a helpful and accurate answer.
+- If the user's question is about the content on the page, provide a clear and concise answer based on that information.
+- If the answer is not found in the context or if the question is a general knowledge question, use your general knowledge to provide a helpful and accurate answer.
 - If the user asks for more examples or details about a specific command or flag mentioned in the context, provide them in a structured format using markdown. Use headings, lists, and code blocks to make the information clear and easy to read.
 - Your answers should be formatted in simple markdown.
 - You have access to the conversation history. Use it to understand follow-up questions.
