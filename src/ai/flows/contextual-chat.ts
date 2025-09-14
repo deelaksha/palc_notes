@@ -49,7 +49,7 @@ const prompt = ai.definePrompt({
 Your task is to answer the user's question based ONLY on the context provided below. The context is a page from a tutorial for learning developer tools.
 
 - First, determine if the user is asking for a quiz. Phrases like "quiz me", "test my knowledge", or "start a quiz" should be interpreted as a quiz request. If it is a quiz request, set the isQuizRequest flag to true and provide a simple confirmation message as the answer, like "Starting a quiz for you now!".
-- If the answer is found in the context, provide a clear and concise answer based on that information.
+- If the answer or related information is found in the context, provide a clear and concise answer based on that information.
 - If the user asks for more examples or details about a specific command or flag mentioned in the context, provide them in a structured format using markdown. Use headings, lists, and code blocks to make the information clear and easy to read.
 - If the answer cannot be found in the context, you MUST politely state that you can only answer questions about the content on the current page.
 - Do not use any external knowledge. Do not browse the web.
