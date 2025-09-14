@@ -76,8 +76,9 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
     if (currentQuestionIndex < quiz.questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
-      setQuizState('finished');
-      setMessages((prev) => [...prev, { role: 'bot', content: 'You have completed the quiz! Feel free to ask more questions or start another quiz.'}]);
+      // Loop back to the first question to make the quiz continuous
+      setCurrentQuestionIndex(0);
+      setMessages((prev) => [...prev, { role: 'bot', content: "Let's go again! Here's the first question."}]);
     }
   };
 
