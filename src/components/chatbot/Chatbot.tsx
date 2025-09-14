@@ -23,7 +23,6 @@ export function Chatbot() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -62,15 +61,6 @@ export function Chatbot() {
     }
   };
 
-  useEffect(() => {
-    if (scrollAreaRef.current) {
-      scrollAreaRef.current.scrollTo({
-        top: scrollAreaRef.current.scrollHeight,
-        behavior: 'smooth',
-      });
-    }
-  }, [messages.length]);
-
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
@@ -89,9 +79,25 @@ export function Chatbot() {
         <SheetHeader className="p-4 border-b border-white/10">
           <SheetTitle className="text-glow">NoteMark Assistant</SheetTitle>
         </SheetHeader>
-        <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
+        <div className="flex-1 flex flex-col-reverse overflow-y-auto p-4">
           <div className="space-y-6">
-            {messages.map((message, index) => (
+            {isLoading && (
+              <div className="flex items-start gap-4">
+                <Avatar className="h-9 w-9 border-2 border-primary/50 text-primary">
+                  <AvatarFallback className="bg-transparent">
+                    <Bot className="h-5 w-5" />
+                  </AvatarFallback>
+                </Avatar>
+                <div className="max-w-[85%] rounded-lg p-4 text-sm bg-muted/50">
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 animate-pulse rounded-full bg-primary" />
+                    <span className="h-2 w-2 animate-pulse rounded-full bg-primary animation-delay-200" />
+                    <span className="h-2 w-2 animate-pulse rounded-full bg-primary animation-delay-400" />
+                  </div>
+                </div>
+              </div>
+            )}
+            {messages.slice().reverse().map((message, index) => (
               <div
                 key={index}
                 className={cn(
@@ -125,24 +131,8 @@ export function Chatbot() {
                 )}
               </div>
             ))}
-            {isLoading && (
-              <div className="flex items-start gap-4">
-                <Avatar className="h-9 w-9 border-2 border-primary/50 text-primary">
-                  <AvatarFallback className="bg-transparent">
-                    <Bot className="h-5 w-5" />
-                  </AvatarFallback>
-                </Avatar>
-                <div className="max-w-[85%] rounded-lg p-4 text-sm bg-muted/50">
-                  <div className="flex items-center gap-2">
-                    <span className="h-2 w-2 animate-pulse rounded-full bg-primary" />
-                    <span className="h-2 w-2 animate-pulse rounded-full bg-primary animation-delay-200" />
-                    <span className="h-2 w-2 animate-pulse rounded-full bg-primary animation-delay-400" />
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
-        </ScrollArea>
+        </div>
         <div className="p-4 border-t border-white/10 bg-transparent">
           <form
             onSubmit={handleSendMessage}
