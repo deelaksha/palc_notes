@@ -4,7 +4,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { MessageSquare, X, Send, Bot, Loader2, Sparkles, BrainCircuit, Maximize, Minimize } from 'lucide-react';
+import { MessageSquare, X, Send, Bot, Loader2, Sparkles, BrainCircuit } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { contextualChat } from '@/ai/flows/contextual-chat';
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
@@ -25,7 +25,6 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [isFullScreen, setIsFullScreen] = useState(false);
 
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [quizState, setQuizState] = useState<QuizState>('idle');
@@ -139,26 +138,15 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 50, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 50, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
-            className={cn(
-              'fixed z-50',
-              isFullScreen
-                ? 'inset-0 w-full h-full'
-                : 'bottom-24 right-4 sm:right-8 w-[calc(100%-2rem)] max-w-md'
-            )}
+            className='fixed inset-0 z-50 w-full h-full'
           >
-            <div className={cn(
-                "bg-card border border-border shadow-2xl flex flex-col",
-                isFullScreen ? "h-full w-full rounded-none" : "h-[70vh] rounded-xl"
-              )}>
+            <div className="bg-card border border-border shadow-2xl flex flex-col h-full w-full rounded-none">
               <div className="flex-1 p-4 overflow-y-auto space-y-4 relative">
                  <div className="absolute top-2 right-2 z-10 flex gap-2">
-                    <Button variant="ghost" size="icon" onClick={() => setIsFullScreen(!isFullScreen)} className="h-8 w-8">
-                        {isFullScreen ? <Minimize className="size-5" /> : <Maximize className="size-5" />}
-                    </Button>
                     <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="h-8 w-8">
                         <X className="size-5" />
                     </Button>
