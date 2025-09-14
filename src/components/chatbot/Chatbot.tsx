@@ -39,6 +39,7 @@ export function Chatbot() {
     setIsLoading(true);
 
     try {
+      // The context is no longer needed and has been removed from the flow
       const response = await contextualChat({
         chatHistory: messages,
         question: input,
@@ -82,7 +83,7 @@ export function Chatbot() {
             </Button>
         </SheetTrigger>
         <SheetContent
-          className="flex h-full flex-col p-0 sm:max-w-lg md:max-w-2xl bg-gradient-futuristic"
+          className="flex h-full flex-col p-0 w-full max-w-lg md:max-w-2xl bg-gradient-futuristic"
           side="right"
         >
         <SheetHeader className="p-4 border-b border-white/10">

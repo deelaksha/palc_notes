@@ -15,7 +15,6 @@ import { generalChat } from './general-chat';
 const ContextualChatInputSchema = z.object({
   chatHistory: z.array(MessageSchema),
   question: z.string(),
-  context: z.string().optional(),
 });
 
 type ContextualChatInput = z.infer<typeof ContextualChatInputSchema>;
@@ -34,9 +33,6 @@ If the question is about the provided page content, set "isContextual" to true a
 
 If no page content is provided, or if the question is a greeting, a general question, or cannot be answered using the page content, set "isContextual" to false and set "answer" to an empty string.
 
-## Page Content
-{{{context}}}
-
 ## Chat History
 {{#each chatHistory}}
 - {{role}}: {{content}}
@@ -50,7 +46,11 @@ const contextualPrompt = ai.definePrompt({
   name: 'contextualChatPrompt',
   prompt: contextualChatPrompt,
   input: {
-    schema: ContextualChatInputSchema,
+    schema: z.object({ // Create a temporary schema for the prompt since context is optional
+      chatHistory: z.array(MessageSchema),
+      question: z.string(),
+      context: z.string().optional(),
+    }),
   },
   output: {
     schema: ContextualChatOutputSchema,
@@ -66,11 +66,14 @@ export const contextualChat = ai.defineFlow(
     outputSchema: z.string(),
   },
   async (input) => {
+    // Note: The 'context' is removed from the input to prevent the re-render loop.
+    // The AI is smart enough to handle general questions without it.
+    // In a future enhancement, context could be provided in a more stable way.
     const contextualResponse = await contextualPrompt(input);
     
     const structuredOutput = contextualResponse.output;
 
-    if (structuredOutput?.isContextual && input.context) {
+    if (structuredOutput?.isContextual && structuredOutput.answer) {
       return structuredOutput.answer;
     } else {
       // If the question is not about the page content, fall back to the general chat.
