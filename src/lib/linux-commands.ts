@@ -207,6 +207,28 @@ export const commandsData = [
     },
     {
         category: "File Viewing and Editing",
+        name: "grep",
+        description: "The `grep` spell is your magical magnifying glass for text. It searches through files (or the output of other commands) and shows you only the lines that contain a pattern you're looking for.",
+        howItWorks: [
+            "The basic spell is `grep 'pattern' filename`.",
+            "It can be combined with other commands using the `|` (pipe) character to filter their output.",
+            "**-i (Ignore Case)**: Finds matches regardless of whether they are uppercase or lowercase.",
+            "**-v (Invert Match)**: Shows you all the lines that *don't* contain the pattern.",
+            "**-r (Recursive)**: Searches for the pattern in all files within a directory and its subdirectories.",
+            "**-l (List Files)**: Shows only the names of the files that contain the pattern, not the matching lines themselves.",
+            "**-n (Line Number)**: Shows the line number for each match."
+        ],
+        examples: [
+            { code: "grep 'error' server.log", text: "Searches for the word 'error' inside the `server.log` file." },
+            { code: "ps aux | grep 'chrome'", text: "Lists all running processes, then uses `grep` to filter and show only the lines related to the Chrome browser." },
+            { code: "grep -ri 'database_password' /etc/", text: "Recursively and case-insensitively searches the entire `/etc` directory for any file containing 'database_password'. A powerful way to find secrets!"},
+            { code: "grep -v '^#' config.conf", text: "Displays a configuration file, but hides all the comment lines that start with `#`."},
+            { code: "grep -l 'main' *.js", text: "Searches all JavaScript files (`*.js`) in the current directory and lists the names of the ones that contain the word 'main'."}
+        ],
+        realWorld: "This is one of the most powerful and frequently used commands. Developers use it constantly to find where a function is being called, system admins use it to search for specific errors in log files, and you'll use it anytime you need to find specific text."
+    },
+    {
+        category: "File Viewing and Editing",
         name: "less",
         description: "The `less` spell is a powerful viewer for huge scrolls (large files). It lets you read them page by page, so you don't get overwhelmed. 'Less is more!'.",
         howItWorks: [
