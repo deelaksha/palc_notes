@@ -46,11 +46,7 @@ const contextualPrompt = ai.definePrompt({
   name: 'contextualChatPrompt',
   prompt: contextualChatPrompt,
   input: {
-    schema: z.object({ // Create a temporary schema for the prompt since context is optional
-      chatHistory: z.array(MessageSchema),
-      question: z.string(),
-      context: z.string().optional(),
-    }),
+    schema: ContextualChatInputSchema, // The context is no longer needed here
   },
   output: {
     schema: ContextualChatOutputSchema,

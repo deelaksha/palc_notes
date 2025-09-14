@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -38,6 +39,7 @@ export function Chatbot() {
     setIsLoading(true);
 
     try {
+      // The `context` has been removed to prevent the re-render loop.
       const response = await contextualChat({
         chatHistory: messages,
         question: input,
