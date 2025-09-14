@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { Chatbot } from '@/components/chatbot/Chatbot';
 
 export function generateStaticParams() {
   return gitCommandsData.map((command) => ({
@@ -38,6 +39,13 @@ export default function CommandDetailPage({
     });
   };
 
+  const pageContentForChatbot = `
+    Command: ${command.name}
+    Description: ${command.description}
+    How it works: ${command.howItWorks.join(' ')}
+    Examples: ${command.examples.map(e => `${e.text}: ${e.code}`).join('; ')}
+    Real-world application: ${command.realWorld}
+  `;
 
   return (
     <div className="max-w-4xl mx-auto p-4 md:p-8 space-y-8">
@@ -95,6 +103,7 @@ export default function CommandDetailPage({
           <p><span className="text-tips font-bold">Quest Tip:</span> Mastering the <code className="font-code bg-code-bg text-tag px-1 py-0.5 rounded-sm text-sm">{command.name}</code> spell will make you a true version control champion!</p>
         </div>
       </section>
+      <Chatbot pageContent={pageContentForChatbot} />
     </div>
   );
 }
