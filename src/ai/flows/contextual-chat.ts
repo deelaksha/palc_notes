@@ -17,21 +17,21 @@ const ChatMessageSchema = z.object({
     content: z.string(),
 });
 
-export const ContextualChatInputSchema = z.object({
+const ContextualChatInputSchema = z.object({
   context: z
     .string()
     .describe('The content of the documentation page to use as context.'),
   history: z.array(ChatMessageSchema).describe('The previous messages in the conversation.'),
   question: z.string().describe('The user\'s current question about the content.'),
 });
-export type ContextualChatInput = z.infer<typeof ContextualChatInputSchema>;
+type ContextualChatInput = z.infer<typeof ContextualChatInputSchema>;
 
 const ContextualChatOutputSchema = z.object({
   answer: z.string().describe('The answer to the question, based on the provided context.'),
   isGeneralQuestion: z.boolean().describe('Whether the question is a general knowledge question unrelated to the context.'),
   isQuizRequest: z.boolean().describe('Whether the user is asking to be quizzed.'),
 });
-export type ContextualChatOutput = z.infer<typeof ContextualChatOutputSchema>;
+type ContextualChatOutput = z.infer<typeof ContextualChatOutputSchema>;
 
 
 export async function contextualChat(

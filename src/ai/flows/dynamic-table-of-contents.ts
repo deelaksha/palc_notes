@@ -16,7 +16,7 @@ const GenerateTableOfContentsInputSchema = z.object({
     .string()
     .describe('The markdown content for which to generate the table of contents.'),
 });
-export type GenerateTableOfContentsInput = z.infer<
+type GenerateTableOfContentsInput = z.infer<
   typeof GenerateTableOfContentsInputSchema
 >;
 
@@ -25,7 +25,7 @@ const GenerateTableOfContentsOutputSchema = z.object({
     .string()
     .describe('The generated table of contents in markdown format.'),
 });
-export type GenerateTableOfContentsOutput = z.infer<
+type GenerateTableOfContentsOutput = z.infer<
   typeof GenerateTableOfContentsOutputSchema
 >;
 

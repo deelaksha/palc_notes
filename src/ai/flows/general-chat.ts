@@ -21,12 +21,12 @@ const GeneralChatInputSchema = z.object({
   history: z.array(ChatMessageSchema).describe('The previous messages in the conversation.'),
   question: z.string().describe('The user\'s current question.'),
 });
-export type GeneralChatInput = z.infer<typeof GeneralChatInputSchema>;
+type GeneralChatInput = z.infer<typeof GeneralChatInputSchema>;
 
 const GeneralChatOutputSchema = z.object({
   answer: z.string().describe('The answer to the question.'),
 });
-export type GeneralChatOutput = z.infer<typeof GeneralChatOutputSchema>;
+type GeneralChatOutput = z.infer<typeof GeneralChatOutputSchema>;
 
 
 export async function generalChat(
