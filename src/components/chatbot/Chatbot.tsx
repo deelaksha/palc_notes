@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -39,7 +38,6 @@ export function Chatbot() {
     setIsLoading(true);
 
     try {
-      // The context is no longer needed and has been removed from the flow
       const response = await contextualChat({
         chatHistory: messages,
         question: input,
