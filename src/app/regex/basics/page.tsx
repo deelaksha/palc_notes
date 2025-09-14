@@ -1,7 +1,6 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
 import { Chatbot } from '@/components/chatbot/Chatbot';
-import { allDocsContext } from '@/lib/all-docs-context';
 
 const content = `
 # 🧙‍♂️ The Basics: Characters & Sets
@@ -77,14 +76,14 @@ Character sets, or character classes, let you match one character from a specifi
 | \`\\s\` | \`[ \\t\\r\\n\\f]\` | Matches any whitespace character (space, tab, newline). |
 | \`\\D\` | \`[^0-9]\` | Matches any character that is **not** a digit. |
 | \`\\W\` | \`[^a-zA-Z0-9_]\` | Matches any character that is **not** a word character. |
-| \`\\S\` | \`[^ \\t\\r\\n\\f]\` | Matches any character that is **not** whitespace. |
+| \`\\S\` | \`[^ \\t\\r\\n\\f]\` | Matches any character that is **not** a whitespace. |
 `;
 
 export default function RegexBasicsPage() {
     return (
         <>
             <MarkdownRenderer markdown={content} />
-            <Chatbot pageContent={allDocsContext} />
+            <Chatbot pageContent={content} />
         </>
     );
 }

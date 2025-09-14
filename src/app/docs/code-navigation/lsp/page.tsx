@@ -2,7 +2,6 @@
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
 import { TableOfContents } from '@/components/toc/TableOfContents';
 import { Chatbot } from '@/components/chatbot/Chatbot';
-import { allDocsContext } from '@/lib/all-docs-context';
 
 const lspMarkdownContent = `
 # 🤖 Code Navigation with LSP (Language Server Protocol)
@@ -105,7 +104,7 @@ export default function LspPage() {
                     <TableOfContents content={lspMarkdownContent} />
                 </div>
             </aside>
-            <Chatbot pageContent={allDocsContext} />
+            <Chatbot pageContent={lspMarkdownContent} />
         </div>
     );
 }

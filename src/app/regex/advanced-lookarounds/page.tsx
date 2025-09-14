@@ -1,7 +1,6 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
 import { Chatbot } from '@/components/chatbot/Chatbot';
-import { allDocsContext } from '@/lib/all-docs-context';
 
 const content = `
 # 🧙‍♂️ Advanced Magic: Lookarounds
@@ -93,7 +92,7 @@ export default function RegexAdvancedPage() {
     return (
         <>
             <MarkdownRenderer markdown={content} />
-            <Chatbot pageContent={allDocsContext} />
+            <Chatbot pageContent={content} />
         </>
     );
 }

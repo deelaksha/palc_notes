@@ -7,7 +7,6 @@ import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Chatbot } from '@/components/chatbot/Chatbot';
-import { allDocsContext } from '@/lib/all-docs-context';
 
 export function generateStaticParams() {
   return gitCommandsData.map((command) => ({
@@ -25,6 +24,15 @@ export default function CommandDetailPage({
   if (!command) {
     notFound();
   }
+
+  const pageContent = `
+    Command: ${command.name}
+    Description: ${command.description}
+    Category: ${command.category}
+    How it works: ${command.howItWorks.join(' ')}
+    Examples: ${command.examples.map(ex => `${ex.text}: \`${ex.code}\``).join(' ')}
+    Real-world application: ${command.realWorld}
+  `;
 
   const renderTextWithCode = (text: string) => {
     const parts = text.split(/(`[^`]+`)/g);
@@ -96,7 +104,7 @@ export default function CommandDetailPage({
           <p><span className="text-tips font-bold">Quest Tip:</span> Mastering the <code className="font-code bg-code-bg text-tag px-1 py-0.5 rounded-sm text-sm">{command.name}</code> spell will make you a true version control champion!</p>
         </div>
       </section>
-      <Chatbot pageContent={allDocsContext} />
+      <Chatbot pageContent={pageContent} />
     </div>
   );
 }

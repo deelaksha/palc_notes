@@ -2,7 +2,6 @@
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
 import { TableOfContents } from '@/components/toc/TableOfContents';
 import { Chatbot } from '@/components/chatbot/Chatbot';
-import { allDocsContext } from '@/lib/all-docs-context';
 
 const ctagsMarkdownContent = `
 # 🏷️ Code Navigation with Ctags
@@ -91,7 +90,7 @@ export default function CtagsPage() {
                     <TableOfContents content={ctagsMarkdownContent} />
                 </div>
             </aside>
-            <Chatbot pageContent={allDocsContext} />
+            <Chatbot pageContent={ctagsMarkdownContent} />
         </div>
     );
 }

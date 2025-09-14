@@ -1,7 +1,6 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
 import { Chatbot } from '@/components/chatbot/Chatbot';
-import { allDocsContext } from '@/lib/all-docs-context';
 
 const content = `
 # 📦 Grouping & Capturing
@@ -78,7 +77,7 @@ export default function RegexGroupingPage() {
     return (
         <>
             <MarkdownRenderer markdown={content} />
-            <Chatbot pageContent={allDocsContext} />
+            <Chatbot pageContent={content} />
         </>
     );
 }
