@@ -173,10 +173,12 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
                   messages.map((message, index) => (
                     <div key={index} className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                       {message.role === 'bot' && <Bot className="size-6 text-primary flex-shrink-0" />}
-                      <div className={`max-w-xs md:max-w-sm rounded-lg px-4 py-2 ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
-                        <div className="markdown-content">
-                            <MarkdownRenderer markdown={message.content} />
-                        </div>
+                      <div className={cn(
+                          'max-w-xs md:max-w-sm rounded-lg px-4 py-2',
+                          message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted',
+                          'markdown-content'
+                      )}>
+                          <MarkdownRenderer markdown={message.content} />
                       </div>
                     </div>
                   ))
