@@ -16,16 +16,6 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'picsum.photos', port: '', pathname: '/**' },
     ],
   },
-  experimental: {
-    turbo: {
-      rules: {
-        '**/*.prompt': {
-          loaders: ['raw-loader'],
-          as: '*.js'
-        },
-      },
-    },
-  },
   webpack(config, { isServer }) {
     config.ignoreWarnings = [
       (warn) => warn.message.includes('ENOENT: no such file or directory'),

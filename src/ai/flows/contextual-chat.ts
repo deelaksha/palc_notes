@@ -13,9 +13,6 @@ import { MessageSchema } from '@/ai/schemas';
 import { generalChat } from './general-chat';
 import { defineDotprompt } from '@genkit-ai/dotprompt';
 
-// @ts-ignore
-import contextualChatPromptFile from '../prompts/contextual-chat.prompt';
-
 const ContextualChatInputSchema = z.object({
   chatHistory: z.array(MessageSchema),
   question: z.string(),
@@ -29,9 +26,32 @@ const ContextualChatOutputSchema = z.object({
   answer: z.string().describe('The answer to the question. If isContextual is false, this will be an empty string.'),
 });
 
-const contextualPrompt = defineDotprompt({
+const contextualChatPrompt = `
+You are an intelligent AI assistant.
+Your goal is to determine if the user's question can be answered using the provided page content.
+
+Analyze the user's question and the page content below.
+
+If the question is about the page content, set "isContextual" to true and provide a comprehensive answer based *only* on that content.
+Do not use any outside knowledge.
+
+If the question is a greeting, a general question, or cannot be answered using the page content, set "isContextual" to false and set "answer" to an empty string.
+
+## Page Content
+{{context}}
+
+## Chat History
+{{#each chatHistory}}
+- {{role}}: {{content}}
+{{/each}}
+
+## User Question
+{{question}}
+`;
+
+const contextualPrompt = ai.definePrompt({
   name: 'contextualChatPrompt',
-  prompt: contextualChatPromptFile,
+  prompt: contextualChatPrompt,
   input: {
     schema: ContextualChatInputSchema,
   },
