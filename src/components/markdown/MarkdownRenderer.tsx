@@ -17,7 +17,7 @@ export function MarkdownRenderer({ markdown }: { markdown: string }) {
       .replace(/'/g, '&#039;');
       
     return escapedText
-      .replace(/`([^`]+)`/g, '<code class="font-code bg-code-bg text-tag px-1 py-0.5 rounded-sm text-sm">$1</code>')
+      .replace(/`([^`]+)`/g, '<code class="font-code bg-code-bg keyword-text px-1 py-0.5 rounded-sm text-sm">$1</code>')
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
       .replace(/👉/g, '<span class="mr-2">👉</span>');
   }

@@ -66,8 +66,8 @@
     --radius: 0.5rem;
     --code-bg: hsl(220 20% 12%);
     --code-text: hsl(210 17% 91%);
-    --command: hsl(150 100% 45%);
-    --tag: hsl(170 80% 60%);
+    --command: hsl(220 100% 70%);
+    --keyword: hsl(170 80% 60%);
     --label: hsl(40 100% 70%);
     --tips: hsl(200 100% 70%);
     --primary-accent: hsl(150 100% 35%);
@@ -170,15 +170,15 @@
   }
   
   .markdown-content code:not(pre > code) {
-    @apply font-code bg-code-bg text-tag px-1 py-0.5 rounded-sm text-sm;
+    @apply font-code bg-code-bg text-keyword px-1 py-0.5 rounded-sm text-sm;
   }
 
   .dark .command-text {
     @apply text-command;
   }
 
-  .dark .tag-text {
-    @apply text-tag;
+  .dark .keyword-text {
+    @apply text-keyword;
   }
   
   .dark .label-text {

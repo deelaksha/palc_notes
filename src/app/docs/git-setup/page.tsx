@@ -33,7 +33,7 @@ export default function GitSetupPage() {
               </p>
               <CodeBlock className="bg-code-bg text-code-text">
                 <span className="command-text">git config</span>{' '}
-                <span className="tag-text">--global</span> <span className="command-text">user.name</span>{' '}
+                <span className="keyword-text">--global</span> <span className="command-text">user.name</span>{' '}
                 <span className="label-text">"Your Name"</span>
               </CodeBlock>
               <div className="mt-4 p-4 rounded-xl bg-card-nested border-l-4 border-l-blue-400">
@@ -46,7 +46,7 @@ export default function GitSetupPage() {
                     The main spell. It lets you change your Git settings.
                   </li>
                   <li>
-                    <span className="tag-text font-bold">--global</span>: A
+                    <span className="keyword-text font-bold">--global</span>: A
                     powerful tag. This tells Git to apply this setting to{' '}
                     <span className="italic">all</span> of your projects, not just
                     the current one.
@@ -98,18 +98,18 @@ export default function GitSetupPage() {
                 <h3 className="text-2xl font-bold command-text mb-2">Check for an Existing Key</h3>
                 <p className="text-muted-foreground mb-4">Before forging a new key, check if you already have one! This command lists all the items in your magic <code>~/.ssh</code> bag.</p>
                 <CodeBlock className="bg-code-bg text-code-text">
-                    <span className="command-text">ls</span> <span className="tag-text">-al</span> <span className="label-text">~/.ssh</span>
+                    <span className="command-text">ls</span> <span className="keyword-text">-al</span> <span className="label-text">~/.ssh</span>
                 </CodeBlock>
                 <div className="mt-4 p-4 rounded-xl bg-card-nested border-l-4 border-l-blue-400">
                     <h4 className="text-xl font-bold text-foreground mb-2">Breaking Down the Spell</h4>
                     <ul className="list-disc list-inside text-muted-foreground space-y-2">
-                        <li><span className="command-text font-bold">ls</span>: The <span className="tag-text">list</span> command. This is the main action, telling your computer to show you all the items in a folder.</li>
-                        <li><span className="tag-text">-a</span>: The <span className="tag-text">all</span> tag. This tells the command to show <strong>all</strong> files, including the hidden ones. Hidden files have names that start with a period, like <code>.ssh</code>, and they are usually kept secret from a normal view.</li>
-                        <li><span className="tag-text">-l</span>: The <span className="tag-text">long</span> tag. This asks for a detailed, long-form list. Instead of just a list of names, you'll see extra information like file permissions, size, and creation date.</li>
-                        <li><span className="label-text">~/.ssh</span>: This is the location of the magic bag you are looking inside. The <span className="tag-text">~</span> is a shortcut for your hero's home directory.</li>
+                        <li><span className="command-text font-bold">ls</span>: The <span className="keyword-text">list</span> command. This is the main action, telling your computer to show you all the items in a folder.</li>
+                        <li><span className="keyword-text">-a</span>: The <span className="keyword-text">all</span> tag. This tells the command to show <strong>all</strong> files, including the hidden ones. Hidden files have names that start with a period, like <code>.ssh</code>, and they are usually kept secret from a normal view.</li>
+                        <li><span className="keyword-text">-l</span>: The <span className="keyword-text">long</span> tag. This asks for a detailed, long-form list. Instead of just a list of names, you'll see extra information like file permissions, size, and creation date.</li>
+                        <li><span className="label-text">~/.ssh</span>: This is the location of the magic bag you are looking inside. The <span className="keyword-text">~</span> is a shortcut for your hero's home directory.</li>
                     </ul>
                 </div>
-                <p className="text-muted-foreground mt-2">Look for files named <code className="font-code bg-code-bg tag-text px-1 py-0.5 rounded-sm text-sm">id_ed25519.pub</code> or <code className="font-code bg-code-bg tag-text px-1 py-0.5 rounded-sm text-sm">id_rsa.pub</code>. If you see one, you can skip to step 3!</p>
+                <p className="text-muted-foreground mt-2">Look for files named <code className="font-code bg-code-bg keyword-text px-1 py-0.5 rounded-sm text-sm">id_ed25519.pub</code> or <code className="font-code bg-code-bg keyword-text px-1 py-0.5 rounded-sm text-sm">id_rsa.pub</code>. If you see one, you can skip to step 3!</p>
             </li>
             <li>
               <h3 className="text-2xl font-bold command-text mb-2">
@@ -120,16 +120,16 @@ export default function GitSetupPage() {
               </p>
               <CodeBlock className="bg-code-bg text-code-text">
                 <span className="command-text">ssh-keygen</span>{' '}
-                <span className="tag-text">-t</span> <span className="label-text">ed25519</span>{' '}
-                <span className="tag-text">-C</span>{' '}
+                <span className="keyword-text">-t</span> <span className="label-text">ed25519</span>{' '}
+                <span className="keyword-text">-C</span>{' '}
                 <span className="label-text">"your.email@example.com"</span>
               </CodeBlock>
                <div className="mt-4 p-4 rounded-xl bg-card-nested border-l-4 border-l-blue-400">
                   <h4 className="text-xl font-bold text-white mb-2">Breaking Down the Spell</h4>
                   <ul className="list-disc list-inside text-muted-foreground space-y-2">
                       <li><span className="command-text font-bold">ssh-keygen</span>: The main spell. It's the command that creates your master SSH key.</li>
-                      <li><span className="tag-text font-bold">-t</span>: The <span className="tag-text">type</span> tag. This tells the spell what kind of key to create. We use `ed25519` because it's a strong and secure type of key.</li>
-                      <li><span className="tag-text font-bold">-C</span>: The <span className="tag-text">comment</span> tag. This lets you add a helpful note to your key, usually your email address, to remind you who it belongs to.</li>
+                      <li><span className="keyword-text font-bold">-t</span>: The <span className="keyword-text">type</span> tag. This tells the spell what kind of key to create. We use `ed25519` because it's a strong and secure type of key.</li>
+                      <li><span className="keyword-text font-bold">-C</span>: The <span className="keyword-text">comment</span> tag. This lets you add a helpful note to your key, usually your email address, to remind you who it belongs to.</li>
                   </ul>
               </div>
             </li>
@@ -156,13 +156,13 @@ export default function GitSetupPage() {
                   Next, copy the entire key that appears in your terminal.
                 </li>
                 <li>
-                  Go to your GitHub <span className="tag-text">Settings</span> {'>'}{' '}
-                  <span className="tag-text">SSH and GPG keys</span>, and click on{' '}
-                  <span className="tag-text">New SSH key</span>.
+                  Go to your GitHub <span className="keyword-text">Settings</span> {'>'}{' '}
+                  <span className="keyword-text">SSH and GPG keys</span>, and click on{' '}
+                  <span className="keyword-text">New SSH key</span>.
                 </li>
                 <li>
                   Paste your public key into the box and give it a title (like
-                  "My Gaming PC"). Click <span className="tag-text">Add SSH key</span>.
+                  "My Gaming PC"). Click <span className="keyword-text">Add SSH key</span>.
                 </li>
               </ul>
             </li>

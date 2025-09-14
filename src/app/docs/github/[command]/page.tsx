@@ -29,7 +29,7 @@ export default function CommandDetailPage({
     return parts.map((part, i) => {
       if (part.startsWith('`') && part.endsWith('`')) {
         return (
-          <code key={i} className="font-code bg-code-bg tag-text px-1 py-0.5 rounded-sm text-sm">
+          <code key={i} className="font-code bg-code-bg keyword-text px-1 py-0.5 rounded-sm text-sm">
             {part.slice(1, -1)}
           </code>
         );
@@ -109,7 +109,7 @@ ${command.realWorld}
         </h2>
         <p className="text-muted-foreground">{command.realWorld}</p>
         <div className="mt-6 p-4 rounded-xl bg-card-nested border-l-4 border-l-yellow-400">
-          <p><span className="text-tips font-bold">Quest Tip:</span> Mastering the <code className="font-code bg-code-bg tag-text px-1 py-0.5 rounded-sm text-sm">{command.name}</code> spell will make you a true version control champion!</p>
+          <p><span className="text-tips font-bold">Quest Tip:</span> Mastering the <code className="font-code bg-code-bg command-text px-1 py-0.5 rounded-sm text-sm">{command.name}</code> spell will make you a true version control champion!</p>
         </div>
       </section>
     </div>

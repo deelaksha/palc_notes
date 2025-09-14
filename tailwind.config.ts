@@ -78,7 +78,7 @@ export default {
         'code-bg': 'var(--code-bg)',
         'code-text': 'var(--code-text)',
         'command': 'var(--command)',
-        'tag': 'var(--tag)',
+        'keyword': 'var(--keyword)',
         'label': 'var(--label)',
         'tips': 'var(--tips)',
         'primary-accent': 'var(--primary-accent)',
