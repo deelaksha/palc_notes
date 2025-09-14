@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { MessageSquare, X, Send, Bot, Loader2, Sparkles, BrainCircuit, ShieldClose } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { contextualChat } from '@/ai/flows/contextual-chat';
+import { generalChat } from '@/ai/flows/general-chat';
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
 import type { Quiz } from '@/ai/flows/quiz-generator';
 import { generateQuiz } from '@/ai/flows/quiz-generator';
@@ -97,21 +97,20 @@ export function Chatbot({ pageContent }: { pageContent: string }) {
     setIsLoading(true);
 
     try {
-      const result = await contextualChat({
-        context: pageContent,
-        history: newMessages.slice(0, -1),
-        question: question
-      });
-      
-      if (result.isQuizRequest) {
-        const botMessage = { role: 'bot' as const, content: result.answer };
+      // Route to quiz flow if user asks for it
+      if (question.toLowerCase().includes('quiz') || question.toLowerCase().includes('test me')) {
+        const botMessage = { role: 'bot' as const, content: "Starting a quiz for you now!" };
         setMessages((prev) => [...prev, botMessage]);
         handleGenerateNewQuiz(false);
       } else {
+        // Default to general chat for all other questions
+        const result = await generalChat({
+          history: newMessages.slice(0, -1),
+          question: question
+        });
         const botMessage = { role: 'bot' as const, content: result.answer };
         setMessages((prev) => [...prev, botMessage]);
       }
-
     } catch (error) {
       console.error('Chatbot error:', error);
       const errorMessage = { role: 'bot' as const, content: 'Sorry, something went wrong. Please try again.' };
