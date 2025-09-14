@@ -63,7 +63,7 @@ export function Chatbot() {
   };
 
   useEffect(() => {
-    if (isOpen && scrollAreaRef.current) {
+    if (scrollAreaRef.current) {
       setTimeout(() => {
         if (scrollAreaRef.current) {
           scrollAreaRef.current.scrollTo({
@@ -73,7 +73,7 @@ export function Chatbot() {
         }
       }, 100);
     }
-  }, [messages, isOpen]);
+  }, [messages]);
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
