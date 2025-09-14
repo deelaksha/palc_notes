@@ -21,6 +21,7 @@ const nextConfig: NextConfig = {
       rules: {
         '**/*.prompt': {
           loaders: ['raw-loader'],
+          as: '*.js'
         },
       },
     },
