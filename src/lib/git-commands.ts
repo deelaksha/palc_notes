@@ -1,5 +1,19 @@
 
-export const gitCommandsData = [
+import type { FlowchartProps } from '@/components/flowcharts/types';
+
+type GitCommand = {
+    category: string;
+    name: string;
+    description: string;
+    howItWorks: string[];
+    examples: { code: string; text: string }[];
+    realWorld: string;
+    imageUrl: string;
+    imageAlt: string;
+    flowchart?: FlowchartProps;
+};
+
+export const gitCommandsData: GitCommand[] = [
     {
         category: "Setup and Configuration",
         name: "git config",
@@ -86,7 +100,23 @@ export const gitCommandsData = [
         ],
         realWorld: "You commit your work every time you finish a small, complete task. It creates a clean history that's easy to look back on.",
         imageUrl: "https://picsum.photos/seed/git-commit/600/400",
-        imageAlt: "Visual diagram explaining 'git commit -m' with a flow showing changes being staged, then committed to a branch. Use light blue rounded rectangles for steps, bold black text, and black arrows."
+        imageAlt: "Visual diagram explaining 'git commit -m' with a flow showing changes being staged, then committed to a branch. Use light blue rounded rectangles for steps, bold black text, and black arrows.",
+        flowchart: {
+            nodes: [
+                { id: 'working-dir', label: 'Working Directory', position: { x: 50, y: 50 } },
+                { id: 'staging-area', label: 'Staging Area', position: { x: 300, y: 50 } },
+                { id: 'local-repo', label: 'Local Repository', position: { x: 550, y: 50 } },
+            ],
+            edges: [
+                { from: 'working-dir', to: 'staging-area', label: 'git add <files>' },
+                { from: 'staging-area', to: 'local-repo', label: 'git commit -m "..."' },
+            ],
+            steps: [
+                "Files in the **Working Directory** are modified.",
+                "The `git add` command moves selected changes to the **Staging Area**.",
+                "The `git commit` command takes everything from the **Staging Area** and creates a permanent snapshot in the **Local Repository**."
+            ]
+        }
     },
     {
         category: "Basic Snapshotting",
