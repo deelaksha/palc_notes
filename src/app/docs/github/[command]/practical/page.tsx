@@ -1,13 +1,32 @@
-import { GitSyncGame } from '@/components/git-game/GitSyncGame';
+
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Construction } from 'lucide-react';
 import { gitCommandsData } from '@/lib/git-commands';
+import { GitAddGame } from '@/components/git-game/GitAddGame';
+import { GitCommitGame } from '@/components/git-game/GitCommitGame';
 
 export function generateStaticParams() {
   return gitCommandsData.map((command) => ({
     command: command.name.replace(/\s+/g, '-'),
   }));
+}
+
+function renderGameForCommand(commandName: string | undefined) {
+    switch (commandName) {
+        case 'git add':
+            return <GitAddGame />;
+        case 'git commit':
+            return <GitCommitGame />;
+        default:
+            return (
+                <div className="text-center text-white glass-effect p-12 rounded-2xl">
+                    <Construction className="mx-auto h-16 w-16 mb-4 text-amber-400" />
+                    <h2 className="text-3xl font-bold mb-2">Practical Coming Soon!</h2>
+                    <p className="text-gray-300">An interactive exercise for <code className="font-bold text-neon-blue">git {commandName || 'this command'}</code> is under construction.</p>
+                </div>
+            );
+    }
 }
 
 export default function CommandPracticalPage({
@@ -30,8 +49,18 @@ export default function CommandPracticalPage({
                 </Link>
             </Button>
         </header>
-        <main className="flex-1 flex items-center justify-center -mt-16">
-            <GitSyncGame commandName={command?.name || 'Git'} />
+        <main className="flex-1 flex flex-col items-center justify-center p-4">
+            <div className="text-center mb-12">
+                <h1 className="text-4xl md:text-5xl font-bold gradient-text mb-4 drop-shadow-2xl">
+                    Practical: git {command?.name}
+                </h1>
+                <p className="text-lg text-gray-300 font-light max-w-3xl mx-auto">
+                    {command?.description}
+                </p>
+            </div>
+            <div className="w-full max-w-7xl">
+                {renderGameForCommand(command?.name)}
+            </div>
         </main>
     </div>
   );
