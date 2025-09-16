@@ -1,11 +1,11 @@
 
 import { gitCommandsData } from '@/lib/git-commands';
 import { notFound } from 'next/navigation';
-import { CodeBlock } from '@/components/markdown/CodeBlock';
-import { Badge } from '@/components/ui/badge';
-import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { ArrowRight, BookOpen, Code } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
 
 export function generateStaticParams() {
   return gitCommandsData.map((command) => ({
@@ -13,7 +13,7 @@ export function generateStaticParams() {
   }));
 }
 
-export default function CommandDetailPage({
+export default function CommandHubPage({
   params,
 }: {
   params: { command: string };
@@ -24,96 +24,68 @@ export default function CommandDetailPage({
     notFound();
   }
 
-  const renderTextWithCode = (text: string) => {
-    const parts = text.split(/(`[^`]+`)/g);
-    return parts.map((part, i) => {
-      if (part.startsWith('`') && part.endsWith('`')) {
-        return (
-          <code key={i} className="font-code bg-code-bg keyword-text px-1 py-0.5 rounded-sm text-sm">
-            {part.slice(1, -1)}
-          </code>
-        );
-      }
-      return part;
-    });
-  };
-  
-  const pageContent = `
-# ${command.name}
-
-**Category**: ${command.category}
-**Description**: ${command.description}
-
-## How it works:
-${command.howItWorks.join('\n')}
-
-## Examples:
-${command.examples.map(ex => `### ${ex.text}\n\`\`\`\n${ex.code}\n\`\`\``).join('\n\n')}
-
-## Real-world application:
-${command.realWorld}
-`;
-
+  const options = [
+    {
+      name: 'Theory',
+      description: `Learn how the '${command.name}' command works with examples.`,
+      href: `/docs/github/${params.command}/theory`,
+      icon: <BookOpen className="size-8" />,
+    },
+    {
+      name: 'Practical',
+      description: 'A blank canvas for hands-on practice.',
+      href: `/docs/github/${params.command}/practical`,
+      icon: <Code className="size-8" />,
+    },
+  ];
 
   return (
-    <div className="flex">
-    <div className="max-w-4xl mx-auto p-4 md:p-8 space-y-8 flex-1">
-      <Button asChild variant="ghost" className="mb-4">
-        <Link href="/docs/github">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to All Commands
-        </Link>
-      </Button>
+    <div className="flex flex-col flex-1">
+      <main className="flex-1 p-4 md:p-8 lg:p-12">
+         <Button asChild variant="ghost" className="mb-8">
+            <Link href="/docs/github">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to All Commands
+            </Link>
+        </Button>
+        <header className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-primary font-headline mb-2">
+            git {command.name}
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            Choose your learning path for this command.
+          </p>
+        </header>
 
-      <header className="text-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-foreground mb-2 font-headline">
-          The <span className="text-primary">{command.name}</span> Spell
-        </h1>
-        <p className="text-lg text-muted-foreground">{command.description}</p>
-        <div className="mt-4">
-          <Badge variant="secondary">{command.category}</Badge>
-        </div>
-      </header>
-
-      <section className="bg-card p-6 md:p-8 rounded-2xl shadow-xl border border-border">
-        <h2 className="text-3xl font-bold text-foreground mb-6 pb-2 border-b-2 border-primary">
-          Chapter 1: How the Spell Works
-        </h2>
-        
-        <div className="space-y-4 text-muted-foreground">
-          {command.howItWorks.map((item, index) => (
-            <p key={index}>{renderTextWithCode(item)}</p>
-          ))}
-        </div>
-      </section>
-
-      <section className="bg-card p-6 md:p-8 rounded-2xl shadow-xl border border-border">
-        <h2 className="text-3xl font-bold text-foreground mb-6 pb-2 border-b-2 border-secondary-accent">
-          Chapter 2: Casting Examples
-        </h2>
-        <div className="space-y-8">
-          {command.examples.map((ex, index) => (
-            <div key={index}>
-              <h3 className="text-xl font-bold command-text mb-2">Example {index + 1}:</h3>
-              <p className="text-muted-foreground mb-4">{ex.text}</p>
-              <CodeBlock className="bg-code-bg text-code-text">
-                {ex.code}
-              </CodeBlock>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="bg-card p-6 md:p-8 rounded-2xl shadow-xl border border-border">
-        <h2 className="text-3xl font-bold text-foreground mb-6 pb-2 border-b-2 border-tertiary-accent">
-          Chapter 3: A Real-World Quest
-        </h2>
-        <p className="text-muted-foreground">{command.realWorld}</p>
-        <div className="mt-6 p-4 rounded-xl bg-card-nested border-l-4 border-l-yellow-400">
-          <p><span className="text-tips font-bold">Quest Tip:</span> Mastering the <code className="font-code bg-code-bg command-text px-1 py-0.5 rounded-sm text-sm">{command.name}</code> spell will make you a true version control champion!</p>
-        </div>
-      </section>
-    </div>
+        <section className="w-full max-w-3xl mx-auto">
+          <div className="grid gap-6 md:grid-cols-2">
+            {options.map((option) => (
+              <Link key={option.name} href={option.href} className="group">
+                <Card className="h-full transition-all duration-300 ease-in-out group-hover:border-primary group-hover:shadow-lg group-hover:shadow-primary/10 group-hover:-translate-y-1">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="bg-muted p-3 rounded-md text-foreground">
+                          {option.icon}
+                        </div>
+                        <div>
+                          <CardTitle className="font-headline">
+                            {option.name}
+                          </CardTitle>
+                          <CardDescription>
+                            {option.description}
+                          </CardDescription>
+                        </div>
+                      </div>
+                      <ArrowRight className="size-5 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
+                    </div>
+                  </CardHeader>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </section>
+      </main>
     </div>
   );
 }
