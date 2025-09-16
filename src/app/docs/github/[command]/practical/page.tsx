@@ -18,6 +18,11 @@ import { GitPullGame } from '@/components/git-game/GitPullGame';
 import { GitPushGame } from '@/components/git-game/GitPushGame';
 import { GitLogGame } from '@/components/git-game/GitLogGame';
 import { GitDiffGame } from '@/components/git-game/GitDiffGame';
+import { GitResetGame } from '@/components/git-game/GitResetGame';
+import { GitRevertGame } from '@/components/git-game/GitRevertGame';
+import { GitStashGame } from '@/components/git-game/GitStashGame';
+import { GitTagGame } from '@/components/git-game/GitTagGame';
+import { GitCherryPickGame } from '@/components/git-game/GitCherryPickGame';
 
 export function generateStaticParams() {
   return gitCommandsData.map((command) => ({
@@ -57,6 +62,16 @@ function renderGameForCommand(commandName: string | undefined) {
             return <GitLogGame />;
         case 'git diff':
             return <GitDiffGame />;
+        case 'git reset':
+            return <GitResetGame />;
+        case 'git revert':
+            return <GitRevertGame />;
+        case 'git stash':
+            return <GitStashGame />;
+        case 'git tag':
+            return <GitTagGame />;
+        case 'git cherry-pick':
+            return <GitCherryPickGame />;
         default:
             return (
                 <div className="text-center text-white glass-effect p-12 rounded-2xl">
