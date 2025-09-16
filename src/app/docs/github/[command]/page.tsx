@@ -88,7 +88,7 @@ ${command.realWorld}
                 width={600} 
                 height={400} 
                 className="rounded-lg border shadow-md mx-auto"
-                data-ai-hint={`git ${command.name.toLowerCase()} flowchart`}
+                data-ai-hint={`${command.name.toLowerCase()} flowchart`}
             />
         </div>
 
