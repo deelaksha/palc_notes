@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, BookOpen, Code, FileCode, Github, Info, Regex, Terminal } from 'lucide-react';
+import { ArrowRight, BookOpen, Code, FileCode, Github, Info, Network, Regex, Terminal } from 'lucide-react';
 import Link from 'next/link';
 
 const categories = [
@@ -46,6 +46,12 @@ const categories = [
         href: '/docs/notes',
         icon: <BookOpen className="size-8" />,
     },
+    {
+        name: 'Network Simulation',
+        description: 'Step-by-step guide to running the ARU-PALC network simulation.',
+        href: '/docs/network-simulation',
+        icon: <Network className="size-8" />,
+    }
 ];
 
 export default function HomePage() {
