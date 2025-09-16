@@ -138,7 +138,7 @@ export const gitCommandsData = [
         ],
         realWorld: "You use `checkout` whenever you need to switch what you're working on. It's a fundamental part of the daily Git workflow.",
         imageUrl: "https://picsum.photos/seed/git-checkout/600/400",
-        imageAlt: "A 'git checkout' flowchart. Before: The main branch has commits A, B, and C. HEAD points to C, and the Working Directory contains files from C. After running 'git checkout B', HEAD now points to commit B. The Working Directory is updated with files from commit B."
+        imageAlt: "A clean, simple flowchart diagram explaining the git checkout process. Use colored boxes and arrows to represent each step. The diagram should start with a blue box labeled ‘git checkout’, followed by a green box labeled ‘Switch to a branch’. From there, two arrows should point to ‘Update working tree’ (green box) and ‘Update HEAD’ (orange box). Both should lead to ‘Update index’ (orange box). Use a modern sans-serif font in black, with a white background and rounded rectangles for each step. The flowchart should be easy to read and visually appealing.”"
     },
     {
         category: "Branching & Merging",
