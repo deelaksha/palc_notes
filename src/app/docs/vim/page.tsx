@@ -139,7 +139,24 @@ Use these keys like arrow keys:
 
 ---
 
-## ✨ 8. Working with Windows & Tabs
+## ✨ 8. Managing Buffers
+
+A "buffer" is a file loaded into Vim's memory for editing. You can have many files open at once, each in its own buffer.
+
+| Command | What it does |
+|---|---|
+| \`:ls\` or \`:buffers\` | **L**i**s**t all open buffers. |
+| \`:b <number or name>\` | Go to a specific **b**uffer by its number or partial name. |
+| \`:bn\` | Go to the **b**uffer **n**ext. |
+| \`:bp\` | Go to the **b**uffer **p**revious. |
+| \`:bd\` | **D**elete (close) the current **b**uffer. |
+| \`:b#\` | Switch to the previously open buffer (the one with the # symbol in \`:ls\`). |
+
+👉 Example: Type \`:ls\` to see all open files. If \`notes.txt\` is buffer 2, you can jump to it with \`:b 2\` or \`:b notes\`.
+
+---
+
+## ✨ 9. Working with Windows & Tabs
 
 | Command | What it does |
 |---|---|
@@ -154,7 +171,7 @@ Use these keys like arrow keys:
 
 ---
 
-## ✨ 9. Marks & Jumps
+## ✨ 10. Marks & Jumps
 
 | Command | What it does |
 |---|---|
@@ -166,7 +183,7 @@ Use these keys like arrow keys:
 
 ---
 
-## ✨ 10. Useful Shortcuts
+## ✨ 11. Useful Shortcuts
 
 | Command | What it does |
 |---|---|
@@ -382,7 +399,7 @@ export default function VimPage() {
                     ))}
                      <AccordionItem value="code-navigation" className="border rounded-lg bg-card overflow-hidden">
                         <AccordionTrigger className="px-6 py-4 font-headline text-lg hover:no-underline">
-                            ✨ 11. Code Navigation
+                            ✨ 12. Code Navigation
                         </AccordionTrigger>
                         <AccordionContent className="px-6 pt-0 pb-6">
                             <Accordion type="single" collapsible className="w-full space-y-4">
