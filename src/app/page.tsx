@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, BookOpen, Code, Github, Regex, Terminal } from 'lucide-react';
+import { ArrowRight, BookOpen, Code, Github, Regex, Terminal, Network } from 'lucide-react';
 import Link from 'next/link';
 
 const categories = [
@@ -33,6 +33,12 @@ const categories = [
         description: 'Master Regular Expressions from basics to advanced patterns.',
         href: '/regex',
         icon: <Regex className="size-8" />,
+    },
+    {
+        name: 'Networking',
+        description: 'Learn about network protocols, models, and concepts.',
+        href: '/docs/networking',
+        icon: <Network className="size-8" />,
     },
     {
         name: 'Notes',

@@ -5,48 +5,48 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, FileTerminal, Network, Layers } from 'lucide-react';
+import { ArrowRight, Layers } from 'lucide-react';
 import Link from 'next/link';
 
-const notes = [
+const topics = [
   {
-    title: 'Network Simulation Guide',
-    description: 'Guide to network simulation, added on 09-16-2025.',
-    href: '/docs/notes/network-simulation',
-    icon: <Network className="size-8" />,
+    title: 'OSI Model Explained',
+    description: 'A deep dive into the 7 layers of the OSI model with animations.',
+    href: '/docs/networking/osi-model',
+    icon: <Layers className="size-8" />,
   },
 ];
 
-export default function NotesPage() {
+export default function NetworkingPage() {
   return (
     <main className="flex-1 p-4 md:p-8 lg:p-12">
       <header className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-bold text-primary font-headline mb-2">
-          Miscellaneous Notes
+          Networking Concepts
         </h1>
         <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-          A collection of AI-generated notes, script analyses, and other thoughts.
+          Explore fundamental networking protocols, models, and concepts.
         </p>
       </header>
 
       <section className="w-full">
         <div className="container px-4 md:px-6">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {notes.map((note) => (
-              <Link key={note.title} href={note.href} className="group">
+            {topics.map((topic) => (
+              <Link key={topic.title} href={topic.href} className="group">
                 <Card className="h-full transition-all duration-300 ease-in-out group-hover:border-primary group-hover:shadow-lg group-hover:shadow-primary/10 group-hover:-translate-y-1">
                   <CardHeader>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
                         <div className="bg-muted p-3 rounded-md text-foreground">
-                          {note.icon}
+                          {topic.icon}
                         </div>
                         <div>
                           <CardTitle className="font-headline">
-                            {note.title}
+                            {topic.title}
                           </CardTitle>
                           <CardDescription>
-                            {note.description}
+                            {topic.description}
                           </CardDescription>
                         </div>
                       </div>

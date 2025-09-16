@@ -162,9 +162,9 @@ export default function OSIModelPage() {
         <main className="flex-1 p-4 md:p-8 lg:p-12">
             <div className="max-w-5xl mx-auto">
                 <Button asChild variant="ghost" className="mb-8">
-                    <Link href="/docs/notes">
+                    <Link href="/docs/networking">
                         <ArrowLeft className="mr-2 h-4 w-4" />
-                        Back to Notes
+                        Back to Networking
                     </Link>
                 </Button>
                 <header className="text-center mb-12">
@@ -224,4 +224,3 @@ export default function OSIModelPage() {
         </main>
     );
 }
-

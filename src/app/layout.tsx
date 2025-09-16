@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/sidebar';
 import { Header } from '@/components/layout/Header';
 import Link from 'next/link';
-import { BookOpen, Code, Github, FileCode, Regex, Terminal } from 'lucide-react';
+import { BookOpen, Code, Github, FileCode, Regex, Terminal, Network } from 'lucide-react';
 import { Logo } from '@/components/icons';
 import { Chatbot } from '@/components/chatbot/Chatbot';
 import { RegexProvider } from '@/context/RegexContext';
@@ -57,6 +57,11 @@ const menuItems = [
     href: '/regex',
     icon: <Regex />,
     label: 'Regex',
+  },
+   {
+    href: '/docs/networking',
+    icon: <Network />,
+    label: 'Networking',
   },
   {
     href: '/docs/notes',
