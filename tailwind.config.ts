@@ -1,4 +1,3 @@
-
 import type { Config } from 'tailwindcss';
 
 export default {
@@ -181,7 +180,7 @@ export default {
         'pulse-custom': 'pulse-custom 2s infinite',
         'shake-custom': 'shake-custom 1s infinite',
         'particle-burst': 'particle-burst 1s ease-out',
-        'pulse-once': 'pulse-once 1s forwards',
+        'pulse-once': 'pulse-once 0.7s forwards',
         'confetti-fall': 'confetti-fall 2s ease-out forwards',
       },
       textShadow: {

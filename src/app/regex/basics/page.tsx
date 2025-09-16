@@ -1,4 +1,4 @@
-
+import { InteractiveRegexExample } from '@/components/regex/InteractiveRegexExample';
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
 
 const content = `
@@ -33,12 +33,15 @@ Let's start with the building blocks of our secret language.
 
 ### Literal Characters
 The simplest regex is just a plain string of characters. The regex \`hello\` will find the exact substring "hello" in your text.
+`;
 
-- **Input Text**: "hello world"
-- **Regex Pattern**: \`hello\`
-- **Explanation**: The engine looks for the character 'h', followed by 'e', 'l', 'l', 'o'.
-- **Output**: "hello"
+const example1 = {
+  pattern: 'hello',
+  text: 'hello world',
+  explanation: `The engine looks for the character 'h', followed by 'e', 'l', 'l', 'o'.`
+};
 
+const content2 = `
 ### Special Characters (Metacharacters)
 These are characters with special meanings. They are the wizards of our language.
 
@@ -51,13 +54,16 @@ These are characters with special meanings. They are the wizards of our language
 
 ### Escaping Characters
 What if you actually want to find a dot \`.\` or a plus \`+\`? You use a backslash \`\\\` to tell the engine, "Hey, this next character is just a normal guy, not a wizard."
+`;
 
-- **Input Text**: "The file is file.txt"
-- **Regex Pattern**: \`file\\.txt\`
-- **Explanation**: We escape the dot with a backslash \`\\.\` to match a literal dot.
-- **Output**: "file.txt"
-- **Pitfall**: Forgetting to escape special characters is a very common mistake! The pattern \`file.txt\` would also match "file-txt" or "file@txt".
+const example2 = {
+  pattern: 'file\\.txt',
+  text: 'The file is file.txt',
+  explanation: `We escape the dot with a backslash \`\\.\` to match a literal dot.
+- **Pitfall**: Forgetting to escape special characters is a very common mistake! The pattern \`file.txt\` would also match "file-txt" or "file@txt".`
+};
 
+const content3 = `
 ### Character Sets \`[]\`
 Character sets, or character classes, let you match one character from a specific group.
 
@@ -86,6 +92,10 @@ export default function RegexBasicsPage() {
         <div className="flex">
             <main className="flex-1">
                 <MarkdownRenderer markdown={content} />
+                <InteractiveRegexExample {...example1} />
+                <MarkdownRenderer markdown={content2} />
+                <InteractiveRegexExample {...example2} />
+                <MarkdownRenderer markdown={content3} />
             </main>
         </div>
     );

@@ -19,6 +19,7 @@ import Link from 'next/link';
 import { BookOpen, Code, Github, FileCode, Regex, Terminal } from 'lucide-react';
 import { Logo } from '@/components/icons';
 import { Chatbot } from '@/components/chatbot/Chatbot';
+import { RegexProvider } from '@/context/RegexContext';
 
 const fontInter = Inter({
   subsets: ['latin'],
@@ -75,41 +76,41 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           fontJetBrainsMono.variable
         )}
       >
-        <SidebarProvider>
-          <Sidebar>
-            <SidebarHeader>
-              <Logo />
-            </SidebarHeader>
-            <SidebarContent>
-              <SidebarMenu>
-                <SidebarGroup>
-                  <SidebarMenuItem>
-                    {menuItems.map((item) => (
-                      <Link href={item.href} key={item.label}>
-                        <SidebarMenuButton
-                          variant="ghost"
-                          className="w-full justify-start"
-                        >
-                          {item.icon}
-                          <span>{item.label}</span>
-                        </SidebarMenuButton>
-                      </Link>
-                    ))}
-                  </SidebarMenuItem>
-                </SidebarGroup>
-              </SidebarMenu>
-            </SidebarContent>
-          </Sidebar>
-          <SidebarInset>
-            <Header />
-            <main>{children}</main>
-          </SidebarInset>
-        </SidebarProvider>
-        <Chatbot />
-        <Toaster />
+        <RegexProvider>
+          <SidebarProvider>
+            <Sidebar>
+              <SidebarHeader>
+                <Logo />
+              </SidebarHeader>
+              <SidebarContent>
+                <SidebarMenu>
+                  <SidebarGroup>
+                    <SidebarMenuItem>
+                      {menuItems.map((item) => (
+                        <Link href={item.href} key={item.label}>
+                          <SidebarMenuButton
+                            variant="ghost"
+                            className="w-full justify-start"
+                          >
+                            {item.icon}
+                            <span>{item.label}</span>
+                          </SidebarMenuButton>
+                        </Link>
+                      ))}
+                    </SidebarMenuItem>
+                  </SidebarGroup>
+                </SidebarMenu>
+              </SidebarContent>
+            </Sidebar>
+            <SidebarInset>
+              <Header />
+              <main>{children}</main>
+            </SidebarInset>
+          </SidebarProvider>
+          <Chatbot />
+          <Toaster />
+        </RegexProvider>
       </body>
     </html>
   );
 }
-
-    
