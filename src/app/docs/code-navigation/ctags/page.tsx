@@ -1,6 +1,5 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
-import { Chatbot } from '@/components/chatbot/Chatbot';
 
 const ctagsMarkdownContent = `
 # 🏷️ Code Navigation with Ctags

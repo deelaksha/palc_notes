@@ -1,6 +1,5 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
-import { Chatbot } from '@/components/chatbot/Chatbot';
 
 const cscopeMarkdownContent = `
 # 🏷️ Code Navigation with Cscope
