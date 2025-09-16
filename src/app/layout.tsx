@@ -49,11 +49,6 @@ const menuItems = [
     icon: <Github />,
     label: 'Git Tutorial',
   },
-    {
-    href: '/code-navigation',
-    icon: <FileCode />,
-    label: 'Code Navigation',
-  },
   {
     href: '/regex',
     icon: <Regex />,

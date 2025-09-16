@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, BookOpen, Code, FileCode, Github, Terminal } from 'lucide-react';
+import { ArrowRight, BookOpen, Code, FileCode } from 'lucide-react';
 import Link from 'next/link';
 
 const categories = [
@@ -16,10 +16,16 @@ const categories = [
         icon: <BookOpen className="size-8" />,
     },
     {
-        name: 'Code Navigation',
-        description: 'Learn to use Ctags and Cscope for powerful "Go to Definition" and "Find References" functionality.',
-        href: '/code-navigation',
+        name: 'Ctags',
+        description: 'Use Ctags for lightning-fast "Go to Definition" functionality.',
+        href: '/docs/code-navigation/ctags',
         icon: <FileCode className="size-8" />,
+    },
+    {
+        name: 'Cscope',
+        description: 'Use Cscope for powerful "Find References" and contextual code queries.',
+        href: '/docs/code-navigation/cscope',
+        icon: <Code className="size-8" />,
     },
 ];
 
