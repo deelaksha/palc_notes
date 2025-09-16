@@ -252,3 +252,59 @@
     @apply bg-card-nested font-bold;
   }
 }
+
+
+/* Git Game Styles */
+.gradient-text {
+    background: linear-gradient(45deg, #00f3ff, #ff006e, #00ff41);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradient-shift 4s ease-in-out infinite;
+}
+
+.glass-effect {
+    backdrop-filter: blur(20px);
+    background: rgba(26, 26, 46, 0.8);
+}
+
+.flying-commit {
+    position: absolute;
+    background: linear-gradient(45deg, #00f3ff, #6c5ce7);
+    transition: all 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    pointer-events: none;
+    z-index: 50;
+    white-space: nowrap;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #00f3ff;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 40;
+}
+
+.shimmer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.shimmer:hover::before {
+    left: 100%;
+}
+
+.animated-bg {
+    background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 226, 0.2) 0%, transparent 50%);
+}

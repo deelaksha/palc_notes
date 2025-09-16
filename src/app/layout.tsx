@@ -3,7 +3,7 @@
 
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
-import { Inter, Source_Code_Pro } from 'next/font/google';
+import { Inter, Source_Code_Pro, JetBrains_Mono } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import {
   SidebarProvider,
@@ -31,6 +31,12 @@ const fontInter = Inter({
 const fontSourceCodePro = Source_Code_Pro({
   subsets: ['latin'],
   variable: '--font-source-code-pro',
+});
+
+const fontJetBrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jetbrains-mono',
+  weight: ['300', '400', '600', '700'],
 });
 
 const menuItems = [
@@ -68,7 +74,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         className={cn(
           'min-h-screen bg-background font-body antialiased',
           fontInter.variable,
-          fontSourceCodePro.variable
+          fontSourceCodePro.variable,
+          fontJetBrainsMono.variable
         )}
       >
         <SidebarProvider>

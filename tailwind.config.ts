@@ -21,6 +21,7 @@ export default {
         body: ['var(--font-inter)', 'sans-serif'],
         headline: ['var(--font-inter)', 'sans-serif'],
         code: ['var(--font-source-code-pro)', 'monospace'],
+        mono: ['var(--font-jetbrains-mono)', 'monospace'],
       },
       colors: {
         background: 'hsl(var(--background))',
@@ -84,6 +85,14 @@ export default {
         'primary-accent': 'var(--primary-accent)',
         'secondary-accent': 'var(--secondary-accent)',
         'tertiary-accent': 'var(--tertiary-accent)',
+
+        // Git Game Theme
+        'neon-blue': '#00f3ff',
+        'neon-green': '#00ff41',
+        'neon-pink': '#ff006e',
+        'dark-primary': '#0a0a0f',
+        'dark-secondary': '#1a1a2e',
+        'accent-purple': '#6c5ce7',
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -122,6 +131,33 @@ export default {
                 transform: 'translateY(0)'
             }
         },
+        // Git Game Animations
+        'float': {
+          '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+          '33%': { transform: 'translateY(-20px) rotate(1deg)' },
+          '66%': { transform: 'translateY(10px) rotate(-1deg)' },
+        },
+        'gradient-shift': {
+            '0%, 100%': { 'background-position': '0% 50%' },
+            '50%': { 'background-position': '100% 50%' },
+        },
+        'slide-in-up': {
+            'from': { opacity: '0', transform: 'translateY(20px)' },
+            'to': { opacity: '1', transform: 'translateY(0)' },
+        },
+        'pulse-custom': {
+            '0%, 100%': { transform: 'scale(1)', 'box-shadow': '0 0 0 0 rgba(0, 255, 65, 0.7)' },
+            '50%': { transform: 'scale(1.1)', 'box-shadow': '0 0 0 20px rgba(0, 255, 65, 0)' },
+        },
+        'shake-custom': {
+            '0%, 100%': { transform: 'translateX(0)' },
+            '25%': { transform: 'translateX(-5px)' },
+            '75%': { transform: 'translateX(5px)' },
+        },
+        'particle-burst': {
+            'from': { transform: 'translate(0, 0) scale(1)', opacity: '1' },
+            'to': { transform: 'translate(var(--x), var(--y)) scale(0)', opacity: '0' }
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -129,10 +165,20 @@ export default {
         'gradient-xy': 'gradient-xy 15s ease infinite',
         'fade-in-up': 'fade-in-up 0.5s ease-out forwards',
         'gradient': 'gradient-animation 18s ease infinite',
+        // Git Game Animations
+        'float': 'float 20s ease-in-out infinite',
+        'gradient-shift': 'gradient-shift 4s ease-in-out infinite',
+        'slide-in-up': 'slide-in-up 0.5s ease',
+        'pulse-custom': 'pulse-custom 2s infinite',
+        'shake-custom': 'shake-custom 1s infinite',
+        'particle-burst': 'particle-burst 1s ease-out'
       },
       textShadow: {
         glow: '0 0 8px hsl(var(--primary) / 0.8)',
       },
+      backdropBlur: {
+        'xs': '2px'
+      }
     },
   },
   plugins: [require('tailwindcss-animate'),
