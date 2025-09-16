@@ -5,10 +5,16 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, FileTerminal, Network } from 'lucide-react';
+import { ArrowRight, FileTerminal, Network, Layers } from 'lucide-react';
 import Link from 'next/link';
 
 const notes = [
+  {
+    title: 'OSI Model Explained',
+    description: 'A deep dive into the 7 layers of the OSI model with animations.',
+    href: '/docs/notes/osi-model',
+    icon: <Layers className="size-8" />,
+  },
   {
     title: 'Network Simulation Guide',
     description: 'Guide to network simulation, added on 09-16-2025.',
