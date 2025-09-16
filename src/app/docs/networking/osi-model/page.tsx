@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { ArrowLeft, ArrowRight, Layers, Play, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { OsiLayerGame } from '@/components/networking/OsiLayerGame';
 
 const layersData = [
   { name: 'Application', color: 'bg-red-500', description: 'Provides network services directly to users. Protocols: HTTP, FTP, SMTP, DNS.' },
@@ -17,7 +18,7 @@ const layersData = [
   { name: 'Network', color: 'bg-blue-500', description: 'Handles routing, addressing, and packet forwarding. Protocols: IP, ICMP.' },
   { name: 'Data Link', color: 'bg-indigo-500', description: 'Manages error detection, framing, and MAC addressing. Protocols: Ethernet, PPP.' },
   { name: 'Physical', color: 'bg-purple-500', description: 'Transmission of raw bits over a physical medium (cables, wireless).' },
-];
+] as const;
 
 const animationSteps = [
     { from: 'Sender', to: 'Sender', layer: 0, text: 'User data is created at the Application Layer.' },
@@ -160,7 +161,7 @@ function OSIModelAnimation() {
 export default function OSIModelPage() {
     return (
         <main className="flex-1 p-4 md:p-8 lg:p-12">
-            <div className="max-w-5xl mx-auto">
+            <div className="max-w-6xl mx-auto">
                 <Button asChild variant="ghost" className="mb-8">
                     <Link href="/docs/networking">
                         <ArrowLeft className="mr-2 h-4 w-4" />
@@ -180,20 +181,27 @@ export default function OSIModelPage() {
                 <div className="space-y-12">
                     <section>
                         <h2 className="text-3xl font-headline font-bold mb-6 pb-2 border-b">Layers Explained</h2>
-                        <div className="grid md:grid-cols-2 gap-6">
+                        <div className="grid md:grid-cols-1 gap-8">
                             {layersData.map((layer, index) => (
                                 <Card key={layer.name} className="hover:border-primary transition-colors">
-                                    <CardHeader>
-                                        <CardTitle className="flex items-center gap-3">
-                                            <span className={cn("flex items-center justify-center size-8 rounded-full text-white font-bold", layer.color)}>
-                                                {7 - index}
-                                            </span>
-                                            {layer.name} Layer
-                                        </CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <p className="text-muted-foreground">{layer.description}</p>
-                                    </CardContent>
+                                    <div className="grid md:grid-cols-3 items-center">
+                                        <div className="md:col-span-2">
+                                            <CardHeader>
+                                                <CardTitle className="flex items-center gap-3">
+                                                    <span className={cn("flex items-center justify-center size-8 rounded-full text-white font-bold", layer.color)}>
+                                                        {7 - index}
+                                                    </span>
+                                                    {layer.name} Layer
+                                                </CardTitle>
+                                            </CardHeader>
+                                            <CardContent>
+                                                <p className="text-muted-foreground">{layer.description}</p>
+                                            </CardContent>
+                                        </div>
+                                        <div className="md:col-span-1 p-4 h-full">
+                                           <OsiLayerGame layer={layer.name} />
+                                        </div>
+                                    </div>
                                 </Card>
                             ))}
                         </div>
