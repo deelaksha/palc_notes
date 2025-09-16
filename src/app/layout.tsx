@@ -1,6 +1,3 @@
-
-'use client';
-
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { Inter, Source_Code_Pro, JetBrains_Mono } from 'next/font/google';
@@ -114,3 +111,5 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
+
+    
