@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { GitBranch, GitCommit, Plus, Terminal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -34,12 +34,14 @@ const Branch = ({ branch, commits, activeBranch, onSwitch }: { branch: any, comm
                 </Button>
             </div>
             <div className="flex items-center gap-2 pl-4">
+                <AnimatePresence>
                 {commits.map((commit, index) => (
                     <React.Fragment key={commit.id}>
                         <Commit commit={commit} isHead={isCurrentBranch && index === commits.length - 1} />
                         {index < commits.length - 1 && <div className="w-8 h-0.5 bg-white/30" />}
                     </React.Fragment>
                 ))}
+                </AnimatePresence>
             </div>
         </motion.div>
     );
@@ -176,6 +178,7 @@ export function GitBranchGame() {
                 <div className="md:col-span-2">
                     <h3 className="text-lg font-bold mb-4">Repository History</h3>
                     <div className="p-4 rounded-lg bg-dark-primary min-h-[300px] overflow-x-auto">
+                        <AnimatePresence>
                         {Object.values(branches).map(branch => (
                             <Branch 
                                 key={branch.name}
@@ -185,6 +188,7 @@ export function GitBranchGame() {
                                 onSwitch={handleSwitchBranch}
                             />
                         ))}
+                        </AnimatePresence>
                     </div>
                 </div>
             </div>

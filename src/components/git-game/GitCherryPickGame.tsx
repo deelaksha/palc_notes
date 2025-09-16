@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { GitBranch, GitCommit, GitPullRequest } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -36,12 +36,14 @@ const BranchLine = ({ commits, name, isActive, isRebasing }: { commits: any[], n
                 <h3 className={`text-lg font-bold ${isActive ? 'text-neon-green' : 'text-white/50'}`}>{name}</h3>
             </div>
             <div className="flex items-center gap-2">
-                {commits.map((c, i) => (
-                    <React.Fragment key={c.id}>
-                        {i > 0 && <div className="w-8 h-0.5 bg-white/30" />}
-                        <Commit commit={c} isHead={isActive && i === commits.length - 1} isCherryPicked={c.isCherryPicked} />
-                    </React.Fragment>
-                ))}
+                <AnimatePresence>
+                    {commits.map((c, i) => (
+                        <React.Fragment key={c.id}>
+                            {i > 0 && <div className="w-8 h-0.5 bg-white/30" />}
+                            <Commit commit={c} isHead={isActive && i === commits.length - 1} isCherryPicked={c.isCherryPicked} />
+                        </React.Fragment>
+                    ))}
+                </AnimatePresence>
             </div>
         </div>
     );
