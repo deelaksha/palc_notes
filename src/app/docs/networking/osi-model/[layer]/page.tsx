@@ -1,6 +1,4 @@
 
-'use client';
-
 import { notFound } from 'next/navigation';
 import { osiLayersData } from '@/lib/osi-layers';
 import { OsiLayerGame } from '@/components/networking/OsiLayerGame';
