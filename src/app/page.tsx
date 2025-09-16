@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, BookOpen, Code, FileCode, Github, Info, Network, Regex, Terminal } from 'lucide-react';
+import { ArrowRight, BookOpen, Code, Github, Regex, Terminal } from 'lucide-react';
 import Link from 'next/link';
 
 const categories = [
@@ -29,12 +29,6 @@ const categories = [
         icon: <Github className="size-8" />,
     },
     {
-        name: 'Code Navigation',
-        description: 'Tools to search, understand, and navigate large codebases.',
-        href: '/docs/code-navigation',
-        icon: <FileCode className="size-8" />,
-    },
-    {
         name: 'Regex',
         description: 'Master Regular Expressions from basics to advanced patterns.',
         href: '/regex',
@@ -46,12 +40,6 @@ const categories = [
         href: '/docs/notes',
         icon: <BookOpen className="size-8" />,
     },
-    {
-        name: 'Network Simulation',
-        description: 'Step-by-step guide to running the ARU-PALC network simulation.',
-        href: '/docs/network-simulation',
-        icon: <Network className="size-8" />,
-    }
 ];
 
 export default function HomePage() {

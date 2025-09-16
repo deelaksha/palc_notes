@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/sidebar';
 import { Header } from '@/components/layout/Header';
 import Link from 'next/link';
-import { BookOpen, Code, FileCode, Github, Network, Regex, Terminal } from 'lucide-react';
+import { BookOpen, Code, Github, Regex, Terminal } from 'lucide-react';
 import { Logo } from '@/components/icons';
 import { Chatbot } from '@/components/chatbot/Chatbot';
 
@@ -48,11 +48,6 @@ const menuItems = [
     href: '/docs/github',
     icon: <Github />,
     label: 'Git Tutorial',
-  },
-  {
-    href: '/docs/code-navigation',
-    icon: <FileCode />,
-    label: 'Code Navigation',
   },
   {
     href: '/regex',
