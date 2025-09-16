@@ -8,9 +8,6 @@ type GitCommand = {
     howItWorks: string[];
     examples: { code: string; text: string }[];
     realWorld: string;
-    imageUrl: string;
-    imageAlt: string;
-    flowchart?: FlowchartProps;
 };
 
 export const gitCommandsData: GitCommand[] = [
@@ -30,8 +27,6 @@ export const gitCommandsData: GitCommand[] = [
             { code: 'git config --global alias.co checkout', text: "Creates a super-fast spell `git co` that does the same thing as `git checkout`." }
         ],
         realWorld: "This is the very first spell you cast after installing Git. It's like creating your character before starting a new game!",
-        imageUrl: "https://picsum.photos/seed/git-config/600/400",
-        imageAlt: "Flowchart for 'git config' showing how the command sets user.name and user.email in a global configuration file. Use light blue rounded rectangles for steps, bold black text, and black arrows."
     },
     {
         category: "Getting & Creating Projects",
@@ -47,8 +42,6 @@ export const gitCommandsData: GitCommand[] = [
             { code: "git init my-awesome-quest", text: "Creates a new folder for your quest and puts the Git treasure chest inside it." }
         ],
         realWorld: "This is the first step for any new project you want to protect with Git. It's like planting a flag and saying, 'This land is under my version control!'",
-        imageUrl: "https://picsum.photos/seed/git-init/600/400",
-        imageAlt: "Flowchart for 'git init' showing a regular folder being transformed into a Git repository with a new, empty .git directory inside. Use light blue rounded rectangles, bold text, and black arrows."
     },
     {
         category: "Getting & Creating Projects",
@@ -64,8 +57,6 @@ export const gitCommandsData: GitCommand[] = [
             { code: "git clone git@github.com:me/my-quest.git my-epic-adventure", text: "Duplicates your own project and gives the folder a new, epic name." }
         ],
         realWorld: "This is how you join a team or start working on an open-source project. You clone it to get your own copy of the code.",
-        imageUrl: "https://picsum.photos/seed/git-clone/600/400",
-        imageAlt: "Flowchart for 'git clone' illustrating a remote repository being copied to a local computer, creating a new local repository linked to the remote 'origin'. Use light blue rounded rectangles, bold text, and black arrows."
     },
     {
         category: "Basic Snapshotting",
@@ -82,8 +73,6 @@ export const gitCommandsData: GitCommand[] = [
             { code: "git add .", text: "Packs everything you've worked on in this area." }
         ],
         realWorld: "You use `git add` right before you make a `git commit`. It’s the 'get ready' step before saving your progress.",
-        imageUrl: "https://picsum.photos/seed/git-add/600/400",
-        imageAlt: "Flow diagram of 'git add' showing files moving from the 'Working Directory' to the 'Staging Area'. Use light blue rounded boxes, bold labels, and a clear black arrow indicating the flow."
     },
     {
         category: "Basic Snapshotting",
@@ -99,24 +88,6 @@ export const gitCommandsData: GitCommand[] = [
             { code: 'git commit --amend -m "Found the secret key and opened the door"', text: "Corrects your last save message to be more accurate." }
         ],
         realWorld: "You commit your work every time you finish a small, complete task. It creates a clean history that's easy to look back on.",
-        imageUrl: "https://picsum.photos/seed/git-commit/600/400",
-        imageAlt: "Visual diagram explaining 'git commit -m' with a flow showing changes being staged, then committed to a branch. Use light blue rounded rectangles for steps, bold black text, and black arrows.",
-        flowchart: {
-            nodes: [
-                { id: 'working-dir', label: 'Working Directory', position: { x: 50, y: 50 } },
-                { id: 'staging-area', label: 'Staging Area', position: { x: 300, y: 50 } },
-                { id: 'local-repo', label: 'Local Repository', position: { x: 550, y: 50 } },
-            ],
-            edges: [
-                { from: 'working-dir', to: 'staging-area', label: 'git add <files>' },
-                { from: 'staging-area', to: 'local-repo', label: 'git commit -m "..."' },
-            ],
-            steps: [
-                "Files in the **Working Directory** are modified.",
-                "The `git add` command moves selected changes to the **Staging Area**.",
-                "The `git commit` command takes everything from the **Staging Area** and creates a permanent snapshot in the **Local Repository**."
-            ]
-        }
     },
     {
         category: "Basic Snapshotting",
@@ -131,8 +102,6 @@ export const gitCommandsData: GitCommand[] = [
             { code: "git status -s", text: "Shows a quick-glance list of what's going on." }
         ],
         realWorld: "This is one of the most used commands. You'll use it all the time to check your progress and see what you need to do next.",
-        imageUrl: "https://picsum.photos/seed/git-status/600/400",
-        imageAlt: "Flowchart diagram for 'git status' showing how it inspects the working directory and staging area to report untracked, modified, and staged files. Use light blue nodes, bold text, and black arrows."
     },
     {
         category: "Branching & Merging",
@@ -149,8 +118,6 @@ export const gitCommandsData: GitCommand[] = [
             { code: "git branch -d experiment-with-potions", text: "Deletes the potion timeline after you've merged your discoveries." }
         ],
         realWorld: "Every new feature or bug fix should be done in a new branch. This keeps your main codebase clean and stable.",
-        imageUrl: "https://picsum.photos/seed/git-branch/600/400",
-        imageAlt: "Flowchart for 'git branch' and 'git branch -d' showing how to create a new branch and then delete it. Use a minimalist design with light blue rounded rectangles, bold labels, and clear black arrows."
     },
     {
         category: "Branching & Merging",
@@ -167,8 +134,6 @@ export const gitCommandsData: GitCommand[] = [
             { code: "git checkout -- ingredients.txt", text: "You messed up the ingredients list, so you use this to magically restore it to your last saved version." }
         ],
         realWorld: "You use `checkout` whenever you need to switch what you're working on. It's a fundamental part of the daily Git workflow.",
-        imageUrl: "https://picsum.photos/seed/git-checkout/600/400",
-        imageAlt: "A clean, simple flowchart diagram explaining the git checkout process. Use colored boxes and arrows to represent each step. The diagram should start with a blue box labeled ‘git checkout’, followed by a green box labeled ‘Switch to a branch’. From there, two arrows should point to ‘Update working tree’ (green box) and ‘Update HEAD’ (orange box). Both should lead to ‘Update index’ (orange box). Use a modern sans-serif font in black, with a white background and rounded rectangles for each step. The flowchart should be easy to read and visually appealing.”"
     },
     {
         category: "Branching & Merging",
@@ -183,8 +148,6 @@ export const gitCommandsData: GitCommand[] = [
             { code: "git merge experiment-with-potions", text: "Brings all your successful potion recipes into your main project." }
         ],
         realWorld: "This is how features get added to the final product. You work in a branch, and when it's complete and tested, you merge it into the main `main` branch.",
-        imageUrl: "https://picsum.photos/seed/git-merge/600/400",
-        imageAlt: "Diagram explaining 'git merge' with two branches merging into a single branch. Show the initial state of two separate branches (e.g., 'main' and 'feature') and then the merged result. Use the established style of light blue nodes, bold text, and black arrows."
     },
     {
         category: "Branching & Merging",
@@ -200,8 +163,6 @@ export const gitCommandsData: GitCommand[] = [
             { code: "git rebase -i HEAD~3", text: "Lets you clean up your last 3 save points before you share your work." }
         ],
         realWorld: "Developers use rebase to keep their work clean before asking for it to be merged. **Warning:** Never use rebase on a branch that other people are also using! It rewrites history and can cause chaos.",
-        imageUrl: "https://picsum.photos/seed/git-rebase/600/400",
-        imageAlt: "Visual representation of 'git rebase', showing a feature branch being moved to the tip of the main branch, effectively rewriting history. Use the light blue, bold text, black arrow style, focusing on the branch progression."
     },
     {
         category: "Sharing & Updating Projects",
@@ -217,8 +178,6 @@ export const gitCommandsData: GitCommand[] = [
             { code: "git remote add upstream https://github.com/original-creator/repo.git", text: "Adds a connection to the original project you copied, so you can get updates from the original author." }
         ],
         realWorld: "This is essential when you're contributing to someone else's project. `origin` is your copy, and `upstream` is their original.",
-        imageUrl: "https://picsum.photos/seed/git-remote/600/400",
-        imageAlt: "Flowchart for 'git remote add' showing a local repository establishing a connection to a remote repository URL, giving it a nickname like 'origin' or 'upstream'. Use light blue nodes, bold text, and black arrows."
     },
     {
         category: "Sharing & Updating Projects",
@@ -233,8 +192,6 @@ export const gitCommandsData: GitCommand[] = [
             { code: "git fetch origin", text: "Gets all the latest news from the 'origin' castle." }
         ],
         realWorld: "This is a safe way to check for updates from your team. You `fetch` to see what they've done, then you can decide if you're ready to `merge` it.",
-        imageUrl: "https://picsum.photos/seed/git-fetch/600/400",
-        imageAlt: "Flow diagram for 'git fetch' showing commits from a remote repository being downloaded into the local repository's remote-tracking branches (e.g., origin/main), without affecting local branches. Use light blue nodes, bold text, black arrows."
     },
     {
         category: "Sharing & Updating Projects",
@@ -249,8 +206,6 @@ export const gitCommandsData: GitCommand[] = [
             { code: "git pull --rebase", text: "Updates your branch by neatly placing your work on top of the team's latest work." }
         ],
         realWorld: "This is what you do every morning when you start work to make sure you have the latest code from your team.",
-        imageUrl: "https://picsum.photos/seed/git-pull/600/400",
-        imageAlt: "Flow diagram illustrating 'git pull' showing changes from a remote repository being fetched and merged into the local branch. Maintain a clean, minimal design with light blue nodes, bold text, and black arrows."
     },
     {
         category: "Sharing & Updating Projects",
@@ -266,8 +221,6 @@ export const gitCommandsData: GitCommand[] = [
             { code: "git push -u origin my-new-feature", text: "Shares your new feature for the first time and links the branches." }
         ],
         realWorld: "This is how you share your work with your team. You finish a feature, push the branch, and then someone can review your code.",
-        imageUrl: "https://picsum.photos/seed/git-push/600/400",
-        imageAlt: "Create a visual guide for 'git push', demonstrating how local commits are sent to a remote repository. Use light blue rounded boxes, bold labels, and black connecting arrows. Include a visual representation of local and remote branches."
     },
     {
         category: "Inspection & Comparison",
@@ -283,8 +236,6 @@ export const gitCommandsData: GitCommand[] = [
             { code: "git log --oneline --graph", text: "Shows a neat, one-line graph of your project's entire history." }
         ],
         realWorld: "You use `git log` to find out who changed a certain file, to see the progress of a project, or to find the ID of an old commit you want to revisit.",
-        imageUrl: "https://picsum.photos/seed/git-log/600/400",
-        imageAlt: "Flowchart diagram for 'git log' showing how it reads the commit history from the .git directory and displays a chronological list of commits. Use light blue nodes, bold text, and black arrows."
     },
     {
         category: "Inspection & Comparison",
@@ -301,8 +252,6 @@ export const gitCommandsData: GitCommand[] = [
             { code: "git diff main..my-feature", text: "Shows you all the work you did on your feature branch." }
         ],
         realWorld: "Absolutely essential for reviewing your work before you save it. It helps you catch mistakes and write better commit messages.",
-        imageUrl: "https://picsum.photos/seed/git-diff/600/400",
-        imageAlt: "Flow diagram for 'git diff' showing it comparing the working directory to the staging area, and '--staged' comparing the staging area to the last commit. Use light blue rounded boxes, bold labels, and black arrows."
     },
     {
         category: "Advanced",
@@ -318,8 +267,6 @@ export const gitCommandsData: GitCommand[] = [
             { code: "git reset --hard a1b2c3d4", text: "Destroys all your current work and makes your project folder look exactly like it did at the old save point `a1b2c3d4`. Be careful!" }
         ],
         realWorld: "Mostly used to 'un-stage' a file (`git reset <file>`). `reset --hard` is for when you've made a huge mess and want to start over from your last good save point.",
-        imageUrl: "https://picsum.photos/seed/git-reset/600/400",
-        imageAlt: "Explain 'git reset --hard HEAD~1' with a diagram illustrating how the HEAD pointer moves back one commit and the working directory is updated. Keep the clean, light blue, bold text, black arrow style consistent."
     },
     {
         category: "Advanced",
@@ -335,8 +282,6 @@ export const gitCommandsData: GitCommand[] = [
             { code: "git revert a1b2c3d4", text: "Finds the old save point `a1b2c3d4` and creates a new one that reverses all its changes." }
         ],
         realWorld: "If a bug was accidentally sent to the main project, you would use `revert` to create a new commit that fixes it. The history clearly shows the mistake and the fix.",
-        imageUrl: "https://picsum.photos/seed/git-revert/600/400",
-        imageAlt: "Flowchart for 'git revert' showing how it identifies a target commit and creates a new commit that inverts the changes from the original, leaving history intact. Use light blue nodes, bold text, black arrows."
     },
     {
         category: "Advanced",
@@ -353,8 +298,6 @@ export const gitCommandsData: GitCommand[] = [
             { code: 'git stash pop', text: "Brings your work back out of hiding." }
         ],
         realWorld: "A daily tool for every developer. You're in the middle of a big feature when a tiny bug is reported. You `stash` your work, switch branches, fix the bug, commit, switch back, and `stash pop`. Genius!",
-        imageUrl: "https://picsum.photos/seed/git-stash/600/400",
-        imageAlt: "Diagram explaining 'git stash' and 'git stash pop' showing how changes are temporarily saved and then reapplied. Use the light blue rounded boxes, bold text, and black arrows."
     },
     {
         category: "Advanced",
@@ -370,8 +313,6 @@ export const gitCommandsData: GitCommand[] = [
             { code: 'git push origin --tags', text: "You have to push tags separately to share your bookmarks with the team." }
         ],
         realWorld: "Every time a company releases a new version of their software, they create a tag. This allows anyone to go back and see the exact state of the code for that release.",
-        imageUrl: "https://picsum.photos/seed/git-tag/600/400",
-        imageAlt: "Flowchart for 'git tag' showing how the command creates a named pointer (e.g., 'v1.0') to a specific commit on a branch. Use light blue rounded boxes for commits and tags, bold labels, and black arrows."
     },
     {
         category: "Advanced",
@@ -386,7 +327,5 @@ export const gitCommandsData: GitCommand[] = [
             { code: "git cherry-pick a1b2c3d4", text: "Copies the changes from the commit `a1b2c3d4` and applies them to your current branch." }
         ],
         realWorld: "A critical bug is fixed on the main development branch, but that fix is also needed on the old, stable version of the software. You can `cherry-pick` just that one bug-fix commit over to the stable branch without bringing any other new features with it.",
-        imageUrl: "https://picsum.photos/seed/git-cherry-pick/600/400",
-        imageAlt: "Flow diagram for 'git cherry-pick' showing a single commit being copied from a 'feature' branch and applied as a new commit on the 'main' branch. Use light blue nodes, bold text, and black arrows."
     }
 ];

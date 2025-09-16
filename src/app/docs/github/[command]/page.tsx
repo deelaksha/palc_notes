@@ -6,8 +6,6 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import Image from 'next/image';
-import { AnimatedFlowchart } from '@/components/flowcharts/AnimatedFlowchart';
 
 export function generateStaticParams() {
   return gitCommandsData.map((command) => ({
@@ -82,25 +80,6 @@ ${command.realWorld}
           Chapter 1: How the Spell Works
         </h2>
         
-        <div className="my-6 min-h-[400px] flex items-center justify-center">
-           {command.flowchart ? (
-              <AnimatedFlowchart 
-                nodes={command.flowchart.nodes}
-                edges={command.flowchart.edges}
-                steps={command.flowchart.steps}
-              />
-           ) : (
-            <Image 
-                src={command.imageUrl} 
-                alt={command.imageAlt} 
-                width={600} 
-                height={400} 
-                className="rounded-lg border shadow-md mx-auto"
-                data-ai-hint={`${command.name.toLowerCase()} flowchart`}
-            />
-           )}
-        </div>
-
         <div className="space-y-4 text-muted-foreground">
           {command.howItWorks.map((item, index) => (
             <p key={index}>{renderTextWithCode(item)}</p>
