@@ -10,12 +10,6 @@ import Link from 'next/link';
 
 const notes = [
   {
-    title: 'ns-fiels.sh Analysis',
-    description: 'AI-Generated Breakdown for a shell script executed on 09-16-2025.',
-    href: '/docs/notes/ns-fiels-sh-09-16-2025',
-    icon: <FileTerminal className="size-8" />,
-  },
-  {
     title: 'Network Simulation Guide',
     description: 'Guide to network simulation, added on 09-16-2025.',
     href: '/docs/notes/network-simulation',
