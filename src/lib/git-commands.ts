@@ -15,7 +15,9 @@ export const gitCommandsData = [
             { code: 'git config --global user.email "captain@coder.com"', text: "Sets the email that will be attached to all your contributions." },
             { code: 'git config --global alias.co checkout', text: "Creates a super-fast spell `git co` that does the same thing as `git checkout`." }
         ],
-        realWorld: "This is the very first spell you cast after installing Git. It’s like creating your character before starting a new game!"
+        realWorld: "This is the very first spell you cast after installing Git. It’s like creating your character before starting a new game!",
+        imageUrl: "https://picsum.photos/seed/git-config/600/400",
+        imageAlt: "A diagram showing git config setting user name and email."
     },
     {
         category: "Getting & Creating Projects",
@@ -30,7 +32,9 @@ export const gitCommandsData = [
             { code: "git init", text: "Turns your current folder into a Git-powered quest." },
             { code: "git init my-awesome-quest", text: "Creates a new folder for your quest and puts the Git treasure chest inside it." }
         ],
-        realWorld: "This is the first step for any new project you want to protect with Git. It's like planting a flag and saying, 'This land is under my version control!'"
+        realWorld: "This is the first step for any new project you want to protect with Git. It's like planting a flag and saying, 'This land is under my version control!'",
+        imageUrl: "https://picsum.photos/seed/git-init/600/400",
+        imageAlt: "A diagram showing an empty folder being turned into a Git repository with the git init command."
     },
     {
         category: "Getting & Creating Projects",
@@ -45,7 +49,9 @@ export const gitCommandsData = [
             { code: "git clone https://github.com/some-hero/cool-project.git", text: "Duplicates a cool project from GitHub onto your computer." },
             { code: "git clone git@github.com:me/my-quest.git my-epic-adventure", text: "Duplicates your own project and gives the folder a new, epic name." }
         ],
-        realWorld: "This is how you join a team or start working on an open-source project. You clone it to get your own copy of the code."
+        realWorld: "This is how you join a team or start working on an open-source project. You clone it to get your own copy of the code.",
+        imageUrl: "https://picsum.photos/seed/git-clone/600/400",
+        imageAlt: "A diagram showing a remote repository being copied to a local machine with git clone."
     },
     {
         category: "Basic Snapshotting",
@@ -61,7 +67,9 @@ export const gitCommandsData = [
             { code: "git add treasure-map.txt", text: "Packs the treasure map for your next save point." },
             { code: "git add .", text: "Packs everything you've worked on in this area." }
         ],
-        realWorld: "You use `git add` right before you make a `git commit`. It’s the 'get ready' step before saving your progress."
+        realWorld: "You use `git add` right before you make a `git commit`. It’s the 'get ready' step before saving your progress.",
+        imageUrl: "https://picsum.photos/seed/git-add/600/400",
+        imageAlt: "A diagram showing files moving from the working directory to the staging area using git add."
     },
     {
         category: "Basic Snapshotting",
@@ -76,7 +84,9 @@ export const gitCommandsData = [
             { code: 'git commit -m "Found the secret key!"', text: "Saves your game with a clear message about your achievement." },
             { code: 'git commit --amend -m "Found the secret key and opened the door"', text: "Corrects your last save message to be more accurate." }
         ],
-        realWorld: "You commit your work every time you finish a small, complete task. It creates a clean history that's easy to look back on."
+        realWorld: "You commit your work every time you finish a small, complete task. It creates a clean history that's easy to look back on.",
+        imageUrl: "https://picsum.photos/seed/git-commit/600/400",
+        imageAlt: "A diagram showing files from the staging area being saved into the repository as a commit."
     },
     {
         category: "Basic Snapshotting",
@@ -90,7 +100,9 @@ export const gitCommandsData = [
             { code: "git status", text: "Gives you a full report on your current quest status." },
             { code: "git status -s", text: "Shows a quick-glance list of what's going on." }
         ],
-        realWorld: "This is one of the most used commands. You'll use it all the time to check your progress and see what you need to do next."
+        realWorld: "This is one of the most used commands. You'll use it all the time to check your progress and see what you need to do next.",
+        imageUrl: "https://picsum.photos/seed/git-status/600/400",
+        imageAlt: "A diagram illustrating the output of git status, showing modified, staged, and untracked files."
     },
     {
         category: "Branching & Merging",
@@ -106,7 +118,9 @@ export const gitCommandsData = [
             { code: "git branch experiment-with-potions", text: "Creates a new timeline to safely test your potions." },
             { code: "git branch -d experiment-with-potions", text: "Deletes the potion timeline after you've merged your discoveries." }
         ],
-        realWorld: "Every new feature or bug fix should be done in a new branch. This keeps your main codebase clean and stable."
+        realWorld: "Every new feature or bug fix should be done in a new branch. This keeps your main codebase clean and stable.",
+        imageUrl: "https://picsum.photos/seed/git-branch/600/400",
+        imageAlt: "A diagram showing the creation of a new branch from the main branch."
     },
     {
         category: "Branching & Merging",
@@ -122,7 +136,9 @@ export const gitCommandsData = [
             { code: 'git checkout -b fix-leaky-roof', text: "Creates a new timeline for fixing the roof and instantly takes you there." },
             { code: "git checkout -- ingredients.txt", text: "You messed up the ingredients list, so you use this to magically restore it to your last saved version." }
         ],
-        realWorld: "You use `checkout` whenever you need to switch what you're working on. It's a fundamental part of the daily Git workflow."
+        realWorld: "You use `checkout` whenever you need to switch what you're working on. It's a fundamental part of the daily Git workflow.",
+        imageUrl: "https://picsum.photos/seed/git-checkout/600/400",
+        imageAlt: "A diagram showing HEAD moving from one commit to another after a git checkout."
     },
     {
         category: "Branching & Merging",
@@ -136,7 +152,9 @@ export const gitCommandsData = [
         examples: [
             { code: "git merge experiment-with-potions", text: "Brings all your successful potion recipes into your main project." }
         ],
-        realWorld: "This is how features get added to the final product. You work in a branch, and when it's complete and tested, you merge it into the main `main` branch."
+        realWorld: "This is how features get added to the final product. You work in a branch, and when it's complete and tested, you merge it into the main `main` branch.",
+        imageUrl: "https://picsum.photos/seed/git-merge/600/400",
+        imageAlt: "A diagram illustrating how a feature branch is merged into the main branch, combining their histories."
     },
     {
         category: "Branching & Merging",
@@ -151,7 +169,9 @@ export const gitCommandsData = [
             { code: "git rebase main", text: "While on your feature branch, this updates it with the latest from the main timeline, putting your work neatly on top." },
             { code: "git rebase -i HEAD~3", text: "Lets you clean up your last 3 save points before you share your work." }
         ],
-        realWorld: "Developers use rebase to keep their work clean before asking for it to be merged. **Warning:** Never use rebase on a branch that other people are also using! It rewrites history and can cause chaos."
+        realWorld: "Developers use rebase to keep their work clean before asking for it to be merged. **Warning:** Never use rebase on a branch that other people are also using! It rewrites history and can cause chaos.",
+        imageUrl: "https://picsum.photos/seed/git-rebase/600/400",
+        imageAlt: "A diagram showing commits from a feature branch being moved to the tip of the main branch."
     },
     {
         category: "Sharing & Updating Projects",
@@ -166,7 +186,9 @@ export const gitCommandsData = [
             { code: "git remote -v", text: "Lists all the remote castles you're connected to." },
             { code: "git remote add upstream https://github.com/original-creator/repo.git", text: "Adds a connection to the original project you copied, so you can get updates from the original author." }
         ],
-        realWorld: "This is essential when you're contributing to someone else's project. `origin` is your copy, and `upstream` is their original."
+        realWorld: "This is essential when you're contributing to someone else's project. `origin` is your copy, and `upstream` is their original.",
+        imageUrl: "https://picsum.photos/seed/git-remote/600/400",
+        imageAlt: "A diagram showing a local repository with connections to origin and upstream remote repositories."
     },
     {
         category: "Sharing & Updating Projects",
@@ -180,7 +202,9 @@ export const gitCommandsData = [
             { code: "git fetch", text: "Gets all the latest news from all your connected remote worlds." },
             { code: "git fetch origin", text: "Gets all the latest news from the 'origin' castle." }
         ],
-        realWorld: "This is a safe way to check for updates from your team. You `fetch` to see what they've done, then you can decide if you're ready to `merge` it."
+        realWorld: "This is a safe way to check for updates from your team. You `fetch` to see what they've done, then you can decide if you're ready to `merge` it.",
+        imageUrl: "https://picsum.photos/seed/git-fetch/600/400",
+        imageAlt: "A diagram showing new commits being downloaded from a remote repository to the local machine, but not yet integrated."
     },
     {
         category: "Sharing & Updating Projects",
@@ -194,7 +218,9 @@ export const gitCommandsData = [
             { code: "git pull", text: "Updates your current branch with all the latest changes from the remote server." },
             { code: "git pull --rebase", text: "Updates your branch by neatly placing your work on top of the team's latest work." }
         ],
-        realWorld: "This is what you do every morning when you start work to make sure you have the latest code from your team."
+        realWorld: "This is what you do every morning when you start work to make sure you have the latest code from your team.",
+        imageUrl: "https://picsum.photos/seed/git-pull/600/400",
+        imageAlt: "A diagram showing git fetch and git merge happening in one git pull command."
     },
     {
         category: "Sharing & Updating Projects",
@@ -209,7 +235,9 @@ export const gitCommandsData = [
             { code: "git push origin main", text: "Shares your local `main` timeline with the `origin` server." },
             { code: "git push -u origin my-new-feature", text: "Shares your new feature for the first time and links the branches." }
         ],
-        realWorld: "This is how you share your work with your team. You finish a feature, push the branch, and then someone can review your code."
+        realWorld: "This is how you share your work with your team. You finish a feature, push the branch, and then someone can review your code.",
+        imageUrl: "https://picsum.photos/seed/git-push/600/400",
+        imageAlt: "A diagram showing local commits being uploaded to a remote repository."
     },
     {
         category: "Inspection & Comparison",
@@ -224,7 +252,9 @@ export const gitCommandsData = [
             { code: "git log", text: "Shows a detailed history of every save." },
             { code: "git log --oneline --graph", text: "Shows a neat, one-line graph of your project's entire history." }
         ],
-        realWorld: "You use `git log` to find out who changed a certain file, to see the progress of a project, or to find the ID of an old commit you want to revisit."
+        realWorld: "You use `git log` to find out who changed a certain file, to see the progress of a project, or to find the ID of an old commit you want to revisit.",
+        imageUrl: "https://picsum.photos/seed/git-log/600/400",
+        imageAlt: "An illustration of the output of git log, showing a list of commits with hashes, authors, and messages."
     },
     {
         category: "Inspection & Comparison",
@@ -240,7 +270,9 @@ export const gitCommandsData = [
             { code: "git diff --staged", text: "Lets you double-check what you're about to commit." },
             { code: "git diff main..my-feature", text: "Shows you all the work you did on your feature branch." }
         ],
-        realWorld: "Absolutely essential for reviewing your work before you save it. It helps you catch mistakes and write better commit messages."
+        realWorld: "Absolutely essential for reviewing your work before you save it. It helps you catch mistakes and write better commit messages.",
+        imageUrl: "https://picsum.photos/seed/git-diff/600/400",
+        imageAlt: "An illustration showing the textual differences between two files, with lines added and removed."
     },
     {
         category: "Advanced",
@@ -255,7 +287,9 @@ export const gitCommandsData = [
             { code: 'git reset HEAD~1', text: "Undoes your last commit, but leaves your changed files as-is. Good for fixing a mistaken commit." },
             { code: "git reset --hard a1b2c3d4", text: "Destroys all your current work and makes your project folder look exactly like it did at the old save point `a1b2c3d4`. Be careful!" }
         ],
-        realWorld: "Mostly used to 'un-stage' a file (`git reset <file>`). `reset --hard` is for when you've made a huge mess and want to start over from your last good save point."
+        realWorld: "Mostly used to 'un-stage' a file (`git reset <file>`). `reset --hard` is for when you've made a huge mess and want to start over from your last good save point.",
+        imageUrl: "https://picsum.photos/seed/git-reset/600/400",
+        imageAlt: "A diagram showing the HEAD pointer moving back to a previous commit, with options for soft, mixed, and hard resets."
     },
     {
         category: "Advanced",
@@ -270,7 +304,9 @@ export const gitCommandsData = [
             { code: "git revert HEAD", text: "Creates a new save point that undoes whatever you did in your very last one." },
             { code: "git revert a1b2c3d4", text: "Finds the old save point `a1b2c3d4` and creates a new one that reverses all its changes." }
         ],
-        realWorld: "If a bug was accidentally sent to the main project, you would use `revert` to create a new commit that fixes it. The history clearly shows the mistake and the fix."
+        realWorld: "If a bug was accidentally sent to the main project, you would use `revert` to create a new commit that fixes it. The history clearly shows the mistake and the fix.",
+        imageUrl: "https://picsum.photos/seed/git-revert/600/400",
+        imageAlt: "A diagram showing a new commit being created that undoes the changes from a previous commit."
     },
     {
         category: "Advanced",
@@ -286,7 +322,9 @@ export const gitCommandsData = [
             { code: 'git stash save "Working on the new user profile page"', text: "Hides your work with a reminder of what you were doing." },
             { code: 'git stash pop', text: "Brings your work back out of hiding." }
         ],
-        realWorld: "A daily tool for every developer. You're in the middle of a big feature when a tiny bug is reported. You `stash` your work, switch branches, fix the bug, commit, switch back, and `stash pop`. Genius!"
+        realWorld: "A daily tool for every developer. You're in the middle of a big feature when a tiny bug is reported. You `stash` your work, switch branches, fix the bug, commit, switch back, and `stash pop`. Genius!",
+        imageUrl: "https://picsum.photos/seed/git-stash/600/400",
+        imageAlt: "A diagram showing changes from the working directory being saved to a stash, and then being reapplied later."
     },
     {
         category: "Advanced",
@@ -301,7 +339,9 @@ export const gitCommandsData = [
             { code: 'git tag -a v2.5 -m "Released version 2.5 with new features"', text: "Creates an official, annotated tag for a major release." },
             { code: 'git push origin --tags', text: "You have to push tags separately to share your bookmarks with the team." }
         ],
-        realWorld: "Every time a company releases a new version of their software, they create a tag. This allows anyone to go back and see the exact state of the code for that release."
+        realWorld: "Every time a company releases a new version of their software, they create a tag. This allows anyone to go back and see the exact state of the code for that release.",
+        imageUrl: "https://picsum.photos/seed/git-tag/600/400",
+        imageAlt: "A diagram showing a 'v1.0' tag pointing to a specific commit in the project history."
     },
     {
         category: "Advanced",
@@ -315,6 +355,8 @@ export const gitCommandsData = [
         examples: [
             { code: "git cherry-pick a1b2c3d4", text: "Copies the changes from the commit `a1b2c3d4` and applies them to your current branch." }
         ],
-        realWorld: "A critical bug is fixed on the main development branch, but that fix is also needed on the old, stable version of the software. You can `cherry-pick` just that one bug-fix commit over to the stable branch without bringing any other new features with it."
+        realWorld: "A critical bug is fixed on the main development branch, but that fix is also needed on the old, stable version of the software. You can `cherry-pick` just that one bug-fix commit over to the stable branch without bringing any other new features with it.",
+        imageUrl: "https://picsum.photos/seed/git-cherry-pick/600/400",
+        imageAlt: "A diagram showing a single commit from one branch being copied and applied to another branch."
     }
 ];

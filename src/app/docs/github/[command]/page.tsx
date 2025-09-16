@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 
 export function generateStaticParams() {
   return gitCommandsData.map((command) => ({
@@ -79,6 +80,18 @@ ${command.realWorld}
         <h2 className="text-3xl font-bold text-foreground mb-6 pb-2 border-b-2 border-primary">
           Chapter 1: How the Spell Works
         </h2>
+        
+        <div className="my-6">
+            <Image 
+                src={command.imageUrl} 
+                alt={command.imageAlt} 
+                width={600} 
+                height={400} 
+                className="rounded-lg border shadow-md mx-auto"
+                data-ai-hint={`git ${command.name.toLowerCase()}`}
+            />
+        </div>
+
         <div className="space-y-4 text-muted-foreground">
           {command.howItWorks.map((item, index) => (
             <p key={index}>{renderTextWithCode(item)}</p>
