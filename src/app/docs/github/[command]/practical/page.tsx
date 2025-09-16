@@ -5,6 +5,7 @@ import { ArrowLeft, Construction } from 'lucide-react';
 import { gitCommandsData } from '@/lib/git-commands';
 import { GitAddGame } from '@/components/git-game/GitAddGame';
 import { GitCommitGame } from '@/components/git-game/GitCommitGame';
+import { GitBranchGame } from '@/components/git-game/GitBranchGame';
 
 export function generateStaticParams() {
   return gitCommandsData.map((command) => ({
@@ -18,6 +19,8 @@ function renderGameForCommand(commandName: string | undefined) {
             return <GitAddGame />;
         case 'git commit':
             return <GitCommitGame />;
+        case 'git branch':
+            return <GitBranchGame />;
         default:
             return (
                 <div className="text-center text-white glass-effect p-12 rounded-2xl">
