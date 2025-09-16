@@ -8,17 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { ArrowLeft, ArrowRight, Layers, Play, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import { OsiLayerGame } from '@/components/networking/OsiLayerGame';
-
-const layersData = [
-  { name: 'Application', color: 'bg-red-500', description: 'Provides network services directly to users. Protocols: HTTP, FTP, SMTP, DNS.' },
-  { name: 'Presentation', color: 'bg-orange-500', description: 'Formats and encrypts data. Handles syntax, encryption, and compression.' },
-  { name: 'Session', color: 'bg-yellow-500', description: 'Manages sessions between applications. Start, control, and end connections.' },
-  { name: 'Transport', color: 'bg-green-500', description: 'Reliable data delivery, flow control, and error correction. Protocols: TCP, UDP.' },
-  { name: 'Network', color: 'bg-blue-500', description: 'Handles routing, addressing, and packet forwarding. Protocols: IP, ICMP.' },
-  { name: 'Data Link', color: 'bg-indigo-500', description: 'Manages error detection, framing, and MAC addressing. Protocols: Ethernet, PPP.' },
-  { name: 'Physical', color: 'bg-purple-500', description: 'Transmission of raw bits over a physical medium (cables, wireless).' },
-] as const;
+import { osiLayersData } from '@/lib/osi-layers';
 
 const animationSteps = [
     { from: 'Sender', to: 'Sender', layer: 0, text: 'User data is created at the Application Layer.' },
@@ -87,7 +77,7 @@ function OSIModelAnimation() {
                 <div>
                     <h3 className="font-headline font-bold text-lg mb-4">Sender</h3>
                     <div className="space-y-1 relative">
-                        {layersData.map((layer, index) => (
+                        {osiLayersData.map((layer, index) => (
                             <div key={`sender-${index}`} className={cn("p-2 rounded-md border text-sm transition-all duration-500", layer.color, activeStep?.from === 'Sender' && activeStep?.layer === index ? 'border-4 border-white shadow-lg shadow-white/30 scale-105' : 'opacity-60')}>
                                 {layer.name}
                             </div>
@@ -130,8 +120,8 @@ function OSIModelAnimation() {
                 <div>
                      <h3 className="font-headline font-bold text-lg mb-4">Receiver</h3>
                      <div className="space-y-1 relative">
-                        {layersData.map((layer, index) => (
-                            <div key={`receiver-${index}`} className={cn("p-2 rounded-md border text-sm transition-all duration-500", layer.color, activeStep?.to === 'Receiver' && activeStep?.layer === (layersData.length - 1 - index) ? 'border-4 border-white shadow-lg shadow-white/30 scale-105' : 'opacity-60')}>
+                        {osiLayersData.map((layer, index) => (
+                            <div key={`receiver-${index}`} className={cn("p-2 rounded-md border text-sm transition-all duration-500", layer.color, activeStep?.to === 'Receiver' && activeStep?.layer === (osiLayersData.length - 1 - index) ? 'border-4 border-white shadow-lg shadow-white/30 scale-105' : 'opacity-60')}>
                                 {layer.name}
                             </div>
                         ))}
@@ -174,58 +164,38 @@ export default function OSIModelPage() {
                         The OSI Model
                     </h1>
                     <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-                        A conceptual framework that standardizes the functions of a telecommunication or computing system into seven distinct layers.
+                        A conceptual framework that standardizes the functions of a telecommunication or computing system into seven distinct layers. Click a layer to learn more.
                     </p>
                 </header>
 
                 <div className="space-y-12">
                     <section>
-                        <h2 className="text-3xl font-headline font-bold mb-6 pb-2 border-b">Layers Explained</h2>
-                        <div className="grid md:grid-cols-1 gap-8">
-                            {layersData.map((layer, index) => (
-                                <Card key={layer.name} className="hover:border-primary transition-colors">
-                                    <div className="grid md:grid-cols-3 items-center">
-                                        <div className="md:col-span-2">
-                                            <CardHeader>
-                                                <CardTitle className="flex items-center gap-3">
-                                                    <span className={cn("flex items-center justify-center size-8 rounded-full text-white font-bold", layer.color)}>
-                                                        {7 - index}
-                                                    </span>
-                                                    {layer.name} Layer
-                                                </CardTitle>
-                                            </CardHeader>
-                                            <CardContent>
-                                                <p className="text-muted-foreground">{layer.description}</p>
-                                            </CardContent>
-                                        </div>
-                                        <div className="md:col-span-1 p-4 h-full">
-                                           <OsiLayerGame layer={layer.name} />
-                                        </div>
-                                    </div>
-                                </Card>
+                        <h2 className="text-3xl font-headline font-bold mb-6 pb-2 border-b">The 7 Layers</h2>
+                        <div className="grid md:grid-cols-1 gap-4">
+                            {osiLayersData.map((layer, index) => (
+                                <Link key={layer.name} href={`/docs/networking/osi-model/${layer.slug}`} className="group">
+                                    <Card className="hover:border-primary transition-colors h-full">
+                                        <CardHeader className="flex flex-row items-center justify-between">
+                                            <div className="flex items-center gap-4">
+                                                <span className={cn("flex items-center justify-center size-10 rounded-full text-white font-bold", layer.color)}>
+                                                    {7 - index}
+                                                </span>
+                                                <div>
+                                                    <CardTitle>{layer.name} Layer</CardTitle>
+                                                    <CardDescription>{layer.summary}</CardDescription>
+                                                </div>
+                                            </div>
+                                            <ArrowRight className="size-5 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
+                                        </CardHeader>
+                                    </Card>
+                                </Link>
                             ))}
                         </div>
                     </section>
                     
                     <section>
-                         <h2 className="text-3xl font-headline font-bold mb-6 pb-2 border-b">Data Flow</h2>
+                         <h2 className="text-3xl font-headline font-bold mb-6 pb-2 border-b">Overall Data Flow</h2>
                          <OSIModelAnimation />
-                    </section>
-
-                     <section>
-                        <h2 className="text-3xl font-headline font-bold mb-6 pb-2 border-b">Use Cases</h2>
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {['Sending an Email', 'Loading a Website', 'Streaming a Video'].map(useCase => (
-                                <Card key={useCase}>
-                                    <CardHeader>
-                                        <CardTitle className="text-lg">{useCase}</CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <p className="text-sm text-muted-foreground">This action involves multiple OSI layers, from the Application layer (HTTP/SMTP) down to the Physical layer for transmission.</p>
-                                    </CardContent>
-                                </Card>
-                            ))}
-                        </div>
                     </section>
                 </div>
             </div>
