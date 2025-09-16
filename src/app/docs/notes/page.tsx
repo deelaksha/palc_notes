@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, FileTerminal } from 'lucide-react';
+import { ArrowRight, FileTerminal, Network } from 'lucide-react';
 import Link from 'next/link';
 
 const notes = [
@@ -14,6 +14,12 @@ const notes = [
     description: 'AI-Generated Breakdown for a shell script executed on 09-16-2025.',
     href: '/docs/notes/ns-fiels-sh-09-16-2025',
     icon: <FileTerminal className="size-8" />,
+  },
+  {
+    title: 'Network Simulation Guide',
+    description: 'Guide to network simulation, added on 09-16-2025.',
+    href: '/docs/notes/network-simulation',
+    icon: <Network className="size-8" />,
   },
 ];
 

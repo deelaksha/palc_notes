@@ -64,11 +64,6 @@ const menuItems = [
     icon: <BookOpen />,
     label: 'Notes',
   },
-  {
-    href: '/docs/network-simulation',
-    icon: <Network />,
-    label: 'Network Simulation',
-  },
 ];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
