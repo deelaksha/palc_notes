@@ -1,6 +1,5 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
-import { Chatbot } from '@/components/chatbot/Chatbot';
 
 const content = `
 # 📦 Grouping & Capturing
@@ -21,6 +20,11 @@ At its simplest, grouping lets you apply a quantifier to a whole sequence of cha
 
 Without the group, the pattern \`ha+\` would mean "match 'h' followed by 'a' one or more times", which would only match "haaaa...".
 
+- **Another Example**: Match a website address with or without "www."
+- **Input Text**: "google.com and www.google.com"
+- **Regex**: \`(www\\.)?google\\.com\`
+- **Explanation**: The group \`(www\\.)\` bundles "www." together, and the \`?\` quantifier makes that entire group optional.
+
 ---
 
 ## ✨ 2. Capturing Groups
@@ -34,11 +38,12 @@ When you group a pattern using \`()\`, the text that matches inside the group is
     - \`(jpg|png)\`: This is **Group 2**. It uses alternation and captures either "jpg" or "png".
 - **Output Matches**: "image.jpg" and "image.png"
 - **Captured Groups for the first match ("image.jpg")**:
+    - **Group 0**: "image.jpg" (Group 0 is always the entire match)
     - **Group 1**: "image"
     - **Group 2**: "jpg"
 
 ### Backreferences
-You can refer back to a captured group *within the same regex pattern* using \`\\1\`, \`\\2\`, etc. This is perfect for finding repeated words.
+You can refer back to a captured group *within the same regex pattern* using \`\\1\`, \`\\2\`, etc. This is perfect for finding repeated words or structured data.
 
 - **Input Text**: "This is a test test."
 - **Regex Pattern**: \`\\b(\\w+)\\s+\\1\\b\`
@@ -50,13 +55,17 @@ You can refer back to a captured group *within the same regex pattern* using \`\
     - \`\\b\`: Word boundary.
 - **Output**: "test test"
 
+- **Another Example**: Find words that start and end with the same letter.
+- **Regex**: \`\\b([a-zA-Z])\\w*\\1\\b\`
+- **Explanation**: \`([a-zA-Z])\` captures the first letter into Group 1, \`\\w*\` matches the middle of the word, and \`\\1\` requires the word to end with the same letter captured in Group 1. It would match "level", "rotor", "Anna".
+
 ---
 
 ## ✨ 3. Non-Capturing Groups \`(?:...)\`
 Sometimes you need to group parts of your pattern (e.g., to use a quantifier or alternation) but you don't care about capturing the result. Using a non-capturing group \`(?:...)\` is slightly more efficient because the engine doesn't have to store the matched text.
 
-- **Regex Pattern**: \`(?:Mr|Mrs|Ms)\\. [A-Z]\\w*\`
-- **Explanation**: The \`(?:Mr|Mrs|Ms)\` part groups the titles together so the \`\\.\` applies to all of them, but it doesn't create a capture group that you'd have to skip over if you had other, more important capture groups later in the pattern.
+- **Regex Pattern**: \`(?:Mr|Mrs|Ms)\\. ([A-Z]\\w*)\`
+- **Explanation**: The \`(?:Mr|Mrs|Ms)\` part groups the titles together so the \`\\.\` applies to all of them, but it doesn't create a capture group. This means the name captured by \`([A-Z]\\w*)\` will be **Group 1**, which is cleaner than if it were Group 2.
 
 ---
 

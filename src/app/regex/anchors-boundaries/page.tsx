@@ -1,6 +1,5 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
-import { Chatbot } from '@/components/chatbot/Chatbot';
 
 const content = `
 # ⚓️ Anchors & Boundaries
@@ -16,7 +15,7 @@ These are the most common anchors. They lock your pattern to the beginning or en
 ### Caret: \`^\` (Start of String)
 The caret \`^\` asserts that the position is the very beginning of the string.
 
-- **Input Text**: "Hello world"
+- **Input Text**: "Hello world\nAnother line"
 - **Regex Pattern**: \`^Hello\`
 - **Explanation**: The engine first checks if it's at the start of the string. It is. Then it matches "H", "e", "l", "l", "o". This is a match.
 - **Output**: "Hello"
@@ -61,6 +60,18 @@ The anchor \`\\B\` is the opposite of \`\\b\`. It matches any position that is *
 - **Output**: "cat" (inside "bobcat")
 
 - **Real-world Example**: You want to find all instances of the word "view" but not "review" or "preview". The pattern \`\\bview\\b\` is perfect for this. Without the boundaries, a simple search for "view" would incorrectly match inside "review".
+
+---
+## ✨ 3. Multiline Mode Anchors
+
+Some regex engines have a "multiline mode" (often enabled with a flag like \`/m\`). In this mode, \`^\` and \`$\` change their meaning slightly.
+
+- \`^\`: Matches the start of the entire string OR the start of a new line (immediately after a newline character \`\\n\`).
+- \`$\`: Matches the end of the entire string OR the end of a line (immediately before a newline character \`\\n\`).
+
+- **Input Text**: "Line 1\nLine 2\nLine 3"
+- **Regex (with /m flag)**: \`^Line\`
+- **Output**: This will match "Line" at the beginning of all three lines. Without multiline mode, it would only match the first one.
 `;
 
 export default function RegexAnchorsPage() {

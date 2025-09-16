@@ -1,6 +1,5 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
-import { Chatbot } from '@/components/chatbot/Chatbot';
 
 const content = `
 # 🧙‍♂️ The Basics: Characters & Sets
@@ -47,6 +46,8 @@ These are characters with special meanings. They are the wizards of our language
 |---|---|---|---|---|
 | \`.\` | Wildcard | Matches any single character (except newline) | \`h.t\` | "hat", "hot", "h@t" |
 | \`\\\` | Backslash | **Escapes** a special character, treating it as a literal | \`\\.\` | Matches an actual dot "." |
+| \`|\` | Alternation (OR) | Matches either the pattern on its left or on its right | \`cat|dog\` | "cat" or "dog" |
+
 
 ### Escaping Characters
 What if you actually want to find a dot \`.\` or a plus \`+\`? You use a backslash \`\\\` to tell the engine, "Hey, this next character is just a normal guy, not a wizard."
@@ -62,9 +63,10 @@ Character sets, or character classes, let you match one character from a specifi
 
 | Pattern | What it Does | Example | Matches |
 |---|---|---|---|
-| \`[abc]\` | Matches a single 'a', 'b', or 'c' | \`h[aeiou]t\` | "hat", "het" |
+| \`[abc]\` | Matches a single 'a', 'b', or 'c' | \`gr[ea]y\` | "grey" or "gray" |
 | \`[a-z]\` | Matches any single lowercase letter from 'a' to 'z' | \`[a-z]ing\` | "sing", "ring" |
 | \`[A-Z0-9]\` | Matches any uppercase letter or any digit | \`[A-Z][0-9]\` | "A1", "C5" |
+| \`[a-zA-Z]\` | Matches any single letter, regardless of case. | \`[a-zA-Z]at\` | "Cat", "bat", "rat" |
 | \`[^abc]\` | **Negation**: Matches any single character **except** 'a', 'b', or 'c' | \`h[^o]t\` | "hat", "hit" (but not "hot") |
 
 ### Predefined Character Classes

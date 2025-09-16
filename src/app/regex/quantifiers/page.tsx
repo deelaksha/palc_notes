@@ -1,6 +1,5 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
-import { Chatbot } from '@/components/chatbot/Chatbot';
 
 const content = `
 # 🔢 Quantifiers: Greedy vs. Lazy
@@ -26,6 +25,7 @@ Quantifiers answer the question, "How many times should this part of the pattern
 | \`{n,m}\` | Between \`n\` and \`m\` times (inclusive) | \`o{1,2}\` | "oo" (the first two) |
 
 - **Real-world Example**: Matching a phone number format. The pattern \`\\d{3}-\\d{4}\` would match a 3-digit area code, a dash, and a 4-digit number, like "555-1234".
+- **Another Example**: Find 4 to 8 letter words. The pattern \`\\b[a-zA-Z]{4,8}\\b\` will match whole words with 4 to 8 letters.
 
 ---
 

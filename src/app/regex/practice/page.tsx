@@ -1,6 +1,5 @@
 
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
-import { Chatbot } from '@/components/chatbot/Chatbot';
 
 const content = `
 # 🌟 Common Patterns & Practice
@@ -18,6 +17,8 @@ The best way to learn regex is to use it. This section provides a reference for 
 | **Date (YYYY-MM-DD)** | \`^\\d{4}-\\d{2}-\\d{2}$\` | Exactly 4 digits, a dash, 2 digits, a dash, 2 digits. Anchored to start/end. |
 | **URL (simple)** | \`https?:\\/\\/[\\w\\-.]+\\.\\w{2,}(\\/\\S*)?\` | Matches http/https, domain, and optional path. |
 | **Password Strength** | \`^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$\` | Requires at least one lowercase, one uppercase, one digit, and be at least 8 chars long. (Uses Lookaheads). |
+| **Username** | \`^[a-zA-Z0-9_]{3,16}$\` | Starts and ends with 3-16 characters that can be letters, numbers, or an underscore. |
+| **IPv4 Address** | \`^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$\` | Matches an IP address from 0.0.0.0 to 255.255.255.255. |
 
 ---
 
