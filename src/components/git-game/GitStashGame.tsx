@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Archive, Unarchive, Inbox, File, Plus } from 'lucide-react';
+import { Archive, ArchiveRestore, Inbox, File, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 
@@ -79,7 +79,7 @@ export function GitStashGame() {
                     <Archive className="mr-2"/> git stash
                 </Button>
                 <Button onClick={handlePop} className="w-full" disabled={stashedItems.length === 0}>
-                     <Unarchive className="mr-2"/> git stash pop
+                     <ArchiveRestore className="mr-2"/> git stash pop
                 </Button>
             </div>
 
