@@ -1,3 +1,4 @@
+
 import {
   Card,
   CardContent,
@@ -63,7 +64,7 @@ echo "Scrubbing complete."
             ns-fiels.sh Analysis
           </h1>
           <p className="text-lg text-muted-foreground">
-            AI-Generated Breakdown for script executed on 09-16-2025.
+            An AI-Generated Breakdown of a System Maintenance Shell Script.
           </p>
         </header>
 
@@ -71,7 +72,7 @@ echo "Scrubbing complete."
             <Card>
                 <CardHeader>
                     <CardTitle>Script Content</CardTitle>
-                    <CardDescription>The full source code of the shell script.</CardDescription>
+                    <CardDescription>The full source code of the shell script being analyzed.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <CodeBlock>{scriptContent}</CodeBlock>
@@ -83,7 +84,7 @@ echo "Scrubbing complete."
                     <CardTitle className="flex items-center gap-2"><Zap className="size-5" /> Purpose</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-muted-foreground">This script, named "Network & System File Scrubber," is designed to perform automated cleanup on a Linux system. Its primary goals are to identify old log files and temporary files that are no longer needed, compress them for archival purposes, and optionally delete them to free up disk space. This is a common maintenance task for servers to prevent disks from filling up.</p>
+                    <p className="text-muted-foreground">This script, named "Network & System File Scrubber," is an automated maintenance tool for a Linux environment. Its primary objective is to manage disk space by identifying and processing old log files and temporary files. This type of routine cleanup is crucial for server health, preventing disk space exhaustion and ensuring smooth operation.</p>
                 </CardContent>
             </Card>
 
@@ -91,18 +92,18 @@ echo "Scrubbing complete."
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2"><Server className="size-5" /> Key Components</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-6">
                     <div>
                         <h3 className="font-semibold text-foreground">Configuration Variables</h3>
-                        <p className="text-muted-foreground">The script begins by defining key locations and thresholds, such as the log directory (`/var/log`), the temp directory (`/tmp`), and the age limit for files (`30` days). This makes the script easy to modify.</p>
+                        <p className="text-muted-foreground">The script defines variables at the top for easy modification. Key settings like the target directories (`/var/log`, `/tmp`), the archive destination (`/opt/archives`), and the file age threshold (`30` days) are centralized, allowing an administrator to adjust the script's behavior without altering its core logic.</p>
                     </div>
-                    <div>
-                        <h3 className="font-semibold text-foreground">Archiving Logic</h3>
-                        <p className="text-muted-foreground">It uses the `find` command to locate all files ending in `.log` that are older than 30 days. For each file found, it uses `gzip` to create a compressed version in the `/opt/archives` directory, appending the current date to the archive name.</p>
+                     <div className="border-t pt-6">
+                        <h3 className="font-semibold text-foreground">Log File Archiving</h3>
+                        <p className="text-muted-foreground">The script uses the `find` command to locate all files (`-type f`) in the log directory that end with `.log` and were last modified more than 30 days ago (`-mtime +30`). Each found file is then piped to a `while` loop, where `gzip` creates a compressed archive. The original file is left untouched, but a commented-out `rm` command suggests it could be deleted after archiving.</p>
                     </div>
-                    <div>
-                        <h3 className="font-semibold text-foreground">Cleanup Logic</h3>
-                        <p className="text-muted-foreground">Similarly, it uses `find` to locate and directly delete (`rm -v`) any temporary files in `/tmp` older than the specified limit. The `-v` flag makes the deletion process verbose, showing which files are being removed.</p>
+                    <div className="border-t pt-6">
+                        <h3 className="font-semibold text-foreground">Temporary File Cleanup</h3>
+                        <p className="text-muted-foreground">A second `find` command is executed on the temporary directory. It identifies any file older than 30 days and directly executes the `rm -v` command on it. The `-v` (verbose) flag ensures that the name of each deleted file is printed to the screen, providing a clear record of the cleanup process.</p>
                     </div>
                 </CardContent>
             </Card>
