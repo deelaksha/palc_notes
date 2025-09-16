@@ -16,6 +16,8 @@ import { GitRemoteGame } from '@/components/git-game/GitRemoteGame';
 import { GitFetchGame } from '@/components/git-game/GitFetchGame';
 import { GitPullGame } from '@/components/git-game/GitPullGame';
 import { GitPushGame } from '@/components/git-game/GitPushGame';
+import { GitLogGame } from '@/components/git-game/GitLogGame';
+import { GitDiffGame } from '@/components/git-game/GitDiffGame';
 
 export function generateStaticParams() {
   return gitCommandsData.map((command) => ({
@@ -51,6 +53,10 @@ function renderGameForCommand(commandName: string | undefined) {
             return <GitPullGame />;
         case 'git push':
             return <GitPushGame />;
+        case 'git log':
+            return <GitLogGame />;
+        case 'git diff':
+            return <GitDiffGame />;
         default:
             return (
                 <div className="text-center text-white glass-effect p-12 rounded-2xl">
