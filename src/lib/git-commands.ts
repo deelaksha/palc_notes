@@ -138,7 +138,7 @@ export const gitCommandsData = [
         ],
         realWorld: "You use `checkout` whenever you need to switch what you're working on. It's a fundamental part of the daily Git workflow.",
         imageUrl: "https://picsum.photos/seed/git-checkout/600/400",
-        imageAlt: "Flow diagram for 'git checkout' showing how the HEAD pointer moves from one branch to another, updating the working directory. Use light blue nodes for branches, bold text, and black arrows."
+        imageAlt: "A 'git checkout' flowchart. Before: The main branch has commits A, B, and C. HEAD points to C, and the Working Directory contains files from C. After running 'git checkout B', HEAD now points to commit B. The Working Directory is updated with files from commit B."
     },
     {
         category: "Branching & Merging",
