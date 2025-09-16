@@ -1,6 +1,6 @@
 
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Book, Braces, Brackets, Captions, CaseSensitive, Regex, Star, Wand2 } from 'lucide-react';
+import { ArrowRight, Book, Braces, Brackets, Captions, CaseSensitive, Regex, Star, Wand2, Eye } from 'lucide-react';
 import Link from 'next/link';
 
 const categories = [
@@ -66,7 +66,29 @@ export default function RegexHubPage() {
 
         <section className="w-full">
           <div className="container px-4 md:px-6">
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+               <Link href="/regex/practical" className="group lg:col-span-3">
+                  <Card className="h-full transition-all duration-300 ease-in-out group-hover:shadow-lg group-hover:-translate-y-1 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border-purple-500/30 hover:border-purple-500/60">
+                    <CardHeader className="p-6">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div className={`p-3 rounded-lg w-fit bg-purple-500/20 text-purple-400`}>
+                            <Eye className="size-8" />
+                          </div>
+                          <div>
+                            <CardTitle className="font-headline text-lg text-foreground">
+                              Practical Regex Visualizer
+                            </CardTitle>
+                            <CardDescription className="mt-1">
+                              Watch the regex engine work in real-time with an animated visualizer.
+                            </CardDescription>
+                          </div>
+                        </div>
+                        <ArrowRight className="size-5 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary mt-1" />
+                      </div>
+                    </CardHeader>
+                  </Card>
+                </Link>
               {categories.map((cat) => (
                 <Link key={cat.name} href={cat.href} className="group">
                   <Card className={`h-full transition-all duration-300 ease-in-out group-hover:shadow-lg group-hover:-translate-y-1 ${cat.color}`}>

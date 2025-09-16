@@ -86,7 +86,7 @@ export default {
         'secondary-accent': 'var(--secondary-accent)',
         'tertiary-accent': 'var(--tertiary-accent)',
 
-        // Git Game Theme
+        // Git Game & Regex Theme
         'neon-blue': '#00f3ff',
         'neon-green': '#00ff41',
         'neon-pink': '#ff006e',
@@ -131,7 +131,7 @@ export default {
                 transform: 'translateY(0)'
             }
         },
-        // Git Game Animations
+        // Git Game & Regex Animations
         'float': {
           '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
           '33%': { transform: 'translateY(-20px) rotate(1deg)' },
@@ -158,6 +158,15 @@ export default {
             'from': { transform: 'translate(0, 0) scale(1)', opacity: '1' },
             'to': { transform: 'translate(var(--x), var(--y)) scale(0)', opacity: '0' }
         },
+        'pulse-once': {
+            '0%': { transform: 'scale(1)', boxShadow: '0 0 0 0px #00ff41' },
+            '50%': { transform: 'scale(1.1)', boxShadow: '0 0 15px 5px #00ff41' },
+            '100%': { transform: 'scale(1)', boxShadow: '0 0 0 0px #00ff41' },
+        },
+        'confetti-fall': {
+            'from': { transform: 'translateY(0) rotate(0deg)', opacity: '1' },
+            'to': { transform: 'translateY(150px) rotate(720deg)', opacity: '0' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -165,13 +174,15 @@ export default {
         'gradient-xy': 'gradient-xy 15s ease infinite',
         'fade-in-up': 'fade-in-up 0.5s ease-out forwards',
         'gradient': 'gradient-animation 18s ease infinite',
-        // Git Game Animations
+        // Git Game & Regex Animations
         'float': 'float 20s ease-in-out infinite',
         'gradient-shift': 'gradient-shift 4s ease-in-out infinite',
         'slide-in-up': 'slide-in-up 0.5s ease',
         'pulse-custom': 'pulse-custom 2s infinite',
         'shake-custom': 'shake-custom 1s infinite',
-        'particle-burst': 'particle-burst 1s ease-out'
+        'particle-burst': 'particle-burst 1s ease-out',
+        'pulse-once': 'pulse-once 1s forwards',
+        'confetti-fall': 'confetti-fall 2s ease-out forwards',
       },
       textShadow: {
         glow: '0 0 8px hsl(var(--primary) / 0.8)',
