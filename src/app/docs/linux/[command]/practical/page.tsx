@@ -42,6 +42,9 @@ import { GzipGame } from '@/components/linux-game/GzipGame';
 import { GunzipGame } from '@/components/linux-game/GunzipGame';
 import { ZipGame } from '@/components/linux-game/ZipGame';
 import { UnzipGame } from '@/components/linux-game/UnzipGame';
+import { WhoamiGame } from '@/components/linux-game/WhoamiGame';
+import { IdGame } from '@/components/linux-game/IdGame';
+import { WhoGame } from '@/components/linux-game/WhoGame';
 
 export function generateStaticParams() {
   return commandsData.map((command) => ({
@@ -127,6 +130,12 @@ function renderGameForCommand(commandName: string | undefined) {
             return <ZipGame />;
         case 'unzip':
             return <UnzipGame />;
+        case 'whoami':
+            return <WhoamiGame />;
+        case 'id':
+            return <IdGame />;
+        case 'who':
+            return <WhoGame />;
         default:
             return (
                 <div className="text-center text-white glass-effect p-12 rounded-2xl">
