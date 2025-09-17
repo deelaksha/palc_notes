@@ -58,6 +58,7 @@ const FileSystemView = () => (
 
 export function FindGame() {
     const [namePattern, setNamePattern] = useState('');
+    const [regexPattern, setRegexPattern] = useState('');
     const [typeFilter, setTypeFilter] = useState('any');
     const [results, setResults] = useState<any[]>([]);
     const [command, setCommand] = useState('find .');
@@ -66,10 +67,19 @@ export function FindGame() {
         let newCommand = 'find .';
         let filtered = [...fileSystem];
 
-        if (namePattern) {
+        if (regexPattern) {
+            newCommand += ` -regex "${regexPattern}"`;
+            try {
+                const regex = new RegExp(regexPattern);
+                filtered = filtered.filter(item => regex.test(item.path));
+            } catch (e) {
+                console.error("Invalid Regex");
+                filtered = [];
+            }
+        } else if (namePattern) {
             newCommand += ` -name "${namePattern}"`;
-            const regex = new RegExp(namePattern.replace(/\*/g, '.*'));
-            filtered = filtered.filter(item => regex.test(item.path.split('/').pop()!));
+            const globPattern = new RegExp(namePattern.replace(/\*/g, '.*'));
+            filtered = filtered.filter(item => globPattern.test(item.path.split('/').pop()!));
         }
 
         if (typeFilter !== 'any') {
@@ -93,7 +103,17 @@ export function FindGame() {
                         <Input 
                             placeholder="e.g., *.js or README.*" 
                             value={namePattern} 
-                            onChange={e => setNamePattern(e.target.value)}
+                            onChange={e => { setNamePattern(e.target.value); setRegexPattern(''); }}
+                            className="bg-dark-primary mt-1"
+                        />
+                    </div>
+
+                     <div>
+                        <label className="text-sm">Regex Pattern (`-regex`)</label>
+                        <Input 
+                            placeholder="e.g., .*/\\.js$" 
+                            value={regexPattern} 
+                            onChange={e => { setRegexPattern(e.target.value); setNamePattern(''); }}
                             className="bg-dark-primary mt-1"
                         />
                     </div>
