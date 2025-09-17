@@ -78,5 +78,31 @@ export const networkingConceptsData: NetworkingConcept[] = [
             }
         ],
         realWorld: "Port numbers are used by the Transport Layer (Layer 4) of the OSI model. They allow a single host to provide many different services simultaneously. This is why you can browse the web, check your email, and be on a video call all at the same time."
+    },
+    {
+        name: "Network Bridge",
+        slug: "network-bridge",
+        description: "A network bridge is a device that connects two or more separate network segments, creating a single, larger network. It operates at the Data Link layer (Layer 2) and makes intelligent decisions about how to forward traffic based on MAC addresses.",
+        howItWorks: [
+            "A 'Host' is any device on the network, like a computer or a server.",
+            "When a bridge is first turned on, it knows nothing. It listens to all traffic.",
+            "When a host sends a data frame, the bridge reads the source MAC address and notes which segment it came from. It builds a 'MAC Address Table' to remember where each host lives.",
+            "When a frame arrives, the bridge checks the destination MAC address against its table.",
+            "If the destination is on the same segment as the source, the bridge ignores the frame, preventing unnecessary traffic from crossing over.",
+            "If the destination is on a different segment, the bridge forwards the frame only to that segment.",
+            "If the destination is unknown, the bridge acts like a simple hub and forwards the frame to all other segments (this is called flooding)."
+        ],
+        analogy: "A network bridge is like a **smart security guard at the entrance of a two-building office complex**. At first, they don't know who works in which building. When an employee, 'John' from Building A, walks past, the guard makes a note: 'John is in Building A'. When a package arrives for 'Susan', the guard checks their notes. If they know 'Susan is in Building B', they send the courier only to Building B. If they don't know where Susan is, they announce over the intercom to both buildings, 'Package for Susan!'.",
+        examples: [
+            {
+                title: "Connecting Two Departments",
+                text: "An office might use a bridge to connect the Marketing department's network and the Sales department's network. The bridge learns which computers are in which department and keeps most of the traffic contained, reducing congestion."
+            },
+            {
+                title: "Wireless Access Points",
+                text: "Many wireless access points have a built-in bridge to connect the wireless network segment to the wired (Ethernet) network segment."
+            }
+        ],
+        realWorld: "Bridges are fundamental to how modern networks are structured. While simple bridges are less common now (their function is often built into more advanced devices like switches), the principle of learning MAC addresses to intelligently forward Layer 2 traffic is a core concept that makes large local networks efficient."
     }
 ];

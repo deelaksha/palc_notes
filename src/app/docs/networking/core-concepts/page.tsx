@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowLeft, ArrowRight, Network, Fingerprint, Anchor } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Network, Fingerprint, Anchor, Waypoints } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
@@ -27,6 +27,12 @@ const topics = [
     description: 'The apartment number that directs data to the right application.',
     href: '/docs/networking/port-number',
     icon: <Anchor className="size-8" />,
+  },
+  {
+    title: 'Network Bridge',
+    description: 'A device that connects and filters traffic between network segments.',
+    href: '/docs/networking/network-bridge',
+    icon: <Waypoints className="size-8" />,
   },
 ];
 
@@ -50,7 +56,7 @@ export default function CoreConceptsPage() {
 
       <section className="w-full">
         <div className="container px-4 md:px-6">
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
             {topics.map((topic) => (
               <Link key={topic.title} href={topic.href} className="group">
                 <Card className="h-full transition-all duration-300 ease-in-out group-hover:border-primary group-hover:shadow-lg group-hover:shadow-primary/10 group-hover:-translate-y-1">
