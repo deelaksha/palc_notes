@@ -41,6 +41,21 @@ const ResultItem = ({ path, type }: { path: string; type: string }) => (
     </motion.div>
 );
 
+const FileSystemView = () => (
+    <div className="glass-effect rounded-2xl p-6 border-2 border-neon-blue/50">
+        <h2 className="text-xl font-bold text-neon-blue mb-4">File System View</h2>
+        <p className="text-xs text-gray-400 mb-4">A simplified view of files the `find` command will search through.</p>
+        <div className="bg-dark-primary p-4 rounded-lg text-sm font-mono grid grid-cols-2 gap-x-4 gap-y-2">
+            {fileSystem.map(item => (
+                <div key={item.path} className="flex items-center gap-2">
+                     {item.type === 'file' ? <FileText className="w-4 h-4 text-white/70 flex-shrink-0" /> : <Folder className="w-4 h-4 text-amber-400/70 flex-shrink-0" />}
+                    <span className="truncate">{item.path}</span>
+                </div>
+            ))}
+        </div>
+    </div>
+);
+
 export function FindGame() {
     const [namePattern, setNamePattern] = useState('');
     const [typeFilter, setTypeFilter] = useState('any');
@@ -67,43 +82,46 @@ export function FindGame() {
     };
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl mx-auto">
-            {/* Controls */}
-            <div className="md:col-span-1 glass-effect rounded-2xl p-6 border-2 border-neon-pink/50 space-y-4">
-                <h2 className="text-xl font-bold text-neon-pink mb-4 flex items-center gap-2"><Search/> `find` Controls</h2>
-                
-                <div>
-                    <label className="text-sm">Name Pattern (`-name`)</label>
-                    <Input 
-                        placeholder="e.g., *.js or README.*" 
-                        value={namePattern} 
-                        onChange={e => setNamePattern(e.target.value)}
-                        className="bg-dark-primary mt-1"
-                    />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full max-w-6xl mx-auto">
+            {/* Left Column: Controls and File System */}
+            <div className="space-y-6">
+                <div className="glass-effect rounded-2xl p-6 border-2 border-neon-pink/50 space-y-4">
+                    <h2 className="text-xl font-bold text-neon-pink mb-4 flex items-center gap-2"><Search/> `find` Controls</h2>
+                    
+                    <div>
+                        <label className="text-sm">Name Pattern (`-name`)</label>
+                        <Input 
+                            placeholder="e.g., *.js or README.*" 
+                            value={namePattern} 
+                            onChange={e => setNamePattern(e.target.value)}
+                            className="bg-dark-primary mt-1"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="text-sm">Type (`-type`)</label>
+                        <Select value={typeFilter} onValueChange={setTypeFilter}>
+                            <SelectTrigger className="bg-dark-primary mt-1">
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="any">Any</SelectItem>
+                                <SelectItem value="file">File (f)</SelectItem>
+                                <SelectItem value="folder">Directory (d)</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <Button onClick={handleFind} className="w-full !mt-6 bg-neon-green text-black hover:bg-white">
+                        Run Find
+                    </Button>
                 </div>
 
-                <div>
-                    <label className="text-sm">Type (`-type`)</label>
-                     <Select value={typeFilter} onValueChange={setTypeFilter}>
-                        <SelectTrigger className="bg-dark-primary mt-1">
-                            <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="any">Any</SelectItem>
-                            <SelectItem value="file">File (f)</SelectItem>
-                            <SelectItem value="folder">Directory (d)</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
-                <p className="text-xs text-gray-400 pt-2 border-t border-white/10">More filters like size and time coming soon!</p>
-
-                <Button onClick={handleFind} className="w-full !mt-6 bg-neon-green text-black hover:bg-white">
-                    Run Find
-                </Button>
+                <FileSystemView />
             </div>
 
-            {/* Terminal Output */}
-            <div className="md:col-span-2 glass-effect rounded-2xl p-6 border-2 border-neon-green/50">
+            {/* Right Column: Terminal Output */}
+            <div className="glass-effect rounded-2xl p-6 border-2 border-neon-green/50">
                  <div className="flex items-center gap-3 mb-4">
                     <Terminal className="h-6 w-6 text-neon-green" />
                     <h2 className="text-xl font-bold">Terminal Output</h2>
