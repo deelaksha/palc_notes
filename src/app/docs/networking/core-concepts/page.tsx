@@ -5,39 +5,52 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, Layers, Network, Fingerprint, Anchor, Library } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Network, Fingerprint, Anchor } from 'lucide-react';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 const topics = [
-  {
-    title: 'OSI Model Explained',
-    description: 'A deep dive into the 7 layers of the OSI model with animations.',
-    href: '/docs/networking/osi-model',
-    icon: <Layers className="size-8" />,
-  },
    {
-    title: 'Core Networking Concepts',
-    description: 'Explore IP addresses, MAC addresses, and Port numbers.',
-    href: '/docs/networking/core-concepts',
-    icon: <Library className="size-8" />,
+    title: 'IP Address',
+    description: 'The mailing address of your computer on the internet.',
+    href: '/docs/networking/ip-address',
+    icon: <Network className="size-8" />,
+  },
+  {
+    title: 'MAC Address',
+    description: 'The unique hardware fingerprint of your device.',
+    href: '/docs/networking/mac-address',
+    icon: <Fingerprint className="size-8" />,
+  },
+  {
+    title: 'Port Number',
+    description: 'The apartment number that directs data to the right application.',
+    href: '/docs/networking/port-number',
+    icon: <Anchor className="size-8" />,
   },
 ];
 
-export default function NetworkingPage() {
+export default function CoreConceptsPage() {
   return (
     <main className="flex-1 p-4 md:p-8 lg:p-12">
+        <Button asChild variant="ghost" className="mb-8">
+            <Link href="/docs/networking">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Networking
+            </Link>
+        </Button>
       <header className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-bold text-primary font-headline mb-2">
-          Networking Concepts
+          Core Networking Concepts
         </h1>
         <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-          Explore fundamental networking protocols, models, and concepts.
+          Explore the fundamental building blocks of network communication.
         </p>
       </header>
 
       <section className="w-full">
         <div className="container px-4 md:px-6">
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {topics.map((topic) => (
               <Link key={topic.title} href={topic.href} className="group">
                 <Card className="h-full transition-all duration-300 ease-in-out group-hover:border-primary group-hover:shadow-lg group-hover:shadow-primary/10 group-hover:-translate-y-1">

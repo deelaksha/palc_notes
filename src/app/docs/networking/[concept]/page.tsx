@@ -43,9 +43,9 @@ export default function ConceptHubPage({
     <div className="flex flex-col flex-1">
       <main className="flex-1 p-4 md:p-8 lg:p-12">
          <Button asChild variant="ghost" className="mb-8">
-            <Link href="/docs/networking">
+            <Link href="/docs/networking/core-concepts">
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Networking Concepts
+                Back to Core Concepts
             </Link>
         </Button>
         <header className="text-center mb-12">
