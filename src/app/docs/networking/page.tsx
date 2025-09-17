@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, Layers } from 'lucide-react';
+import { ArrowRight, Layers, Network, Fingerprint, Anchor } from 'lucide-react';
 import Link from 'next/link';
 
 const topics = [
@@ -14,6 +14,24 @@ const topics = [
     description: 'A deep dive into the 7 layers of the OSI model with animations.',
     href: '/docs/networking/osi-model',
     icon: <Layers className="size-8" />,
+  },
+   {
+    title: 'IP Address',
+    description: 'The mailing address of your computer on the internet.',
+    href: '/docs/networking/ip-address',
+    icon: <Network className="size-8" />,
+  },
+  {
+    title: 'MAC Address',
+    description: 'The unique hardware fingerprint of your device.',
+    href: '/docs/networking/mac-address',
+    icon: <Fingerprint className="size-8" />,
+  },
+  {
+    title: 'Port Number',
+    description: 'The apartment number that directs data to the right application.',
+    href: '/docs/networking/port-number',
+    icon: <Anchor className="size-8" />,
   },
 ];
 
