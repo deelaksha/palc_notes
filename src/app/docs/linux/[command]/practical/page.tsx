@@ -1,4 +1,5 @@
 
+
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowLeft, Construction } from 'lucide-react';
@@ -22,6 +23,13 @@ import { LessGame } from '@/components/linux-game/LessGame';
 import { ChmodGame } from '@/components/linux-game/ChmodGame';
 import { ChownGame } from '@/components/linux-game/ChownGame';
 import { UmaskGame } from '@/components/linux-game/UmaskGame';
+import { PsGame } from '@/components/linux-game/PsGame';
+import { TopGame } from '@/components/linux-game/TopGame';
+import { KillGame } from '@/components/linux-game/KillGame';
+import { UptimeGame } from '@/components/linux-game/UptimeGame';
+import { DfGame } from '@/components/linux-game/DfGame';
+import { DuGame } from '@/components/linux-game/DuGame';
+import { FreeGame } from '@/components/linux-game/FreeGame';
 
 export function generateStaticParams() {
   return commandsData.map((command) => ({
@@ -69,6 +77,20 @@ function renderGameForCommand(commandName: string | undefined) {
             return <ChownGame />;
         case 'umask':
             return <UmaskGame />;
+        case 'ps':
+            return <PsGame />;
+        case 'top':
+            return <TopGame />;
+        case 'kill':
+            return <KillGame />;
+        case 'uptime':
+            return <UptimeGame />;
+        case 'df':
+            return <DfGame />;
+        case 'du':
+            return <DuGame />;
+        case 'free':
+            return <FreeGame />;
         default:
             return (
                 <div className="text-center text-white glass-effect p-12 rounded-2xl">
