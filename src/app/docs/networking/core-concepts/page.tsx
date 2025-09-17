@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowLeft, ArrowRight, Network, Fingerprint, Anchor, Waypoints } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Network, Fingerprint, Anchor, Waypoints, Route } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
@@ -33,6 +33,12 @@ const topics = [
     description: 'A device that connects and filters traffic between network segments.',
     href: '/docs/networking/network-bridge',
     icon: <Waypoints className="size-8" />,
+  },
+  {
+    title: 'Routing',
+    description: 'The process of selecting a path for data to travel across networks.',
+    href: '/docs/networking/routing',
+    icon: <Route className="size-8" />,
   },
 ];
 

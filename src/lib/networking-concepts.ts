@@ -104,5 +104,29 @@ export const networkingConceptsData: NetworkingConcept[] = [
             }
         ],
         realWorld: "Bridges are fundamental to how modern networks are structured. While simple bridges are less common now (their function is often built into more advanced devices like switches), the principle of learning MAC addresses to intelligently forward Layer 2 traffic is a core concept that makes large local networks efficient."
+    },
+    {
+        name: "Routing",
+        slug: "routing",
+        description: "Routing is the process of selecting a path for data to travel from a source to a destination across one or more networks. It's the internet's fundamental guidance system.",
+        howItWorks: [
+            "Routers are devices that connect different networks together.",
+            "Each router maintains a 'routing table', which is a set of rules, like a signpost, that tells it where to send data packets.",
+            "When a packet arrives at a router, the router examines the destination IP address on the packet.",
+            "It looks up this IP address in its routing table to find the best 'next hop'—the next router to send the packet to on its journey.",
+            "This process repeats from router to router across the internet until the packet reaches its final destination network."
+        ],
+        analogy: "Routing is like a **GPS for your data**. You give it a final destination address (the IP address). At every intersection (router), the GPS checks its map (routing table) and tells you which road to take next to get closer to your destination.",
+        examples: [
+            {
+                title: "Home Network",
+                text: "When you send a request from your laptop to google.com, your home router is the first hop. Its routing table has a 'default route' that says 'for any address I don't know, send it to the ISP'."
+            },
+            {
+                title: "Internet Backbone",
+                text: "Your ISP's router then receives the packet and looks at its massive routing table to decide which major internet backbone to forward the packet to, getting it one step closer to Google's servers."
+            }
+        ],
+        realWorld: "Routing is what makes the global internet possible. Protocols like BGP (Border Gateway Protocol) allow routers from different internet service providers all over the world to share their routing tables, creating a decentralized and resilient network that can find paths between any two points."
     }
 ];
