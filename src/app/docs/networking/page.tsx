@@ -1,12 +1,16 @@
 
+'use client';
+
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, Layers, Network, Fingerprint, Anchor, Library } from 'lucide-react';
+import { ArrowRight, Layers, Library, Route, Bot } from 'lucide-react';
 import Link from 'next/link';
+import { RoutingGame } from '@/components/networking/RoutingGame';
+import { DynamicRoutingGame } from '@/components/networking/DynamicRoutingGame';
 
 const topics = [
   {
@@ -20,6 +24,18 @@ const topics = [
     description: 'Explore IP addresses, MAC addresses, and Port numbers.',
     href: '/docs/networking/core-concepts',
     icon: <Library className="size-8" />,
+  },
+  {
+    title: 'Routing',
+    description: 'A deep dive into how routers send packets across networks.',
+    href: '/docs/networking/routing',
+    icon: <Route className="size-8" />,
+  },
+  {
+    title: 'Dynamic Routing',
+    description: 'Learn how routers automatically adapt to network changes.',
+    href: '/docs/networking/dynamic-routing',
+    icon: <Bot className="size-8" />,
   },
 ];
 
@@ -35,7 +51,7 @@ export default function NetworkingPage() {
         </p>
       </header>
 
-      <section className="w-full">
+      <section className="w-full space-y-12">
         <div className="container px-4 md:px-6">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
             {topics.map((topic) => (
@@ -64,6 +80,7 @@ export default function NetworkingPage() {
             ))}
           </div>
         </div>
+        
       </section>
     </main>
   );
