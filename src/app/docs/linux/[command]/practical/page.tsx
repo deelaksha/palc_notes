@@ -6,6 +6,7 @@ import { commandsData } from '@/lib/linux-commands';
 import { LsGame } from '@/components/linux-game/LsGame';
 import { CdGame } from '@/components/linux-game/CdGame';
 import { MkdirGame } from '@/components/linux-game/MkdirGame';
+import { PwdGame } from '@/components/linux-game/PwdGame';
 
 export function generateStaticParams() {
   return commandsData.map((command) => ({
@@ -21,6 +22,8 @@ function renderGameForCommand(commandName: string | undefined) {
             return <CdGame />;
         case 'mkdir':
             return <MkdirGame />;
+        case 'pwd':
+            return <PwdGame />;
         default:
             return (
                 <div className="text-center text-white glass-effect p-12 rounded-2xl">
