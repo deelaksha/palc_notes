@@ -12,6 +12,7 @@ import { TouchGame } from '@/components/linux-game/TouchGame';
 import { CpGame } from '@/components/linux-game/CpGame';
 import { MvGame } from '@/components/linux-game/MvGame';
 import { RmGame } from '@/components/linux-game/RmGame';
+import { FindGame } from '@/components/linux-game/FindGame';
 
 export function generateStaticParams() {
   return commandsData.map((command) => ({
@@ -39,6 +40,8 @@ function renderGameForCommand(commandName: string | undefined) {
             return <MvGame />;
         case 'rm':
             return <RmGame />;
+        case 'find':
+            return <FindGame />;
         default:
             return (
                 <div className="text-center text-white glass-effect p-12 rounded-2xl">
