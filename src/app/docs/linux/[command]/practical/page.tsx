@@ -7,6 +7,11 @@ import { LsGame } from '@/components/linux-game/LsGame';
 import { CdGame } from '@/components/linux-game/CdGame';
 import { MkdirGame } from '@/components/linux-game/MkdirGame';
 import { PwdGame } from '@/components/linux-game/PwdGame';
+import { RmdirGame } from '@/components/linux-game/RmdirGame';
+import { TouchGame } from '@/components/linux-game/TouchGame';
+import { CpGame } from '@/components/linux-game/CpGame';
+import { MvGame } from '@/components/linux-game/MvGame';
+import { RmGame } from '@/components/linux-game/RmGame';
 
 export function generateStaticParams() {
   return commandsData.map((command) => ({
@@ -24,6 +29,16 @@ function renderGameForCommand(commandName: string | undefined) {
             return <MkdirGame />;
         case 'pwd':
             return <PwdGame />;
+        case 'rmdir':
+            return <RmdirGame />;
+        case 'touch':
+            return <TouchGame />;
+        case 'cp':
+            return <CpGame />;
+        case 'mv':
+            return <MvGame />;
+        case 'rm':
+            return <RmGame />;
         default:
             return (
                 <div className="text-center text-white glass-effect p-12 rounded-2xl">
