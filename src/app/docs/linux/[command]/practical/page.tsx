@@ -19,6 +19,9 @@ import { TailGame } from '@/components/linux-game/TailGame';
 import { WcGame } from '@/components/linux-game/WcGame';
 import { CatGame } from '@/components/linux-game/CatGame';
 import { LessGame } from '@/components/linux-game/LessGame';
+import { ChmodGame } from '@/components/linux-game/ChmodGame';
+import { ChownGame } from '@/components/linux-game/ChownGame';
+import { UmaskGame } from '@/components/linux-game/UmaskGame';
 
 export function generateStaticParams() {
   return commandsData.map((command) => ({
@@ -60,6 +63,12 @@ function renderGameForCommand(commandName: string | undefined) {
             return <CatGame />;
         case 'less':
             return <LessGame />;
+        case 'chmod':
+            return <ChmodGame />;
+        case 'chown':
+            return <ChownGame />;
+        case 'umask':
+            return <UmaskGame />;
         default:
             return (
                 <div className="text-center text-white glass-effect p-12 rounded-2xl">
