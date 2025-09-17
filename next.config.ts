@@ -17,10 +17,6 @@ const nextConfig: NextConfig = {
     ],
   },
   webpack(config, { isServer }) {
-    config.ignoreWarnings = [
-      (warn) => warn.message.includes('ENOENT: no such file or directory'),
-    ];
-
     config.module.rules.push({
       test: /\.prompt$/,
       use: 'raw-loader',
