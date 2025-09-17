@@ -30,6 +30,13 @@ import { UptimeGame } from '@/components/linux-game/UptimeGame';
 import { DfGame } from '@/components/linux-game/DfGame';
 import { DuGame } from '@/components/linux-game/DuGame';
 import { FreeGame } from '@/components/linux-game/FreeGame';
+import { PingGame } from '@/components/linux-game/PingGame';
+import { IpAddrGame } from '@/components/linux-game/IpAddrGame';
+import { NetstatGame } from '@/components/linux-game/NetstatGame';
+import { ScpGame } from '@/components/linux-game/ScpGame';
+import { SshGame } from '@/components/linux-game/SshGame';
+import { WgetGame } from '@/components/linux-game/WgetGame';
+import { CurlGame } from '@/components/linux-game/CurlGame';
 
 export function generateStaticParams() {
   return commandsData.map((command) => ({
@@ -91,6 +98,20 @@ function renderGameForCommand(commandName: string | undefined) {
             return <DuGame />;
         case 'free':
             return <FreeGame />;
+        case 'ping':
+            return <PingGame />;
+        case 'ip addr':
+            return <IpAddrGame />;
+        case 'netstat':
+            return <NetstatGame />;
+        case 'scp':
+            return <ScpGame />;
+        case 'ssh':
+            return <SshGame />;
+        case 'wget':
+            return <WgetGame />;
+        case 'curl':
+            return <CurlGame />;
         default:
             return (
                 <div className="text-center text-white glass-effect p-12 rounded-2xl">
