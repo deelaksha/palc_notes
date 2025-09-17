@@ -60,7 +60,7 @@ export default function LinuxPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {commands.map((command) => (
                   <Link
-                    href={`/docs/linux/${command.name}`}
+                    href={`/docs/linux/${command.name.replace(' ', '-')}`}
                     key={command.name}
                     className="command-card-container group"
                   >

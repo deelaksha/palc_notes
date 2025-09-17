@@ -48,7 +48,7 @@ import { WhoGame } from '@/components/linux-game/WhoGame';
 
 export function generateStaticParams() {
   return commandsData.map((command) => ({
-    command: command.name,
+    command: command.name.replace(' ', '-'),
   }));
 }
 
@@ -152,7 +152,7 @@ export default function CommandPracticalPage({
 }: {
   params: { command: string };
 }) {
-    const command = commandsData.find((cmd) => cmd.name === params.command);
+    const command = commandsData.find((cmd) => cmd.name.replace(' ', '-') === params.command);
 
   return (
     <div className="flex flex-col min-h-screen font-mono bg-gradient-to-br from-dark-primary via-dark-secondary to-blue-900 text-white overflow-x-hidden">

@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 
 export function generateStaticParams() {
   return commandsData.map((command) => ({
-    command: command.name,
+    command: command.name.replace(' ', '-'),
   }));
 }
 
@@ -17,7 +17,7 @@ export default function CommandTheoryPage({
 }: {
   params: { command: string };
 }) {
-  const command = commandsData.find((cmd) => cmd.name === params.command);
+  const command = commandsData.find((cmd) => cmd.name.replace(' ', '-') === params.command);
 
   if (!command) {
     notFound();

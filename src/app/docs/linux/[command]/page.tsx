@@ -9,7 +9,7 @@ import { ArrowLeft } from 'lucide-react';
 
 export function generateStaticParams() {
   return commandsData.map((command) => ({
-    command: command.name,
+    command: command.name.replace(' ', '-'),
   }));
 }
 
@@ -18,7 +18,7 @@ export default function CommandHubPage({
 }: {
   params: { command: string };
 }) {
-  const command = commandsData.find((cmd) => cmd.name === params.command);
+  const command = commandsData.find((cmd) => cmd.name.replace(' ', '-') === params.command);
 
   if (!command) {
     notFound();
