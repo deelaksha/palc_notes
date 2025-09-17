@@ -1,10 +1,13 @@
+'use client';
+
 import { InteractiveRegexExample } from '@/components/regex/InteractiveRegexExample';
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
+import { motion } from 'framer-motion';
 
 const content = `
 # ⚓️ Anchors & Boundaries
 
-Anchors are special metacharacters that don't match any character. Instead, they match a **position** before, after, or between characters. They are crucial for ensuring your pattern matches at the right place.
+Anchors are special metacharacters that don\'t match any character. Instead, they match a **position** before, after, or between characters. They are crucial for ensuring your pattern matches at the right place.
 
 ---
 
@@ -19,7 +22,7 @@ The caret \`^\` asserts that the position is the very beginning of the string.
 const example1 = {
   pattern: '^Hello',
   text: 'Hello world\\nAnother line',
-  explanation: `The engine first checks if it's at the start of the string. It is. Then it matches "H", "e", "l", "l", "o". This is a match.`
+  explanation: `The engine first checks if it\'s at the start of the string. It is. Then it matches "H", "e", "l", "l", "o". This is a match.`
 };
 
 const content2 = `
@@ -88,19 +91,25 @@ const example5 = {
 
 export default function RegexAnchorsPage() {
   return (
-    <div className="flex">
-      <main className="flex-1">
-        <MarkdownRenderer markdown={content} />
-        <InteractiveRegexExample {...example1} />
-        <MarkdownRenderer markdown={content2} />
-        <InteractiveRegexExample {...example2} />
-        <MarkdownRenderer markdown={content3} />
-        <InteractiveRegexExample {...example3} />
-        <MarkdownRenderer markdown={content4} />
-        <InteractiveRegexExample {...example4} />
-        <MarkdownRenderer markdown={content5} />
-        <InteractiveRegexExample {...example5} />
-      </main>
-    </div>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="flex">
+        <main className="flex-1">
+          <MarkdownRenderer markdown={content} />
+          <InteractiveRegexExample {...example1} />
+          <MarkdownRenderer markdown={content2} />
+          <InteractiveRegexExample {...example2} />
+          <MarkdownRenderer markdown={content3} />
+          <InteractiveRegexExample {...example3} />
+          <MarkdownRenderer markdown={content4} />
+          <InteractiveRegexExample {...example4} />
+          <MarkdownRenderer markdown={content5} />
+          <InteractiveRegexExample {...example5} />
+        </main>
+      </div>
+    </motion.div>
   );
 }

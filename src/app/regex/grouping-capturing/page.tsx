@@ -1,5 +1,8 @@
+'use client';
+
 import { InteractiveRegexExample } from '@/components/regex/InteractiveRegexExample';
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
+import { motion } from 'framer-motion';
 
 const content = `
 # 📦 Grouping & Capturing
@@ -17,9 +20,9 @@ const example1 = {
   text: 'hahaha',
   explanation: `
 1.  The \`(ha)\` creates a group containing "ha".
-2.  The \`+\` quantifier applies to the *entire group*, meaning "match the sequence 'ha' one or more times".
+2.  The \`+\` quantifier applies to the *entire group*, meaning "match the sequence \'ha\' one or more times".
 
-Without the group, the pattern \`ha+\` would mean "match 'h' followed by 'a' one or more times", which would only match "haaaa...".
+Without the group, the pattern \`ha+\` would mean "match \'h\' followed by \'a\' one or more times", which would only match "haaaa...".
 `
 };
 
@@ -32,7 +35,7 @@ const example2 = {
 const content2 = `
 ---
 ## ✨ 2. Capturing Groups
-When you group a pattern using \`()\`, the text that matches inside the group is automatically "captured" and stored in memory. These captures are numbered starting from 1 based on the opening parenthesis's position.
+When you group a pattern using \`()\`, the text that matches inside the group is automatically "captured" and stored in memory. These captures are numbered starting from 1 based on the opening parenthesis\'s position.
 `;
 
 const example3 = {
@@ -59,7 +62,7 @@ const example4 = {
     text: 'This is a test test.',
     explanation: `
 - \`\\b\`: Word boundary.
-- \`(\\w+)\`: Matches one or more word characters and captures them into **Group 1**. Let's say it captures "test".
+- \`(\\w+)\`: Matches one or more word characters and captures them into **Group 1**. Let\'s say it captures "test".
 - \`\\s+\`: Matches one or more spaces.
 - \`\\1\`: This is the backreference. It tells the engine to match the exact text that was captured by Group 1, which is "test".
 - \`\\b\`: Word boundary.
@@ -69,14 +72,14 @@ const example4 = {
 const example5 = {
     pattern: '\\b([a-zA-Z])\\w*\\1\\b',
     text: 'level, rotor, Anna',
-    explanation: '`([a-zA-Z])` captures the first letter into Group 1, `\\w*` matches the middle of the word, and `\\1` requires the word to end with the same letter captured in Group 1.'
+    explanation: '\`([a-zA-Z])\` captures the first letter into Group 1, \`\\w*\` matches the middle of the word, and \`\\1\` requires the word to end with the same letter captured in Group 1.'
 };
 
 const content4 = `
 ---
 
 ## ✨ 3. Non-Capturing Groups \`(?:...)\`
-Sometimes you need to group parts of your pattern (e.g., to use a quantifier or alternation) but you don't care about capturing the result. Using a non-capturing group \`(?:...)\` is slightly more efficient because the engine doesn't have to store the matched text.
+Sometimes you need to group parts of your pattern (e.g., to use a quantifier or alternation) but you don\'t care about capturing the result. Using a non-capturing group \`(?:...)\` is slightly more efficient because the engine doesn\'t have to store the matched text.
 `;
 
 const example6 = {
@@ -106,21 +109,27 @@ const example7 = {
 
 export default function RegexGroupingPage() {
     return (
-        <div className="flex">
-            <main className="flex-1">
-                <MarkdownRenderer markdown={content} />
-                <InteractiveRegexExample {...example1} />
-                <InteractiveRegexExample {...example2} />
-                <MarkdownRenderer markdown={content2} />
-                <InteractiveRegexExample {...example3} />
-                <MarkdownRenderer markdown={content3} />
-                <InteractiveRegexExample {...example4} />
-                <InteractiveRegexExample {...example5} />
-                <MarkdownRenderer markdown={content4} />
-                <InteractiveRegexExample {...example6} />
-                <MarkdownRenderer markdown={content5} />
-                <InteractiveRegexExample {...example7} />
-            </main>
-        </div>
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+        >
+            <div className="flex">
+                <main className="flex-1">
+                    <MarkdownRenderer markdown={content} />
+                    <InteractiveRegexExample {...example1} />
+                    <InteractiveRegexExample {...example2} />
+                    <MarkdownRenderer markdown={content2} />
+                    <InteractiveRegexExample {...example3} />
+                    <MarkdownRenderer markdown={content3} />
+                    <InteractiveRegexExample {...example4} />
+                    <InteractiveRegexExample {...example5} />
+                    <MarkdownRenderer markdown={content4} />
+                    <InteractiveRegexExample {...example6} />
+                    <MarkdownRenderer markdown={content5} />
+                    <InteractiveRegexExample {...example7} />
+                </main>
+            </div>
+        </motion.div>
     );
 }

@@ -1,5 +1,8 @@
+'use client';
+
 import { InteractiveRegexExample } from '@/components/regex/InteractiveRegexExample';
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
+import { motion } from 'framer-motion';
 
 const content = `
 # 🔢 Quantifiers: Greedy vs. Lazy
@@ -46,7 +49,7 @@ const content2 = `
 This is a critical concept. By default, quantifiers are **Greedy**. This means they try to match **as much text as possible** while still allowing the rest of the pattern to match.
 
 ### Greedy Quantifiers
-Let's see a greedy quantifier in action.
+Let\'s see a greedy quantifier in action.
 `;
 
 const example3 = {
@@ -55,7 +58,7 @@ const example3 = {
   explanation: `
 1.  The engine sees \`<\` and matches the first one.
 2.  Then it sees \`.*\`. The \`.\` matches any character, and the \`*\` says "match 0 or more times, greedily".
-3.  The engine's greedy nature makes it consume the *entire rest of the string*: \`h1>This is a heading</h1>\`.
+3.  The engine\'s greedy nature makes it consume the *entire rest of the string*: \`h1>This is a heading</h1>\`.
 4.  It reaches the end of the string. Now it checks the rest of the pattern: \`>\`.
 5.  The engine has to backtrack from the end of its greedy match, one character at a time, until it finds a \`>\` that allows the pattern to succeed. It finds the very last \`>\`.
 - **Output**: \`<h1>This is a heading</h1>\` (The whole thing!)
@@ -73,9 +76,9 @@ const example4 = {
   text: '<h1>This is a heading</h1>',
   explanation: `
 1.  The engine sees \`<\` and matches the first one.
-2.  Then it sees \`.*?\`. It's lazy, so it first tries to match *zero* characters.
-3.  It checks the rest of the pattern: \`>\`. Does the next character match? Yes, it's 'h'. No match.
-4.  The lazy quantifier expands its match one character at a time. It matches 'h', then checks for \`>\`. No. It matches '1', then checks for \`>\`. Yes!
+2.  Then it sees \`.*?\`. It\'s lazy, so it first tries to match *zero* characters.
+3.  It checks the rest of the pattern: \`>\`. Does the next character match? Yes, it\'s \'h\'. No match.
+4.  The lazy quantifier expands its match one character at a time. It matches \'h\', then checks for \`>\`. No. It matches \'1\', then checks for \`>\`. Yes!
 - **Output**: The engine finds two matches: \`<h1>\` and \`</h1>\`.
 - **Pitfall**: Using greedy quantifiers like \`.*\`, especially with patterns that can be found multiple times in a string, is a common source of bugs. When in doubt, start with a lazy quantifier (\`.*?_\`) or a more specific negated character set (\`[^>]*\`). The pattern \`<[^>]*>\` is often a better and more efficient way to match an HTML tag than \`<.*?>\`.
 `
@@ -83,16 +86,22 @@ const example4 = {
 
 export default function RegexQuantifiersPage() {
     return (
-        <div className="flex">
-            <main className="flex-1">
-                <MarkdownRenderer markdown={content} />
-                <InteractiveRegexExample {...example1} />
-                <InteractiveRegexExample {...example2} />
-                <MarkdownRenderer markdown={content2} />
-                <InteractiveRegexExample {...example3} />
-                <MarkdownRenderer markdown={content3} />
-                <InteractiveRegexExample {...example4} />
-            </main>
-        </div>
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+        >
+            <div className="flex">
+                <main className="flex-1">
+                    <MarkdownRenderer markdown={content} />
+                    <InteractiveRegexExample {...example1} />
+                    <InteractiveRegexExample {...example2} />
+                    <MarkdownRenderer markdown={content2} />
+                    <InteractiveRegexExample {...example3} />
+                    <MarkdownRenderer markdown={content3} />
+                    <InteractiveRegexExample {...example4} />
+                </main>
+            </div>
+        </motion.div>
     );
 }

@@ -1,17 +1,20 @@
+'use client';
+
 import { InteractiveRegexExample } from '@/components/regex/InteractiveRegexExample';
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
+import { motion } from 'framer-motion';
 
 const content = `
 # 🧙‍♂️ The Basics: Characters & Sets
 
-Welcome, adventurer, to the world of Regular Expressions! Think of Regex as a secret language for finding and manipulating text. Let's start with the absolute basics.
+Welcome, adventurer, to the world of Regular Expressions! Think of Regex as a secret language for finding and manipulating text. Let\'s start with the absolute basics.
 
 ---
 
 ## ✨ 1. Introduction to Regex
 
 ### What is Regex?
-A **Regular Expression** (or **Regex**) is a special sequence of characters that defines a search pattern. You can use this pattern to find specific words, numbers, or structures within text. It's like a super-powered version of the "Find" feature in your text editor.
+A **Regular Expression** (or **Regex**) is a special sequence of characters that defines a search pattern. You can use this pattern to find specific words, numbers, or structures within text. It\'s like a super-powered version of the "Find" feature in your text editor.
 
 ### Why use Regex?
 - **Validation**: Check if an email address, phone number, or password is in the correct format.
@@ -29,7 +32,7 @@ Regex is used almost everywhere in programming and text processing:
 
 ## ✨ 2. Basic Concepts and Syntax
 
-Let's start with the building blocks of our secret language.
+Let\'s start with the building blocks of our secret language.
 
 ### Literal Characters
 The simplest regex is just a plain string of characters. The regex \`hello\` will find the exact substring "hello" in your text.
@@ -38,7 +41,7 @@ The simplest regex is just a plain string of characters. The regex \`hello\` wil
 const example1 = {
   pattern: 'hello',
   text: 'hello world',
-  explanation: `The engine looks for the character 'h', followed by 'e', 'l', 'l', 'o'.`
+  explanation: `The engine looks for the character \'h\', followed by \'e\', \'l\', \'l\', \'o\'.`
 };
 
 const content2 = `
@@ -69,11 +72,11 @@ Character sets, or character classes, let you match one character from a specifi
 
 | Pattern | What it Does | Example | Matches |
 |---|---|---|---|
-| \`[abc]\` | Matches a single 'a', 'b', or 'c' | \`gr[ea]y\` | "grey" or "gray" |
-| \`[a-z]\` | Matches any single lowercase letter from 'a' to 'z' | \`[a-z]ing\` | "sing", "ring" |
+| \`[abc]\` | Matches a single \'a\', \'b\', or \'c\' | \`gr[ea]y\` | "grey" or "gray" |
+| \`[a-z]\` | Matches any single lowercase letter from \'a\' to \'z\' | \`[a-z]ing\` | "sing", "ring" |
 | \`[A-Z0-9]\` | Matches any uppercase letter or any digit | \`[A-Z][0-9]\` | "A1", "C5" |
 | \`[a-zA-Z]\` | Matches any single letter, regardless of case. | \`[a-zA-Z]at\` | "Cat", "bat", "rat" |
-| \`[^abc]\` | **Negation**: Matches any single character **except** 'a', 'b', or 'c' | \`h[^o]t\` | "hat", "hit" (but not "hot") |
+| \`[^abc]\` | **Negation**: Matches any single character **except** \'a\', \'b\', or \'c\' | \`h[^o]t\` | "hat", "hit" (but not "hot") |
 
 ### Predefined Character Classes
 
@@ -89,14 +92,20 @@ Character sets, or character classes, let you match one character from a specifi
 
 export default function RegexBasicsPage() {
     return (
-        <div className="flex">
-            <main className="flex-1">
-                <MarkdownRenderer markdown={content} />
-                <InteractiveRegexExample {...example1} />
-                <MarkdownRenderer markdown={content2} />
-                <InteractiveRegexExample {...example2} />
-                <MarkdownRenderer markdown={content3} />
-            </main>
-        </div>
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+        >
+            <div className="flex">
+                <main className="flex-1">
+                    <MarkdownRenderer markdown={content} />
+                    <InteractiveRegexExample {...example1} />
+                    <MarkdownRenderer markdown={content2} />
+                    <InteractiveRegexExample {...example2} />
+                    <MarkdownRenderer markdown={content3} />
+                </main>
+            </div>
+        </motion.div>
     );
 }

@@ -1,15 +1,18 @@
+'use client';
+
 import { InteractiveRegexExample } from '@/components/regex/InteractiveRegexExample';
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
+import { motion } from 'framer-motion';
 
 const content = `
 # 🧙‍♂️ Advanced Magic: Lookarounds
 
-Lookarounds are the secret weapons of a Regex master. Like anchors, they are **zero-width assertions**, meaning they match a position, not characters. They allow you to create conditions—"match this pattern, but only if it's next to that other pattern"—without including the "other pattern" in the final match.
+Lookarounds are the secret weapons of a Regex master. Like anchors, they are **zero-width assertions**, meaning they match a position, not characters. They allow you to create conditions—"match this pattern, but only if it\'s next to that other pattern"—without including the "other pattern" in the final match.
 
 ---
 
 ## ✨ 1. Lookahead \`(?=...)\`
-**Positive Lookahead**: Asserts that the characters following the current position must match the pattern inside the lookahead, but doesn't consume them. Think of it as looking ahead in the string to see if a condition is met before deciding to match.
+**Positive Lookahead**: Asserts that the characters following the current position must match the pattern inside the lookahead, but doesn\'t consume them. Think of it as looking ahead in the string to see if a condition is met before deciding to match.
 `;
 
 const example1 = {
@@ -59,7 +62,7 @@ const example3 = {
 3.  The engine then proceeds to match \`\\d+\`, which matches "100".
 4.  Later, when it gets to "5", it peeks backward and sees "€". The lookbehind fails. No match.
 - **Output**: "100" and "20"
-- **Important Note**: Many regex engines require the pattern inside a lookbehind to be of a fixed length. You can't put quantifiers like \`*\` or \`+\` in them in most flavors.
+- **Important Note**: Many regex engines require the pattern inside a lookbehind to be of a fixed length. You can\'t put quantifiers like \`*\` or \`+\` in them in most flavors.
 `
 };
 
@@ -76,7 +79,7 @@ const example4 = {
     explanation: `
 1.  When the engine gets to "123", it looks behind. Is it preceded by "ID: "? No. The lookbehind succeeds. Match: "123".
 2.  When it gets to "456", it looks behind. Is it preceded by "ID: "? Yes. The negative lookbehind *fails*. No match.
-3.  When it gets to "789", it looks behind. It's not preceded by "ID: ". Match: "789".
+3.  When it gets to "789", it looks behind. It\'s not preceded by "ID: ". Match: "789".
 - **Output**: "123" and "789"
 `
 };
@@ -85,7 +88,7 @@ const content5 = `
 ---
 
 ## Example: Password Strength Check
-Lookaheads are famously used for password validation. Let's create a pattern that requires at least one lowercase letter, one uppercase letter, one digit, and is at least 8 characters long.
+Lookaheads are famously used for password validation. Let\'s create a pattern that requires at least one lowercase letter, one uppercase letter, one digit, and is at least 8 characters long.
 `;
 
 const example5 = {
@@ -93,7 +96,7 @@ const example5 = {
     text: 'A_strong_p@ssw0rd!',
     explanation: `
 - \`^\`: Anchor to the start of the string.
-- \`(?=.*[a-z])\`: A lookahead that asserts "somewhere in the string, there is a lowercase letter". It doesn't consume any characters.
+- \`(?=.*[a-z])\`: A lookahead that asserts "somewhere in the string, there is a lowercase letter". It doesn\'t consume any characters.
 - \`(?=.*[A-Z])\`: A second lookahead from the same starting position. It asserts "somewhere in the string, there is an uppercase letter".
 - \`(?=.*\\d)\`: A third lookahead asserting "somewhere in the string, there is a digit".
 - After all three lookaheads succeed (without moving the cursor!), the engine finally tries to consume characters with \`.{8,}\`.
@@ -104,19 +107,25 @@ This powerful combination lets you enforce multiple conditions on the same strin
 
 export default function RegexAdvancedPage() {
     return (
-        <div className="flex">
-            <main className="flex-1">
-                <MarkdownRenderer markdown={content} />
-                <InteractiveRegexExample {...example1} />
-                <MarkdownRenderer markdown={content2} />
-                <InteractiveRegexExample {...example2} />
-                <MarkdownRenderer markdown={content3} />
-                <InteractiveRegexExample {...example3} />
-                <MarkdownRenderer markdown={content4} />
-                <InteractiveRegexExample {...example4} />
-                <MarkdownRenderer markdown={content5} />
-                <InteractiveRegexExample {...example5} />
-            </main>
-        </div>
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+        >
+            <div className="flex">
+                <main className="flex-1">
+                    <MarkdownRenderer markdown={content} />
+                    <InteractiveRegexExample {...example1} />
+                    <MarkdownRenderer markdown={content2} />
+                    <InteractiveRegexExample {...example2} />
+                    <MarkdownRenderer markdown={content3} />
+                    <InteractiveRegexExample {...example3} />
+                    <MarkdownRenderer markdown={content4} />
+                    <InteractiveRegexExample {...example4} />
+                    <MarkdownRenderer markdown={content5} />
+                    <InteractiveRegexExample {...example5} />
+                </main>
+            </div>
+        </motion.div>
     );
 }

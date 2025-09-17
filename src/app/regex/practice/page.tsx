@@ -1,5 +1,8 @@
+'use client';
+
 import { InteractiveRegexExample } from '@/components/regex/InteractiveRegexExample';
 import { MarkdownRenderer } from '@/components/markdown/MarkdownRenderer';
+import { motion } from 'framer-motion';
 
 const content = `
 # 🌟 Common Patterns & Practice
@@ -86,28 +89,34 @@ You should never write regex blind! Always use a testing tool.
 ---
 
 ## ✨ 3. Tips & Best Practices
-- **Be Specific**: Write patterns that are as specific as possible. \`.+\` is powerful but lazy. \`[^<]+\` (match anything that isn't a closing bracket) is often better and more performant.
+- **Be Specific**: Write patterns that are as specific as possible. \`.+\` is powerful but lazy. \`[^<]+\` (match anything that isn\'t a closing bracket) is often better and more performant.
 - **Comment Your Regex**: Complex regex is hard to read. Use comments if your engine supports them (\`(?#...) \` or free-spacing mode \`x\`).
 - **Start Simple**: Build your pattern piece by piece. Get one part working, then add the next.
 - **Debug with a Tool**: Use regex101.com or our visualizer to see exactly how the engine is processing your string step-by-step.
-- **Avoid Catastrophic Backtracking**: A poorly written regex like \`(a|b|c)*d\` on a long string without a 'd' can take forever to run. Be careful with nested quantifiers and alternation.
+- **Avoid Catastrophic Backtracking**: A poorly written regex like \`(a|b|c)*d\` on a long string without a \'d\' can take forever to run. Be careful with nested quantifiers and alternation.
 `;
 
 export default function RegexPracticePage() {
     return (
-        <div className="flex">
-            <main className="flex-1">
-                <MarkdownRenderer markdown={content} />
-                 <div className="space-y-4">
-                    {examples.map((ex, i) => (
-                        <div key={i}>
-                            <h4 className="font-semibold text-foreground mb-2">{ex.title}</h4>
-                            <InteractiveRegexExample pattern={ex.pattern} text={ex.text} explanation="" />
-                        </div>
-                    ))}
-                </div>
-                <MarkdownRenderer markdown={content2} />
-            </main>
-        </div>
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+        >
+            <div className="flex">
+                <main className="flex-1">
+                    <MarkdownRenderer markdown={content} />
+                    <div className="space-y-4">
+                        {examples.map((ex, i) => (
+                            <div key={i}>
+                                <h4 className="font-semibold text-foreground mb-2">{ex.title}</h4>
+                                <InteractiveRegexExample pattern={ex.pattern} text={ex.text} explanation="" />
+                            </div>
+                        ))}
+                    </div>
+                    <MarkdownRenderer markdown={content2} />
+                </main>
+            </div>
+        </motion.div>
     );
 }
