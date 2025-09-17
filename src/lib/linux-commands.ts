@@ -521,20 +521,21 @@ export const commandsData = [
     {
         category: "Networking and Connectivity",
         name: "ip addr",
-        description: "The `ip addr` spell is like asking, 'What's my computer's home address on the internet?' It's a number that lets other computers find yours.",
+        description: "The `ip addr` spell is the modern way to ask, 'What's my computer's address on the network?' It shows all network interfaces and their assigned IP addresses.",
         howItWorks: [
-            "Think of the internet as a giant city. Every house needs a unique address so mail can be delivered. An IP address is your computer's address in this city.",
-            "When you run `ip addr` (or the shorter `ip a`), you get a lot of information. You're looking for a line that starts with `inet`.",
-            "The number right after `inet` is your IP address! It looks something like `192.168.1.5` for your home network, or a different set of numbers for the public internet.",
-            "You will see multiple 'devices' listed. `lo` is the 'loopback' device—it's like a note you write to yourself and doesn't go out to the network. Others like `eth0` or `wlan0` are your real connections (Ethernet cable or Wi-Fi)."
+            "It lists all network 'interfaces' on your system (like `lo` for loopback, `eth0` for Ethernet, `wlan0` for Wi-Fi).",
+            "For each interface, it shows the physical (MAC) address and the logical (IP) address.",
+            "The `inet` line shows your IPv4 address (e.g., `192.168.1.101/24`).",
+            "The `inet6` line shows your longer IPv6 address.",
+            "You can use the shorthand `ip a`."
         ],
         examples: [
-            { code: "ip a", text: "The fastest way to see all your network addresses. It's a shorter version of `ip addr show`." },
-            { code: "ip addr show eth0", text: "Shows information for only your main wired connection (often called `eth0`)." },
-            { code: "ip -4 addr", text: "Shows only the more common IPv4 addresses (like 192.168.1.5) and hides the longer IPv6 ones." },
-            { code: "ip addr | grep 'inet '", text: "A pro move! This shows all the address information and then filters it to only show the lines with your actual IP address on them."}
+            { code: "ip addr", text: "Shows address information for all network interfaces." },
+            { code: "ip a", text: "A common, faster alias for `ip addr`." },
+            { code: "ip addr show eth0", text: "Displays information only for the `eth0` (Ethernet) interface." },
+            { code: "ip -4 addr", text: "Shows only IPv4 addresses, hiding the IPv6 information for a cleaner view." }
         ],
-        realWorld: "If you want to play a multiplayer game with a friend on the same Wi-Fi, you both need to know your computer's IP address to connect to each other. You would run `ip a` to find it."
+        realWorld: "When setting up a home server or troubleshooting a network connection, `ip addr` is the standard command to find your computer's local IP address."
     },
     {
         category: "Networking and Connectivity",
