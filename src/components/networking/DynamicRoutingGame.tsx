@@ -7,6 +7,7 @@ import { Server, Mail, Route, WifiOff, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { Card, CardContent } from '@/components/ui/card';
 
 const nodes = {
   A: { x: '10%', y: '50%' },
