@@ -11,6 +11,7 @@ export const commandsData = [
             "**-a (The Secret-Detector)**: Reveals *all* files, including hidden ones that start with a dot (`.`), like secret configuration scrolls.",
             "**-h (The Humanizer)**: Used with `-l`, this makes file sizes easy to read (e.g., `4K`, `1.2M`) instead of giant numbers.",
             "**-t (The Time-Sorter)**: Sorts the files by the last time they were touched, showing the newest ones first.",
+            "**-S (The Size-Sorter)**: Sorts the files by size, largest first.",
             "**-R (The Explorer)**: Recursively lists everything in the current folder, and then everything inside those folders, and so on.",
             "Combine them for superpowers! `ls -laht` shows all files in a detailed, time-sorted, human-readable list."
         ],
@@ -186,7 +187,7 @@ export const commandsData = [
           { "code": "find /var/log -name \"*.log\" -mtime +30", "text": "Finds all log files in `/var/log` that are older than 30 days."}
         ],
         "realWorld": "A system admin uses `find` to hunt down large, old log files that are eating up disk space and delete them."
-      },      
+    },      
     {
         category: "File Viewing and Editing",
         name: "cat",

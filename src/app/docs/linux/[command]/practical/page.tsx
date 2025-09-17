@@ -17,6 +17,8 @@ import { GrepGame } from '@/components/linux-game/GrepGame';
 import { HeadGame } from '@/components/linux-game/HeadGame';
 import { TailGame } from '@/components/linux-game/TailGame';
 import { WcGame } from '@/components/linux-game/WcGame';
+import { CatGame } from '@/components/linux-game/CatGame';
+import { LessGame } from '@/components/linux-game/LessGame';
 
 export function generateStaticParams() {
   return commandsData.map((command) => ({
@@ -54,6 +56,10 @@ function renderGameForCommand(commandName: string | undefined) {
             return <TailGame />;
         case 'wc':
             return <WcGame />;
+        case 'cat':
+            return <CatGame />;
+        case 'less':
+            return <LessGame />;
         default:
             return (
                 <div className="text-center text-white glass-effect p-12 rounded-2xl">

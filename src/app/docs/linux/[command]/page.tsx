@@ -1,6 +1,6 @@
 
 import { commandsData } from '@/lib/linux-commands';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ArrowRight, BookOpen, Code } from 'lucide-react';
@@ -22,6 +22,14 @@ export default function CommandHubPage({
 
   if (!command) {
     notFound();
+  }
+
+  // For commands that are too complex for a practical game, redirect to their main doc page.
+  // We will create dedicated doc pages for them.
+  if (command.name === 'vim' || command.name === 'nano') {
+      if (command.name === 'vim') redirect('/docs/vim');
+      if (command.name === 'nano') redirect('/docs/linux/nano');
+      return null;
   }
 
   const options = [
