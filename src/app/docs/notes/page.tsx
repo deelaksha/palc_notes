@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, FileTerminal, Network, Layers } from 'lucide-react';
+import { ArrowRight, FileTerminal, Network, Layers, Route } from 'lucide-react';
 import Link from 'next/link';
 
 const notes = [
@@ -14,6 +14,12 @@ const notes = [
     description: 'Guide to network simulation, added on 09-16-2025.',
     href: '/docs/notes/network-simulation',
     icon: <Network className="size-8" />,
+  },
+  {
+    title: 'Routing Concepts Deep Dive',
+    description: 'Detailed notes on routing tables, IP addressing, and core concepts. Added on 10-27-2023.',
+    href: '/docs/notes/routing-concepts',
+    icon: <Route className="size-8" />,
   },
 ];
 
