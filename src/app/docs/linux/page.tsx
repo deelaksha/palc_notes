@@ -51,20 +51,20 @@ export default function LinuxPage() {
       </div>
 
       {filteredCommands.length > 0 ? (
-        <div className="max-w-4xl mx-auto space-y-12">
+        <div className="max-w-5xl mx-auto space-y-12">
           {Object.entries(groupedCommands).map(([category, commands]) => (
             <section key={category}>
               <h2 className="text-2xl font-headline font-bold mb-6 pb-2 border-b">
                 {category}
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {commands.map((command) => (
                   <Link
                     href={`/docs/linux/${command.name}`}
                     key={command.name}
                     className="command-card-container group"
                   >
-                    <div className="bg-card rounded-lg p-4 shadow-md border border-border hover:border-primary hover:shadow-primary/10 transition-all duration-300 h-full flex items-center justify-center">
+                    <div className="bg-card rounded-lg p-4 shadow-md border border-border hover:border-primary hover:shadow-primary/10 transition-all duration-300 h-full flex items-center justify-center text-center">
                       <h3 className="text-xl font-semibold text-foreground font-code">
                         {command.name}
                       </h3>
