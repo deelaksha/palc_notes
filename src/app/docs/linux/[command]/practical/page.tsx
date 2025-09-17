@@ -13,6 +13,10 @@ import { CpGame } from '@/components/linux-game/CpGame';
 import { MvGame } from '@/components/linux-game/MvGame';
 import { RmGame } from '@/components/linux-game/RmGame';
 import { FindGame } from '@/components/linux-game/FindGame';
+import { GrepGame } from '@/components/linux-game/GrepGame';
+import { HeadGame } from '@/components/linux-game/HeadGame';
+import { TailGame } from '@/components/linux-game/TailGame';
+import { WcGame } from '@/components/linux-game/WcGame';
 
 export function generateStaticParams() {
   return commandsData.map((command) => ({
@@ -42,6 +46,14 @@ function renderGameForCommand(commandName: string | undefined) {
             return <RmGame />;
         case 'find':
             return <FindGame />;
+        case 'grep':
+            return <GrepGame />;
+        case 'head':
+            return <HeadGame />;
+        case 'tail':
+            return <TailGame />;
+        case 'wc':
+            return <WcGame />;
         default:
             return (
                 <div className="text-center text-white glass-effect p-12 rounded-2xl">
