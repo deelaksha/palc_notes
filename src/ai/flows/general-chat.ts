@@ -6,9 +6,10 @@
  * - generalChat - A function that handles general chat queries.
  */
 
-import { ai } from '@/ai/genkit';
+import { ai } from '@/ai';
 import { z } from 'zod';
 import { MessageSchema } from '@/ai/schemas';
+import { defineFlow, definePrompt } from '@genkit-ai/core';
 
 const GeneralChatInputSchema = z.object({
   chatHistory: z.array(MessageSchema),
@@ -17,11 +18,11 @@ const GeneralChatInputSchema = z.object({
 
 type GeneralChatInput = z.infer<typeof GeneralChatInputSchema>;
 
-const prompt = ai.definePrompt(
+const prompt = definePrompt(
   {
     name: 'generalChatPrompt',
-    input: { schema: GeneralChatInputSchema },
-    output: { format: 'text' },
+    inputSchema: GeneralChatInputSchema,
+    outputFormat: 'text',
     model: 'googleai/gemini-1.5-flash-latest',
     prompt: `
 You are a helpful and friendly AI assistant named NoteMark.
@@ -39,14 +40,14 @@ Here is the user's question:
   },
 );
 
-export const generalChat = ai.defineFlow(
+export const generalChat = defineFlow(
   {
     name: 'generalChat',
     inputSchema: GeneralChatInputSchema,
     outputSchema: z.string(),
   },
   async (input) => {
-    const { output } = await prompt(input);
-    return output!;
+    const response = await prompt.generate(input);
+    return response.text();
   }
 );

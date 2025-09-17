@@ -2,11 +2,11 @@
 /**
  * @fileoverview This file initializes the Genkit AI instance.
  */
-import { genkit } from 'genkit';
+import { configure } from '@genkit-ai/core';
 import { googleAI } from '@genkit-ai/googleai';
 
-// This is the correct initialization for Genkit v1.x
-export const ai = genkit({
+// This is the correct initialization for Genkit v0.5.0
+export const ai = configure({
   plugins: [
     googleAI({
       apiVersion: 'v1beta',

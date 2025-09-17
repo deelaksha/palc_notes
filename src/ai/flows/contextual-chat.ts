@@ -7,10 +7,11 @@
  * - contextualChat - A function that handles contextual chat queries.
  */
 
-import { ai } from '@/ai/genkit';
+import { ai } from '@/ai';
 import { z } from 'zod';
 import { MessageSchema } from '@/ai/schemas';
 import { generalChat } from './general-chat';
+import { defineFlow, definePrompt } from '@genkit-ai/core';
 
 const ContextualChatInputSchema = z.object({
   chatHistory: z.array(MessageSchema),
@@ -42,20 +43,16 @@ If no page content is provided, or if the question is a greeting, a general ques
 {{question}}
 `;
 
-const contextualPrompt = ai.definePrompt({
+const contextualPrompt = definePrompt({
   name: 'contextualChatPrompt',
   prompt: contextualChatPrompt,
-  input: {
-    schema: ContextualChatInputSchema, // The context is no longer needed here
-  },
-  output: {
-    schema: ContextualChatOutputSchema,
-  },
+  inputSchema: ContextualChatInputSchema, 
+  outputSchema: ContextualChatOutputSchema,
   model: 'googleai/gemini-1.5-flash-latest',
 });
 
 
-export const contextualChat = ai.defineFlow(
+export const contextualChat = defineFlow(
   {
     name: 'contextualChat',
     inputSchema: ContextualChatInputSchema,
@@ -67,7 +64,7 @@ export const contextualChat = ai.defineFlow(
     // In a future enhancement, context could be provided in a more stable way.
     const contextualResponse = await contextualPrompt(input);
     
-    const structuredOutput = contextualResponse.output;
+    const structuredOutput = contextualResponse;
 
     if (structuredOutput?.isContextual && structuredOutput.answer) {
       return structuredOutput.answer;
