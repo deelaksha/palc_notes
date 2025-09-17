@@ -37,6 +37,11 @@ import { ScpGame } from '@/components/linux-game/ScpGame';
 import { SshGame } from '@/components/linux-game/SshGame';
 import { WgetGame } from '@/components/linux-game/WgetGame';
 import { CurlGame } from '@/components/linux-game/CurlGame';
+import { TarGame } from '@/components/linux-game/TarGame';
+import { GzipGame } from '@/components/linux-game/GzipGame';
+import { GunzipGame } from '@/components/linux-game/GunzipGame';
+import { ZipGame } from '@/components/linux-game/ZipGame';
+import { UnzipGame } from '@/components/linux-game/UnzipGame';
 
 export function generateStaticParams() {
   return commandsData.map((command) => ({
@@ -112,6 +117,16 @@ function renderGameForCommand(commandName: string | undefined) {
             return <WgetGame />;
         case 'curl':
             return <CurlGame />;
+        case 'tar':
+            return <TarGame />;
+        case 'gzip':
+            return <GzipGame />;
+        case 'gunzip':
+            return <GunzipGame />;
+        case 'zip':
+            return <ZipGame />;
+        case 'unzip':
+            return <UnzipGame />;
         default:
             return (
                 <div className="text-center text-white glass-effect p-12 rounded-2xl">
