@@ -5,7 +5,7 @@ import { ArrowLeft, Dumbbell, PlayCircle, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 const exercises = [
-  { name: 'Exercise 1', description: 'Practice with basic FRR setup.', href: '#' },
+  { name: 'Exercise 1', description: 'Practice with basic FRR setup.', href: '/docs/notes/frr-exercises/exercise1' },
   { name: 'Exercise 2', description: 'Configure OSPF routing protocols.', href: '#' },
   { name: 'Exercise 3', description: 'Explore BGP peering scenarios.', href: '#' },
   { name: 'Exercise 4', description: 'Troubleshoot common routing issues.', href: '#' },
