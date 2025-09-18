@@ -5,11 +5,7 @@ import { ArrowLeft, Dumbbell, PlayCircle } from 'lucide-react';
 import Link from 'next/link';
 
 const exercises = [
-  { name: 'Exercise 1', href: '#' },
-  { name: 'Exercise 2', href: '#' },
-  { name: 'Exercise 3', href: '#' },
-  { name: 'Exercise 4', href: '#' },
-  { name: 'FRR Exercise', href: '#' },
+  { name: 'src/frr exercise', href: '#' },
 ];
 
 export default function ExercisePage() {
