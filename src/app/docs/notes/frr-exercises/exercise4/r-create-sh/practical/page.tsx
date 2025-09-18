@@ -47,7 +47,7 @@ const RCreatePracticalPage = () => {
     );
 
     const Connection = ({ isActive, x1, y1, x2, y2 }: {isActive: boolean, x1:string, y1:string, x2:string, y2:string}) => (
-        <motion.svg className="absolute w-full h-full" style={{top: 0, left: 0}}>
+        <motion.svg className="absolute w-full h-full" style={{top: 0, left: 0, pointerEvents: 'none'}}>
             <motion.line
                 x1={x1} y1={y1} x2={x2} y2={y2}
                 className="stroke-white/50"
