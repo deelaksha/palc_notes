@@ -8,7 +8,7 @@ const exercises = [
   { name: 'Exercise 1', description: 'Practice with basic FRR setup.', href: '/docs/notes/frr-exercises/exercise1' },
   { name: 'Exercise 2', description: 'Configure OSPF routing protocols.', href: '/docs/notes/frr-exercises/exercise2' },
   { name: 'Exercise 3', description: 'Explore a multi-subnet router topology.', href: '/docs/notes/frr-exercises/exercise3' },
-  { name: 'Exercise 4', description: 'Troubleshoot common routing issues.', href: '#' },
+  { name: 'Exercise 4', description: 'Explore a dual-router topology.', href: '/docs/notes/frr-exercises/exercise4' },
 ];
 
 export default function FrrExercisesPage() {
