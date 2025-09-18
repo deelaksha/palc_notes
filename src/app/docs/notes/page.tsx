@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, FileTerminal, Network, Layers, Route } from 'lucide-react';
+import { ArrowRight, FileTerminal, Network, Layers, Route, Dumbbell } from 'lucide-react';
 import Link from 'next/link';
 
 const notes = [
@@ -20,6 +20,12 @@ const notes = [
     description: 'Detailed notes on routing tables, IP addressing, and core concepts. Added on 10-27-2023.',
     href: '/docs/notes/routing-concepts',
     icon: <Route className="size-8" />,
+  },
+  {
+    title: 'Exercises',
+    description: 'A place for practice problems and exercises.',
+    href: '/docs/notes/exercise',
+    icon: <Dumbbell className="size-8" />,
   },
 ];
 
