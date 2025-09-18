@@ -128,7 +128,7 @@ const PacketCaptureVisualizer = () => {
                                 <SelectContent>
                                     <SelectItem value="h1">h1</SelectItem>
                                     <SelectItem value="bridge">bridge</SelectItem>
-                                    <SelectItem value="h2">h2</pre></SelectItem>
+                                    <SelectItem value="h2">h2</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
