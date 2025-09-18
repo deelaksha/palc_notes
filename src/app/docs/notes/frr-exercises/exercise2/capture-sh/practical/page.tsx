@@ -8,6 +8,7 @@ import { ArrowLeft, Ear, Mail, Server, Laptop, Bridge, Terminal, Radio } from 'l
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
