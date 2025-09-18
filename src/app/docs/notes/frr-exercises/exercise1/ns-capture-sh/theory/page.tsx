@@ -7,31 +7,6 @@ import { ArrowLeft } from 'lucide-react';
 import { CodeBlock } from '@/components/markdown/CodeBlock';
 
 const NsCaptureTheoryPage = () => {
-    const fullScript = `#!/bin/bash
-
-# Get suffix from argument 1 or USERNAME env var, default to 'arms'
-SUFFIX="\${1:-${'${USERNAME:-arms}'}}"
-
-# Check if tcpdump is installed, install if not
-if ! command -v tcpdump &> /dev/null; then
-    echo "tcpdump not found. Installing..."
-    sudo apt-get update && sudo apt-get -y install tcpdump
-fi
-
-# Check for 'write' mode
-if [ "$2" = "write" ]; then
-    # Write mode - save to pcap file
-    PCAP_FILE="\${3:-/tmp/capture-${'${SUFFIX}'}.pcap}"
-    echo "Capturing all packets on h2-${'${SUFFIX}'} to file: \${PCAP_FILE}"
-    echo "Press Ctrl-C to stop capture..."
-    sudo ip netns exec h2-${'${SUFFIX}'} tcpdump -i v2-${'${SUFFIX}'} -n -w \${PCAP_FILE}
-else
-    # Live mode - output to stdout
-    echo "Capturing all packets on h2-${'${SUFFIX}'} (live mode)"
-    echo "Press Ctrl-C to stop..."
-    sudo ip netns exec h2-${'${SUFFIX}'} tcpdump -i v2-${'${SUFFIX}'} -n -e -l
-fi`;
-
     return (
         <main className="p-6">
             <div className="max-w-4xl mx-auto">
@@ -109,9 +84,9 @@ fi`;
                         <span className="command-text">if</span> [ <span className="text-tips">"$2"</span> = <span className="text-tips">"write"</span> ]; <span className="command-text">then</span><br/>
                         {"    "}<span className="text-muted-foreground"># Write mode - save to pcap file</span><br/>
                         {"    "}<span className="text-label">PCAP_FILE</span>=<span className="text-tips">"${'${3:-/tmp/capture-${SUFFIX}}'}.pcap"</span><br/>
-                        {"    "}<span className="command-text">echo</span> <span className="text-tips">"Capturing all packets on h2-${'${SUFFIX}'} to file: \${PCAP_FILE}"</span><br/>
+                        {"    "}<span className="command-text">echo</span> <span className="text-tips">"Capturing all packets on h2-${'${SUFFIX}'} to file: \${'${PCAP_FILE}'}"</span><br/>
                         {"    "}<span className="command-text">echo</span> <span className="text-tips">"Press Ctrl-C to stop capture..."</span><br/>
-                        {"    "}<span className="command-text">sudo</span> <span className="keyword-text">ip netns exec</span> h2-${'${SUFFIX}'} tcpdump -i v2-${'${SUFFIX}'} -n -w <span className="text-label">\${PCAP_FILE}</span><br/>
+                        {"    "}<span className="command-text">sudo</span> <span className="keyword-text">ip netns exec</span> h2-${'${SUFFIX}'} tcpdump -i v2-${'${SUFFIX}'} -n -w <span className="text-label">\${'${PCAP_FILE}'}</span><br/>
                         <span className="command-text">else</span><br/>
                         {"    "}<span className="text-muted-foreground"># Live mode - output to stdout</span><br/>
                         {"    "}<span className="command-text">echo</span> <span className="text-tips">"Capturing all packets on h2-${'${SUFFIX}'} (live mode)"</span><br/>
