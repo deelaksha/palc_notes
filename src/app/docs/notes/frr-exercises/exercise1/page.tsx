@@ -11,9 +11,9 @@ const scripts = [
     href: '/docs/notes/frr-exercises/exercise1/ns-create-sh',
   },
    {
-    name: 'ns-capture.sh',
+    name: 'capture.sh',
     description: 'Captures network traffic for analysis.',
-    href: '/docs/notes/frr-exercises/exercise1/ns-capture-sh',
+    href: '/docs/notes/frr-exercises/exercise1/capture.sh',
   },
   {
     name: 'ns-ping.sh',
@@ -83,3 +83,5 @@ export default function Exercise1HubPage() {
     </main>
   );
 }
+
+    

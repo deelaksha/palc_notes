@@ -9,13 +9,13 @@ export default function NsCaptureHubPage() {
     {
       name: 'Theory',
       description: 'An explanation of how the capture script works.',
-      href: '/docs/notes/frr-exercises/exercise1/ns-capture-sh/theory',
+      href: '/docs/notes/frr-exercises/exercise1/capture.sh/theory',
       icon: <BookOpen className="size-8" />,
     },
     {
       name: 'Practical',
       description: 'A hands-on animation showing packet capture.',
-      href: '/docs/notes/frr-exercises/exercise1/ns-capture-sh/practical',
+      href: '/docs/notes/frr-exercises/exercise1/capture.sh/practical',
       icon: <Code className="size-8" />,
     },
   ];
@@ -31,7 +31,7 @@ export default function NsCaptureHubPage() {
         </Button>
         <header className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-primary font-headline mb-2">
-            ns-capture.sh
+            capture.sh
           </h1>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Choose your learning path for this script.
@@ -70,3 +70,5 @@ export default function NsCaptureHubPage() {
     </div>
   );
 }
+
+    
