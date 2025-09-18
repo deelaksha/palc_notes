@@ -21,6 +21,11 @@ const scripts = [
     href: '/docs/notes/frr-exercises/exercise1/ns-ping-sh',
   },
   {
+    name: 'ns-show.sh',
+    description: 'Shows details about the virtual network environment.',
+    href: '/docs/notes/frr-exercises/exercise1/ns-show-sh',
+  },
+  {
     name: 'ns-clean.sh',
     description: 'Cleans up the network namespaces.',
     href: '/docs/notes/frr-exercises/exercise1/ns-clean-sh',
@@ -53,7 +58,7 @@ export default function Exercise1HubPage() {
 
         <section className="w-full">
           <div className="grid gap-6 md:grid-cols-1">
-            {scripts.map((script) => (
+            {scripts.sort((a, b) => a.name.localeCompare(b.name)).map((script) => (
               <Link key={script.name} href={script.href} className="group">
                 <Card className="h-full transition-all duration-300 ease-in-out group-hover:border-primary group-hover:shadow-lg group-hover:shadow-primary/10 group-hover:-translate-y-1">
                   <CardHeader>
