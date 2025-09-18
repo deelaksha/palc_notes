@@ -211,22 +211,22 @@ const NetworkSimulator = () => {
 
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8 p-4">
+    <div className="w-full mx-auto space-y-4 md:space-y-8 p-2 md:p-4">
       <header className="text-center">
-        <h1 className="text-3xl md:text-4xl font-bold mb-2 text-white">Network & Subnetting Simulator</h1>
-        <p className="text-md md:text-lg text-gray-400">
+        <h1 className="text-2xl md:text-4xl font-bold mb-2 text-white">Network & Subnetting Simulator</h1>
+        <p className="text-sm md:text-lg text-gray-400">
           Watch a data packet travel across a network.
         </p>
       </header>
 
       <main className="bg-gray-800 p-4 md:p-6 rounded-2xl shadow-xl space-y-6">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
             <div className="space-y-2">
-                <Label htmlFor="sourceIp" className="text-gray-300">Source IP Address</Label>
+                <Label htmlFor="sourceIp" className="text-gray-300">Source IP</Label>
                 <Input id="sourceIp" value={sourceIp} onChange={e => setSourceIp(e.target.value)} />
             </div>
             <div className="space-y-2">
-                <Label htmlFor="destinationIp" className="text-gray-300">Destination IP Address</Label>
+                <Label htmlFor="destinationIp" className="text-gray-300">Destination IP</Label>
                 <Input id="destinationIp" value={destinationIp} onChange={e => setDestinationIp(e.target.value)} />
             </div>
             <div className="space-y-2">
@@ -246,20 +246,19 @@ const NetworkSimulator = () => {
                     </SelectContent>
                 </Select>
             </div>
-          <div className="flex flex-col justify-center items-center space-y-4 col-span-1 lg:col-span-2">
-            <div className="flex space-x-4">
-              <Button onClick={startSimulation} disabled={isSimulating}>
-                Start Simulation
-              </Button>
-              <Button onClick={resetSimulation} variant="secondary">
-                Reset
-              </Button>
-            </div>
-            <div className="text-center text-gray-300 min-h-[4rem]">{status}</div>
-          </div>
         </div>
+        <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+            <Button onClick={startSimulation} disabled={isSimulating}>
+                Start Simulation
+            </Button>
+            <Button onClick={resetSimulation} variant="secondary">
+                Reset
+            </Button>
+        </div>
+        <div className="text-center text-gray-300 min-h-[2rem]">{status}</div>
 
-        <div className="network-topology mt-8 rounded-xl shadow-inner h-[300px] md:h-[500px]">
+
+        <div className="network-topology mt-8 rounded-xl shadow-inner h-[400px] md:h-[500px]">
            {['conn-source-bridge1', 'conn-hostA-bridge1', 'conn-bridge1-router', 'conn-router-firewall', 'conn-firewall-bridge2', 'conn-bridge2-hostB', 'conn-bridge2-dest'].map(id => (
               <div key={id} ref={el => lineRefs.current[id] = el} className="connection-line" />
            ))}
@@ -310,7 +309,7 @@ const NetworkSimulator = () => {
 
         <div className="bg-gray-700 p-4 rounded-xl shadow-md mt-6">
           <h3 className="text-lg font-bold mb-2 text-white">Simulation Log:</h3>
-          <ul className="list-disc list-inside space-y-1 text-gray-300">
+          <ul className="list-disc list-inside space-y-1 text-gray-300 text-sm md:text-base">
             {logs.map((log, i) => <li key={i}>{log}</li>)}
           </ul>
         </div>
