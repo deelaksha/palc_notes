@@ -23,7 +23,7 @@ const scripts = [
   {
     name: 'r-show.sh',
     description: 'Shows details about the OSPF neighbors and routes.',
-    href: '#',
+    href: '/docs/notes/frr-exercises/exercise2/r-show-sh',
   },
   {
     name: 'r-clean.sh',
