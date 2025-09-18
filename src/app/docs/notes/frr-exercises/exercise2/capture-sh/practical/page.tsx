@@ -3,174 +3,187 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Laptop, Server, Mail, Waypoints, HelpCircle, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Ear, Mail, Server, Laptop, Waypoints, Terminal } from 'lucide-react';
-import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
-import { Label } from '@/components/ui/label';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
+const hosts = [
+    { id: 'A1', name: 'Host A1', mac: 'AA:..:A1', segment: 'A', top: '20%', left: '10%' },
+    { id: 'A2', name: 'Host A2', mac: 'AA:..:A2', segment: 'A', top: '60%', left: '10%' },
+    { id: 'B1', name: 'Host B1', mac: 'BB:..:B1', segment: 'B', top: '20%', left: '80%' },
+    { id: 'B2', name: 'Host B2', mac: 'BB:..:B2', segment: 'B', top: '60%', left: '80%' },
+];
 
-// New themed component based on user's provided HTML
-const PacketCaptureVisualizer = () => {
-  const { toast } = useToast();
-  const [step, setStep] = useState(0);
-  const [explanation, setExplanation] = useState("Select an interface to listen on, then send a ping.");
-  const [capturedPackets, setCapturedPackets] = useState<string[]>([]);
-  const [listeningOn, setListeningOn] = useState('bridge');
-  const [isAnimating, setIsAnimating] = useState(false);
+const scenarios = [
+    { from: 'A1', to: 'A2', description: 'Host A1 sends to Host A2 (same segment). Bridge learns A1, then correctly filters the frame.' },
+    { from: 'A2', to: 'B1', description: 'Host A2 sends to Host B1 (different segment). Bridge learns A2, then forwards the frame to Segment B.' },
+    { from: 'B1', to: 'A1', description: 'Host B1 sends to Host A1. Bridge already knows both locations, so it forwards efficiently.' },
+    { from: 'A1', to: 'B2', description: 'Host A1 sends to Host B2 (unknown). Bridge learns A1, but must flood the frame to Segment B.' },
+];
 
-  const scenarioText = [
-    "Ready. Select an interface and click 'Send Ping'.",
-    "H1 sends an ICMP Echo Request to H2...",
-    "Packet crosses the network to the bridge...",
-    "Bridge forwards packet...",
-    `'tcpdump' on ${listeningOn} captures the incoming packet.`,
-    "H2 receives ping and sends an Echo Reply...",
-    "Reply crosses the network to the bridge...",
-    "Bridge forwards reply...",
-    `'tcpdump' on ${listeningOn} captures the outgoing reply.`,
-    "Animation Complete."
-  ];
+export function BridgeGame() {
+    const { toast } = useToast();
+    const [currentScenario, setCurrentScenario] = useState(0);
+    const [macTable, setMacTable] = useState<{ [key: string]: string }>({});
+    const [isAnimating, setIsAnimating] = useState(false);
+    const [frameState, setFrameState] = useState({ visible: false, from: 'A1', to: 'A2', at: 'start' });
 
-  const runAnimation = async () => {
-    if (isAnimating) return;
+    const runScenario = async () => {
+        setIsAnimating(true);
+        const scenario = scenarios[currentScenario];
+        const fromHost = hosts.find(h => h.id === scenario.from)!;
+        const toHost = hosts.find(h => h.id === scenario.to)!;
+        
+        // Initial state
+        setFrameState({ visible: true, from: fromHost.id, to: toHost.id, at: 'start' });
+        await new Promise(r => setTimeout(r, 500));
 
-    setIsAnimating(true);
-    setCapturedPackets([]);
-    toast({ title: "Starting Ping", description: `Capturing on ${listeningOn}` });
+        // Move to bridge
+        setFrameState(s => ({ ...s, at: 'bridge' }));
+        toast({ title: 'Frame sent to Bridge', description: `Source: ${fromHost.mac}`});
+        await new Promise(r => setTimeout(r, 1000));
+        
+        // Bridge learns source MAC
+        if (!macTable[fromHost.mac]) {
+            setMacTable(t => ({...t, [fromHost.mac]: fromHost.segment }));
+            toast({ title: 'Bridge Learns!', description: `MAC Table updated: ${fromHost.mac} is on Segment ${fromHost.segment}`});
+            await new Promise(r => setTimeout(r, 1000));
+        }
 
-    // Ping out
-    setStep(1); setExplanation(scenarioText[1]); await new Promise(r => setTimeout(r, 500));
-    setStep(2); setExplanation(scenarioText[2]); await new Promise(r => setTimeout(r, 1000));
-    setStep(3); setExplanation(scenarioText[3]); await new Promise(r => setTimeout(r, 1000));
-    setStep(4); setExplanation(scenarioText[4]);
-    if (listeningOn === 'h1' || listeningOn === 'bridge') {
-      setCapturedPackets(prev => [...prev, `${new Date().toLocaleTimeString()}: IP 10.0.0.1 > 10.0.0.2: ICMP echo request`]);
-    }
-    await new Promise(r => setTimeout(r, 1000));
+        const destinationSegment = macTable[toHost.mac];
+        if (destinationSegment) {
+            if (destinationSegment === fromHost.segment) {
+                toast({ title: 'Bridge Filters!', description: 'Destination is on the same segment. Frame is dropped.'});
+                setFrameState(s => ({ ...s, at: 'filtered' }));
+            } else {
+                toast({ title: 'Bridge Forwards!', description: `Destination known on Segment ${destinationSegment}. Forwarding...`});
+                setFrameState(s => ({ ...s, at: 'end' }));
+            }
+        } else {
+            toast({ title: 'Bridge Floods!', description: 'Destination unknown. Forwarding to all other segments.'});
+            setFrameState(s => ({ ...s, at: 'end' }));
+        }
 
-    // Ping back
-    setStep(5); setExplanation(scenarioText[5]); await new Promise(r => setTimeout(r, 500));
-    setStep(6); setExplanation(scenarioText[6]); await new Promise(r => setTimeout(r, 1000));
-    setStep(7); setExplanation(scenarioText[7]); await new Promise(r => setTimeout(r, 1000));
-    setStep(8); setExplanation(scenarioText[8]);
-    if (listeningOn === 'h2' || listeningOn === 'bridge') {
-        setCapturedPackets(prev => [...prev, `${new Date().toLocaleTimeString()}: IP 10.0.0.2 > 10.0.0.1: ICMP echo reply`]);
-    }
-    await new Promise(r => setTimeout(r, 1000));
-
-    setStep(9); setExplanation(scenarioText[9]);
-    setIsAnimating(false);
-  };
+        await new Promise(r => setTimeout(r, 1500));
+        setFrameState(s => ({ ...s, visible: false }));
+        setIsAnimating(false);
+        setCurrentScenario(s => (s + 1) % scenarios.length);
+    };
     
-  const resetAnimation = () => {
-    setStep(0);
-    setExplanation(scenarioText[0]);
-    setCapturedPackets([]);
-    setIsAnimating(false);
-  };
+    const resetGame = () => {
+        setMacTable({});
+        setCurrentScenario(0);
+        setIsAnimating(false);
+        setFrameState({ visible: false, from: 'A1', to: 'A2', at: 'start' });
+        toast({title: "Game Reset"});
+    }
+    
+    const getFramePosition = () => {
+        if (!frameState.visible) return { opacity: 0 };
+        const fromHost = hosts.find(h => h.id === frameState.from)!;
+        const toHost = hosts.find(h => h.id === frameState.to)!;
 
-  const getPacketPosition = () => {
-    if (step === 0 || step === 9) return { opacity: 0, x: '15%', y: '50%' };
-    if (step === 1) return { opacity: 1, x: '15%', y: '50%', transition: { duration: 0 } };
-    if (step === 2) return { opacity: 1, x: '50%', y: '50%', transition: { duration: 1 } };
-    if (step === 3) return { opacity: 1, x: '85%', y: '50%', transition: { duration: 1 } };
-    if (step === 4) return { opacity: 0, x: '85%', y: '50%', scale: 1.5, transition: { duration: 0.5 }};
-    if (step === 5) return { opacity: 1, x: '85%', y: '50%', transition: { duration: 0 } };
-    if (step === 6) return { opacity: 1, x: '50%', y: '50%', transition: { duration: 1 } };
-    if (step === 7) return { opacity: 1, x: '15%', y: '50%', transition: { duration: 1 } };
-    if (step === 8) return { opacity: 0, x: '15%', y: '50%', scale: 1.5, transition: { duration: 0.5 }};
-    return { opacity: 0 };
-  }
+        switch (frameState.at) {
+            case 'start':
+                return { top: fromHost.top, left: fromHost.left, opacity: 1, transition: { duration: 0 } };
+            case 'bridge':
+                return { top: '40%', left: '45%', opacity: 1, transition: { duration: 1 } };
+            case 'filtered':
+                 return { top: '40%', left: '45%', opacity: 0, scale: 0, transition: { duration: 0.5 } };
+            case 'end':
+                return { top: toHost.top, left: toHost.left, opacity: 1, transition: { duration: 1 } };
+            default:
+                return { opacity: 0 };
+        }
+    };
 
-  const getReplyPacketPosition = () => {
-      if (step < 5) return { opacity: 0 };
-      return getPacketPosition();
-  }
-
-
-  return (
-    <div className="p-6">
-      <Button asChild variant="ghost" className="mb-8">
-        <Link href="/docs/notes/frr-exercises/exercise2/capture-sh">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to capture.sh
-        </Link>
-      </Button>
-      <div className="max-w-4xl mx-auto bg-[#2d2d2d] rounded-2xl shadow-lg border-2 border-[#555] p-6 space-y-6">
-          <h1 className="font-['Press_Start_2P',_cursive] text-[#ff00ff] text-center text-xl">Packet Capture Visualizer</h1>
-          
-          <div id="animationCanvas" className="relative w-full h-[300px] bg-[#1e1e1e] border-2 border-[#00ffff] rounded-lg overflow-hidden">
-            {/* Devices */}
-            <div className="absolute top-1/2 -translate-y-1/2 left-[15%] -translate-x-1/2 text-center text-white">
-              <Laptop className="mx-auto w-10 h-10"/>
-              <p className="text-xs font-mono mt-1">h1 (10.0.0.1)</p>
-              {listeningOn === 'h1' && <Ear className="w-4 h-4 text-amber-400 absolute -top-4 left-1/2 -translate-x-1/2"/>}
+    return (
+        <div className="p-6">
+             <Button asChild variant="ghost" className="mb-8">
+                <Link href="/docs/notes/frr-exercises/exercise2/capture-sh">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Back to capture.sh
+                </Link>
+            </Button>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl mx-auto">
+                <div className="md:col-span-2 glass-effect rounded-2xl p-6 border-2 border-neon-blue/50 relative min-h-[400px]">
+                    {/* Segments */}
+                    <div className="absolute top-4 left-4 text-gray-400 text-sm font-bold">Segment A</div>
+                    <div className="absolute top-4 right-4 text-gray-400 text-sm font-bold">Segment B</div>
+                    <div className="absolute top-12 bottom-4 left-1/2 -translate-x-1/2 w-px bg-white/20"></div>
+                    
+                    {/* Hosts */}
+                    {hosts.map(host => (
+                        <div key={host.id} className="absolute flex flex-col items-center" style={{ top: host.top, left: host.left }}>
+                            {host.name.includes("Server") ? <Server className="w-8 h-8"/> : <Laptop className="w-8 h-8"/>}
+                            <p className="text-xs font-mono">{host.mac}</p>
+                        </div>
+                    ))}
+                    
+                    {/* Bridge */}
+                    <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 flex flex-col items-center">
+                        <Waypoints className="w-10 h-10 text-neon-green" />
+                        <p className="text-sm font-bold">Bridge</p>
+                    </div>
+                    
+                    {/* Frame Animation */}
+                    <AnimatePresence>
+                    {frameState.visible && (
+                        <motion.div className="absolute" initial={false} animate={getFramePosition()}>
+                            <Mail className="w-6 h-6 text-neon-pink" />
+                        </motion.div>
+                    )}
+                    </AnimatePresence>
+                </div>
+                
+                <div className="md:col-span-1 glass-effect rounded-2xl p-6 border-2 border-neon-pink/50 space-y-4">
+                    <div>
+                        <h3 className="text-lg font-bold text-neon-pink">Bridge MAC Table</h3>
+                        <div className="bg-dark-primary rounded-lg mt-2 text-sm h-32 overflow-y-auto">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>MAC Address</TableHead>
+                                        <TableHead>Segment</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {Object.entries(macTable).map(([mac, segment]) => (
+                                        <TableRow key={mac}>
+                                            <TableCell className="font-mono">{mac}</TableCell>
+                                            <TableCell>{segment}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                            {Object.keys(macTable).length === 0 && <p className="p-4 text-center text-gray-500 text-xs">Table is empty. Bridge will learn as frames pass through.</p>}
+                        </div>
+                    </div>
+                    <div>
+                        <h3 className="text-lg font-bold text-neon-pink flex items-center gap-2">Scenario <HelpCircle className="w-4 h-4" title={scenarios[currentScenario].description}/></h3>
+                        <p className="text-xs text-gray-300 mt-1">{scenarios[currentScenario].description}</p>
+                        <Button onClick={runScenario} disabled={isAnimating} className="w-full mt-4 bg-neon-green text-black hover:bg-white">
+                            Run Next Step
+                        </Button>
+                        <Button onClick={resetGame} disabled={isAnimating} variant="outline" className="w-full mt-2">
+                            <RefreshCw className="mr-2 w-4 h-4"/>
+                            Reset Game
+                        </Button>
+                    </div>
+                </div>
             </div>
-            <div className="absolute top-1/2 -translate-y-1/2 left-[50%] -translate-x-1/2 text-center text-white">
-              <Waypoints className="mx-auto w-10 h-10"/>
-              <p className="text-xs font-mono mt-1">bridge</p>
-              {listeningOn === 'bridge' && <Ear className="w-4 h-4 text-amber-400 absolute -top-4 left-1/2 -translate-x-1/2"/>}
-            </div>
-            <div className="absolute top-1/2 -translate-y-1/2 left-[85%] -translate-x-1/2 text-center text-white">
-              <Server className="mx-auto w-10 h-10"/>
-              <p className="text-xs font-mono mt-1">h2 (10.0.0.2)</p>
-              {listeningOn === 'h2' && <Ear className="w-4 h-4 text-amber-400 absolute -top-4 left-1/2 -translate-x-1/2"/>}
-            </div>
-            {/* Links */}
-            <div className="absolute top-1/2 left-[15%] w-[70%] h-0.5 bg-white/20" />
+        </div>
+    );
+}
 
-            {/* Packets */}
-            <AnimatePresence>
-              <motion.div className="absolute top-0 left-0" initial={false} animate={getPacketPosition()}>
-                <Mail className="w-8 h-8 text-neon-pink" />
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
-            <div className="space-y-2">
-                <Label htmlFor="listener-select" className="text-sm font-semibold">Listening Interface:</Label>
-                <Select value={listeningOn} onValueChange={setListeningOn} disabled={isAnimating}>
-                    <SelectTrigger id="listener-select" className="bg-[#1e1e1e] border-[#555]">
-                        <SelectValue placeholder="Select an interface..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="h1">h1</SelectItem>
-                        <SelectItem value="bridge">bridge</SelectItem>
-                        <SelectItem value="h2">h2</SelectItem>
-                    </SelectContent>
-                </Select>
-            </div>
-            <div className="flex gap-4">
-                <Button onClick={runAnimation} disabled={isAnimating} className="w-full bg-[#00ffff] text-black font-bold uppercase tracking-wider shadow-[0_4px_#00ffff] hover:translate-y-[-2px] hover:shadow-[0_6px_#00ffff] transition-all">Send Ping</Button>
-                <Button onClick={resetAnimation} disabled={isAnimating} className="w-full bg-[#ff00ff] text-black font-bold uppercase tracking-wider shadow-[0_4px_#ff00ff] hover:translate-y-[-2px] hover:shadow-[0_6px_#ff00ff] transition-all">Reset</Button>
-            </div>
-          </div>
-          
-          <div id="explanation" className="bg-[#1a1a1a] text-[#4CAF50] font-['Press_Start_2P',_cursive] p-4 rounded-md border border-[#ff00ff] text-center min-h-[4rem] flex items-center justify-center text-xs">
-            {explanation}
-          </div>
-          
-          <div id="command" className="bg-[#1a1a1a] text-[#ffc107] font-mono p-4 rounded-md border border-[#00ffff] min-h-[6rem]">
-             <p className="text-gray-400">$ sudo tcpdump -i {listeningOn === 'h1' ? 'v1-arms' : listeningOn === 'h2' ? 'v2-arms' : 'br0-arms'} -n</p>
-             <AnimatePresence>
-                {capturedPackets.map((packet, index) => (
-                  <motion.p key={index} initial={{opacity:0, y:5}} animate={{opacity:1, y:0}}>{packet}</motion.p>
-                ))}
-              </AnimatePresence>
-          </div>
-      </div>
-    </div>
-  );
-};
-
-export default PacketCaptureVisualizer;
+export default BridgeGame;
