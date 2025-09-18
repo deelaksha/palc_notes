@@ -47,14 +47,14 @@ const RCreateTheoryPage = () => {
                      <h3 className="text-xl font-semibold mt-6 mb-2 text-secondary-accent">3. Static Routing:</h3>
                     <ul className="list-disc list-inside space-y-2">
                         <li>This is the most important part of the script. The routers only know about the networks they are directly connected to. We must manually tell them how to reach the other networks.</li>
-                        <li><b className="font-mono text-keyword"><code>sudo ip -n r1-$SUFFIX route add 192.168.3.0/24 via 10.0.0.2</code></b>: This command tells router `r1`, "To reach the `192.168.3.0/24` network (where `h3` lives), send the packet to the next router at `10.0.0.2` (which is `r2`)."</li>
+                        <li><b className="font-mono text-keyword">`sudo ip -n r1-$SUFFIX route add 192.168.3.0/24 via 10.0.0.2`</b>: This command tells router `r1`, "To reach the `192.168.3.0/24` network (where `h3` lives), send the packet to the next router at `10.0.0.2` (which is `r2`)."</li>
                         <li>Static routes are added to both routers so they know how to forward traffic to each other's networks.</li>
                         <li>Each host is also given a default route pointing to its local router as the gateway.</li>
                     </ul>
 
                      <h3 className="text-xl font-semibold mt-6 mb-2 text-primary-accent">4. IP Forwarding:</h3>
                      <ul className="list-disc list-inside space-y-2">
-                        <li><b className="font-mono text-keyword"><code>sysctl -w net.ipv4.ip_forward=1</code></b>: This command is run in *both* router namespaces. It's essential for allowing them to forward packets that aren't destined for the routers themselves.</li>
+                        <li><b className="font-mono text-keyword">`sysctl -w net.ipv4.ip_forward=1`</b>: This command is run in *both* router namespaces. It's essential for allowing them to forward packets that aren't destined for the routers themselves.</li>
                      </ul>
 
                     <h2 className="text-2xl font-bold mt-8 mb-4 border-b-2 text-primary-accent pb-2">
