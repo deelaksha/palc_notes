@@ -3,42 +3,37 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Terminal, Send, Server } from 'lucide-react';
+import { ArrowLeft, Terminal, Send, Server, FileCode } from 'lucide-react';
 import Link from 'next/link';
 
 const PingVisualizer = () => {
     const [step, setStep] = useState(0);
     const [output, setOutput] = useState<string[]>([]);
-    const [explanation, setExplanation] = useState("Click 'Start' to begin the simulation.");
 
     const steps = [
-        "Click 'Start' to begin the simulation.",
-        "First, the ARP cache in `h1` is flushed. This means `h1` forgets the MAC address of `h2`.",
-        "Now, `h1` sends the first `ping` request to `10.0.0.2`.",
-        "Since `h1` doesn't know `h2`'s MAC, it first sends an ARP request: 'Who has 10.0.0.2?'",
-        "`h2` replies to the ARP request: 'I have 10.0.0.2, my MAC is ...'. `h1` caches this.",
-        "The ping packet is delivered. `h2` sends a reply back to `h1`.",
-        "The first reply is received. The connection is confirmed!",
-        "Subsequent pings are sent and received without needing ARP.",
-        "Simulation complete."
+        { exp: "Click 'Start' to simulate pinging h2 from h1.", code: "" },
+        { exp: "First, the ARP cache in `h1` is flushed. This means `h1` forgets the MAC address of `h2`.", code: "sudo ip netns exec h1-arms ip neigh flush all" },
+        { exp: "Now, `h1` sends the first `ping` request to `10.0.0.2`.", code: "sudo ip netns exec h1-arms ping -c 3 10.0.0.2" },
+        { exp: "Since `h1` doesn't know `h2`'s MAC, it first sends an ARP request: 'Who has 10.0.0.2?'", code: "(ARP broadcast)" },
+        { exp: "`h2` replies to the ARP request: 'I have 10.0.0.2, my MAC is ...'. `h1` caches this.", code: "(ARP reply)" },
+        { exp: "The actual ICMP ping packet is delivered. `h2` sends an ICMP reply back to `h1`.", code: "(ICMP echo request/reply)" },
+        { exp: "The first reply is received. The connection is confirmed!", code: "64 bytes from 10.0.0.2: ..." },
+        { exp: "Subsequent pings are sent and received without needing ARP.", code: "(ICMP echo request/reply)" },
+        { exp: "Simulation complete.", code: "Done." }
     ];
 
     const runStep = async () => {
-        if (step < steps.length - 1) {
-            const nextStep = step + 1;
-            setStep(nextStep);
-            setExplanation(steps[nextStep]);
+        const nextStep = (step + 1) % steps.length;
+        setStep(nextStep);
 
-            if (nextStep === 6) {
-                setOutput(prev => [...prev, `64 bytes from 10.0.0.2: icmp_seq=1 ttl=64 time=0.1ms`]);
-            }
-            if (nextStep === 7) {
-                setOutput(prev => [...prev, `64 bytes from 10.0.0.2: icmp_seq=2 ttl=64 time=0.05ms`]);
-                setOutput(prev => [...prev, `64 bytes from 10.0.0.2: icmp_seq=3 ttl=64 time=0.05ms`]);
-            }
-        } else {
-            setStep(0);
-            setExplanation(steps[0]);
+        if (nextStep === 6) {
+            setOutput(prev => [...prev, `64 bytes from 10.0.0.2: icmp_seq=1 ttl=64 time=0.1ms`]);
+        }
+        if (nextStep === 7) {
+            setOutput(prev => [...prev, `64 bytes from 10.0.0.2: icmp_seq=2 ttl=64 time=0.05ms`]);
+            setOutput(prev => [...prev, `64 bytes from 10.0.0.2: icmp_seq=3 ttl=64 time=0.05ms`]);
+        }
+        if (nextStep === 0) { // Reset
             setOutput([]);
         }
     };
@@ -61,7 +56,7 @@ const PingVisualizer = () => {
                     </div>
                     <div className="absolute top-1/2 left-1/4 w-1/2 h-0.5 bg-white/20">
                          <AnimatePresence>
-                         {(step >= 2 && step < 7) && (
+                         {(step >= 2 && step < 8) && (
                             <motion.div 
                                 className="w-4 h-4 bg-neon-pink rounded-full absolute -top-1.5"
                                 initial={{ left: (step === 4 || step === 5) ? '100%' : '0%' }}
@@ -85,8 +80,9 @@ const PingVisualizer = () => {
                          {step === 0 ? "Start" : step === steps.length - 1 ? "Reset" : "Next Step"}
                     </Button>
                 </div>
-                 <div className="bg-card-nested text-accent font-mono p-4 rounded-lg border border-secondary text-center min-h-[4rem] flex items-center justify-center">
-                   {explanation}
+                 <div className="bg-card-nested p-4 rounded-lg border border-secondary text-center space-y-2">
+                   <p className="font-semibold text-accent">{steps[step].exp}</p>
+                   <code className="text-xs text-amber-400 bg-black/30 p-1 rounded-md inline-block"><FileCode className="inline-block mr-2 h-4 w-4"/>{steps[step].code}</code>
                 </div>
                 {/* Terminal */}
                  <div className="bg-dark-primary p-4 rounded-lg min-h-[150px] text-xs font-mono overflow-y-auto">

@@ -1,44 +1,27 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, Route, FileText, FileCode } from 'lucide-react';
+import Link from 'next/link';
 
 const RCreateVisualizer = () => {
     const [step, setStep] = useState(0);
 
-    const explanationText = [
-        "Ready to begin! This script creates 3 hosts connected to a central bridge.",
-        "Step 1: Create three isolated network namespaces (h1, h2, h3).",
-        "Step 2: Create a virtual network switch, called a 'bridge', and activate it.",
-        "Step 3: Create a virtual cable for Host 1 and connect one end to h1 and the other to the bridge.",
-        "Step 4: Create a second virtual cable for Host 2 and connect it.",
-        "Step 5: Create a third virtual cable for Host 3 and connect it.",
-        "Step 6: Assign IP addresses to each host so they can communicate over the bridge.",
-        "Animation Complete! You've built a virtual LAN."
-    ];
-
-    const commandText = [
-        "",
-        "sudo ip netns add h1-arms\nsudo ip netns add h2-arms\nsudo ip netns add h3-arms",
-        "sudo ip link add br0-arms type bridge\nsudo ip link set br0-arms up",
-        "sudo ip link add v1 type veth peer name v1p\nsudo ip link set v1 netns h1-arms\nsudo ip link set v1p master br0-arms",
-        "sudo ip link add v2 type veth peer name v2p\nsudo ip link set v2 netns h2-arms\nsudo ip link set v2p master br0-arms",
-        "sudo ip link add v3 type veth peer name v3p\nsudo ip link set v3 netns h3-arms\nsudo ip link set v3p master br0-arms",
-        "sudo ip -n h1-arms addr add 10.0.0.1/24 dev v1\nsudo ip -n h2-arms addr add 10.0.0.2/24 dev v2\nsudo ip -n h3-arms addr add 10.0.0.3/24 dev v3",
-        ""
+    const steps = [
+        { exp: "Ready to begin! This script creates 3 hosts connected to a central bridge.", code: "" },
+        { exp: "Create three isolated network namespaces (h1, h2, h3).", code: "sudo ip netns add h1-arms\nsudo ip netns add h2-arms\nsudo ip netns add h3-arms" },
+        { exp: "Create a virtual network switch, called a 'bridge', and activate it.", code: "sudo ip link add br0-arms type bridge\nsudo ip link set br0-arms up" },
+        { exp: "Create a virtual cable for Host 1 and connect one end to h1 and the other to the bridge.", code: "sudo ip link add v1 type veth peer name v1p\nsudo ip link set v1 netns h1-arms\nsudo ip link set v1p master br0-arms" },
+        { exp: "Create a second virtual cable for Host 2 and connect it.", code: "sudo ip link add v2 type veth peer name v2p\n..." },
+        { exp: "Create a third virtual cable for Host 3 and connect it.", code: "sudo ip link add v3 type veth peer name v3p\n..." },
+        { exp: "Assign IP addresses to each host so they can communicate over the bridge.", code: "sudo ip -n h1-arms addr add 10.0.0.1/24 dev v1" },
+        { exp: "Animation Complete! You've built a virtual LAN.", code: "Done." }
     ];
 
     const handleNextStep = () => {
-        if (step < explanationText.length - 1) {
-            setStep(s => s + 1);
-        }
-    };
-    
-    const resetAnimation = () => {
-        setStep(0);
+        setStep(s => (s + 1) % steps.length);
     };
     
     const Node = ({ name, ip, isActive, type }: { name: string; ip?: string; isActive: boolean, type: 'host' | 'bridge' }) => (
@@ -48,8 +31,9 @@ const RCreateVisualizer = () => {
             animate={{ opacity: isActive ? 1 : 0, scale: isActive ? 1 : 0.5 }}
         >
             <div className={`w-20 h-16 rounded-lg border-2 flex items-center justify-center ${type === 'host' ? 'border-neon-blue/50' : 'border-neon-green/50'}`}>
-                <span className={`text-lg font-bold font-mono ${type === 'host' ? 'text-neon-blue' : 'text-neon-green'}`}>{name}</span>
+                {type === 'host' ? <FileText className="w-8 h-8 text-neon-blue"/> : <Route className="w-10 h-10 text-neon-green"/>}
             </div>
+            <span className="text-sm font-mono">{name}</span>
             {ip && <span className="text-xs font-mono text-amber-400">{ip}</span>}
         </motion.div>
     );
@@ -89,16 +73,15 @@ const RCreateVisualizer = () => {
                 </div>
                 
                 <div className="flex justify-center gap-4">
-                    <Button onClick={handleNextStep} className="bg-primary hover:bg-primary/90" disabled={step >= explanationText.length -1}>
-                        Start/Next
+                    <Button onClick={handleNextStep} className="bg-primary hover:bg-primary/90">
+                        {step === 0 ? "Start" : step === steps.length - 1 ? "Reset" : "Next"}
                     </Button>
-                    <Button onClick={resetAnimation} variant="outline">Reset</Button>
                 </div>
-                 <div className="bg-card-nested text-accent font-mono p-4 rounded-lg border border-secondary text-center min-h-[4rem] flex items-center justify-center">
-                    {explanationText[step]}
-                </div>
-                <div className="bg-dark-primary text-yellow-400 font-mono p-4 rounded-lg border border-secondary min-h-[4rem] flex items-center justify-center whitespace-pre-wrap text-xs">
-                    {commandText[step]}
+                 <div className="bg-card-nested p-4 rounded-lg border border-secondary text-center space-y-2">
+                   <p className="font-semibold text-accent min-h-[3rem] flex items-center justify-center">{steps[step].exp}</p>
+                   {steps[step].code && (
+                       <code className="text-xs text-amber-400 bg-black/30 p-2 rounded-md inline-block whitespace-pre-wrap"><FileCode className="inline-block mr-2 h-4 w-4"/>{steps[step].code}</code>
+                   )}
                 </div>
             </div>
         </div>

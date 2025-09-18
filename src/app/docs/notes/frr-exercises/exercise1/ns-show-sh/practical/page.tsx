@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Terminal } from 'lucide-react';
+import { ArrowLeft, Terminal, FileCode } from 'lucide-react';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -44,12 +44,22 @@ v2-arms          UP             10.0.0.2/24
 const NsShowPracticalPage = () => {
     const [output, setOutput] = useState({h1: '', h2: ''});
 
+    const steps = [
+        { exp: "Click 'Run Script' to see the detailed network state of each namespace.", code: "" },
+        { exp: "The script loops through h1 and h2, running commands like 'ip addr' and 'ip route' inside each.", code: "for NS in \"h1-$SFX\" \"h2-$SFX\"; do ... done" },
+        { exp: "The output shows links, IP addresses, routes, and neighbors for each namespace.", code: "sudo ip -n $NS ..." }
+    ];
+    
+    const [step, setStep] = useState(0);
+
     const runScript = () => {
         setOutput({h1: h1Output, h2: h2Output});
+        setStep(1);
     };
 
     const resetScript = () => {
         setOutput({h1: '', h2: ''});
+        setStep(0);
     };
 
     return (
@@ -67,6 +77,13 @@ const NsShowPracticalPage = () => {
                     <Button onClick={resetScript} variant="outline">Reset</Button>
                 </div>
                 
+                 <div className="bg-card-nested p-4 rounded-lg border border-secondary text-center space-y-2">
+                   <p className="font-semibold text-accent min-h-[1rem] flex items-center justify-center">{steps[step].exp}</p>
+                   {steps[step].code && (
+                       <code className="text-xs text-amber-400 bg-black/30 p-2 rounded-md inline-block whitespace-pre-wrap"><FileCode className="inline-block mr-2 h-4 w-4"/>{steps[step].code}</code>
+                   )}
+                </div>
+
                 <Tabs defaultValue="h1" className="w-full">
                     <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger value="h1">h1-arms</TabsTrigger>

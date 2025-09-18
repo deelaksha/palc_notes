@@ -1,9 +1,8 @@
-
 'use client';
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Terminal, Send, ArrowLeft, Ear, Route, FileText } from 'lucide-react';
+import { Terminal, FileText, Send, ArrowLeft, Waypoints, Ear, Route, FileCode } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import {
@@ -31,36 +30,42 @@ const CapturePracticalPage = () => {
     const [listeningOn, setListeningOn] = useState('r1');
     const [capturedPackets, setCapturedPackets] = useState<string[]>([]);
     const [packetPath, setPacketPath] = useState<string[]>([]);
+    const [step, setStep] = useState(0);
+
+    const steps = [
+      { exp: "Select a device and click 'Ping' to capture traffic.", code: "" },
+      { exp: "A ping from h1 to h3 is initiated. The packet is sent to h1's gateway, r1.", code: "./ns-ping.sh h1 h3" },
+      { exp: "Packet arrives at r1. The capture script on r1 sees the packet on the `r1-h1` interface.", code: "sudo ip netns exec r1-arms tcpdump ..." },
+      { exp: "r1 forwards the packet to r2. The capture script sees the packet leaving on the `r1-r2` interface.", code: "(Routing Decision)" },
+      { exp: "r2 receives and forwards the packet to h3.", code: "(Routing Decision)" },
+      { exp: "Packet arrives at h3.", code: "Done." }
+    ];
     
     const runAnimation = async () => {
         setIsAnimating(true);
         setCapturedPackets([]);
+        setStep(1);
         
         const path = ['h1', 'r1', 'r2', 'h3'];
-        setPacketPath(path);
-        
-        const descriptions = [
-            "Ping from h1 to h3 initiated.",
-            "Packet arrives at r1. r1 forwards it to r2.",
-            "Packet arrives at r2. r2 forwards it to h3.",
-            "Packet arrives at h3.",
-        ];
-        const packets = [
-            "h1 > h3: ICMP echo request",
-            "h1 > h3: ICMP echo request",
-            "h1 > h3: ICMP echo request",
-        ];
+        const packetInfo = "h1 > h3: ICMP echo request";
 
         for (let i = 0; i < path.length - 1; i++) {
-            toast({ title: "Packet Sent!", description: descriptions[i] });
-            
+            setStep(i + 2);
+            setPacketPath([path[i], path[i+1]]);
             const fromNode = path[i];
             const toNode = path[i+1];
 
+            // Determine if the listener should capture this packet
             if (listeningOn === fromNode || listeningOn === toNode) {
                  setTimeout(() => {
-                    const intf = fromNode.startsWith('r') ? `${fromNode}-${toNode}-arms` : `${fromNode}-${toNode}-arms`;
-                    setCapturedPackets(prev => [...prev, `[${intf}] ${packets[i]}`]);
+                    let intf;
+                    if(fromNode.startsWith('r') || toNode.startsWith('r')) {
+                         intf = fromNode.startsWith('r') ? `${fromNode}-${toNode}` : `${toNode}-${fromNode}`;
+                    } else {
+                         intf = `${fromNode}-r1`;
+                    }
+                    intf = intf.replace(/r([12])h([1-4])/, 'r$1-h$2') + `-${'arms'}`;
+                    setCapturedPackets(prev => [...prev, `[${intf}] ${packetInfo}`]);
                 }, 500);
             }
             
@@ -69,11 +74,12 @@ const CapturePracticalPage = () => {
 
         setIsAnimating(false);
         setPacketPath([]);
+        setStep(5);
     };
     
-    const getPacketPosition = (step: number) => {
-        if (!isAnimating || step >= packetPath.length) return { opacity: 0 };
-        const node = nodes[packetPath[step] as keyof typeof nodes];
+    const getPacketPosition = (nodeId: string) => {
+        if (!nodeId) return { opacity: 0 };
+        const node = nodes[nodeId as keyof typeof nodes];
         return { ...node, opacity: 1, transition: { duration: 1.2 } };
     };
 
@@ -101,12 +107,11 @@ const CapturePracticalPage = () => {
                     })}
                     <svg className="absolute w-full h-full" style={{top: 0, left: 0}}><line x1="10%" y1="15%" x2="22.5%" y2="65%" stroke="white" strokeOpacity="0.2" /><line x1="35%" y1="15%" x2="22.5%" y2="65%" stroke="white" strokeOpacity="0.2" /><line x1="65%" y1="15%" x2="77.5%" y2="65%" stroke="white" strokeOpacity="0.2" /><line x1="90%" y1="15%" x2="77.5%" y2="65%" stroke="white" strokeOpacity="0.2" /><line x1="22.5%" y1="65%" x2="77.5%" y2="65%" stroke="white" strokeOpacity="0.2" /></svg>
                     <AnimatePresence>
-                        {packetPath.map((_, i) => (
-                           i < packetPath.length -1 &&
-                           <motion.div key={i} className="absolute" initial={getPacketPosition(i)} animate={getPacketPosition(i+1)}>
+                        {packetPath.length === 2 &&
+                           <motion.div className="absolute" initial={getPacketPosition(packetPath[0])} animate={getPacketPosition(packetPath[1])}>
                                <Send className="w-6 h-6 text-yellow-400"/>
                            </motion.div>
-                        ))}
+                        }
                     </AnimatePresence>
                 </div>
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
@@ -114,10 +119,16 @@ const CapturePracticalPage = () => {
                         <Label htmlFor="listener-select">Listen on:</Label>
                         <Select value={listeningOn} onValueChange={setListeningOn} disabled={isAnimating}>
                             <SelectTrigger id="listener-select"><SelectValue /></SelectTrigger>
-                            <SelectContent><SelectItem value="r1">r1</SelectItem><SelectItem value="r2">r2</SelectItem><SelectItem value="h1">h1</SelectItem><SelectItem value="h2">h2</SelectItem><SelectItem value="h3">h3</SelectItem><SelectItem value="h4">h4</SelectItem></SelectContent>
+                            <SelectContent><SelectItem value="r1">r1</SelectItem><SelectItem value="r2">r2</SelectItem><SelectItem value="h1">h1</SelectItem><SelectItem value="h3">h3</SelectItem></SelectContent>
                         </Select>
                     </div>
                     <Button onClick={runAnimation} disabled={isAnimating} className="w-full bg-primary mt-6">Ping h1 to h3</Button>
+                </div>
+                 <div className="bg-card-nested p-4 rounded-lg border border-secondary text-center space-y-2">
+                   <p className="font-semibold text-accent min-h-[1rem] flex items-center justify-center">{steps[step].exp}</p>
+                   {steps[step].code && (
+                       <code className="text-xs text-amber-400 bg-black/30 p-2 rounded-md inline-block whitespace-pre-wrap"><FileCode className="inline-block mr-2 h-4 w-4"/>{steps[step].code}</code>
+                   )}
                 </div>
                 <div id="command" className="mt-4">
                     <h3 className="font-semibold flex items-center gap-2"><Terminal className="w-5 h-5 text-yellow-400"/>tcpdump on {listeningOn}:</h3>

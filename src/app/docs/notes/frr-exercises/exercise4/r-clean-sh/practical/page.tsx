@@ -1,10 +1,9 @@
-
 'use client';
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Trash2, Route, FileText } from 'lucide-react';
+import { ArrowLeft, Trash2, Route, FileText, FileCode } from 'lucide-react';
 import Link from 'next/link';
 
 const NodeVisual = ({ name, exists, type }: { name: string; exists: boolean; type: 'host' | 'router' }) => (
@@ -30,14 +29,11 @@ const RCleanupPracticalPage = () => {
     const [step, setStep] = useState(0);
 
     const steps = [
-        "Ready to begin. The full dual-router topology is active.",
-        "Running `sudo ip netns del r1-arms`...",
-        "Running `sudo ip netns del r2-arms`...",
-        "Running `sudo ip netns del h1-arms`...",
-        "Running `sudo ip netns del h2-arms`...",
-        "Running `sudo ip netns del h3-arms`...",
-        "Running `sudo ip netns del h4-arms`...",
-        "Final link cleanup... all virtual components have been removed."
+        { exp: "Ready to begin. The full dual-router topology is active.", code: "(Initial State)"},
+        { exp: "The script begins by deleting the router namespaces. This also removes the interfaces inside them.", code: "sudo ip netns del r1-arms\nsudo ip netns del r2-arms" },
+        { exp: "Next, the host namespaces are deleted one by one.", code: "sudo ip netns del h1-arms\nsudo ip netns del h2-arms\n..." },
+        { exp: "Final cleanup commands remove any lingering veth pairs from the default namespace.", code: "sudo ip link del h1-r1-arms" },
+        { exp: "Cleanup complete! All virtual components have been removed.", code: "Done." }
     ];
     
     const runStep = () => {
@@ -57,14 +53,14 @@ const RCleanupPracticalPage = () => {
 
                 <div className="w-full min-h-[300px] bg-dark-primary rounded-lg border-2 border-primary/50 flex flex-col justify-center items-center gap-8 p-8">
                     <div className="flex justify-center items-center gap-4">
-                        <NodeVisual name="h1" exists={step < 4} type="host" />
-                        <NodeVisual name="h2" exists={step < 5} type="host" />
-                        <NodeVisual name="h3" exists={step < 6} type="host" />
-                        <NodeVisual name="h4" exists={step < 7} type="host" />
+                        <NodeVisual name="h1" exists={step < 2} type="host" />
+                        <NodeVisual name="h2" exists={step < 2} type="host" />
+                        <NodeVisual name="h3" exists={step < 2} type="host" />
+                        <NodeVisual name="h4" exists={step < 2} type="host" />
                     </div>
                      <div className="flex justify-center items-center gap-20">
-                        <NodeVisual name="r1" exists={step < 2} type="router" />
-                        <NodeVisual name="r2" exists={step < 3} type="router" />
+                        <NodeVisual name="r1" exists={step < 1} type="router" />
+                        <NodeVisual name="r2" exists={step < 1} type="router" />
                     </div>
                 </div>
                 
@@ -74,8 +70,11 @@ const RCleanupPracticalPage = () => {
                     </Button>
                 </div>
 
-                <div className="bg-card-nested text-accent font-mono p-4 rounded-lg border border-secondary text-center min-h-[4rem] flex items-center justify-center">
-                   {steps[step]}
+                 <div className="bg-card-nested p-4 rounded-lg border border-secondary text-center space-y-2">
+                   <p className="font-semibold text-accent min-h-[3rem] flex items-center justify-center">{steps[step].exp}</p>
+                   {steps[step].code && (
+                       <code className="text-xs text-amber-400 bg-black/30 p-2 rounded-md inline-block whitespace-pre-wrap"><FileCode className="inline-block mr-2 h-4 w-4"/>{steps[step].code}</code>
+                   )}
                 </div>
             </div>
         </div>

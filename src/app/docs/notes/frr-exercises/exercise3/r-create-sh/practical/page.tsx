@@ -1,34 +1,27 @@
-
 'use client';
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Route, FileText } from 'lucide-react';
+import { ArrowLeft, Route, FileText, FileCode } from 'lucide-react';
 import Link from 'next/link';
 
 const RCreatePracticalPage = () => {
     const [step, setStep] = useState(0);
 
     const steps = [
-        "Ready to begin. This script creates 1 router and 3 hosts in separate networks.",
-        "Step 1: Create four isolated network namespaces (router, h1, h2, h3).",
-        "Step 2: Create three virtual cable pairs (veth pairs) to connect each host to the router.",
-        "Step 3: Move one end of each cable into the corresponding host namespace and the other end into the router namespace.",
-        "Step 4: Configure IP addresses. Each host/router link forms its own subnet (e.g., 192.168.1.0/24).",
-        "Step 5: Add a default route on each host, telling it to send all non-local traffic to the router.",
-        "Step 6: Enable IP forwarding on the router, allowing it to pass traffic between its interfaces.",
-        "Animation Complete! You've built a multi-subnet network."
+        { exp: "Ready to begin. This script creates 1 router and 3 hosts in separate networks.", code: "" },
+        { exp: "Create four isolated network namespaces (router, h1, h2, h3).", code: "sudo ip netns add router-arms\nsudo ip netns add h1-arms\n..." },
+        { exp: "Create three virtual cable pairs (veth pairs) to connect each host to the router.", code: "sudo ip link add h1-r-arms type veth peer name r-h1-arms\n..." },
+        { exp: "Move one end of each cable into the corresponding host namespace and the other end into the router namespace.", code: "sudo ip link set h1-r-arms netns h1-arms\nsudo ip link set r-h1-arms netns router-arms" },
+        { exp: "Configure IP addresses. Each host/router link forms its own subnet (e.g., 192.168.1.0/24).", code: "sudo ip -n h1-arms addr add 192.168.1.10/24 dev h1-r-arms\nsudo ip -n router-arms addr add 192.168.1.1/24 dev r-h1-arms" },
+        { exp: "Add a default route on each host, telling it to send all non-local traffic to the router.", code: "sudo ip -n h1-arms route add default via 192.168.1.1" },
+        { exp: "Enable IP forwarding on the router, allowing it to pass traffic between its interfaces.", code: "sudo ip netns exec router-arms sysctl -w net.ipv4.ip_forward=1" },
+        { exp: "Animation Complete! You've built a multi-subnet network.", code: "Done." }
     ];
     
     const handleNextStep = () => {
-        if (step < steps.length - 1) {
-            setStep(s => s + 1);
-        }
-    };
-    
-    const resetAnimation = () => {
-        setStep(0);
+        setStep(s => (s + 1) % steps.length);
     };
     
     const Node = ({ name, ip, isActive, type }: { name: string; ip?: string; isActive: boolean, type: 'host' | 'router' }) => (
@@ -45,9 +38,10 @@ const RCreatePracticalPage = () => {
         </motion.div>
     );
 
-    const Connection = ({ isActive }: {isActive: boolean}) => (
+    const Connection = ({ isActive, rotation }: {isActive: boolean, rotation: number}) => (
         <motion.div 
-            className="absolute h-16 w-0.5 bg-white/50" 
+            className="absolute h-16 w-0.5 bg-white/50 origin-bottom"
+            style={{ transform: `rotate(${rotation}deg)` }}
             initial={{ scaleY: 0 }}
             animate={{ scaleY: isActive ? 1 : 0 }}
             transition={{ duration: 0.5 }}
@@ -65,7 +59,7 @@ const RCreatePracticalPage = () => {
             <div className="bg-card p-6 rounded-2xl shadow-lg border border-border space-y-6">
                  <h1 className="text-2xl font-bold text-center text-primary font-mono">Router Creation Visualizer</h1>
 
-                <div className="w-full h-72 bg-dark-primary rounded-lg border-2 border-primary/50 flex flex-col justify-center items-center gap-8 p-4 relative">
+                <div className="w-full h-72 bg-dark-primary rounded-lg border-2 border-primary/50 flex flex-col justify-between items-center p-4 relative">
                     {/* Hosts */}
                     <div className="flex justify-around items-center w-full">
                         <Node name="h1" ip={step >= 4 ? "192.168.1.10" : ""} isActive={step >= 1} type="host" />
@@ -74,22 +68,26 @@ const RCreatePracticalPage = () => {
                     </div>
                      
                      {/* Router */}
-                    <Node name="router" isActive={step >= 1} type="router" />
-                    
-                    {/* Connections */}
-                    <div className="absolute top-[35%] left-[24%]" style={{transform: 'rotate(45deg)'}}><Connection isActive={step >= 2} /></div>
-                    <div className="absolute top-[35%] left-[50%] -translate-x-1/2"><Connection isActive={step >= 2} /></div>
-                    <div className="absolute top-[35%] right-[24%]" style={{transform: 'rotate(-45deg)'}}><Connection isActive={step >= 2} /></div>
+                    <div className="relative">
+                        <Node name="router" isActive={step >= 1} type="router" />
+                        <div className="absolute bottom-full left-1/2 -translate-x-1/2">
+                            <Connection isActive={step >= 2} rotation={-45} />
+                            <Connection isActive={step >= 2} rotation={0} />
+                            <Connection isActive={step >= 2} rotation={45} />
+                        </div>
+                    </div>
                 </div>
                 
                 <div className="flex justify-center gap-4">
-                    <Button onClick={handleNextStep} className="bg-primary hover:bg-primary/90" disabled={step >= steps.length -1}>
-                        Start/Next
+                    <Button onClick={handleNextStep} className="bg-primary hover:bg-primary/90">
+                        {step === 0 ? "Start" : step === steps.length - 1 ? "Reset" : "Next"}
                     </Button>
-                    <Button onClick={resetAnimation} variant="outline">Reset</Button>
                 </div>
-                 <div className="bg-card-nested text-accent font-mono p-4 rounded-lg border border-secondary text-center min-h-[4rem] flex items-center justify-center">
-                    {steps[step]}
+                 <div className="bg-card-nested p-4 rounded-lg border border-secondary text-center space-y-2">
+                   <p className="font-semibold text-accent min-h-[3rem] flex items-center justify-center">{steps[step].exp}</p>
+                   {steps[step].code && (
+                       <code className="text-xs text-amber-400 bg-black/30 p-2 rounded-md inline-block whitespace-pre-wrap"><FileCode className="inline-block mr-2 h-4 w-4"/>{steps[step].code}</code>
+                   )}
                 </div>
             </div>
         </div>

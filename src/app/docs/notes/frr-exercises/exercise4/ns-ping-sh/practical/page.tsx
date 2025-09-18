@@ -1,9 +1,8 @@
-
 'use client';
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Computer, Server, Send, Route, Rss, ArrowLeft, Terminal } from 'lucide-react';
+import { Computer, Server, Send, Route, Rss, ArrowLeft, Terminal, FileCode } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import {
@@ -36,16 +35,16 @@ const Node = ({ id, name, ip }: { id: string; name: string; ip: string }) => (
 const PingPacket = ({ path }: { path: string[] }) => {
     if (path.length < 2) return null;
 
-    const sequence = path.flatMap(nodeId => [
-        { ...nodes[nodeId as keyof typeof nodes], duration: 0.8 },
-    ]);
-    const reverseSequence = [...sequence].reverse();
-    
+    const sequence = path.map(nodeId => ({
+        ...nodes[nodeId as keyof typeof nodes],
+        transition: { duration: 0.8 },
+    }));
+
     return (
          <motion.div
             className="absolute z-10"
             initial={{ left: sequence[0].x, top: sequence[0].y }}
-            animate={sequence.map(s => ({ left: s.x, top: s.y, transition: { duration: s.duration } }))}
+            animate={sequence}
         >
             <Send className="w-6 h-6 text-neon-pink"/>
         </motion.div>
@@ -58,34 +57,56 @@ const NsPingPracticalPage = () => {
     const [destination, setDestination] = useState('h4');
     const [isPinging, setIsPinging] = useState(false);
     const [terminalOutput, setTerminalOutput] = useState<string[]>([]);
+    const [currentStep, setCurrentStep] = useState(0);
     
+    const getPath = (src: string, dest: string) => {
+        const path = [src];
+        const sourceRouter = src === 'h1' || src === 'h2' ? 'r1' : 'r2';
+        const destRouter = dest === 'h1' || dest === 'h2' ? 'r1' : 'r2';
+
+        path.push(sourceRouter);
+        if(sourceRouter !== destRouter) path.push(destRouter);
+        path.push(dest);
+        return path;
+    };
+    
+    const path = getPath(source, destination);
+
+    const steps = [
+        { exp: "Select source and destination, then click 'Send Ping'.", code: "" },
+        { exp: "The script determines the routing path and expected TTL based on the hosts' parent routers.", code: "SRC_ROUTER=\"${HOST_ROUTERS[$SRC_HOST]}\"\nDST_ROUTER=\"${HOST_ROUTERS[$DST_HOST]}\"" },
+        { exp: `The ping command is executed from ${source}'s namespace.`, code: `sudo ip netns exec ${source}-arms ping ...`},
+        { exp: `Packet travels the path: ${path.join(' -> ')}`, code: "(ICMP echo request)"},
+        { exp: `A successful reply with a TTL of ${path.length === 3 ? 63 : 62} confirms the path.`, code: `(ICMP echo reply)` }
+    ];
+
     const handlePing = async () => {
         if (source === destination) {
             toast({ title: 'Invalid', description: 'Source and destination cannot be the same.', variant: 'destructive'});
             return;
         }
         setIsPinging(true);
+        setCurrentStep(1);
         setTerminalOutput([`Pinging from ${source} to ${destination}...`]);
+        await new Promise(res => setTimeout(res, 1000));
         
-        await new Promise(res => setTimeout(res, 3500)); 
+        setCurrentStep(2);
+        await new Promise(res => setTimeout(res, 1000));
 
+        setCurrentStep(3);
+        const animationDuration = (path.length - 1) * 800 + (path.length - 2) * 200 + 400;
+        await new Promise(res => setTimeout(res, animationDuration));
+        
+        setCurrentStep(4);
         const destIp = nodes[destination as keyof typeof nodes].ip;
-        setTerminalOutput(prev => [...prev, `64 bytes from ${destIp}: icmp_seq=1 ttl=62 time=0.3ms`]);
+        const ttl = 64 - (path.length - 1);
+        setTerminalOutput(prev => [...prev, `64 bytes from ${destIp}: icmp_seq=1 ttl=${ttl} time=0.3ms`]);
         
-        setTimeout(() => setIsPinging(false), 1000);
+        setTimeout(() => {
+            setIsPinging(false);
+            setCurrentStep(0);
+        }, 2000);
     }
-
-    const getPath = () => {
-        if (!isPinging) return [];
-        const path = [source];
-        const sourceRouter = source === 'h1' || source === 'h2' ? 'r1' : 'r2';
-        const destRouter = destination === 'h1' || destination === 'h2' ? 'r1' : 'r2';
-
-        path.push(sourceRouter);
-        if(sourceRouter !== destRouter) path.push(destRouter);
-        path.push(destination);
-        return path;
-    };
 
     return (
         <div className="container mx-auto p-4 md:p-6 max-w-4xl">
@@ -116,6 +137,12 @@ const NsPingPracticalPage = () => {
                     <Button onClick={handlePing} disabled={isPinging} className="w-full bg-neon-green text-black hover:bg-white">
                         {isPinging ? 'Pinging...' : 'Send Ping'}
                     </Button>
+                     <div className="bg-card-nested p-4 rounded-lg border border-secondary text-center space-y-2">
+                       <p className="font-semibold text-accent min-h-[1rem] flex items-center justify-center">{steps[currentStep].exp}</p>
+                       {steps[currentStep].code && (
+                           <code className="text-xs text-amber-400 bg-black/30 p-2 rounded-md inline-block whitespace-pre-wrap"><FileCode className="inline-block mr-2 h-4 w-4"/>{steps[currentStep].code}</code>
+                       )}
+                    </div>
                      <div className="bg-dark-primary p-4 rounded-lg font-mono text-xs min-h-[100px]">
                         <p className="text-gray-400">$ ./ns-ping.sh arms {source} {destination}</p>
                         <AnimatePresence>
@@ -130,7 +157,7 @@ const NsPingPracticalPage = () => {
                     <h2 className="text-xl font-bold text-neon-blue mb-4">Network Topology</h2>
                     <div className="relative w-full h-64 bg-dark-primary rounded-lg">
                         {Object.keys(nodes).map(key => <Node key={key} id={key} name={key} ip={nodes[key as keyof typeof nodes].ip} />)}
-                        <AnimatePresence>{isPinging && <PingPacket path={getPath()} />}</AnimatePresence>
+                        <AnimatePresence>{isPinging && <PingPacket path={path} />}</AnimatePresence>
                     </div>
                 </div>
             </div>

@@ -1,35 +1,28 @@
-
 'use client';
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Route, FileText } from 'lucide-react';
+import { ArrowLeft, Route, FileText, FileCode } from 'lucide-react';
 import Link from 'next/link';
 
 const RCreatePracticalPage = () => {
     const [step, setStep] = useState(0);
 
     const steps = [
-        "Ready to begin. This script creates a dual-router topology.",
-        "Step 1: Create all namespaces (r1, r2, h1, h2, h3, h4).",
-        "Step 2: Create veth pairs to link hosts to their respective routers.",
-        "Step 3: Create the special veth pair to link the two routers.",
-        "Step 4: Configure IP addresses on all interfaces across all namespaces.",
-        "Step 5: Add default routes on each host pointing to its local router.",
-        "Step 6: Add static routes on each router to teach them how to reach networks connected to the other router.",
-        "Step 7: Enable IP forwarding on both routers, allowing them to pass traffic.",
-        "Animation Complete! You've built a multi-router, multi-hop network."
+        { exp: "Ready to begin. This script creates a dual-router topology.", code: "" },
+        { exp: "Step 1: Create all namespaces (r1, r2, h1, h2, h3, h4).", code: "sudo ip netns add r1-arms\nsudo ip netns add h1-arms\n..." },
+        { exp: "Step 2: Create veth pairs to link hosts to their respective routers.", code: "sudo ip link add h1-r1-arms type veth peer name r1-h1-arms\n..." },
+        { exp: "Step 3: Create the special veth pair to link the two routers.", code: "sudo ip link add r1-r2-arms type veth peer name r2-r1-arms" },
+        { exp: "Step 4: Configure IP addresses on all interfaces across all namespaces.", code: "sudo ip -n r1-arms addr add 192.168.1.1/24 dev r1-h1-arms\n..." },
+        { exp: "Step 5: Add default routes on each host pointing to its local router.", code: "sudo ip -n h1-arms route add default via 192.168.1.1" },
+        { exp: "Step 6: Add static routes on each router to teach them how to reach networks connected to the other router.", code: "sudo ip -n r1-arms route add 192.168.3.0/24 via 10.0.0.2" },
+        { exp: "Step 7: Enable IP forwarding on both routers, allowing them to pass traffic.", code: "sudo ip netns exec r1-arms sysctl -w net.ipv4.ip_forward=1" },
+        { exp: "Animation Complete! You've built a multi-router, multi-hop network.", code: "Done." }
     ];
     
     const handleNextStep = () => {
-        if (step < steps.length - 1) {
-            setStep(s => s + 1);
-        }
-    };
-    
-    const resetAnimation = () => {
-        setStep(0);
+        setStep(s => (s + 1) % steps.length);
     };
     
     const Node = ({ name, ip, isActive, type }: { name: string; ip?: string; isActive: boolean, type: 'host' | 'router' }) => (
@@ -89,13 +82,15 @@ const RCreatePracticalPage = () => {
                 </div>
                 
                 <div className="flex justify-center gap-4">
-                    <Button onClick={handleNextStep} className="bg-primary hover:bg-primary/90" disabled={step >= steps.length -1}>
-                        Start/Next
+                    <Button onClick={handleNextStep} className="bg-primary hover:bg-primary/90">
+                       {step === 0 ? "Start" : step === steps.length - 1 ? "Reset" : "Next"}
                     </Button>
-                    <Button onClick={resetAnimation} variant="outline">Reset</Button>
                 </div>
-                 <div className="bg-card-nested text-accent font-mono p-4 rounded-lg border border-secondary text-center min-h-[4rem] flex items-center justify-center">
-                    {steps[step]}
+                 <div className="bg-card-nested p-4 rounded-lg border border-secondary text-center space-y-2">
+                   <p className="font-semibold text-accent min-h-[3rem] flex items-center justify-center">{steps[step].exp}</p>
+                   {steps[step].code && (
+                       <code className="text-xs text-amber-400 bg-black/30 p-2 rounded-md inline-block whitespace-pre-wrap"><FileCode className="inline-block mr-2 h-4 w-4"/>{steps[step].code}</code>
+                   )}
                 </div>
             </div>
         </div>

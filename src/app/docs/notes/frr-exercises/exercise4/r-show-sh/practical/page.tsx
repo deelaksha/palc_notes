@@ -1,13 +1,13 @@
-
 'use client';
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Terminal } from 'lucide-react';
+import { Terminal, FileCode } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { ArrowLeft } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 const fullReport = `
 === Dual-Router Network Information (suffix: arms) ===
@@ -31,20 +31,7 @@ Routing table:
   192.168.4.0/24 via 10.0.0.2 dev r1-r2-arms
 
 --- Router r2 (r2-arms) ---
-IP forwarding: 1
-Interfaces:
-  r2-h3-arms (state: UP)
-    IP: 192.168.3.1/24
-  r2-h4-arms (state: UP)
-    IP: 192.168.4.1/24
-  r2-r1-arms (state: UP)
-    IP: 10.0.0.2/30
-Routing table:
-  10.0.0.0/30 dev r2-r1-arms proto kernel scope link src 10.0.0.2
-  192.168.1.0/24 via 10.0.0.1 dev r2-r1-arms
-  192.168.2.0/24 via 10.0.0.1 dev r2-r1-arms
-  192.168.3.0/24 dev r2-h3-arms proto kernel scope link src 192.168.3.1
-  192.168.4.0/24 dev r2-h4-arms proto kernel scope link src 192.168.4.1
+(Similar output for r2, showing its direct connections and static routes via 10.0.0.1)
 
 === Host Information ===
 (Host details for h1, h2, h3, h4 would appear here)
@@ -63,13 +50,22 @@ This topology demonstrates multi-hop static routing.
 
 const RShowPracticalPage = () => {
     const [output, setOutput] = useState('');
+    const [step, setStep] = useState(0);
+
+    const steps = [
+        { exp: "Click 'Run Script' to generate a full diagnostic report for the dual-router setup.", code: "" },
+        { exp: "The script loops through all routers and hosts, running diagnostic commands.", code: "for r in r1 r2; do ... done\nfor i in 1 2 3 4; do ... done" },
+        { exp: "A ping matrix is created to test connectivity between every host, confirming multi-hop routing.", code: "for src in h1 h2 h3 h4; do\n  for dst in h1 h2 h3 h4; do\n    ..." }
+    ];
 
     const runScript = () => {
         setOutput(fullReport);
+        setStep(1);
     }
     
     const reset = () => {
         setOutput('');
+        setStep(0);
     }
 
     return (
@@ -81,7 +77,7 @@ const RShowPracticalPage = () => {
                         Back
                     </Link>
                 </Button>
-                <div className="glass-effect rounded-2xl p-6 border-2 border-neon-blue/50">
+                <div className="glass-effect rounded-2xl p-6 border-2 border-neon-blue/50 space-y-4">
                     <div className="flex items-center gap-3 mb-4">
                         <Terminal className="h-6 w-6 text-neon-blue" />
                         <h2 className="text-xl font-bold">`r-show.sh` Simulator</h2>
@@ -90,6 +86,12 @@ const RShowPracticalPage = () => {
                     <div className="flex gap-4">
                         <Button onClick={runScript} className="bg-neon-green text-black hover:bg-white">Run Script</Button>
                         <Button onClick={reset} variant="outline">Reset</Button>
+                    </div>
+                     <div className="bg-card-nested p-4 rounded-lg border border-secondary text-center space-y-2">
+                       <p className="font-semibold text-accent min-h-[1rem] flex items-center justify-center">{steps[step].exp}</p>
+                       {steps[step].code && (
+                           <code className="text-xs text-amber-400 bg-black/30 p-2 rounded-md inline-block whitespace-pre-wrap"><FileCode className="inline-block mr-2 h-4 w-4"/>{steps[step].code}</code>
+                       )}
                     </div>
                     <div className="bg-dark-primary p-4 rounded-lg min-h-[300px] mt-4">
                         <ScrollArea className="h-[500px]">

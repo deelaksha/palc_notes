@@ -1,9 +1,8 @@
-
 'use client';
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Computer, Server, Send, Route, Rss, ArrowLeft, Terminal } from 'lucide-react';
+import { Computer, Server, Send, Route, Rss, ArrowLeft, Terminal, FileCode } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import {
@@ -36,16 +35,18 @@ const PingPacket = ({ from, to }: { from: string, to: string }) => {
     const toPos = nodes[to as keyof typeof nodes];
     const routerPos = nodes.router;
 
+    const sequence = [
+        { left: routerPos.x, top: routerPos.y, transition: { duration: 0.8 } },
+        { left: toPos.x, top: toPos.y, transition: { duration: 0.8, delay: 0.2 } },
+        { left: routerPos.x, top: routerPos.y, transition: { duration: 0.8, delay: 0.4 } },
+        { left: fromPos.x, top: fromPos.y, transition: { duration: 0.8, delay: 0.6 } },
+    ];
+    
     return (
         <motion.div
             className="absolute z-10"
             initial={{ left: fromPos.x, top: fromPos.y }}
-            animate={[
-                { left: routerPos.x, top: routerPos.y, transition: { duration: 0.8 } },
-                { left: toPos.x, top: toPos.y, transition: { duration: 0.8, delay: 0.2 } },
-                { left: routerPos.x, top: routerPos.y, transition: { duration: 0.8, delay: 0.4 } },
-                { left: fromPos.x, top: fromPos.y, transition: { duration: 0.8, delay: 0.6 } },
-            ]}
+            animate={sequence}
         >
             <Send className="w-6 h-6 text-neon-pink"/>
         </motion.div>
@@ -59,18 +60,40 @@ const NsPingPracticalPage = () => {
     const [isPinging, setIsPinging] = useState(false);
     const [terminalOutput, setTerminalOutput] = useState<string[]>([]);
     
+    const steps = [
+        { exp: "Select source and destination hosts and click 'Send Ping'.", code: "" },
+        { exp: "The script validates the hosts and finds the destination IP from a map.", code: "DST_IP=\"${HOST_IPS[$DST_HOST]}\"" },
+        { exp: "It executes the ping command from inside the source host's namespace.", code: "sudo ip netns exec \"$SRC_NS\" ping ..." },
+        { exp: "The ping travels from the source, through the router, to the destination, and back.", code: "(Packet travelling)"},
+        { exp: "A successful reply is printed to the terminal.", code: "64 bytes from ... icmp_seq=1 ..."}
+    ];
+    const [currentStep, setCurrentStep] = useState(0);
+
     const handlePing = async () => {
         if (source === destination) {
             toast({ title: 'Invalid', description: 'Source and destination cannot be the same.', variant: 'destructive'});
             return;
         }
         setIsPinging(true);
+        setCurrentStep(1);
         setTerminalOutput([`Pinging from ${source} to ${destination}...`]);
+        await new Promise(res => setTimeout(res, 500));
         
-        await new Promise(res => setTimeout(res, 3500)); 
-
+        setCurrentStep(2);
+        await new Promise(res => setTimeout(res, 500));
+        
+        setCurrentStep(3);
+        await new Promise(res => setTimeout(res, 3000));
+        
+        setCurrentStep(4);
         setTerminalOutput(prev => [...prev, `64 bytes from ${nodes[destination as keyof typeof nodes].ip}: icmp_seq=1 ttl=63 time=0.2ms`]);
         setIsPinging(false);
+    }
+    
+    const reset = () => {
+        setIsPinging(false);
+        setTerminalOutput([]);
+        setCurrentStep(0);
     }
 
     return (
@@ -102,6 +125,13 @@ const NsPingPracticalPage = () => {
                     <Button onClick={handlePing} disabled={isPinging} className="w-full bg-neon-green text-black hover:bg-white">
                         {isPinging ? 'Pinging...' : 'Send Ping'}
                     </Button>
+                    <Button onClick={reset} variant="outline">Reset</Button>
+                     <div className="bg-card-nested p-4 rounded-lg border border-secondary text-center space-y-2">
+                       <p className="font-semibold text-accent min-h-[1rem] flex items-center justify-center">{steps[currentStep].exp}</p>
+                       {steps[currentStep].code && (
+                           <code className="text-xs text-amber-400 bg-black/30 p-2 rounded-md inline-block whitespace-pre-wrap"><FileCode className="inline-block mr-2 h-4 w-4"/>{steps[currentStep].code}</code>
+                       )}
+                    </div>
                      <div className="bg-dark-primary p-4 rounded-lg font-mono text-xs min-h-[100px]">
                         <p className="text-gray-400">$ ./ns-ping.sh arms {source} {destination}</p>
                         <AnimatePresence>

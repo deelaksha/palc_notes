@@ -1,11 +1,10 @@
-
 'use client';
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Route, FileText, GitBranch, Network } from 'lucide-react';
+import { ArrowLeft, Route, FileText, GitBranch, Network, FileCode } from 'lucide-react';
 import Link from 'next/link';
 
 const routingTables = {
@@ -44,6 +43,15 @@ const routingTables = {
 const NsRoutePracticalPage = () => {
     const [selectedNode, setSelectedNode] = useState('r1');
     const tableData = routingTables[selectedNode as keyof typeof routingTables];
+    
+    const steps = {
+        h1: { exp: "The host knows its local network directly and uses the router as a default gateway for everything else.", code: "sudo ip -n h1-arms route show" },
+        h2: { exp: "The host knows its local network directly and uses the router as a default gateway for everything else.", code: "sudo ip -n h2-arms route show" },
+        h3: { exp: "The host knows its local network directly and uses the router as a default gateway for everything else.", code: "sudo ip -n h3-arms route show" },
+        h4: { exp: "The host knows its local network directly and uses the router as a default gateway for everything else.", code: "sudo ip -n h4-arms route show" },
+        r1: { exp: "The router has direct routes to its local subnets and static routes pointing to r2 for remote subnets.", code: "sudo ip -n r1-arms route show" },
+        r2: { exp: "The router has direct routes to its local subnets and static routes pointing to r1 for remote subnets.", code: "sudo ip -n r2-arms route show" }
+    };
 
     return (
         <div className="container mx-auto p-6 max-w-4xl">
@@ -102,12 +110,9 @@ const NsRoutePracticalPage = () => {
                             </motion.div>
                         </AnimatePresence>
                     </div>
-                     <div className="text-xs text-muted-foreground mt-4 p-2 bg-background/30 rounded">
-                        <h4 className="font-bold">Explanation:</h4>
-                        {selectedNode.startsWith('h') ? 
-                            <p>Each host has a `default` route sending all unknown traffic to its local router, and a `direct` route for its own subnet.</p> :
-                            <p>Each router has `direct` routes for its connected subnets and `static` routes (via the other router's IP) to reach remote subnets.</p>
-                        }
+                     <div className="text-xs text-muted-foreground mt-4 p-2 bg-card-nested rounded-lg space-y-2 text-center">
+                       <p className="font-semibold text-accent">{steps[selectedNode as keyof typeof steps].exp}</p>
+                       <code className="text-xs text-amber-400 bg-black/30 p-1 rounded-md inline-block"><FileCode className="inline-block mr-2 h-4 w-4"/>{steps[selectedNode as keyof typeof steps].code}</code>
                     </div>
                 </div>
             </div>

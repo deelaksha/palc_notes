@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Trash2 } from 'lucide-react';
+import { ArrowLeft, Trash2, FileCode } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 
@@ -44,18 +44,18 @@ const CleanupVisualizer = () => {
     const [step, setStep] = useState(0);
 
     const steps = [
-        "Ready to begin. The environment created by `ns-create.sh` is active.",
-        "Running `sudo ip netns del h1-arms`... This destroys the first namespace.",
-        "The `veth` pair connected to `h1` is automatically destroyed with it.",
-        "Running `sudo ip netns del h2-arms`... This destroys the second namespace.",
-        "Cleanup complete! The virtual environment has been removed."
+        { exp: "Ready to begin. The environment created by `ns-create.sh` is active.", code: "(Initial state)" },
+        { exp: "This destroys the first namespace. The veth pair inside it is automatically removed.", code: "sudo ip netns del h1-arms" },
+        { exp: "The `veth` pair is a single entity. Destroying one end destroys the other.", code: "(veth pair destroyed)" },
+        { exp: "This destroys the second namespace.", code: "sudo ip netns del h2-arms" },
+        { exp: "Cleanup complete! The virtual environment has been removed.", code: "Done." }
     ];
 
     const namespaces = {
-        h1: step < 2,
-        h2: step < 4,
+        h1: step < 1,
+        h2: step < 3,
     };
-    const veth = step < 3;
+    const veth = step < 2;
     
     const runStep = () => {
         if (step < steps.length - 1) {
@@ -89,8 +89,9 @@ const CleanupVisualizer = () => {
                     </Button>
                 </div>
 
-                <div className="bg-card-nested text-accent font-mono p-4 rounded-lg border border-secondary text-center min-h-[4rem] flex items-center justify-center">
-                   {steps[step]}
+                <div className="bg-card-nested p-4 rounded-lg border border-secondary text-center space-y-2">
+                   <p className="font-semibold text-accent">{steps[step].exp}</p>
+                   <code className="text-xs text-amber-400 bg-black/30 p-1 rounded-md inline-block"><FileCode className="inline-block mr-2 h-4 w-4"/>{steps[step].code}</code>
                 </div>
             </div>
         </div>

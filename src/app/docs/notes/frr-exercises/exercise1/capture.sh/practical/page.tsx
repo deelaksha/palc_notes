@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Ear, Mail, Terminal } from 'lucide-react';
+import { ArrowLeft, Ear, Mail, Terminal, FileCode } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -10,24 +10,22 @@ import { useToast } from '@/hooks/use-toast';
 const PacketCaptureVisualizer = () => {
     const { toast } = useToast();
     const [step, setStep] = useState(0);
-    const [explanation, setExplanation] = useState("Click 'Start' to begin the simulation.");
     const [capturedPackets, setCapturedPackets] = useState<string[]>([]);
 
     const steps = [
-        { exp: "Click 'Start' to begin the simulation." },
-        { exp: "H1 sends an ICMP Echo Request (a 'ping') to H2's IP address (10.0.0.2)." },
-        { exp: "The packet travels across the virtual link between the two hosts." },
-        { exp: "The `tcpdump` process running on H2's interface captures a copy of the packet as it arrives." },
-        { exp: "H2's network stack processes the ping and prepares to send an ICMP Echo Reply." },
-        { exp: "H2 sends the Echo Reply back to H1." },
-        { exp: "`tcpdump` captures the outgoing reply packet as it leaves H2's interface." },
-        { exp: "Animation complete! You've captured both the request and the reply." }
+        { exp: "Click 'Start' to begin the simulation. `tcpdump` is listening on host h2.", code: "sudo ip netns exec h2-arms tcpdump -i v2-arms -n" },
+        { exp: "H1 sends an ICMP Echo Request (a 'ping') to H2's IP address (10.0.0.2).", code: "./ns-ping.sh" },
+        { exp: "The packet travels across the virtual link between the two hosts.", code: "(Packet in transit)" },
+        { exp: "`tcpdump` captures a copy of the packet as it arrives at h2's interface.", code: "(tcpdump captures frame)" },
+        { exp: "H2's network stack processes the ping and prepares to send an ICMP Echo Reply.", code: "(Kernel processing)" },
+        { exp: "H2 sends the Echo Reply back to H1.", code: "(Kernel responds to ping)" },
+        { exp: "`tcpdump` captures the outgoing reply packet as it leaves h2's interface.", code: "(tcpdump captures frame)" },
+        { exp: "Animation complete! You've captured both the request and the reply.", code: "Done." }
     ];
 
     const runAnimationStep = async () => {
         const nextStep = (step + 1) % steps.length;
         setStep(nextStep);
-        setExplanation(steps[nextStep].exp);
 
         if (nextStep === 3) {
             toast({ title: "Packet Captured!", description: "Request packet from 10.0.0.1 -> 10.0.0.2" });
@@ -101,8 +99,9 @@ const PacketCaptureVisualizer = () => {
                         {step === 0 ? "Start" : step === steps.length -1 ? "Reset" : "Next Step"}
                     </Button>
                 </div>
-                <div className="bg-card-nested text-accent font-mono p-4 rounded-lg border border-secondary text-center text-xs min-h-[4rem] flex-grow flex items-center justify-center">
-                   {explanation}
+                <div className="bg-card-nested p-4 rounded-lg border border-secondary text-center space-y-2">
+                   <p className="font-semibold text-accent">{steps[step].exp}</p>
+                   <code className="text-xs text-amber-400 bg-black/30 p-1 rounded-md inline-block"><FileCode className="inline-block mr-2 h-4 w-4"/>{steps[step].code}</code>
                 </div>
                  <div className="bg-dark-primary text-amber-400 font-mono p-4 mt-4 rounded-lg border border-secondary text-xs min-h-[6rem]">
                    <p className="text-gray-400 mb-2">$ sudo tcpdump -i v2-arms -n</p>
