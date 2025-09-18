@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState } from 'react';
@@ -42,24 +41,28 @@ const VethVisual = ({ exists }: { exists: boolean }) => (
 
 const CleanupVisualizer = () => {
     const { toast } = useToast();
-    const [namespaces, setNamespaces] = useState({ h1: true, h2: true });
-    const [veth, setVeth] = useState(true);
+    const [step, setStep] = useState(0);
 
-    const handleClean = () => {
-        if (!namespaces.h1 && !namespaces.h2) return;
-        
-        toast({ title: 'Running ns-clean.sh...', description: 'Deleting namespaces and virtual interfaces.'});
-        
-        // Stagger the animation
-        setTimeout(() => setNamespaces({ h1: false, h2: true }), 500);
-        setTimeout(() => setVeth(false), 800);
-        setTimeout(() => setNamespaces({ h1: false, h2: false }), 1200);
+    const steps = [
+        "Ready to begin. The environment created by `ns-create.sh` is active.",
+        "Running `sudo ip netns del h1-arms`... This destroys the first namespace.",
+        "The `veth` pair connected to `h1` is automatically destroyed with it.",
+        "Running `sudo ip netns del h2-arms`... This destroys the second namespace.",
+        "Cleanup complete! The virtual environment has been removed."
+    ];
 
+    const namespaces = {
+        h1: step < 2,
+        h2: step < 4,
     };
-
-    const handleReset = () => {
-        setNamespaces({ h1: true, h2: true });
-        setVeth(true);
+    const veth = step < 3;
+    
+    const runStep = () => {
+        if (step < steps.length - 1) {
+            setStep(s => s + 1);
+        } else {
+            setStep(0);
+        }
     };
 
     return (
@@ -81,14 +84,13 @@ const CleanupVisualizer = () => {
                 </div>
                 
                 <div className="flex justify-center gap-4">
-                    <Button onClick={handleClean} disabled={!namespaces.h1 && !namespaces.h2} className="bg-destructive hover:bg-destructive/90">
-                        <Trash2 className="mr-2"/> Run Cleanup
+                     <Button onClick={runStep} className="bg-destructive hover:bg-destructive/90">
+                        {step === 0 ? "Start Cleanup" : step === steps.length - 1 ? "Reset" : "Next Step"}
                     </Button>
-                    <Button onClick={handleReset} variant="outline">Reset</Button>
                 </div>
 
                 <div className="bg-card-nested text-accent font-mono p-4 rounded-lg border border-secondary text-center min-h-[4rem] flex items-center justify-center">
-                   {namespaces.h1 || namespaces.h2 ? "Environment is active. Run cleanup to remove it." : "Cleanup complete!"}
+                   {steps[step]}
                 </div>
             </div>
         </div>

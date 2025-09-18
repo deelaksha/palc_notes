@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState } from 'react';
@@ -61,7 +60,7 @@ const NsShowPracticalPage = () => {
                     Back
                 </Link>
             </Button>
-            <div className="glass-effect rounded-2xl p-6 border-2 border-neon-blue/50 space-y-6">
+            <div className="bg-card p-6 rounded-2xl shadow-lg border border-border space-y-6">
                 <h1 className="text-2xl font-bold text-center text-primary font-mono">`ns-show.sh` Simulator</h1>
                 <div className="flex justify-center gap-4">
                     <Button onClick={runScript} className="bg-primary hover:bg-primary/90">Run Script</Button>
@@ -84,7 +83,7 @@ const NsShowPracticalPage = () => {
                         <div className="bg-dark-primary text-accent font-mono p-4 rounded-lg border border-secondary min-h-[20rem]">
                             <p className="text-gray-400">$ ./ns-show.sh</p>
                             <ScrollArea className="h-72">
-                                <pre className="text-xs whitespace-pre-wrap mt-2">{output.h1}</pre>
+                                <pre className="text-xs whitespace-pre-wrap mt-2">{output.h1 || "Click 'Run Script' to see output..."}</pre>
                             </ScrollArea>
                         </div>
                     </TabsContent>
@@ -92,7 +91,7 @@ const NsShowPracticalPage = () => {
                          <div className="bg-dark-primary text-accent font-mono p-4 rounded-lg border border-secondary min-h-[20rem]">
                              <p className="text-gray-400">$ ./ns-show.sh</p>
                             <ScrollArea className="h-72">
-                                <pre className="text-xs whitespace-pre-wrap mt-2">{output.h2}</pre>
+                                <pre className="text-xs whitespace-pre-wrap mt-2">{output.h2 || "Click 'Run Script' to see output..."}</pre>
                             </ScrollArea>
                         </div>
                     </TabsContent>
