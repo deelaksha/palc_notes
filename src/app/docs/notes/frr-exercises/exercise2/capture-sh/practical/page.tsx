@@ -15,7 +15,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select"
 
 // New themed component based on user's provided HTML
 const PacketCaptureVisualizer = () => {
@@ -140,7 +140,7 @@ const PacketCaptureVisualizer = () => {
                 <Label htmlFor="listener-select" className="text-sm font-semibold">Listening Interface:</Label>
                 <Select value={listeningOn} onValueChange={setListeningOn} disabled={isAnimating}>
                     <SelectTrigger id="listener-select" className="bg-[#1e1e1e] border-[#555]">
-                        <SelectValue />
+                        <SelectValue placeholder="Select an interface..." />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="h1">h1</SelectItem>
