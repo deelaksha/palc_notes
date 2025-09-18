@@ -10,15 +10,15 @@ const scripts = [
     description: 'Creates network namespaces for the exercise.',
     href: '/docs/notes/frr-exercises/exercise1/ns-create-sh',
   },
+   {
+    name: 'ns-capture.sh',
+    description: 'Captures network traffic for analysis.',
+    href: '/docs/notes/frr-exercises/exercise1/ns-capture-sh',
+  },
   {
     name: 'ns-ping.sh',
     description: 'Pings devices within the network namespaces.',
     href: '/docs/notes/frr-exercises/exercise1/ns-ping-sh',
-  },
-  {
-    name: 'ns-capture.sh',
-    description: 'Captures network traffic for analysis.',
-    href: '/docs/notes/frr-exercises/exercise1/ns-capture-sh',
   },
   {
     name: 'ns-clean.sh',
