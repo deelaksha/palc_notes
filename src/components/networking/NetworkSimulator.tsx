@@ -16,7 +16,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 
 const NetworkSimulator = () => {
   const [sourceIp, setSourceIp] = useState('192.168.1.10');
-  const [destinationIp, setDestinationIp] = useState('10.10.10.5');
+  const [destinationIp, setDestinationIp] = useState('192.168.2.30');
   const [subnetMask, setSubnetMask] = useState('255.255.255.0');
   const [packetType, setPacketType] = useState('http');
   const [status, setStatus] = useState('Enter details and click "Start Simulation".');
@@ -34,27 +34,31 @@ const NetworkSimulator = () => {
 
   const deviceRefs = {
     sourceHost: useRef<HTMLDivElement>(null),
+    hostA: useRef<HTMLDivElement>(null),
     bridge1: useRef<HTMLDivElement>(null),
     router1: useRef<HTMLDivElement>(null),
     router2: useRef<HTMLDivElement>(null),
     firewall: useRef<HTMLDivElement>(null),
     bridge2: useRef<HTMLDivElement>(null),
+    hostB: useRef<HTMLDivElement>(null),
     destinationHost: useRef<HTMLDivElement>(null),
   };
   
   const deviceData = {
-      sourceHost: { name: 'Source Host', mac: 'AA:..:01'},
+      sourceHost: { name: 'Source Host', mac: 'AA:..:01', ip: '192.168.1.10' },
+      hostA: { name: 'Host A', mac: 'AA:..:02', ip: '192.168.1.20' },
       bridge1: { name: 'Bridge 1', mac: ''},
-      router1: { name: 'Router 1', mac: 'R1:..:A1', mac2: 'R1:..:B1' },
-      router2: { name: 'Router 2', mac: 'R2:..:A1', mac2: 'R2:..:B1' },
-      firewall: { name: 'Firewall', mac: ''},
+      router1: { name: 'Router 1', mac: 'R1:..:A1', mac2: 'R1:..:B1', ip: '192.168.1.1' },
+      router2: { name: 'Router 2', mac: 'R2:..:A1', mac2: 'R2:..:B1', ip: '10.0.0.1' },
+      firewall: { name: 'Firewall', mac: 'F1:..:01'},
       bridge2: { name: 'Bridge 2', mac: ''},
-      destinationHost: { name: 'Destination Host', mac: 'DD:..:01'},
+      hostB: { name: 'Host B', mac: 'DD:..:02', ip: '192.168.2.20' },
+      destinationHost: { name: 'Destination Host', mac: 'DD:..:01', ip: '192.168.2.30' },
   };
 
   const routingTables = {
-    router1: { '10.10.10.0/24': 'router2' },
-    router2: { '10.10.10.0/24': 'firewall' },
+    router1: { '10.10.10.0/24': 'router2', '0.0.0.0/0': 'router2' },
+    router2: { '192.168.2.0/24': 'firewall', '0.0.0.0/0': 'firewall' },
   };
 
   const lineRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
@@ -73,10 +77,12 @@ const NetworkSimulator = () => {
   const drawLines = () => {
     const connections = [
       { from: 'sourceHost', to: 'bridge1', id: 'conn-source-bridge1' },
+      { from: 'hostA', to: 'bridge1', id: 'conn-hostA-bridge1' },
       { from: 'bridge1', to: 'router1', id: 'conn-bridge1-router1' },
       { from: 'router1', to: 'router2', id: 'conn-router1-router2' },
       { from: 'router2', to: 'firewall', id: 'conn-router2-firewall' },
       { from: 'firewall', to: 'bridge2', id: 'conn-firewall-bridge2' },
+      { from: 'bridge2', to: 'hostB', id: 'conn-bridge2-hostB' },
       { from: 'bridge2', to: 'destinationHost', id: 'conn-bridge2-dest' },
     ];
     connections.forEach((conn) => {
@@ -155,6 +161,24 @@ const NetworkSimulator = () => {
     setCurrentRouterId(null);
   };
 
+  const ipToBinary = (ip: string) => ip.split('.').map(octet => parseInt(octet, 10).toString(2).padStart(8, '0')).join('');
+
+  const getNetworkId = (ip: string, mask: string) => {
+    let maskBinary;
+    if (mask.startsWith('/')) {
+        const cidr = parseInt(mask.substring(1), 10);
+        maskBinary = '1'.repeat(cidr).padEnd(32, '0');
+    } else {
+        maskBinary = ipToBinary(mask);
+    }
+    const ipBinary = ipToBinary(ip);
+    let networkBinary = '';
+    for (let i = 0; i < 32; i++) {
+        networkBinary += (ipBinary[i] === '1' && maskBinary[i] === '1') ? '1' : '0';
+    }
+    return networkBinary;
+  };
+
   const startSimulation = async () => {
     const IP_REGEX = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
     if (!IP_REGEX.test(sourceIp) || !IP_REGEX.test(destinationIp) || !IP_REGEX.test(subnetMask)) {
@@ -164,36 +188,53 @@ const NetworkSimulator = () => {
     resetSimulation();
     setIsSimulating(true);
     setStatus('Simulation starting...');
+
+    const sourceDeviceKey = Object.keys(deviceData).find(key => deviceData[key as keyof typeof deviceData].ip === sourceIp) || 'sourceHost';
     
-    const sourcePos = getDevicePos('sourceHost');
+    const sourcePos = getDevicePos(sourceDeviceKey as keyof typeof deviceRefs);
     setPacketState({
         visible: true,
         x: sourcePos.x - 10,
         y: sourcePos.y - 10,
-        sourceMac: deviceData.sourceHost.mac,
+        sourceMac: deviceData[sourceDeviceKey as keyof typeof deviceData].mac,
         destMac: deviceData.router1.mac,
     });
     
     const isBlocked = packetType === 'torrent';
+    const sourceNetworkId = getNetworkId(sourceIp, subnetMask);
+    const destNetworkId = getNetworkId(destinationIp, subnetMask);
+    const isSameSubnet = sourceNetworkId === destNetworkId;
 
-    const path = [
-        { id: 'sourceHost', log: '1. Source Host sends packet to its default gateway (Router 1).', delay: 2000, duration: 1.5, line: 'conn-source-bridge1', sourceMac: deviceData.sourceHost.mac, destMac: deviceData.router1.mac },
-        { id: 'bridge1', log: '2. Bridge forwards the packet towards the router.', delay: 2000, duration: 1.5, line: 'conn-bridge1-router1', sourceMac: deviceData.sourceHost.mac, destMac: deviceData.router1.mac },
-        { id: 'router1', routerId: 'router1', log: '3. Router 1 receives. MAC changes. Forwards to Router 2.', delay: 2500, duration: 1.5, line: 'conn-router1-router2', sourceMac: deviceData.router1.mac2, destMac: deviceData.router2.mac },
-        { id: 'router2', routerId: 'router2', log: '4. Router 2 receives. MAC changes. Forwards to Firewall.', delay: 2500, duration: 1.5, line: 'conn-router2-firewall', sourceMac: deviceData.router2.mac2, destMac: deviceData.firewall.mac },
-        { id: 'firewall', log: `5. Firewall inspects the packet.`, delay: 1500 }
-    ];
+    let path;
 
-    if (isBlocked) {
-        path.push({ id: 'firewall', log: `FIREWALL BLOCK: ${packetType.toUpperCase()} traffic is not allowed. Packet dropped.`, delay: 1500 });
-        await animatePacket(path);
+    if (isSameSubnet) {
+        const destDeviceKey = Object.keys(deviceData).find(key => deviceData[key as keyof typeof deviceData].ip === destinationIp) || 'hostA';
+        path = [
+            { id: sourceDeviceKey, log: '1. Source Host finds destination is on the same local network.', delay: 2000, duration: 1.5, line: 'conn-source-bridge1', sourceMac: deviceData[sourceDeviceKey as keyof typeof deviceData].mac, destMac: deviceData[destDeviceKey as keyof typeof deviceData].mac },
+            { id: 'bridge1', log: '2. Bridge forwards the frame directly to the destination MAC address.', delay: 2000, duration: 1.5, line: 'conn-hostA-bridge1' },
+            { id: destDeviceKey, log: '3. Packet arrives at destination on the same LAN.', delay: 2000 }
+        ]
     } else {
-        path.push(
-            { id: 'firewall', log: `6. Firewall allows packet. Forwards to Bridge 2.`, delay: 1500, duration: 1.5, line: 'conn-firewall-bridge2', sourceMac: deviceData.router2.mac2, destMac: deviceData.bridge2.mac },
-            { id: 'bridge2', log: '7. Bridge 2 forwards packet to the destination host.', delay: 1500, duration: 1.5, line: 'conn-bridge2-dest', sourceMac: deviceData.router2.mac2, destMac: deviceData.destinationHost.mac },
-            { id: 'destinationHost', log: '8. Packet has arrived at the destination!', delay: 2000 }
-        );
-        await animatePacket(path);
+        path = [
+            { id: sourceDeviceKey, log: '1. Source Host sends packet to its default gateway (Router 1).', delay: 2000, duration: 1.5, line: 'conn-source-bridge1', sourceMac: deviceData[sourceDeviceKey as keyof typeof deviceData].mac, destMac: deviceData.router1.mac },
+            { id: 'bridge1', log: '2. Bridge forwards the packet towards the router.', delay: 2000, duration: 1.5, line: 'conn-bridge1-router1', sourceMac: deviceData[sourceDeviceKey as keyof typeof deviceData].mac, destMac: deviceData.router1.mac },
+            { id: 'router1', routerId: 'router1', log: '3. Router 1 receives. MAC changes. Forwards to Router 2.', delay: 2500, duration: 1.5, line: 'conn-router1-router2', sourceMac: deviceData.router1.mac2, destMac: deviceData.router2.mac },
+            { id: 'router2', routerId: 'router2', log: '4. Router 2 receives. MAC changes. Forwards to Firewall.', delay: 2500, duration: 1.5, line: 'conn-router2-firewall', sourceMac: deviceData.router2.mac2, destMac: deviceData.firewall.mac },
+            { id: 'firewall', log: `5. Firewall inspects the packet.`, delay: 1500 }
+        ];
+
+        if (isBlocked) {
+            path.push({ id: 'firewall', log: `FIREWALL BLOCK: ${packetType.toUpperCase()} traffic is not allowed. Packet dropped.`, delay: 1500 });
+            await animatePacket(path);
+        } else {
+             const destDeviceKey = Object.keys(deviceData).find(key => deviceData[key as keyof typeof deviceData].ip === destinationIp) || 'destinationHost';
+            path.push(
+                { id: 'firewall', log: `6. Firewall allows packet. Forwards to Bridge 2.`, delay: 1500, duration: 1.5, line: 'conn-firewall-bridge2', sourceMac: deviceData.router2.mac2, destMac: deviceData.bridge2.mac },
+                { id: 'bridge2', log: '7. Bridge 2 forwards packet to the destination host.', delay: 1500, duration: 1.5, line: 'conn-bridge2-dest', sourceMac: deviceData.router2.mac2, destMac: deviceData[destDeviceKey as keyof typeof deviceData].mac },
+                { id: destDeviceKey, log: '8. Packet has arrived at the destination!', delay: 2000 }
+            );
+            await animatePacket(path);
+        }
     }
 
     setStatus('Simulation complete!');
@@ -269,22 +310,28 @@ const NetworkSimulator = () => {
 
         {/* Network Topology */}
         <div className="network-topology mt-8 rounded-xl shadow-inner h-[400px] md:h-[500px]">
-           {['conn-source-bridge1', 'conn-bridge1-router1', 'conn-router1-router2', 'conn-router2-firewall', 'conn-firewall-bridge2', 'conn-bridge2-dest'].map(id => (
+           {['conn-source-bridge1', 'conn-hostA-bridge1', 'conn-bridge1-router1', 'conn-router1-router2', 'conn-router2-firewall', 'conn-firewall-bridge2', 'conn-bridge2-hostB', 'conn-bridge2-dest'].map(id => (
               <div key={id} ref={el => lineRefs.current[id] = el} className="connection-line" />
            ))}
-            <div ref={deviceRefs.sourceHost} className="device host-device" style={{ left: '10%', top: '50%' }}>
+            <div ref={deviceRefs.sourceHost} className="device host-device" style={{ left: '10%', top: '20%' }}>
                 <span className="device-icon">💻</span>
                 <span className="device-label">Source Host</span>
+                 <span className="device-ip">{deviceData.sourceHost.ip}</span>
             </div>
-            <div ref={deviceRefs.bridge1} className="device bridge-device" style={{ left: '25%', top: '50%' }}>
+            <div ref={deviceRefs.hostA} className="device host-device" style={{ left: '10%', top: '60%' }}>
+                <span className="device-icon">📱</span>
+                <span className="device-label">Host A</span>
+                <span className="device-ip">{deviceData.hostA.ip}</span>
+            </div>
+            <div ref={deviceRefs.bridge1} className="device bridge-device" style={{ left: '30%', top: '40%' }}>
                 <span className="device-icon">🌉</span>
                 <span className="device-label">Bridge 1</span>
             </div>
-            <div ref={deviceRefs.router1} className="device router-device" style={{ left: '40%', top: '30%' }}>
+            <div ref={deviceRefs.router1} className="device router-device" style={{ left: '50%', top: '20%' }}>
                 <span className="device-icon">🌐</span>
                 <span className="device-label">Router 1</span>
             </div>
-            <div ref={deviceRefs.router2} className="device router-device" style={{ left: '55%', top: '70%' }}>
+             <div ref={deviceRefs.router2} className="device router-device" style={{ left: '50%', top: '80%' }}>
                 <span className="device-icon">🌐</span>
                 <span className="device-label">Router 2</span>
             </div>
@@ -296,9 +343,15 @@ const NetworkSimulator = () => {
                 <span className="device-icon">🌉</span>
                 <span className="device-label">Bridge 2</span>
             </div>
-            <div ref={deviceRefs.destinationHost} className="device host-device" style={{ right: '5%', top: '50%' }}>
+            <div ref={deviceRefs.hostB} className="device host-device" style={{ right: '5%', top: '20%' }}>
+                <span className="device-icon">🖨️</span>
+                <span className="device-label">Host B</span>
+                <span className="device-ip">{deviceData.hostB.ip}</span>
+            </div>
+            <div ref={deviceRefs.destinationHost} className="device host-device" style={{ right: '5%', top: '80%' }}>
                 <span className="device-icon">🖥️</span>
-                <span className="device-label">Destination</span>
+                <span className="device-label">Destination Host</span>
+                <span className="device-ip">{deviceData.destinationHost.ip}</span>
             </div>
 
             {packetState.visible && (
@@ -311,5 +364,3 @@ const NetworkSimulator = () => {
 };
 
 export default NetworkSimulator;
-
-    
