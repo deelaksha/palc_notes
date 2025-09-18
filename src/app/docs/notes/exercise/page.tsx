@@ -1,11 +1,16 @@
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Dumbbell, PlayCircle } from 'lucide-react';
+import { ArrowLeft, Dumbbell, PlayCircle, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 const exercises = [
-  { name: 'src/frr exercise', href: '/docs/notes/frr-exercises' },
+  { 
+    name: 'FRR Routing Exercises',
+    description: 'Practice scenarios for FRR configurations.',
+    href: '/docs/notes/frr-exercises',
+    icon: <PlayCircle className="size-8" />
+  },
 ];
 
 export default function ExercisePage() {
@@ -18,29 +23,45 @@ export default function ExercisePage() {
             Back to Notes
           </Link>
         </Button>
-        <Card>
-          <CardHeader className="text-center">
-            <div className="flex justify-center mb-4">
+        <header className="text-center mb-12">
+            <div className="inline-block bg-primary/10 p-4 rounded-full mb-4">
                 <Dumbbell className="size-12 text-primary" />
             </div>
-            <CardTitle className="font-headline text-3xl">Practice Exercises</CardTitle>
-             <p className="text-center text-muted-foreground pt-2">
-              Select an exercise to begin.
+            <h1 className="text-4xl md:text-5xl font-bold text-primary font-headline mb-2">
+                Practice Exercises
+            </h1>
+             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Select a topic to begin.
             </p>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        </header>
+        <section className="w-full">
+            <div className="grid gap-6 md:grid-cols-1">
               {exercises.map((exercise) => (
-                <Button key={exercise.name} asChild variant="outline" size="lg" className="justify-start">
-                  <Link href={exercise.href}>
-                    <PlayCircle className="mr-3 h-5 w-5" />
-                    {exercise.name}
-                  </Link>
-                </Button>
+                <Link key={exercise.name} href={exercise.href} className="group">
+                  <Card className="h-full transition-all duration-300 ease-in-out group-hover:border-primary group-hover:shadow-lg group-hover:shadow-primary/10 group-hover:-translate-y-1">
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                           <div className="bg-muted p-3 rounded-md text-foreground">
+                                {exercise.icon}
+                           </div>
+                          <div>
+                            <CardTitle className="font-headline">
+                              {exercise.name}
+                            </CardTitle>
+                            <CardDescription>
+                              {exercise.description}
+                            </CardDescription>
+                          </div>
+                        </div>
+                        <ArrowRight className="size-5 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
+                      </div>
+                    </CardHeader>
+                  </Card>
+                </Link>
               ))}
             </div>
-          </CardContent>
-        </Card>
+        </section>
       </div>
     </main>
   );
