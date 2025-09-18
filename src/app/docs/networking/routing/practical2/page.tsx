@@ -2,7 +2,8 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowLeft, Construction } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
+import NetworkSimulator from '@/components/networking/NetworkSimulator';
 
 export default function CommandPracticalPage() {
   return (
@@ -22,15 +23,7 @@ export default function CommandPracticalPage() {
         </Button>
       </header>
       <main className="flex-1 flex flex-col items-center justify-center p-4">
-        <div className="text-center text-white glass-effect p-12 rounded-2xl">
-          <Construction className="mx-auto h-16 w-16 mb-4 text-amber-400" />
-          <h2 className="text-3xl font-bold mb-2">
-            Practical Example Coming Soon!
-          </h2>
-          <p className="text-gray-300">
-            A new interactive exercise for routing is under construction.
-          </p>
-        </div>
+        <NetworkSimulator />
       </main>
     </div>
   );

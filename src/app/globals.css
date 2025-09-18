@@ -309,4 +309,81 @@
                 radial-gradient(circle at 40% 40%, rgba(120, 219, 226, 0.2) 0%, transparent 50%);
 }
 
-    
+.network-topology {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    border: 2px dashed #4a5568;
+    border-radius: 1rem;
+    background-color: #2d3748;
+}
+
+.device {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0.5rem;
+    border-radius: 9999px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease-in-out;
+    z-index: 20;
+}
+
+.device-icon {
+    font-size: 2.5rem;
+    line-height: 1;
+}
+
+.router-device {
+    background-color: #3182ce;
+}
+.host-device {
+    background-color: #48bb78;
+}
+.bridge-device {
+    background-color: #9f7aea;
+}
+.firewall-device {
+    background-color: #e53e3e;
+}
+
+.packet {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    background-color: #f6ad55;
+    border-radius: 50%;
+    transition: transform 1.5s ease-in-out;
+    box-shadow: 0 0 10px #f6ad55;
+    z-index: 30;
+}
+
+.pulse-animation {
+    animation: pulse 1s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.connection-line {
+    position: absolute;
+    border: 2px dashed #4a5568;
+    border-radius: 0.5rem;
+    transform-origin: 0 0;
+    z-index: 10;
+}
+.path-active {
+    border-color: #f6ad55;
+    box-shadow: 0 0 10px #f6ad55;
+}
