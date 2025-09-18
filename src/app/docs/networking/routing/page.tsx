@@ -1,0 +1,87 @@
+
+import { networkingConceptsData } from '@/lib/networking-concepts';
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { ArrowRight, BookOpen, Code } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+
+export default function ConceptHubPage() {
+  const concept = networkingConceptsData.find((cmd) => cmd.slug === 'routing');
+
+  if (!concept) {
+    notFound();
+  }
+
+  const options = [
+    {
+      name: 'Theory',
+      description: `Learn the 'what' and 'why' behind ${concept.name}.`,
+      href: `/docs/networking/routing/theory`,
+      icon: <BookOpen className="size-8" />,
+    },
+    {
+      name: 'Practical',
+      description: 'See it in action with an interactive animation.',
+      href: `/docs/networking/routing/practical`,
+      icon: <Code className="size-8" />,
+    },
+    {
+      name: 'Practical 2',
+      description: 'A second practical example.',
+      href: `/docs/networking/routing/practical2`,
+      icon: <Code className="size-8" />,
+    },
+  ];
+
+  return (
+    <div className="flex flex-col flex-1">
+      <main className="flex-1 p-4 md:p-8 lg:p-12">
+         <Button asChild variant="ghost" className="mb-8">
+            <Link href="/docs/networking/core-concepts">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Core Concepts
+            </Link>
+        </Button>
+        <header className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-primary font-headline mb-2">
+            {concept.name}
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            Choose your learning path for this concept.
+          </p>
+        </header>
+
+        <section className="w-full max-w-3xl mx-auto">
+          <div className="grid gap-6 md:grid-cols-2">
+            {options.map((option) => (
+              <Link key={option.name} href={option.href} className="group">
+                <Card className="h-full transition-all duration-300 ease-in-out group-hover:border-primary group-hover:shadow-lg group-hover:shadow-primary/10 group-hover:-translate-y-1">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="bg-muted p-3 rounded-md text-foreground">
+                          {option.icon}
+                        </div>
+                        <div>
+                          <CardTitle className="font-headline">
+                            {option.name}
+                          </CardTitle>
+                          <CardDescription>
+                            {option.description}
+                          </CardDescription>
+                        </div>
+                      </div>
+                      <ArrowRight className="size-5 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
+                    </div>
+                  </CardHeader>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </section>
+      </main>
+    </div>
+  );
+}

@@ -9,8 +9,6 @@ import {
 } from '@/components/ui/card';
 import { ArrowRight, Layers, Library, Route, Bot } from 'lucide-react';
 import Link from 'next/link';
-import { RoutingGame } from '@/components/networking/RoutingGame';
-import { DynamicRoutingGame } from '@/components/networking/DynamicRoutingGame';
 
 const topics = [
   {
@@ -80,7 +78,6 @@ export default function NetworkingPage() {
             ))}
           </div>
         </div>
-        
       </section>
     </main>
   );
