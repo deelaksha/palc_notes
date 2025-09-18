@@ -8,7 +8,7 @@ const scripts = [
   {
     name: 'r-create.sh',
     description: 'Creates a more complex multi-router topology.',
-    href: '#',
+    href: '/docs/notes/frr-exercises/exercise2/r-create-sh',
   },
    {
     name: 'capture.sh',
