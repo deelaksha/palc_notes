@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Ear, Mail, Server, Laptop, Bridge, Terminal, Radio } from 'lucide-react';
+import { ArrowLeft, Ear, Mail, Server, Laptop, Bridge, Terminal } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
