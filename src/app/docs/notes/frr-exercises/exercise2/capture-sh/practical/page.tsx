@@ -15,7 +15,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
+
 
 // New themed component based on user's provided HTML
 const PacketCaptureVisualizer = () => {
