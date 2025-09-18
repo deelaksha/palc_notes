@@ -1,7 +1,7 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
-import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { CodeBlock } from '@/components/markdown/CodeBlock';
@@ -122,27 +122,6 @@ echo "h2-\${SUFFIX}: 10.0.0.2/24"`;
                 The Full Script
             </h2>
             <CodeBlock>{scriptContent}</CodeBlock>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4 border-b-2 text-primary-accent pb-2">
-                Real-World Uses of Network Namespaces
-            </h2>
-            <p className="text-lg text-muted-foreground">
-                While this script is simple, the underlying technology—network namespaces—is a fundamental part of modern Linux systems. Here are some of its most common and important real-world applications:
-            </p>
-            <ul className="list-disc list-inside space-y-4 text-muted-foreground">
-                <li>
-                    <b className="text-foreground">Containerization (Docker, Podman)</b>: This is the most prevalent use case. When you run a Docker container, the container is given its own isolated network namespace. This means that each container has its own network stack, interfaces, and IP addresses, completely separate from the host machine and other containers. It allows you to run multiple services on the same server without them interfering with each other's network configurations.
-                </li>
-                <li>
-                    <b className="text-foreground">Network Simulation and Testing</b>: Engineers and developers use network namespaces to create isolated, virtual networks for testing. They can set up complex network topologies with routers, firewalls, and multiple subnets to test configurations or software without needing a separate physical lab. This allows for safe and repeatable testing.
-                </li>
-                <li>
-                    <b className="text-foreground">Network Security</b>: Namespaces can be used to isolate sensitive services. For example, a web server could run in its own namespace with a restrictive firewall, making it harder for an attacker to compromise other services on the same machine, even if they gain access to the web server.
-                </li>
-                <li>
-                    <b className="text-foreground">VPN Tunnelling for Specific Applications</b>: You can place an application inside its own network namespace and configure that namespace to route all its traffic through a VPN. This ensures that only that specific application's traffic uses the VPN, while the rest of the host system's traffic remains on the normal network. This is useful for privacy or bypassing geo-restrictions for a single application.
-                </li>
-            </ul>
         </div>
       </div>
     </main>
