@@ -18,7 +18,7 @@ const scripts = [
     {
     name: 'ns-ping.sh',
     description: 'Pings devices within the network namespaces.',
-    href: '#',
+    href: '/docs/notes/frr-exercises/exercise2/ns-ping-sh',
   },
   {
     name: 'r-show.sh',
