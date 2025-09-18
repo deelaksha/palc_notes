@@ -45,7 +45,7 @@ const NsRouteTheoryPage = () => {
                     
                      <h3 className="text-xl font-semibold mt-6 mb-2 text-secondary-accent">3. Multi-Hop Path Analysis:</h3>
                      <ul className="list-disc list-inside space-y-2">
-                        <li>The script contains a section that explains the theoretical path for both a single-hop (e.g., `h1` to `h2`, via `r1`) and a multi-hop (e.g., `h1` to `h4`, via `r1` then `r2`) communication.</li>
+                        <li>This section explains the theoretical path for both a single-hop (e.g., `h1` to `h2`, via `r1`) and a multi-hop (e.g., `h1` to `h4`, via `r1` then `r2`) communication.</li>
                         <li>It clearly outlines the step-by-step decision process, from a host sending a packet to its default gateway, to the routers forwarding it based on their static routes.</li>
                     </ul>
 
@@ -59,37 +59,25 @@ const NsRouteTheoryPage = () => {
                         The Full Script
                     </h2>
                     <CodeBlock>
-{`#!/bin/bash
-# Show routing tables and multi-hop path analysis
-
-# ... (setup logic) ...
-
-# Show router routing tables
-echo "=== Router Routing Tables ==="
-for r in r1 r2; do
-    echo "--- $r Routing Table ---"
-    sudo ip -n "$r-$SUFFIX" route show | #... formatting logic ...
-done
-
-# Check IP forwarding status
-echo "IP Forwarding: $(sudo ip netns exec "r1-$SUFFIX" sysctl -n net.ipv4.ip_forward)"
-# ... for r2
-
-# Show host routing tables
-echo "=== Host Routing Tables ==="
-for i in 1 2 3 4; do
-    echo "--- h$i Routing Table ---"
-    sudo ip -n "h$i-$SUFFIX" route show | #... formatting logic ...
-done
-
-# Analyze multi-hop routes
-echo "=== Multi-Hop Route Path Analysis ==="
-echo "h1 → h4:"
-echo "  Step 1: h1 sends to default gateway (r1)"
-echo "  Step 2: r1 forwards via static route to r2"
-echo "  Step 3: r2 forwards directly to h4"
-# ...
-`}
+                        <span className="text-muted-foreground">#!/bin/bash</span><br/>
+                        <span className="text-muted-foreground"># Show routing tables and multi-hop path analysis</span><br/><br/>
+                        <span className="text-muted-foreground"># ... (setup logic) ...</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"=== Router Routing Tables ==="</span><br/>
+                        <span className="command-text">for</span> r <span className="command-text">in</span> r1 r2; <span className="command-text">do</span><br/>
+                        {"    "}<span className="command-text">echo</span> <span className="text-tips">"--- $r Routing Table ---"</span><br/>
+                        {"    "}<span className="command-text">sudo</span> ip -n <span className="text-tips">"$r-$SUFFIX"</span> route show | <span className="text-muted-foreground">#... formatting logic ...</span><br/>
+                        <span className="command-text">done</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"=== Host Routing Tables ==="</span><br/>
+                        <span className="command-text">for</span> i <span className="command-text">in</span> 1 2 3 4; <span className="command-text">do</span><br/>
+                        {"    "}<span className="command-text">echo</span> <span className="text-tips">"--- h$i Routing Table ---"</span><br/>
+                        {"    "}<span className="command-text">sudo</span> ip -n <span className="text-tips">"h$i-$SUFFIX"</span> route show | <span className="text-muted-foreground">#... formatting logic ...</span><br/>
+                        <span className="command-text">done</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"=== Multi-Hop Route Path Analysis ==="</span><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"h1 → h4:"</span><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"  Step 1: h1 sends to default gateway (r1)"</span><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"  Step 2: r1 forwards via static route to r2"</span><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"  Step 3: r2 forwards directly to h4"</span><br/>
+                        <span className="text-muted-foreground"># ...</span>
                     </CodeBlock>
                 </div>
             </div>

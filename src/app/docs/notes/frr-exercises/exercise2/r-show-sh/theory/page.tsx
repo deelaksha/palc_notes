@@ -65,33 +65,29 @@ const RShowTheoryPage = () => {
                         The Full Script
                     </h2>
                     <CodeBlock>
-{`#!/bin/bash
-# ... (script setup)
-
-echo "=== Bridge Information ==="
-bridge link show
-
-echo "=== Host Information ==="
-for i in 1 2 3; do
-    NS="h$i-$SUFFIX"
-    echo "--- Host $i ($NS) ---"
-    sudo ip -n "$NS" link show
-    sudo ip -n "$NS" addr show
-    sudo ip -n "$NS" route show
-done
-
-echo "=== Connectivity Test Matrix ==="
-printf "%-8s" ""
-for dst in h1 h2 h3; do printf "%-8s" "$dst"; done
-echo ""
-for src in h1 h2 h3; do
-    printf "%-8s" "$src"
-    for dst in h1 h2 h3; do
-        # ... (ping logic)
-    done
-    echo ""
-done
-`}
+                        <span className="text-muted-foreground">#!/bin/bash</span><br/>
+                        <span className="text-muted-foreground"># ... (script setup) ...</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"=== Bridge Information ==="</span><br/>
+                        <span className="command-text">bridge</span> link show<br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"=== Host Information ==="</span><br/>
+                        <span className="command-text">for</span> i <span className="command-text">in</span> 1 2 3; <span className="command-text">do</span><br/>
+                        {"    "}<span className="text-label">NS</span>=<span className="text-tips">"h$i-$SUFFIX"</span><br/>
+                        {"    "}<span className="command-text">echo</span> <span className="text-tips">"--- Host $i ($NS) ---"</span><br/>
+                        {"    "}<span className="command-text">sudo</span> ip -n <span className="text-tips">"$NS"</span> link show<br/>
+                        {"    "}<span className="command-text">sudo</span> ip -n <span className="text-tips">"$NS"</span> addr show<br/>
+                        {"    "}<span className="command-text">sudo</span> ip -n <span className="text-tips">"$NS"</span> route show<br/>
+                        <span className="command-text">done</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"=== Connectivity Test Matrix ==="</span><br/>
+                        <span className="command-text">printf</span> <span className="text-tips">"%-8s"</span> <span className="text-tips">""</span><br/>
+                        <span className="command-text">for</span> dst <span className="command-text">in</span> h1 h2 h3; <span className="command-text">do</span> <span className="command-text">printf</span> <span className="text-tips">"%-8s"</span> <span className="text-tips">"$dst"</span>; <span className="command-text">done</span><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">""</span><br/>
+                        <span className="command-text">for</span> src <span className="command-text">in</span> h1 h2 h3; <span className="command-text">do</span><br/>
+                        {"    "}<span className="command-text">printf</span> <span className="text-tips">"%-8s"</span> <span className="text-tips">"$src"</span><br/>
+                        {"    "}<span className="command-text">for</span> dst <span className="command-text">in</span> h1 h2 h3; <span className="command-text">do</span><br/>
+                        {"        "}<span className="text-muted-foreground"># ... (ping logic) ...</span><br/>
+                        {"    "}<span className="command-text">done</span><br/>
+                        {"    "}<span className="command-text">echo</span> <span className="text-tips">""</span><br/>
+                        <span className="command-text">done</span>
                     </CodeBlock>
                 </div>
             </div>

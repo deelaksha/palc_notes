@@ -59,48 +59,28 @@ const CaptureTheoryPage = () => {
                         The Full Script
                     </h2>
                     <CodeBlock>
-{`#!/bin/bash
-# Capture network traffic on router or host interfaces
-
-# ... (argument parsing and validation logic) ...
-
-# Determine the namespace and interfaces to capture
-if [[ "$TARGET" == "router" ]]; then
-    TARGET_NS="router-$SUFFIX"
-    INTERFACES="r-h1-$SUFFIX r-h2-$SUFFIX r-h3-$SUFFIX"
-else
-    TARGET_NS="$TARGET-$SUFFIX"
-    INTERFACES="$TARGET-r-$SUFFIX"
-fi
-
-# Build and execute tcpdump command
-if [[ "$TARGET" == "router" && "$MODE" == "live" ]]; then
-    # Create named pipes for each interface
-    PIPE1="/tmp/pipe1_$$"; PIPE2="/tmp/pipe2_$$"; PIPE3="/tmp/pipe3_$$"
-    mkfifo "$PIPE1" "$PIPE2" "$PIPE3"
-    
-    # Start tcpdump on each interface in the background
-    sudo ip netns exec "$TARGET_NS" tcpdump -i r-h1-$SUFFIX -n -l > "$PIPE1" &
-    sudo ip netns exec "$TARGET_NS" tcpdump -i r-h2-$SUFFIX -n -l > "$PIPE2" &
-    sudo ip netns exec "$TARGET_NS" tcpdump -i r-h3-$SUFFIX -n -l > "$PIPE3" &
-    
-    # Read from pipes and label output
-    (while read line; do echo "[r-h1-$SUFFIX] $line"; done < "$PIPE1") &
-    (while read line; do echo "[r-h2-$SUFFIX] $line"; done < "$PIPE2") &
-    (while read line; do echo "[r-h3-$SUFFIX] $line"; done < "$PIPE3") &
-    
-    # Wait for user to stop
-    wait
-else
-    # Simpler case for single interface capture (hosts or router write mode)
-    INTERFACE=\${INTERFACES%% *} # Use first interface if multiple
-    if [[ "$MODE" == "live" ]]; then
-        sudo ip netns exec "$TARGET_NS" tcpdump -i "$INTERFACE" -n -e -l
-    else
-        sudo ip netns exec "$TARGET_NS" tcpdump -i "$INTERFACE" -n -w "$OUTPUT_FILE"
-    fi
-fi
-`}
+                        <span className="text-muted-foreground">#!/bin/bash</span><br/>
+                        <span className="text-muted-foreground"># Capture network traffic on router or host interfaces</span><br/><br/>
+                        <span className="text-muted-foreground"># ... (argument parsing and validation logic) ...</span><br/><br/>
+                        <span className="command-text">if</span> [[ <span className="text-tips">"$TARGET"</span> == <span className="text-tips">"router"</span> &amp;&amp; <span className="text-tips">"$MODE"</span> == <span className="text-tips">"live"</span> ]]; <span className="command-text">then</span><br/>
+                        {"    "}<span className="text-muted-foreground"># Create named pipes for each interface</span><br/>
+                        {"    "}<span className="text-label">PIPE1</span>=<span className="text-tips">"/tmp/pipe1_$$"</span>; <span className="text-label">PIPE2</span>=<span className="text-tips">"/tmp/pipe2_$$"</span>; <span className="text-label">PIPE3</span>=<span className="text-tips">"/tmp/pipe3_$$"</span><br/>
+                        {"    "}mkfifo <span className="text-tips">"$PIPE1"</span> <span className="text-tips">"$PIPE2"</span> <span className="text-tips">"$PIPE3"</span><br/><br/>
+                        {"    "}<span className="text-muted-foreground"># Start tcpdump on each interface in the background</span><br/>
+                        {"    "}<span className="command-text">sudo</span> ip netns exec <span className="text-tips">"$TARGET_NS"</span> tcpdump -i r-h1-$SUFFIX -n -l &gt; <span className="text-tips">"$PIPE1"</span> &amp;<br/>
+                        {"    "}<span className="command-text">sudo</span> ip netns exec <span className="text-tips">"$TARGET_NS"</span> tcpdump -i r-h2-$SUFFIX -n -l &gt; <span className="text-tips">"$PIPE2"</span> &amp;<br/>
+                        {"    "}<span className="command-text">sudo</span> ip netns exec <span className="text-tips">"$TARGET_NS"</span> tcpdump -i r-h3-$SUFFIX -n -l &gt; <span className="text-tips">"$PIPE3"</span> &amp;<br/><br/>
+                        {"    "}<span className="text-muted-foreground"># Read from pipes and label output</span><br/>
+                        {"    "}(<span className="command-text">while</span> read line; <span className="command-text">do</span> <span className="command-text">echo</span> <span className="text-tips">"[r-h1-$SUFFIX] $line"</span>; <span className="command-text">done</span> &lt; <span className="text-tips">"$PIPE1"</span>) &amp;<br/>
+                        {"    "}(<span className="command-text">while</span> read line; <span className="command-text">do</span> <span className="command-text">echo</span> <span className="text-tips">"[r-h2-$SUFFIX] $line"</span>; <span className="command-text">done</span> &lt; <span className="text-tips">"$PIPE2"</span>) &amp;<br/>
+                        {"    "}(<span className="command-text">while</span> read line; <span className="command-text">do</span> <span className="command-text">echo</span> <span className="text-tips">"[r-h3-$SUFFIX] $line"</span>; <span className="command-text">done</span> &lt; <span className="text-tips">"$PIPE3"</span>) &amp;<br/><br/>
+                        {"    "}<span className="text-muted-foreground"># Wait for user to stop</span><br/>
+                        {"    "}<span className="command-text">trap</span> <span className="text-tips">"..."</span> INT<br/>
+                        {"    "}<span className="command-text">wait</span><br/>
+                        <span className="command-text">else</span><br/>
+                        {"    "}<span className="text-muted-foreground"># Simpler case for single interface capture (hosts or router write mode)</span><br/>
+                        {"    "}<span className="command-text">sudo</span> ip netns exec <span className="text-tips">"$TARGET_NS"</span> tcpdump -i <span className="text-tips">"$INTERFACE"</span> -n -w <span className="text-tips">"$OUTPUT_FILE"</span><br/>
+                        <span className="command-text">fi</span>
                     </CodeBlock>
                 </div>
             </div>

@@ -69,41 +69,25 @@ const NsPingTheoryPage = () => {
                         The Full Script
                     </h2>
                     <CodeBlock>
-{`#!/bin/bash
-# Ping from one host to another in the bridge topology
-
-# Default values
-DEFAULT_SUFFIX="arms"
-DEFAULT_SRC="h1"
-DEFAULT_DST="h2"
-DEFAULT_COUNT=5
-
-# Usage function
-usage() {
-    echo "Usage: $0 [SUFFIX] [SOURCE] [DEST] [COUNT]"
-    # ... (usage text)
-}
-
-# Parse arguments
-# ... (argument parsing logic)
-
-# Validate hosts
-# ... (validation logic)
-
-# Map host names to IP addresses
-declare -A HOST_IPS
-HOST_IPS["h1"]="10.0.0.1"
-HOST_IPS["h2"]="10.0.0.2"
-HOST_IPS["h3"]="10.0.0.3"
-
-SRC_NS="$SRC_HOST-$SUFFIX"
-DST_IP="\${HOST_IPS[$DST_HOST]}"
-
-echo "Pinging from $SRC_NS to $DST_HOST ($DST_IP)..."
-
-# Execute ping
-sudo ip netns exec "$SRC_NS" ping -c "$COUNT" "$DST_IP"
-`}
+                        <span className="text-muted-foreground">#!/bin/bash</span><br/>
+                        <span className="text-muted-foreground"># Ping from one host to another in the bridge topology</span><br/><br/>
+                        <span className="text-muted-foreground"># ... (defaults and usage function omitted) ...</span><br/><br/>
+                        <span className="text-muted-foreground"># Parse arguments...</span><br/>
+                        <span className="text-label">SUFFIX</span>=<span className="text-tips">"${'${1:-$USERNAME}'}"</span><br/>
+                        <span className="text-label">SRC_HOST</span>=<span className="text-tips">"${'${2:-h1}'}"</span><br/>
+                        <span className="text-label">DST_HOST</span>=<span className="text-tips">"${'${3:-h2}'}"</span><br/>
+                        <span className="text-label">COUNT</span>=<span className="text-tips">"${'${4:-5}'}"</span><br/><br/>
+                        <span className="text-muted-foreground"># Validate hosts... (logic omitted)</span><br/><br/>
+                        <span className="text-muted-foreground"># Map host names to IP addresses</span><br/>
+                        <span className="command-text">declare</span> -A HOST_IPS<br/>
+                        <span className="text-label">HOST_IPS</span>[<span className="text-tips">"h1"</span>]=<span className="text-tips">"10.0.0.1"</span><br/>
+                        <span className="text-label">HOST_IPS</span>[<span className="text-tips">"h2"</span>]=<span className="text-tips">"10.0.0.2"</span><br/>
+                        <span className="text-label">HOST_IPS</span>[<span className="text-tips">"h3"</span>]=<span className="text-tips">"10.0.0.3"</span><br/><br/>
+                        <span className="text-label">SRC_NS</span>=<span className="text-tips">"$SRC_HOST-$SUFFIX"</span><br/>
+                        <span className="text-label">DST_IP</span>=<span className="text-tips">"${'${HOST_IPS[$DST_HOST]}'}"</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"Pinging from $SRC_NS to $DST_HOST ($DST_IP)..."</span><br/><br/>
+                        <span className="text-muted-foreground"># Execute ping</span><br/>
+                        <span className="command-text">sudo</span> ip netns exec <span className="text-tips">"$SRC_NS"</span> ping -c <span className="text-tips">"$COUNT"</span> <span className="text-tips">"$DST_IP"</span>
                     </CodeBlock>
                 </div>
             </div>

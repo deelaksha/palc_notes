@@ -25,7 +25,7 @@ const RShowTheoryPage = () => {
 
                 <div className="prose dark:prose-invert prose-lg max-w-none">
                     <p className="text-lg text-muted-foreground">
-                        This script is a comprehensive health check and diagnostic tool for the multi-subnet router topology. It provides a detailed, well-formatted report on the status of the router, each host's network configuration, and performs a full connectivity test.
+                        This is a comprehensive health check and diagnostic tool for the multi-subnet router topology. It provides a detailed, well-formatted report on the status of the router, each host's network configuration, and performs a full connectivity test.
                     </p>
 
                     <h2 className="text-2xl font-bold mt-8 mb-4 border-b-2 text-primary-accent pb-2">
@@ -41,14 +41,14 @@ const RShowTheoryPage = () => {
                     </ul>
 
                     <h3 className="text-xl font-semibold mt-6 mb-2 text-primary-accent">2. Host Information Loop:</h3>
-                     <p className="text-muted-foreground">The script then loops through each host (`h1`, `h2`, `h3`) and performs the following checks inside each namespace:</p>
+                     <p className="text-muted-foreground">The script then loops through each host (`h1`, `h2`, `h3`) and performs a series of checks inside each namespace:</p>
                     <ul className="list-disc list-inside space-y-2">
                         <li>**Interfaces & IPs**: Shows the status and IP address of its network interfaces.</li>
                         <li>**Routes**: Prints the host's routing table, which should show a `default` route pointing to the router's IP address on its subnet.</li>
                         <li>**Loopback Test**: Pings its own loopback address (`127.0.0.1`) to ensure the internal networking stack is working correctly.</li>
                     </ul>
                     
-                     <h3 className="text-xl font-semibold mt-6 mb-2 text-secondary-accent">3. Connectivity Test Matrix:</h3>
+                     <h3 className="text-xl font-semibold mt-6 mb-2 text-secondary-accent">3. Advanced Connectivity Matrix:</h3>
                      <ul className="list-disc list-inside space-y-2">
                         <li>This is the most powerful part of the script. It creates a grid to test connectivity from every host to every other host.</li>
                         <li>It uses nested loops to iterate through all possible source-destination pairs (`h1`->`h2`, `h1`->`h3`, etc.).</li>
@@ -58,45 +58,39 @@ const RShowTheoryPage = () => {
                     
                      <h3 className="text-xl font-semibold mt-6 mb-2 text-primary-accent">4. Summary and Next Steps:</h3>
                      <ul className="list-disc list-inside space-y-2">
-                         <li>Finally, it provides a quick text summary of the network's configuration and suggests useful commands for further testing, like `ns-ping.sh` and `ns-capture.sh`.</li>
+                         <li>The script concludes with a clear summary of the entire topology, outlining which hosts connect to which router and the expected traffic flow.</li>
+                         <li>It provides helpful suggestions for using `ns-ping.sh` and `ns-capture.sh` for more specific troubleshooting.</li>
                     </ul>
 
                     <h2 className="text-2xl font-bold mt-8 mb-4 border-b-2 text-primary-accent pb-2">
                         The Full Script
                     </h2>
                     <CodeBlock>
-{`#!/bin/bash
-# ... (script setup)
-
-echo "=== Router Information ==="
-# ... (Checks router namespace, IP forwarding, interfaces, and routes)
-
-echo "=== Host Information ==="
-for i in 1 2 3; do
-    NS="h$i-$SUFFIX"
-    echo "--- Host $i ($NS) ---"
-    # ... (Checks interfaces, IPs, routes, and loopback for each host)
-done
-
-echo "=== Inter-Subnet Connectivity Test Matrix ==="
-# ... (Nested loops to ping from each host to every other host) ...
-
-printf "%-8s" ""
-for dst in h1 h2 h3; do printf "%-12s" "$dst"; done; echo ""
-for src in h1 h2 h3; do
-    printf "%-8s" "$src"
-    for dst in h1 h2 h3; do
-        if [[ "$src" == "$dst" ]]; then printf "%-12s" "-"; else
-            # ... ping logic ...
-            printf "%-12s" "OK" # or "FAIL"
-        fi
-    done
-    echo ""
-done
-
-echo "=== Summary ==="
-# ... (Prints summary of topology and next steps)
-`}
+                        <span className="text-muted-foreground">#!/bin/bash</span><br/>
+                        <span className="text-muted-foreground"># ... (script setup) ...</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"=== Router Information ==="</span><br/>
+                        <span className="text-muted-foreground"># ... (Checks router namespace, IP forwarding, interfaces, and routes)</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"=== Host Information ==="</span><br/>
+                        <span className="command-text">for</span> i <span className="command-text">in</span> 1 2 3; <span className="command-text">do</span><br/>
+                        {"    "}<span className="text-muted-foreground"># ... (Checks interfaces, IPs, routes, and loopback for each host)</span><br/>
+                        <span className="command-text">done</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"=== Inter-Subnet Connectivity Test Matrix ==="</span><br/>
+                        <span className="command-text">printf</span> <span className="text-tips">"%-8s"</span> <span className="text-tips">""</span><br/>
+                        <span className="command-text">for</span> dst <span className="command-text">in</span> h1 h2 h3; <span className="command-text">do</span> <span className="command-text">printf</span> <span className="text-tips">"%-12s"</span> <span className="text-tips">"$dst"</span>; <span className="command-text">done</span>; <span className="command-text">echo</span> <span className="text-tips">""</span><br/>
+                        <span className="command-text">for</span> src <span className="command-text">in</span> h1 h2 h3; <span className="command-text">do</span><br/>
+                        {"    "}<span className="command-text">printf</span> <span className="text-tips">"%-8s"</span> <span className="text-tips">"$src"</span><br/>
+                        {"    "}<span className="command-text">for</span> dst <span className="command-text">in</span> h1 h2 h3; <span className="command-text">do</span><br/>
+                        {"        "}<span className="command-text">if</span> [[ <span className="text-tips">"$src"</span> == <span className="text-tips">"$dst"</span> ]]; <span className="command-text">then</span><br/>
+                        {"            "}<span className="command-text">printf</span> <span className="text-tips">"%-12s"</span> <span className="text-tips">"-"</span><br/>
+                        {"        "}<span className="command-text">else</span><br/>
+                        {"            "}<span className="text-muted-foreground"># ... ping logic ...</span><br/>
+                        {"            "}<span className="command-text">printf</span> <span className="text-tips">"%-12s"</span> <span className="text-tips">"OK"</span> <span className="text-muted-foreground"># or "FAIL"</span><br/>
+                        {"        "}<span className="command-text">fi</span><br/>
+                        {"    "}<span className="command-text">done</span><br/>
+                        {"    "}<span className="command-text">echo</span> <span className="text-tips">""</span><br/>
+                        <span className="command-text">done</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"=== Summary ==="</span><br/>
+                        <span className="text-muted-foreground"># ... (Prints summary of topology and next steps)</span>
                     </CodeBlock>
                 </div>
             </div>

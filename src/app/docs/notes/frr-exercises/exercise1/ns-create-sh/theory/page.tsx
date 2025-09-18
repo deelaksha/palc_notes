@@ -92,29 +92,29 @@ export default function NsCreateTheoryPage() {
             <CodeBlock>
                 <span className="text-muted-foreground">#!/bin/bash</span><br/><br/>
                 <span className="text-muted-foreground"># Get suffix from argument or USERNAME env var, default to 'arms'</span><br/>
-                <span className="text-label">SUFFIX</span>=<span className="text-tips">&quot;${'${1:-${USERNAME:-arms}}'}&quot;</span><br/><br/>
+                <span className="text-label">SUFFIX</span>=<span className="text-tips">"${'${1:-${USERNAME:-arms}}'}"</span><br/><br/>
                 <span className="text-muted-foreground"># Create namespaces</span><br/>
-                <span className="command-text">echo</span> <span className="text-tips">&quot;Creating namespaces h1-${'${SUFFIX}'} and h2-${'${SUFFIX}'}...&quot;</span><br/>
+                <span className="command-text">echo</span> <span className="text-tips">"Creating namespaces h1-${'${SUFFIX}'} and h2-${'${SUFFIX}'}..."</span><br/>
                 <span className="command-text">sudo</span> <span className="keyword-text">ip netns add</span> h1-${'${SUFFIX}'} <span className="text-muted-foreground">#creating host1</span><br/>
                 <span className="command-text">sudo</span> <span className="keyword-text">ip netns add</span> h2-${'${SUFFIX}'} <span className="text-muted-foreground">#creating host2</span><br/><br/>
                 <span className="text-muted-foreground"># Create veth pair and move to namespaces</span><br/>
-                <span className="command-text">echo</span> <span className="text-tips">&quot;Creating veth pair...&quot;</span><br/>
+                <span className="command-text">echo</span> <span className="text-tips">"Creating veth pair..."</span><br/>
                 <span className="command-text">sudo</span> <span className="keyword-text">ip link add</span> v1-${'${SUFFIX}'} <span className="keyword-text">type</span> veth <span className="keyword-text">peer name</span> v2-${'${SUFFIX}'}<br/>
                 <span className="command-text">sudo</span> <span className="keyword-text">ip link set</span> v1-${'${SUFFIX}'} <span className="keyword-text">netns</span> h1-${'${SUFFIX}'} <span className="text-muted-foreground">#attaching v1 - h1</span><br/>
                 <span className="command-text">sudo</span> <span className="keyword-text">ip link set</span> v2-${'${SUFFIX}'} <span className="keyword-text">netns</span> h2-${'${SUFFIX}'}<br/><br/>
                 <span className="text-muted-foreground"># Assign IP addresses</span><br/>
-                <span className="command-text">echo</span> <span className="text-tips">&quot;Assigning IP addresses...&quot;</span><br/>
+                <span className="command-text">echo</span> <span className="text-tips">"Assigning IP addresses..."</span><br/>
                 <span className="command-text">sudo</span> <span className="keyword-text">ip -n</span> h1-${'${SUFFIX}'} <span className="keyword-text">addr add</span> 10.0.0.1/24 <span className="keyword-text">dev</span> v1-${'${SUFFIX}'}<br/>
                 <span className="command-text">sudo</span> <span className="keyword-text">ip -n</span> h2-${'${SUFFIX}'} <span className="keyword-text">addr add</span> 10.0.0.2/24 <span className="keyword-text">dev</span> v2-${'${SUFFIX}'}<br/><br/>
                 <span className="text-muted-foreground"># Bring up loopback and veth interfaces</span><br/>
-                <span className="command-text">echo</span> <span className="text-tips">&quot;Bringing up interfaces...&quot;</span><br/>
+                <span className="command-text">echo</span> <span className="text-tips">"Bringing up interfaces..."</span><br/>
                 <span className="command-text">sudo</span> <span className="keyword-text">ip -n</span> h1-${'${SUFFIX}'} <span className="keyword-text">link set</span> lo <span className="keyword-text">up</span><br/>
                 <span className="command-text">sudo</span> <span className="keyword-text">ip -n</span> h2-${'${SUFFIX}'} <span className="keyword-text">link set</span> lo <span className="keyword-text">up</span><br/>
                 <span className="command-text">sudo</span> <span className="keyword-text">ip -n</span> h1-${'${SUFFIX}'} <span className="keyword-text">link set</span> v1-${'${SUFFIX}'} <span className="keyword-text">up</span><br/>
                 <span className="command-text">sudo</span> <span className="keyword-text">ip -n</span> h2-${'${SUFFIX}'} <span className="keyword-text">link set</span> v2-${'${SUFFIX}'} <span className="keyword-text">up</span><br/><br/>
-                <span className="command-text">echo</span> <span className="text-tips">&quot;Network namespaces created successfully!&quot;</span><br/>
-                <span className="command-text">echo</span> <span className="text-tips">&quot;h1-${'${SUFFIX}'}: 10.0.0.1/24&quot;</span><br/>
-                <span className="command-text">echo</span> <span className="text-tips">&quot;h2-${'${SUFFIX}'}: 10.0.0.2/24&quot;</span>
+                <span className="command-text">echo</span> <span className="text-tips">"Network namespaces created successfully!"</span><br/>
+                <span className="command-text">echo</span> <span className="text-tips">"h1-${'${SUFFIX}'}: 10.0.0.1/24"</span><br/>
+                <span className="command-text">echo</span> <span className="text-tips">"h2-${'${SUFFIX}'}: 10.0.0.2/24"</span>
             </CodeBlock>
         </div>
       </div>

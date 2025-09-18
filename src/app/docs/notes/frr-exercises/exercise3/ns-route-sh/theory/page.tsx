@@ -63,45 +63,29 @@ const NsRouteTheoryPage = () => {
                         The Full Script
                     </h2>
                     <CodeBlock>
-{`#!/bin/bash
-# Show routing tables and path analysis for router topology
-
-# ... (Get suffix logic) ...
-
-# Show router routing table
-echo "=== Router Routing Table ($ROUTER_NS) ==="
-sudo ip -n "$ROUTER_NS" route show
-
-# Check IP forwarding
-IP_FORWARD=$(sudo ip netns exec "$ROUTER_NS" sysctl -n net.ipv4.ip_forward)
-echo "IP Forwarding: $IP_FORWARD"
-
-# Loop through hosts and show their routing tables
-echo ""
-echo "=== Host Routing Tables ==="
-for i in 1 2 3; do
-    NS="h$i-$SUFFIX"
-    echo "--- $NS Routing Table ---"
-    sudo ip -n "$NS" route show
-done
-
-# Analyze path between hosts
-echo ""
-echo "=== Route Path Analysis ==="
-for src in h1 h2 h3; do
-    for dst in h1 h2 h3; do
-        if [[ "$src" != "$dst" ]]; then
-            SRC_NS="$src-$SUFFIX"
-            DST_IP="..." # Logic to get destination IP
-            
-            echo "$src → $dst:"
-            # Use 'ip route get' to simulate the path
-            ROUTE_INFO=$(sudo ip -n "$SRC_NS" route get "$DST_IP")
-            echo "  $ROUTE_INFO"
-        fi
-    done
-done
-`}
+                        <span className="text-muted-foreground">#!/bin/bash</span><br/>
+                        <span className="text-muted-foreground"># Show routing tables and path analysis for router topology</span><br/><br/>
+                        <span className="text-muted-foreground"># ... (Get suffix logic) ...</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"=== Router Routing Table ($ROUTER_NS) ==="</span><br/>
+                        <span className="command-text">sudo</span> ip -n <span className="text-tips">"$ROUTER_NS"</span> route show<br/><br/>
+                        <span className="text-muted-foreground"># Check IP forwarding</span><br/>
+                        <span className="text-label">IP_FORWARD</span>=$(<span className="command-text">sudo</span> ip netns exec <span className="text-tips">"$ROUTER_NS"</span> sysctl -n net.ipv4.ip_forward)<br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"IP Forwarding: $IP_FORWARD"</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"=== Host Routing Tables ==="</span><br/>
+                        <span className="command-text">for</span> i <span className="command-text">in</span> 1 2 3; <span className="command-text">do</span><br/>
+                        {"    "}<span className="command-text">echo</span> <span className="text-tips">"--- h$i-$SUFFIX Routing Table ---"</span><br/>
+                        {"    "}<span className="command-text">sudo</span> ip -n <span className="text-tips">"h$i-$SUFFIX"</span> route show<br/>
+                        <span className="command-text">done</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"=== Route Path Analysis ==="</span><br/>
+                        <span className="command-text">for</span> src <span className="command-text">in</span> h1 h2 h3; <span className="command-text">do</span><br/>
+                        {"    "}<span className="command-text">for</span> dst <span className="command-text">in</span> h1 h2 h3; <span className="command-text">do</span><br/>
+                        {"        "}<span className="command-text">if</span> [[ <span className="text-tips">"$src"</span> != <span className="text-tips">"$dst"</span> ]]; <span className="command-text">then</span><br/>
+                        {"            "}<span className="command-text">echo</span> <span className="text-tips">"$src → $dst:"</span><br/>
+                        {"            "}<span className="text-muted-foreground"># Use 'ip route get' to simulate the path</span><br/>
+                        {"            "}<span className="command-text">sudo</span> ip -n <span className="text-tips">"$src-$SUFFIX"</span> route get <span className="text-tips">"$DST_IP"</span><br/>
+                        {"        "}<span className="command-text">fi</span><br/>
+                        {"    "}<span className="command-text">done</span><br/>
+                        <span className="command-text">done</span>
                     </CodeBlock>
                 </div>
             </div>

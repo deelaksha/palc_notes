@@ -55,45 +55,30 @@ const RCreateTheoryPage = () => {
                         The Full Script
                     </h2>
                     <CodeBlock>
-{`#!/bin/bash
-# Create router topology with 3 hosts in different subnets
-
-# ... (Get suffix logic & cleanup) ...
-
-# Create namespaces for router and 3 hosts
-sudo ip netns add router-$SUFFIX
-sudo ip netns add h1-$SUFFIX
-# ... (h2, h3)
-
-# Create veth pairs (e.g., h1-r <=> r-h1)
-sudo ip link add h1-r-$SUFFIX type veth peer name r-h1-$SUFFIX
-# ... (for h2, h3)
-
-# Move veth ends into correct namespaces
-sudo ip link set h1-r-$SUFFIX netns h1-$SUFFIX
-sudo ip link set r-h1-$SUFFIX netns router-$SUFFIX
-# ... (for h2, h3)
-
-# Assign IP addresses
-# Host 1 (Subnet 1)
-sudo ip -n h1-$SUFFIX addr add 192.168.1.10/24 dev h1-r-$SUFFIX
-# Router on Subnet 1
-sudo ip -n router-$SUFFIX addr add 192.168.1.1/24 dev r-h1-$SUFFIX
-# ... (repeat for h2/Subnet 2 and h3/Subnet 3)
-
-# Bring all interfaces up
-# ...
-
-# Configure routing
-# Add default routes on hosts pointing to router
-sudo ip -n h1-$SUFFIX route add default via 192.168.1.1
-# ... (for h2, h3)
-
-# Enable IP forwarding on the router
-sudo ip netns exec router-$SUFFIX sysctl -w net.ipv4.ip_forward=1
-
-echo "Setup complete!"
-`}
+                        <span className="text-muted-foreground">#!/bin/bash</span><br/>
+                        <span className="text-muted-foreground"># Create router topology with 3 hosts in different subnets</span><br/><br/>
+                        <span className="text-muted-foreground"># ... (Get suffix logic & cleanup) ...</span><br/><br/>
+                        <span className="text-muted-foreground"># Create namespaces for router and 3 hosts</span><br/>
+                        <span className="command-text">sudo</span> ip netns add router-$SUFFIX<br/>
+                        <span className="command-text">sudo</span> ip netns add h1-$SUFFIX<br/>
+                        <span className="text-muted-foreground"># ... (h2, h3)</span><br/><br/>
+                        <span className="text-muted-foreground"># Create veth pairs (e.g., h1-r &lt;=&gt; r-h1)</span><br/>
+                        <span className="command-text">sudo</span> ip link add h1-r-$SUFFIX type veth peer name r-h1-$SUFFIX<br/>
+                        <span className="text-muted-foreground"># ... (for h2, h3)</span><br/><br/>
+                        <span className="text-muted-foreground"># ... (move interfaces to namespaces) ...</span><br/><br/>
+                        <span className="text-muted-foreground"># Assign IP addresses</span><br/>
+                        <span className="text-muted-foreground"># Host 1 (Subnet 1)</span><br/>
+                        <span className="command-text">sudo</span> ip -n h1-$SUFFIX addr add 192.168.1.10/24 dev h1-r-$SUFFIX<br/>
+                        <span className="text-muted-foreground"># Router on Subnet 1</span><br/>
+                        <span className="command-text">sudo</span> ip -n router-$SUFFIX addr add 192.168.1.1/24 dev r-h1-$SUFFIX<br/>
+                        <span className="text-muted-foreground"># ... (repeat for h2/Subnet 2 and h3/Subnet 3)</span><br/><br/>
+                        <span className="text-muted-foreground"># ... (bring interfaces up) ...</span><br/><br/>
+                        <span className="text-muted-foreground"># Configure HOST default routes</span><br/>
+                        <span className="command-text">sudo</span> ip -n h1-$SUFFIX route add default via 192.168.1.1<br/>
+                        <span className="text-muted-foreground"># ... (for h2, h3)</span><br/><br/>
+                        <span className="text-muted-foreground"># Enable IP forwarding on the router</span><br/>
+                        <span className="command-text">sudo</span> ip netns exec router-$SUFFIX sysctl -w net.ipv4.ip_forward=1<br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"Setup complete!"</span>
                     </CodeBlock>
                 </div>
             </div>

@@ -58,46 +58,36 @@ const RCleanTheoryPage = () => {
                         The Full Script
                     </h2>
                     <CodeBlock>
-{`#!/bin/bash
-# Clean up 3-host bridge topology
-
-# Get suffix from argument or USERNAME environment variable
-if [[ -n "$1" ]]; then
-    SUFFIX="$1"
-elif [[ -n "$USERNAME" ]]; then
-    SUFFIX="$USERNAME"
-else
-    SUFFIX="arms"  # default suffix
-fi
-
-echo "Cleaning up network namespaces and bridge with suffix: $SUFFIX"
-
-# Delete namespaces (this also removes interfaces inside them)
-echo "Deleting namespaces..."
-sudo ip netns del h1-$SUFFIX 2>/dev/null && echo "  Deleted h1-$SUFFIX" || echo "  h1-$SUFFIX not found"
-sudo ip netns del h2-$SUFFIX 2>/dev/null && echo "  Deleted h2-$SUFFIX" || echo "  h2-$SUFFIX not found"
-sudo ip netns del h3-$SUFFIX 2>/dev/null && echo "  Deleted h3-$SUFFIX" || echo "  h3-$SUFFIX not found"
-
-# Delete bridge
-echo "Deleting bridge..."
-sudo ip link del br0-$SUFFIX 2>/dev/null && echo "  Deleted br0-$SUFFIX" || echo "  br0-$SUFFIX not found"
-
-# Clean up any leftover veth interfaces
-echo "Cleaning up any leftover veth interfaces..."
-sudo ip link del v1-$SUFFIX 2>/dev/null || true
-sudo ip link del v2-$SUFFIX 2>/dev/null || true
-sudo ip link del v3-$SUFFIX 2>/dev/null || true
-sudo ip link del v1p-$SUFFIX 2>/dev/null || true
-sudo ip link del v2p-$SUFFIX 2>/dev/null || true
-sudo ip link del v3p-$SUFFIX 2>/dev/null || true
-
-echo "Cleanup complete!"
-echo ""
-echo "Verification:"
-echo "  Namespaces with suffix '$SUFFIX':"
-ip netns list | grep -E "h[1-3]-$SUFFIX" || echo "  None found (good)"
-echo "  Bridge with suffix '$SUFFIX':"
-ip link show | grep "br0-$SUFFIX" || echo "  None found (good)"`}
+                        <span className="text-muted-foreground">#!/bin/bash</span><br/>
+                        <span className="text-muted-foreground"># Clean up 3-host bridge topology</span><br/><br/>
+                        <span className="command-text">if</span> [[ -n <span className="text-tips">"$1"</span> ]]; <span className="command-text">then</span><br/>
+                        {"    "}<span className="text-label">SUFFIX</span>=<span className="text-tips">"$1"</span><br/>
+                        <span className="command-text">elif</span> [[ -n <span className="text-tips">"$USERNAME"</span> ]]; <span className="command-text">then</span><br/>
+                        {"    "}<span className="text-label">SUFFIX</span>=<span className="text-tips">"$USERNAME"</span><br/>
+                        <span className="command-text">else</span><br/>
+                        {"    "}<span className="text-label">SUFFIX</span>=<span className="text-tips">"arms"</span><br/>
+                        <span className="command-text">fi</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"Cleaning up network namespaces and bridge with suffix: $SUFFIX"</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"Deleting namespaces..."</span><br/>
+                        <span className="command-text">sudo</span> ip netns del h1-$SUFFIX 2&gt;/dev/null && <span className="command-text">echo</span> <span className="text-tips">"  Deleted h1-$SUFFIX"</span> || <span className="command-text">echo</span> <span className="text-tips">"  h1-$SUFFIX not found"</span><br/>
+                        <span className="command-text">sudo</span> ip netns del h2-$SUFFIX 2&gt;/dev/null && <span className="command-text">echo</span> <span className="text-tips">"  Deleted h2-$SUFFIX"</span> || <span className="command-text">echo</span> <span className="text-tips">"  h2-$SUFFIX not found"</span><br/>
+                        <span className="command-text">sudo</span> ip netns del h3-$SUFFIX 2&gt;/dev/null && <span className="command-text">echo</span> <span className="text-tips">"  Deleted h3-$SUFFIX"</span> || <span className="command-text">echo</span> <span className="text-tips">"  h3-$SUFFIX not found"</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"Deleting bridge..."</span><br/>
+                        <span className="command-text">sudo</span> ip link del br0-$SUFFIX 2&gt;/dev/null && <span className="command-text">echo</span> <span className="text-tips">"  Deleted br0-$SUFFIX"</span> || <span className="command-text">echo</span> <span className="text-tips">"  br0-$SUFFIX not found"</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"Cleaning up any leftover veth interfaces..."</span><br/>
+                        <span className="command-text">sudo</span> ip link del v1-$SUFFIX 2&gt;/dev/null || <span className="keyword-text">true</span><br/>
+                        <span className="command-text">sudo</span> ip link del v2-$SUFFIX 2&gt;/dev/null || <span className="keyword-text">true</span><br/>
+                        <span className="command-text">sudo</span> ip link del v3-$SUFFIX 2&gt;/dev/null || <span className="keyword-text">true</span><br/>
+                        <span className="command-text">sudo</span> ip link del v1p-$SUFFIX 2&gt;/dev/null || <span className="keyword-text">true</span><br/>
+                        <span className="command-text">sudo</span> ip link del v2p-$SUFFIX 2&gt;/dev/null || <span className="keyword-text">true</span><br/>
+                        <span className="command-text">sudo</span> ip link del v3p-$SUFFIX 2&gt;/dev/null || <span className="keyword-text">true</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"Cleanup complete!"</span><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">""</span><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"Verification:"</span><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"  Namespaces with suffix '$SUFFIX':"</span><br/>
+                        ip netns list | grep -E "h[1-3]-$SUFFIX" || <span className="command-text">echo</span> <span className="text-tips">"  None found (good)"</span><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"  Bridge with suffix '$SUFFIX':"</span><br/>
+                        ip link show | grep "br0-$SUFFIX" || <span className="command-text">echo</span> <span className="text-tips">"  None found (good)"</span>
                     </CodeBlock>
                 </div>
             </div>

@@ -63,31 +63,24 @@ const NsPingTheoryPage = () => {
                         The Full Script
                     </h2>
                     <CodeBlock>
-{`#!/bin/bash
-# Ping from one host to another in the router topology
-
-# ... (defaults and usage function) ...
-
-# ... (argument parsing and validation) ...
-
-# Map host names to IP addresses
-declare -A HOST_IPS
-HOST_IPS["h1"]="192.168.1.10"
-HOST_IPS["h2"]="192.168.2.10"
-HOST_IPS["h3"]="192.168.3.10"
-
-SRC_NS="$SRC_HOST-$SUFFIX"
-DST_IP="\${HOST_IPS[$DST_HOST]}"
-
-echo "Pinging from $SRC_NS to $DST_HOST ($DST_IP)..."
-
-# Check if source namespace exists and execute ping
-if ! sudo ip netns list | grep -q "^$SRC_NS "; then
-    echo "Error: Namespace $SRC_NS not found."
-    exit 1
-fi
-sudo ip netns exec "$SRC_NS" ping -c "$COUNT" "$DST_IP"
-`}
+                        <span className="text-muted-foreground">#!/bin/bash</span><br/>
+                        <span className="text-muted-foreground"># Ping from one host to another in the router topology</span><br/><br/>
+                        <span className="text-muted-foreground"># ... (defaults and usage function) ...</span><br/><br/>
+                        <span className="text-muted-foreground"># ... (argument parsing and validation) ...</span><br/><br/>
+                        <span className="text-muted-foreground"># Map host names to IP addresses</span><br/>
+                        <span className="command-text">declare</span> -A HOST_IPS<br/>
+                        <span className="text-label">HOST_IPS</span>[<span className="text-tips">"h1"</span>]=<span className="text-tips">"192.168.1.10"</span><br/>
+                        <span className="text-label">HOST_IPS</span>[<span className="text-tips">"h2"</span>]=<span className="text-tips">"192.168.2.10"</span><br/>
+                        <span className="text-label">HOST_IPS</span>[<span className="text-tips">"h3"</span>]=<span className="text-tips">"192.168.3.10"</span><br/><br/>
+                        <span className="text-label">SRC_NS</span>=<span className="text-tips">"$SRC_HOST-$SUFFIX"</span><br/>
+                        <span className="text-label">DST_IP</span>=<span className="text-tips">"${'${HOST_IPS[$DST_HOST]}'}"</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"Pinging from $SRC_NS to $DST_HOST ($DST_IP)..."</span><br/><br/>
+                        <span className="text-muted-foreground"># Check if source namespace exists and execute ping</span><br/>
+                        <span className="command-text">if</span> ! <span className="command-text">sudo</span> ip netns list | <span className="command-text">grep</span> -q <span className="text-tips">"^$SRC_NS "</span>; <span className="command-text">then</span><br/>
+                        {"    "}<span className="command-text">echo</span> <span className="text-tips">"Error: Namespace $SRC_NS not found."</span><br/>
+                        {"    "}<span className="command-text">exit</span> 1<br/>
+                        <span className="command-text">fi</span><br/>
+                        <span className="command-text">sudo</span> ip netns exec <span className="text-tips">"$SRC_NS"</span> ping -c <span className="text-tips">"$COUNT"</span> <span className="text-tips">"$DST_IP"</span>
                     </CodeBlock>
                 </div>
             </div>

@@ -62,57 +62,35 @@ const RCreateTheoryPage = () => {
                         The Full Script
                     </h2>
                     <CodeBlock>
-                        {`#!/bin/bash
-# Create 3 hosts connected via a bridge
-
-# Get suffix from argument or USERNAME environment variable
-if [[ -n "$1" ]]; then
-    SUFFIX="$1"
-elif [[ -n "$USERNAME" ]]; then
-    SUFFIX="$USERNAME"
-else
-    SUFFIX="arms"  # default suffix
-fi
-
-echo "Creating network namespaces and bridge with suffix: $SUFFIX"
-
-# Clean up any existing setup
-sudo ip netns del h1-$SUFFIX 2>/dev/null || true
-# ... (cleanup for h2, h3, br0, etc.)
-
-# Create namespaces
-echo "Creating namespaces..."
-sudo ip netns add h1-$SUFFIX
-sudo ip netns add h2-$SUFFIX
-sudo ip netns add h3-$SUFFIX
-
-# Create bridge
-echo "Creating bridge br0-$SUFFIX..."
-sudo ip link add br0-$SUFFIX type bridge
-sudo ip link set br0-$SUFFIX up
-
-# --- Connect Host 1 ---
-sudo ip link add v1-$SUFFIX type veth peer name v1p-$SUFFIX
-sudo ip link set v1-$SUFFIX netns h1-$SUFFIX
-sudo ip link set v1p-$SUFFIX master br0-$SUFFIX
-sudo ip link set v1p-$SUFFIX up
-
-# --- Connect Host 2 ---
-sudo ip link add v2-$SUFFIX type veth peer name v2p-$SUFFIX
-# ... (similar steps for h2)
-
-# --- Connect Host 3 ---
-sudo ip link add v3-$SUFFIX type veth peer name v3p-$SUFFIX
-# ... (similar steps for h3)
-
-
-# --- Configure IPs ---
-sudo ip -n h1-$SUFFIX addr add 10.0.0.1/24 dev v1-$SUFFIX
-sudo ip -n h1-$SUFFIX link set v1-$SUFFIX up
-# ... (similar steps for h2 and h3)
-
-echo "Setup complete!"
-`}
+                        <span className="text-muted-foreground">#!/bin/bash</span><br/>
+                        <span className="text-muted-foreground"># Create 3 hosts connected via a bridge</span><br/><br/>
+                        <span className="command-text">if</span> [[ -n <span className="text-tips">"$1"</span> ]]; <span className="command-text">then</span><br/>
+                        {"    "}<span className="text-label">SUFFIX</span>=<span className="text-tips">"$1"</span><br/>
+                        <span className="command-text">elif</span> [[ -n <span className="text-tips">"$USERNAME"</span> ]]; <span className="command-text">then</span><br/>
+                        {"    "}<span className="text-label">SUFFIX</span>=<span className="text-tips">"$USERNAME"</span><br/>
+                        <span className="command-text">else</span><br/>
+                        {"    "}<span className="text-label">SUFFIX</span>=<span className="text-tips">"arms"</span><br/>
+                        <span className="command-text">fi</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"Creating network namespaces and bridge with suffix: $SUFFIX"</span><br/><br/>
+                        <span className="text-muted-foreground"># ... (cleanup logic omitted) ...</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"Creating namespaces..."</span><br/>
+                        <span className="command-text">sudo</span> ip netns add h1-$SUFFIX<br/>
+                        <span className="command-text">sudo</span> ip netns add h2-$SUFFIX<br/>
+                        <span className="command-text">sudo</span> ip netns add h3-$SUFFIX<br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"Creating bridge br0-$SUFFIX..."</span><br/>
+                        <span className="command-text">sudo</span> ip link add br0-$SUFFIX type bridge<br/>
+                        <span className="command-text">sudo</span> ip link set br0-$SUFFIX up<br/><br/>
+                        <span className="text-muted-foreground"># --- Connect Host 1 ---</span><br/>
+                        <span className="command-text">sudo</span> ip link add v1-$SUFFIX type veth peer name v1p-$SUFFIX<br/>
+                        <span className="command-text">sudo</span> ip link set v1-$SUFFIX netns h1-$SUFFIX<br/>
+                        <span className="command-text">sudo</span> ip link set v1p-$SUFFIX master br0-$SUFFIX<br/>
+                        <span className="command-text">sudo</span> ip link set v1p-$SUFFIX up<br/><br/>
+                        <span className="text-muted-foreground"># --- Connect Host 2 & 3 (similar steps) ---</span><br/><br/>
+                        <span className="text-muted-foreground"># --- Configure IPs ---</span><br/>
+                        <span className="command-text">sudo</span> ip -n h1-$SUFFIX addr add 10.0.0.1/24 dev v1-$SUFFIX<br/>
+                        <span className="command-text">sudo</span> ip -n h1-$SUFFIX link set v1-$SUFFIX up<br/>
+                        <span className="text-muted-foreground"># ... (similar steps for h2 and h3)</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"Setup complete!"</span>
                     </CodeBlock>
                 </div>
             </div>

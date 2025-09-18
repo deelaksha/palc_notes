@@ -61,30 +61,21 @@ const RCleanTheoryPage = () => {
                         The Full Script
                     </h2>
                     <CodeBlock>
-{`#!/bin/bash
-# Clean up router topology
-
-# ... (Get suffix logic) ...
-
-echo "Cleaning up router network topology with suffix: $SUFFIX"
-
-# Delete namespaces
-sudo ip netns del router-$SUFFIX 2>/dev/null && echo "  Deleted router-$SUFFIX" || echo "  router-$SUFFIX not found"
-sudo ip netns del h1-$SUFFIX 2>/dev/null && echo "  Deleted h1-$SUFFIX" || echo "  h1-$SUFFIX not found"
-# ... (deletes h2, h3)
-
-# Clean up any leftover veth interfaces
-echo "Cleaning up any leftover veth interfaces..."
-sudo ip link del h1-r-$SUFFIX 2>/dev/null || true
-sudo ip link del r-h1-$SUFFIX 2>/dev/null || true
-# ... (cleans up other veth pairs)
-
-echo "Cleanup complete!"
-echo ""
-echo "Verification:"
-ip netns list | grep "$SUFFIX" || echo "  No namespaces found (good)"
-ip link show | grep "$SUFFIX" || echo "  No veth pairs found (good)"
-`}
+                        <span className="text-muted-foreground">#!/bin/bash</span><br/>
+                        <span className="text-muted-foreground"># Clean up router topology</span><br/><br/>
+                        <span className="text-muted-foreground"># ... (Get suffix logic) ...</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"Cleaning up router network topology with suffix: $SUFFIX"</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"Deleting namespaces..."</span><br/>
+                        <span className="command-text">sudo</span> ip netns del router-$SUFFIX 2&gt;/dev/null && <span className="command-text">echo</span> <span className="text-tips">"  Deleted router-$SUFFIX"</span> || <span className="command-text">echo</span> <span className="text-tips">"  router-$SUFFIX not found"</span><br/>
+                        <span className="command-text">sudo</span> ip netns del h1-$SUFFIX 2&gt;/dev/null && <span className="command-text">echo</span> <span className="text-tips">"  Deleted h1-$SUFFIX"</span> || <span className="command-text">echo</span> <span className="text-tips">"  h1-$SUFFIX not found"</span><br/>
+                        <span className="text-muted-foreground"># ... (deletes h2, h3)</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"Cleaning up any leftover veth interfaces..."</span><br/>
+                        <span className="command-text">sudo</span> ip link del h1-r-$SUFFIX 2&gt;/dev/null || <span className="keyword-text">true</span><br/>
+                        <span className="text-muted-foreground"># ... (cleans up other veth pairs)</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"Cleanup complete!"</span><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">""</span><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"Verification:"</span><br/>
+                        <span className="text-muted-foreground"># ... (verification logic) ...</span>
                     </CodeBlock>
                 </div>
             </div>

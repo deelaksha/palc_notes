@@ -63,41 +63,36 @@ const RShowTheoryPage = () => {
                         The Full Script
                     </h2>
                     <CodeBlock>
-{`#!/bin/bash
-# ... (script setup)
-
-echo "=== Router Information ==="
-for r in r1 r2; do
-    # ... (Checks router namespace, IP forwarding, interfaces, and routes)
-done
-
-echo "=== Host Information ==="
-for i in 1 2 3 4; do
-    # ... (Checks interfaces, IPs, routes, and loopback for each host)
-done
-
-echo "=== Cross-Network Connectivity Test Matrix ==="
-# ... (Nested loops to ping from each host to every other host) ...
-for src in h1 h2 h3 h4; do
-    printf "%-8s" "$src"
-    for dst in h1 h2 h3 h4; do
-        if [[ "$src" == "$dst" ]]; then
-            printf "%-8s" "-"
-        else
-            PING_RESULT=$(sudo ip netns exec "$src-$SUFFIX" ping -c 1 -W 2 "$DST_IP" 2>&1)
-            if echo "$PING_RESULT" | grep -q "1 received"; then
-                printf "%-8s" "OK"
-            else
-                printf "%-8s" "FAIL"
-            fi
-        fi
-    done
-    echo ""
-done
-
-echo "=== Summary ==="
-# ... (Prints summary of topology and next steps)
-`}
+                        <span className="text-muted-foreground">#!/bin/bash</span><br/>
+                        <span className="text-muted-foreground"># ... (script setup) ...</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"=== Router Information ==="</span><br/>
+                        <span className="command-text">for</span> r <span className="command-text">in</span> r1 r2; <span className="command-text">do</span><br/>
+                        {"    "}<span className="text-muted-foreground"># ... (Checks router namespace, IP forwarding, interfaces, and routes)</span><br/>
+                        <span className="command-text">done</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"=== Host Information ==="</span><br/>
+                        <span className="command-text">for</span> i <span className="command-text">in</span> 1 2 3 4; <span className="command-text">do</span><br/>
+                        {"    "}<span className="text-muted-foreground"># ... (Checks interfaces, IPs, routes, and loopback for each host)</span><br/>
+                        <span className="command-text">done</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"=== Cross-Network Connectivity Test Matrix ==="</span><br/>
+                        <span className="text-muted-foreground"># ... (Nested loops to ping from each host to every other host) ...</span><br/>
+                        <span className="command-text">for</span> src <span className="command-text">in</span> h1 h2 h3 h4; <span className="command-text">do</span><br/>
+                        {"    "}<span className="command-text">printf</span> <span className="text-tips">"%-8s"</span> <span className="text-tips">"$src"</span><br/>
+                        {"    "}<span className="command-text">for</span> dst <span className="command-text">in</span> h1 h2 h3 h4; <span className="command-text">do</span><br/>
+                        {"        "}<span className="command-text">if</span> [[ <span className="text-tips">"$src"</span> == <span className="text-tips">"$dst"</span> ]]; <span className="command-text">then</span><br/>
+                        {"            "}<span className="command-text">printf</span> <span className="text-tips">"%-8s"</span> <span className="text-tips">"-"</span><br/>
+                        {"        "}<span className="command-text">else</span><br/>
+                        {"            "}<span className="text-label">PING_RESULT</span>=$(<span className="command-text">sudo</span> ip netns exec <span className="text-tips">"$src-$SUFFIX"</span> ping -c 1 -W 2 <span className="text-tips">"$DST_IP"</span> 2&gt;&amp;1)<br/>
+                        {"            "}<span className="command-text">if</span> <span className="command-text">echo</span> <span className="text-tips">"$PING_RESULT"</span> | <span className="command-text">grep</span> -q <span className="text-tips">"1 received"</span>; <span className="command-text">then</span><br/>
+                        {"                "}<span className="command-text">printf</span> <span className="text-tips">"%-8s"</span> <span className="text-tips">"OK"</span><br/>
+                        {"            "}<span className="command-text">else</span><br/>
+                        {"                "}<span className="command-text">printf</span> <span className="text-tips">"%-8s"</span> <span className="text-tips">"FAIL"</span><br/>
+                        {"            "}<span className="command-text">fi</span><br/>
+                        {"        "}<span className="command-text">fi</span><br/>
+                        {"    "}<span className="command-text">done</span><br/>
+                        {"    "}<span className="command-text">echo</span><br/>
+                        <span className="command-text">done</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"=== Summary ==="</span><br/>
+                        <span className="text-muted-foreground"># ... (Prints summary of topology and next steps)</span>
                     </CodeBlock>
                 </div>
             </div>

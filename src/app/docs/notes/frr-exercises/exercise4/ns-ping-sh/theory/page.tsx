@@ -40,13 +40,13 @@ const NsPingTheoryPage = () => {
 
                     <h3 className="text-xl font-semibold mt-6 mb-2 text-primary-accent">2. Associative Arrays for Mapping:</h3>
                     <ul className="list-disc list-inside space-y-2">
-                        <li><b className="font-mono text-keyword">`declare -A HOST_IPS`</b>: Creates a map to easily find a host's IP address by its name (e.g., `h1` -> `192.168.1.10`).</li>
-                        <li><b className="font-mono text-keyword">`declare -A HOST_ROUTERS`</b>: A second map that links each host to its default gateway router (`h1` -> `r1`, `h4` -> `r2`). This is the key to predicting the route.</li>
+                        <li><b className="font-mono text-keyword"><code>declare -A HOST_IPS</code></b>: Creates a map to easily find a host's IP address by its name (e.g., `h1` -> `192.168.1.10`).</li>
+                        <li><b className="font-mono text-keyword"><code>declare -A HOST_ROUTERS</code></b>: A second map that links each host to its default gateway router (`h1` -> `r1`, `h4` -> `r2`). This is the key to predicting the route.</li>
                     </ul>
                     
                      <h3 className="text-xl font-semibold mt-6 mb-2 text-secondary-accent">3. Route Path Prediction:</h3>
                      <ul className="list-disc list-inside space-y-2">
-                        <li><b className="font-mono text-keyword">`if [[ "$SRC_ROUTER" == "$DST_ROUTER" ]]`</b>: By comparing the source and destination routers from the `HOST_ROUTERS` map, the script can determine if the communication will happen through a single router (1 hop) or if it needs to cross both routers (2 hops).</li>
+                        <li><b className="font-mono text-keyword"><code>if [[ "$SRC_ROUTER" == "$DST_ROUTER" ]]</code></b>: By comparing the source and destination routers from the `HOST_ROUTERS` map, the script can determine if the communication will happen through a single router (1 hop) or if it needs to cross both routers (2 hops).</li>
                         <li>It prints a predicted route path and the expected TTL value. TTL starts at 64 and is decremented by 1 at each router, so a TTL of 62 confirms a 2-hop path.</li>
                     </ul>
 
@@ -61,31 +61,24 @@ const NsPingTheoryPage = () => {
                         The Full Script
                     </h2>
                     <CodeBlock>
-{`#!/bin/bash
-# Ping from one host to another via one or more routers
-
-# ... (defaults and argument parsing) ...
-
-# Map host names to IPs and their parent routers
-declare -A HOST_IPS
-HOST_IPS["h1"]="192.168.1.10" # ... and so on
-declare -A HOST_ROUTERS
-HOST_ROUTERS["h1"]="r1" # ... and so on
-
-# Determine routing path
-if [[ "$SRC_ROUTER" == "$DST_ROUTER" ]]; then
-    ROUTE_PATH="$SRC_HOST → $SRC_ROUTER → $DST_HOST (1 hop, expected TTL=63)"
-else
-    ROUTE_PATH="$SRC_HOST → $SRC_ROUTER → $DST_ROUTER → $DST_HOST (2 hops, expected TTL=62)"
-fi
-
-echo "Route: $ROUTE_PATH"
-
-# Execute ping
-sudo ip netns exec "$SRC_NS" ping -c "$COUNT" "$DST_IP"
-
-# ... (Show TTL interpretation and guidance)
-`}
+                        <span className="text-muted-foreground">#!/bin/bash</span><br/>
+                        <span className="text-muted-foreground"># Ping from one host to another via one or more routers</span><br/><br/>
+                        <span className="text-muted-foreground"># ... (defaults and argument parsing) ...</span><br/><br/>
+                        <span className="text-muted-foreground"># Map host names to IPs and their parent routers</span><br/>
+                        <span className="command-text">declare</span> -A HOST_IPS<br/>
+                        <span className="text-label">HOST_IPS</span>[<span className="text-tips">"h1"</span>]=<span className="text-tips">"192.168.1.10"</span> <span className="text-muted-foreground"># ... and so on</span><br/>
+                        <span className="command-text">declare</span> -A HOST_ROUTERS<br/>
+                        <span className="text-label">HOST_ROUTERS</span>[<span className="text-tips">"h1"</span>]=<span className="text-tips">"r1"</span> <span className="text-muted-foreground"># ... and so on</span><br/><br/>
+                        <span className="text-muted-foreground"># Determine routing path</span><br/>
+                        <span className="command-text">if</span> [[ <span className="text-tips">"$SRC_ROUTER"</span> == <span className="text-tips">"$DST_ROUTER"</span> ]]; <span className="command-text">then</span><br/>
+                        {"    "}<span className="text-label">ROUTE_PATH</span>=<span className="text-tips">"$SRC_HOST → $SRC_ROUTER → $DST_HOST (1 hop, expected TTL=63)"</span><br/>
+                        <span className="command-text">else</span><br/>
+                        {"    "}<span className="text-label">ROUTE_PATH</span>=<span className="text-tips">"$SRC_HOST → $SRC_ROUTER → $DST_ROUTER → $DST_HOST (2 hops, expected TTL=62)"</span><br/>
+                        <span className="command-text">fi</span><br/><br/>
+                        <span className="command-text">echo</span> <span className="text-tips">"Route: $ROUTE_PATH"</span><br/><br/>
+                        <span className="text-muted-foreground"># Execute ping</span><br/>
+                        <span className="command-text">sudo</span> ip netns exec <span className="text-tips">"$SRC_NS"</span> ping -c <span className="text-tips">"$COUNT"</span> <span className="text-tips">"$DST_IP"</span><br/><br/>
+                        <span className="text-muted-foreground"># ... (Show TTL interpretation and guidance)</span>
                     </CodeBlock>
                 </div>
             </div>

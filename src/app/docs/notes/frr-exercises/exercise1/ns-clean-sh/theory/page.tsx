@@ -65,11 +65,11 @@ const NsCleanTheoryPage = () => {
                         <span className="text-label">SUFFIX</span>=<span className="text-tips">"${'${1:-${USERNAME:-arms}}'}"</span><br/><br/>
                         <span className="command-text">echo</span> <span className="text-tips">"Cleaning up namespaces and interfaces for suffix '${'${SUFFIX}'}'..."</span><br/><br/>
                         <span className="text-muted-foreground"># Delete namespaces (this automatically removes veth interfaces inside them)</span><br/>
-                        <span className="command-text">sudo</span> <span className="keyword-text">ip netns del</span> h1-${'${SUFFIX}'} 2>/dev/null || <span className="keyword-text">true</span><br/>
-                        <span className="command-text">sudo</span> <span className="keyword-text">ip netns del</span> h2-${'${SUFFIX}'} 2>/dev/null || <span className="keyword-text">true</span><br/><br/>
+                        <span className="command-text">sudo</span> <span className="keyword-text">ip netns del</span> h1-${'${SUFFIX}'} 2&gt;/dev/null || <span className="keyword-text">true</span><br/>
+                        <span className="command-text">sudo</span> <span className="keyword-text">ip netns del</span> h2-${'${SUFFIX}'} 2&gt;/dev/null || <span className="keyword-text">true</span><br/><br/>
                         <span className="text-muted-foreground"># Just in case veth devices exist in default namespace, try to delete them</span><br/>
-                        <span className="command-text">sudo</span> <span className="keyword-text">ip link del</span> v1-${'${SUFFIX}'} 2>/dev/null || <span className="keyword-text">true</span><br/>
-                        <span className="command-text">sudo</span> <span className="keyword-text">ip link del</span> v2-${'${SUFFIX}'} 2>/dev/null || <span className="keyword-text">true</span><br/><br/>
+                        <span className="command-text">sudo</span> <span className="keyword-text">ip link del</span> v1-${'${SUFFIX}'} 2&gt;/dev/null || <span className="keyword-text">true</span><br/>
+                        <span className="command-text">sudo</span> <span className="keyword-text">ip link del</span> v2-${'${SUFFIX}'} 2&gt;/dev/null || <span className="keyword-text">true</span><br/><br/>
                         <span className="command-text">echo</span> <span className="text-tips">"Cleanup complete for suffix '${'${SUFFIX}'}'"</span>
                     </CodeBlock>
                 </div>

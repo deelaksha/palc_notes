@@ -84,9 +84,9 @@ const NsShowTheoryPage = () => {
                         {"  "}<span className="command-text">echo</span> <span className="text-tips">"--- SOCKETS (top few) ---"</span><br/>
                         {"  "}<span className="command-text">sudo</span> <span className="keyword-text">ip netns exec</span> <span className="text-tips">"$NS"</span> ss -tunap | <span className="command-text">head</span> -20 || <span className="keyword-text">true</span><br/>
                         {"  "}<span className="command-text">echo</span> <span className="text-tips">"--- IPTABLES (if present) ---"</span><br/>
-                        {"  "}<span className="command-text">sudo</span> <span className="keyword-text">ip netns exec</span> <span className="text-tips">"$NS"</span> iptables -S 2>/dev/null || <span className="command-text">echo</span> <span className="text-tips">"(no iptables)"</span><br/>
+                        {"  "}<span className="command-text">sudo</span> <span className="keyword-text">ip netns exec</span> <span className="text-tips">"$NS"</span> iptables -S 2&gt;/dev/null || <span className="command-text">echo</span> <span className="text-tips">"(no iptables)"</span><br/>
                         {"  "}<span className="command-text">echo</span> <span className="text-tips">"--- NFT RULESET (if present) ---"</span><br/>
-                        {"  "}<span className="command-text">sudo</span> <span className="keyword-text">ip netns exec</span> <span className="text-tips">"$NS"</span> nft list ruleset 2>/dev/null || <span className="command-text">echo</span> <span className="text-tips">"(no nftables)"</span><br/>
+                        {"  "}<span className="command-text">sudo</span> <span className="keyword-text">ip netns exec</span> <span className="text-tips">"$NS"</span> nft list ruleset 2&gt;/dev/null || <span className="command-text">echo</span> <span className="text-tips">"(no nftables)"</span><br/>
                         {"  "}<span className="command-text">echo</span> <span className="text-tips">"--- PIDs in $NS ---"</span><br/>
                         {"  "}<span className="command-text">sudo</span> <span className="keyword-text">ip netns pids</span> <span className="text-tips">"$NS"</span> || <span className="keyword-text">true</span><br/>
                         {"  "}<span className="command-text">echo</span><br/>
