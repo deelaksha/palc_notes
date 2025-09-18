@@ -2,10 +2,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, Ear, Mail, Server, Laptop, Bridge } from 'lucide-react';
-import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, Ear, Mail, Server, Laptop, Bridge, Terminal, Radio } from 'lucide-react';
+import Link from 'next/link';
+import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 import {
   Select,
   SelectContent,
@@ -13,135 +15,157 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useToast } from '@/hooks/use-toast';
 
+// New themed component based on user's provided HTML
 const PacketCaptureVisualizer = () => {
   const { toast } = useToast();
   const [step, setStep] = useState(0);
   const [explanation, setExplanation] = useState("Select an interface to listen on, then send a ping.");
   const [capturedPackets, setCapturedPackets] = useState<string[]>([]);
-  const [listeningOn, setListeningOn] = useState('h1');
+  const [listeningOn, setListeningOn] = useState('bridge');
+  const [isAnimating, setIsAnimating] = useState(false);
 
-  const explanationText = [
-    "Ready. Select an interface and send a ping.",
-    "H1 sends an ICMP Echo Request to H2.",
-    "Packet travels across the virtual link.",
-    `The 'tcpdump' listener on ${listeningOn} captures the packet.`,
-    "H2 replies to H1.",
-    `Listener on ${listeningOn} captures the reply.`,
+  const scenarioText = [
+    "Ready. Select an interface and click 'Send Ping'.",
+    "H1 sends an ICMP Echo Request to H2...",
+    "Packet crosses the network to the bridge...",
+    "Bridge forwards packet...",
+    `'tcpdump' on ${listeningOn} captures the incoming packet.`,
+    "H2 receives ping and sends an Echo Reply...",
+    "Reply crosses the network to the bridge...",
+    "Bridge forwards reply...",
+    `'tcpdump' on ${listeningOn} captures the outgoing reply.`,
     "Animation Complete."
   ];
 
   const runAnimation = async () => {
-    if (step !== 0) return;
-    
-    setCapturedPackets([]);
-    toast({ title: "Starting Ping", description: `Capturing on ${listeningOn}`});
+    if (isAnimating) return;
 
-    for (let i = 1; i <= 5; i++) {
-        setStep(i);
-        setExplanation(explanationText[i]);
-        
-        if (i === 3) {
-            setCapturedPackets(prev => [...prev, `${new Date().toLocaleTimeString()}: IP 10.0.0.1 > 10.0.0.2: ICMP echo request`]);
-        }
-        if (i === 5 && listeningOn !== 'h2') {
-             setCapturedPackets(prev => [...prev, `${new Date().toLocaleTimeString()}: IP 10.0.0.2 > 10.0.0.1: ICMP echo reply`]);
-        }
-        await new Promise(r => setTimeout(r, 1000));
+    setIsAnimating(true);
+    setCapturedPackets([]);
+    toast({ title: "Starting Ping", description: `Capturing on ${listeningOn}` });
+
+    // Ping out
+    setStep(1); setExplanation(scenarioText[1]); await new Promise(r => setTimeout(r, 500));
+    setStep(2); setExplanation(scenarioText[2]); await new Promise(r => setTimeout(r, 1000));
+    setStep(3); setExplanation(scenarioText[3]); await new Promise(r => setTimeout(r, 1000));
+    setStep(4); setExplanation(scenarioText[4]);
+    if (listeningOn === 'h1' || listeningOn === 'bridge') {
+      setCapturedPackets(prev => [...prev, `${new Date().toLocaleTimeString()}: IP 10.0.0.1 > 10.0.0.2: ICMP echo request`]);
     }
-    setStep(6);
-    setExplanation(explanationText[6]);
+    await new Promise(r => setTimeout(r, 1000));
+
+    // Ping back
+    setStep(5); setExplanation(scenarioText[5]); await new Promise(r => setTimeout(r, 500));
+    setStep(6); setExplanation(scenarioText[6]); await new Promise(r => setTimeout(r, 1000));
+    setStep(7); setExplanation(scenarioText[7]); await new Promise(r => setTimeout(r, 1000));
+    setStep(8); setExplanation(scenarioText[8]);
+    if (listeningOn === 'h2' || listeningOn === 'bridge') {
+        setCapturedPackets(prev => [...prev, `${new Date().toLocaleTimeString()}: IP 10.0.0.2 > 10.0.0.1: ICMP echo reply`]);
+    }
+    await new Promise(r => setTimeout(r, 1000));
+
+    setStep(9); setExplanation(scenarioText[9]);
+    setIsAnimating(false);
   };
     
   const resetAnimation = () => {
     setStep(0);
-    setExplanation(explanationText[0]);
+    setExplanation(scenarioText[0]);
     setCapturedPackets([]);
+    setIsAnimating(false);
   };
 
-  const getPacketPosition = (isReply = false) => {
-    const from = isReply ? { left: '80%' } : { left: '10%' };
-    const to = isReply ? { left: '10%' } : { left: '80%' };
-    const capturePoint = { left: '45%' };
-
-    if (step === 1 && !isReply) return { ...from, opacity: 1, transition: { duration: 0 }};
-    if (step === 2 && !isReply) return { ...to, opacity: 1, transition: { duration: 1 }};
-    if (step === 3 && !isReply) return { ...to, opacity: 0, scale: 1.5, transition: { duration: 0.5 }};
-    if (step === 4 && isReply) return { ...from, opacity: 1, transition: { duration: 0 }};
-    if (step === 5 && isReply) return { ...to, opacity: 1, transition: { duration: 1 }};
-
+  const getPacketPosition = () => {
+    if (step === 0 || step === 9) return { opacity: 0, x: '15%', y: '50%' };
+    if (step === 1) return { opacity: 1, x: '15%', y: '50%', transition: { duration: 0 } };
+    if (step === 2) return { opacity: 1, x: '50%', y: '50%', transition: { duration: 1 } };
+    if (step === 3) return { opacity: 1, x: '85%', y: '50%', transition: { duration: 1 } };
+    if (step === 4) return { opacity: 0, x: '85%', y: '50%', scale: 1.5, transition: { duration: 0.5 }};
+    if (step === 5) return { opacity: 1, x: '85%', y: '50%', transition: { duration: 0 } };
+    if (step === 6) return { opacity: 1, x: '50%', y: '50%', transition: { duration: 1 } };
+    if (step === 7) return { opacity: 1, x: '15%', y: '50%', transition: { duration: 1 } };
+    if (step === 8) return { opacity: 0, x: '15%', y: '50%', scale: 1.5, transition: { duration: 0.5 }};
     return { opacity: 0 };
   }
 
+  const getReplyPacketPosition = () => {
+      if (step < 5) return { opacity: 0 };
+      return getPacketPosition();
+  }
+
+
   return (
-    <div className="container mx-auto p-6 max-w-5xl">
+    <div className="p-6">
       <Button asChild variant="ghost" className="mb-8">
         <Link href="/docs/notes/frr-exercises/exercise2/capture-sh">
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Back
+          Back to capture.sh
         </Link>
       </Button>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-card p-6 rounded-2xl shadow-lg border border-border">
-          <h1 className="text-2xl font-bold text-center text-primary font-mono mb-4">Packet Capture Visualizer</h1>
-          <div className="relative w-full h-64 bg-dark-primary rounded-lg border-2 border-primary/50 overflow-hidden">
+      <div className="max-w-4xl mx-auto bg-[#2d2d2d] rounded-2xl shadow-lg border-2 border-[#555] p-6 space-y-6">
+          <h1 className="font-['Press_Start_2P',_cursive] text-[#ff00ff] text-center text-xl">Packet Capture Visualizer</h1>
+          
+          <div id="animationCanvas" className="relative w-full h-[300px] bg-[#1e1e1e] border-2 border-[#00ffff] rounded-lg overflow-hidden">
             {/* Devices */}
-            <div className="absolute top-1/2 -translate-y-1/2 left-[10%] text-center">
-              <Laptop className="mx-auto w-8 h-8"/>
-              <div className="font-mono text-xs">h1 (10.0.0.1)</div>
+            <div className="absolute top-1/2 -translate-y-1/2 left-[15%] -translate-x-1/2 text-center text-white">
+              <Laptop className="mx-auto w-10 h-10"/>
+              <p className="text-xs font-mono mt-1">h1 (10.0.0.1)</p>
               {listeningOn === 'h1' && <Ear className="w-4 h-4 text-amber-400 absolute -top-4 left-1/2 -translate-x-1/2"/>}
             </div>
-            <div className="absolute top-1/2 -translate-y-1/2 left-[45%] text-center">
-              <Bridge className="mx-auto w-8 h-8"/>
-              <div className="font-mono text-xs">bridge</div>
+            <div className="absolute top-1/2 -translate-y-1/2 left-[50%] -translate-x-1/2 text-center text-white">
+              <Bridge className="mx-auto w-10 h-10"/>
+              <p className="text-xs font-mono mt-1">bridge</p>
               {listeningOn === 'bridge' && <Ear className="w-4 h-4 text-amber-400 absolute -top-4 left-1/2 -translate-x-1/2"/>}
             </div>
-            <div className="absolute top-1/2 -translate-y-1/2 left-[80%] text-center">
-              <Server className="mx-auto w-8 h-8"/>
-              <div className="font-mono text-xs">h2 (10.0.0.2)</div>
+            <div className="absolute top-1/2 -translate-y-1/2 left-[85%] -translate-x-1/2 text-center text-white">
+              <Server className="mx-auto w-10 h-10"/>
+              <p className="text-xs font-mono mt-1">h2 (10.0.0.2)</p>
               {listeningOn === 'h2' && <Ear className="w-4 h-4 text-amber-400 absolute -top-4 left-1/2 -translate-x-1/2"/>}
             </div>
             {/* Links */}
-            <div className="absolute top-1/2 left-[15%] w-[65%] h-0.5 bg-white/20" />
+            <div className="absolute top-1/2 left-[15%] w-[70%] h-0.5 bg-white/20" />
+
             {/* Packets */}
             <AnimatePresence>
-              {step > 0 && step < 4 && <motion.div className="absolute top-1/2 -mt-4" initial={{left: '10%', opacity: 0}} animate={getPacketPosition()}><Mail className="w-8 h-8 text-neon-pink" /></motion.div>}
-              {step > 3 && <motion.div className="absolute top-1/2 -mt-4" initial={{left: '80%', opacity: 0}} animate={getPacketPosition(true)}><Mail className="w-8 h-8 text-neon-green" /></motion.div>}
+              <motion.div className="absolute top-0 left-0" initial={false} animate={getPacketPosition()}>
+                <Mail className="w-8 h-8 text-neon-pink" />
+              </motion.div>
             </AnimatePresence>
           </div>
-        </div>
-        <div className="space-y-4">
-          <div className="bg-card p-4 rounded-2xl border border-border h-full flex flex-col">
-            <div className="space-y-4 mb-4">
-                <Select value={listeningOn} onValueChange={setListeningOn} disabled={step > 0 && step < 6}>
-                    <SelectTrigger>
-                        <SelectValue placeholder="Select interface to listen on..." />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+            <div className="space-y-2">
+                <Label htmlFor="listener-select" className="text-sm font-semibold">Listening Interface:</Label>
+                <Select value={listeningOn} onValueChange={setListeningOn} disabled={isAnimating}>
+                    <SelectTrigger id="listener-select" className="bg-[#1e1e1e] border-[#555]">
+                        <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="h1">Listen on h1</SelectItem>
-                        <SelectItem value="bridge">Listen on bridge</SelectItem>
-                        <SelectItem value="h2">Listen on h2</SelectItem>
+                        <SelectItem value="h1">h1</SelectItem>
+                        <SelectItem value="bridge">bridge</SelectItem>
+                        <SelectItem value="h2">h2</SelectItem>
                     </SelectContent>
                 </Select>
-                <div className="flex justify-center gap-4">
-                    <Button onClick={runAnimation} disabled={step > 0 && step < 6} className="bg-primary hover:bg-primary/90">Send Ping</Button>
-                    <Button onClick={resetAnimation} variant="outline">Reset</Button>
-                </div>
             </div>
-            <div className="bg-card-nested text-accent font-mono p-4 rounded-lg border border-secondary text-center text-xs min-h-[4rem] flex-grow flex items-center justify-center">
-              {explanation}
+            <div className="flex gap-4">
+                <Button onClick={runAnimation} disabled={isAnimating} className="w-full bg-[#00ffff] text-black font-bold uppercase tracking-wider shadow-[0_4px_#00ffff] hover:translate-y-[-2px] hover:shadow-[0_6px_#00ffff] transition-all">Send Ping</Button>
+                <Button onClick={resetAnimation} disabled={isAnimating} className="w-full bg-[#ff00ff] text-black font-bold uppercase tracking-wider shadow-[0_4px_#ff00ff] hover:translate-y-[-2px] hover:shadow-[0_6px_#ff00ff] transition-all">Reset</Button>
             </div>
-            <div className="bg-dark-primary text-amber-400 font-mono p-4 mt-4 rounded-lg border border-secondary text-xs min-h-[6rem]">
-              <p className="text-gray-400 mb-2">$ sudo tcpdump -i {listeningOn === 'h1' ? 'v1-arms' : listeningOn === 'h2' ? 'v2-arms' : 'br0-arms'} -n</p>
-              <AnimatePresence>
+          </div>
+          
+          <div id="explanation" className="bg-[#1a1a1a] text-[#4CAF50] font-['Press_Start_2P',_cursive] p-4 rounded-md border border-[#ff00ff] text-center min-h-[4rem] flex items-center justify-center text-xs">
+            {explanation}
+          </div>
+          
+          <div id="command" className="bg-[#1a1a1a] text-[#ffc107] font-mono p-4 rounded-md border border-[#00ffff] min-h-[6rem]">
+             <p className="text-gray-400">$ sudo tcpdump -i {listeningOn === 'h1' ? 'v1-arms' : listeningOn === 'h2' ? 'v2-arms' : 'br0-arms'} -n</p>
+             <AnimatePresence>
                 {capturedPackets.map((packet, index) => (
                   <motion.p key={index} initial={{opacity:0, y:5}} animate={{opacity:1, y:0}}>{packet}</motion.p>
                 ))}
               </AnimatePresence>
-            </div>
           </div>
-        </div>
       </div>
     </div>
   );

@@ -18,48 +18,48 @@ const NsCaptureTheoryPage = () => {
                 </Button>
             </div>
 
-            <div className="max-w-4xl mx-auto bg-card p-8 rounded-xl shadow-lg border border-border">
-                <h1 className="text-3xl sm:text-4xl font-bold text-center mb-6 text-primary">
+            <div className="max-w-4xl mx-auto bg-[#2d2d2d] rounded-2xl shadow-lg border-2 border-[#555] p-8">
+                <h1 className="font-['Press_Start_2P',_cursive] text-[#ff00ff] text-center text-2xl mb-6">
                     Explaining the Advanced `capture.sh` Script
                 </h1>
 
                 <div className="prose dark:prose-invert prose-lg max-w-none">
-                    <p className="text-lg text-muted-foreground">
+                    <p className="text-lg text-gray-300">
                         This script is a more advanced tool for capturing network traffic within our virtual environments. It can listen on different interfaces (`h1`, `h2`, `bridge`) and can either show traffic live or save it to a file for later analysis with tools like Wireshark.
                     </p>
 
-                    <h2 className="text-2xl font-bold mt-8 mb-4 border-b-2 text-primary-accent pb-2">
+                    <h2 className="text-xl font-bold mt-8 mb-4 border-b-2 text-[#00ffff] pb-2">
                         Line-by-Line Explanation
                     </h2>
 
-                    <h3 className="text-xl font-semibold mt-6 mb-2 text-secondary-accent">1. Usage and Argument Parsing:</h3>
-                    <ul className="list-disc list-inside space-y-2">
+                    <h3 className="text-lg font-semibold mt-6 mb-2 text-[#ffc107]">1. Usage and Argument Parsing:</h3>
+                    <ul className="list-disc list-inside space-y-2 text-gray-300">
                         <li><b className="font-mono text-keyword"><code>usage()</code></b>: A help function that explains how to use the script and shows examples.</li>
                         <li><b className="font-mono text-keyword"><code>if [[ "$1" == "-h" ...</code></b>: A check to see if the user asked for help.</li>
                         <li>The script then carefully parses up to four arguments: a suffix for the namespace, a mode (`live` or `write`), an output file path, and the interface to listen on. It sets sensible defaults if they aren't provided.</li>
                         <li>It includes validation to make sure the arguments make sense (e.g., you must provide a filename in 'write' mode).</li>
                     </ul>
 
-                    <h3 className="text-xl font-semibold mt-6 mb-2 text-primary-accent">2. Determining the Capture Context:</h3>
-                    <ul className="list-disc list-inside space-y-2">
+                    <h3 className="text-lg font-semibold mt-6 mb-2 text-[#ffc107]">2. Determining the Capture Context:</h3>
+                    <ul className="list-disc list-inside space-y-2 text-gray-300">
                         <li>The script cleverly determines *where* and *how* to run `tcpdump`.</li>
                         <li><b className="font-mono text-keyword"><code>if [[ "$INTERFACE" == "bridge" ]]</code></b>: If you want to listen on the bridge (`br0-arms`), it runs `tcpdump` directly in the main OS.</li>
                         <li><b className="font-mono text-keyword"><code>else ...</code></b>: If you want to listen on a host's interface (e.g., `h1`), it sets up an `EXEC_CONTEXT`.</li>
                         <li><b className="font-mono text-keyword"><code>EXEC_CONTEXT="sudo ip netns exec $HOST_NS"</code></b>: This variable stores the command needed to run something *inside* the correct network namespace (e.g., `h1-arms`).</li>
                     </ul>
 
-                    <h3 className="text-xl font-semibold mt-6 mb-2 text-secondary-accent">3. Building and Executing the Command:</h3>
-                     <ul className="list-disc list-inside space-y-2">
+                    <h3 className="text-lg font-semibold mt-6 mb-2 text-[#ffc107]">3. Building and Executing the Command:</h3>
+                     <ul className="list-disc list-inside space-y-2 text-gray-300">
                         <li>Based on the 'mode', it builds the final `tcpdump` command string (`TCPDUMP_CMD`).</li>
                         <li>For 'live' mode, it uses flags for immediate, readable output.</li>
                         <li>For 'write' mode, it uses the `-w` flag to save raw packet data to a `.pcap` file.</li>
                         <li><b className="font-mono text-keyword"><code>if [[ -n "$EXEC_CONTEXT" ]] ...</code></b>: This final block executes the command, either inside a namespace (if `EXEC_CONTEXT` is set) or in the main OS.</li>
                     </ul>
 
-                    <h2 className="text-2xl font-bold mt-8 mb-4 border-b-2 text-secondary-accent pb-2">
+                    <h2 className="text-xl font-bold mt-8 mb-4 border-b-2 text-[#00ffff] pb-2">
                         The Full Script
                     </h2>
-                    <CodeBlock>
+                    <CodeBlock className="bg-[#1e1e1e] border-[#00ffff]">
                         <span className="text-muted-foreground">#!/bin/bash</span><br/>
                         <span className="text-muted-foreground"># Capture network traffic on the bridge or host interfaces</span><br/><br/>
                         
