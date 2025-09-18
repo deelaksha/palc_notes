@@ -1,31 +1,72 @@
 
-import { CodeBlock } from '@/components/markdown/CodeBlock';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ArrowLeft, ArrowRight, BookOpen, Code } from 'lucide-react';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
-const scriptContent = `
-#!/bin/bash
-# Description: Pings devices within the network namespaces.
+export default function NsPingHubPage() {
+  const options = [
+    {
+      name: 'Theory',
+      description: 'An explanation of how the ping script works.',
+      href: '/docs/notes/frr-exercises/exercise1/ns-ping-sh/theory',
+      icon: <BookOpen className="size-8" />,
+    },
+    {
+      name: 'Practical',
+      description: 'A hands-on animation showing the ping process.',
+      href: '/docs/notes/frr-exercises/exercise1/ns-ping-sh/practical',
+      icon: <Code className="size-8" />,
+    },
+  ];
 
-echo "Pinging devices..."
-# Add script logic here
-`;
-
-export default function NsPingShPage() {
   return (
-    <main className="flex-1 p-4 md:p-8 lg:p-12">
-      <div className="max-w-4xl mx-auto">
-        <Button asChild variant="ghost" className="mb-8">
-          <Link href="/docs/notes/frr-exercises/exercise1">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Exercise 1
-          </Link>
+    <div className="flex flex-col flex-1">
+      <main className="flex-1 p-4 md:p-8 lg:p-12">
+         <Button asChild variant="ghost" className="mb-8">
+            <Link href="/docs/notes/frr-exercises/exercise1">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Exercise 1
+            </Link>
         </Button>
-        <h1 className="text-3xl font-bold font-code mb-4">ns-ping.sh</h1>
-        <p className="text-muted-foreground mb-6">This script is used to send ICMP ping requests to devices within the created network namespaces to test connectivity.</p>
-        <CodeBlock>{scriptContent.trim()}</CodeBlock>
-      </div>
-    </main>
+        <header className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-primary font-headline mb-2">
+            ns-ping.sh
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            Choose your learning path for this script.
+          </p>
+        </header>
+
+        <section className="w-full max-w-3xl mx-auto">
+          <div className="grid gap-6 md:grid-cols-2">
+            {options.map((option) => (
+              <Link key={option.name} href={option.href} className="group">
+                <Card className="h-full transition-all duration-300 ease-in-out group-hover:border-primary group-hover:shadow-lg group-hover:shadow-primary/10 group-hover:-translate-y-1">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="bg-muted p-3 rounded-md text-foreground">
+                          {option.icon}
+                        </div>
+                        <div>
+                          <CardTitle className="font-headline">
+                            {option.name}
+                          </CardTitle>
+                          <CardDescription>
+                            {option.description}
+                          </CardDescription>
+                        </div>
+                      </div>
+                      <ArrowRight className="size-5 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
+                    </div>
+                  </CardHeader>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </section>
+      </main>
+    </div>
   );
 }
