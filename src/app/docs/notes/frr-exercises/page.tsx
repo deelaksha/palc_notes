@@ -5,17 +5,20 @@ import { ArrowLeft, Dumbbell, PlayCircle } from 'lucide-react';
 import Link from 'next/link';
 
 const exercises = [
-  { name: 'src/frr exercise', href: '/docs/notes/frr-exercises' },
+  { name: 'Exercise 1', href: '#' },
+  { name: 'Exercise 2', href: '#' },
+  { name: 'Exercise 3', href: '#' },
+  { name: 'Exercise 4', href: '#' },
 ];
 
-export default function ExercisePage() {
+export default function FrrExercisesPage() {
   return (
     <main className="flex-1 p-4 md:p-8 lg:p-12">
       <div className="max-w-4xl mx-auto">
         <Button asChild variant="ghost" className="mb-8">
-          <Link href="/docs/notes">
+          <Link href="/docs/notes/exercise">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Notes
+            Back to Exercises
           </Link>
         </Button>
         <Card>
@@ -23,7 +26,7 @@ export default function ExercisePage() {
             <div className="flex justify-center mb-4">
                 <Dumbbell className="size-12 text-primary" />
             </div>
-            <CardTitle className="font-headline text-3xl">Practice Exercises</CardTitle>
+            <CardTitle className="font-headline text-3xl">FRR Exercises</CardTitle>
              <p className="text-center text-muted-foreground pt-2">
               Select an exercise to begin.
             </p>
