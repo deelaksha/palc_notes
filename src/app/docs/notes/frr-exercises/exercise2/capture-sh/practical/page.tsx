@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Ear, Mail, Server, Laptop, Bridge, Terminal } from 'lucide-react';
+import { ArrowLeft, Ear, Mail, Server, Laptop, Waypoints, Terminal } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -116,7 +116,7 @@ const PacketCaptureVisualizer = () => {
               {listeningOn === 'h1' && <Ear className="w-4 h-4 text-amber-400 absolute -top-4 left-1/2 -translate-x-1/2"/>}
             </div>
             <div className="absolute top-1/2 -translate-y-1/2 left-[50%] -translate-x-1/2 text-center text-white">
-              <Bridge className="mx-auto w-10 h-10"/>
+              <Waypoints className="mx-auto w-10 h-10"/>
               <p className="text-xs font-mono mt-1">bridge</p>
               {listeningOn === 'bridge' && <Ear className="w-4 h-4 text-amber-400 absolute -top-4 left-1/2 -translate-x-1/2"/>}
             </div>
