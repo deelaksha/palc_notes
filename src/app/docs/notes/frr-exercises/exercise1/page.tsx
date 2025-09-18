@@ -30,11 +30,6 @@ const scripts = [
     description: 'Cleans up the network namespaces.',
     href: '/docs/notes/frr-exercises/exercise1/ns-clean-sh',
   },
-  {
-    name: 'ns-mac.sh',
-    description: 'Displays MAC addresses for devices.',
-    href: '/docs/notes/frr-exercises/exercise1/ns-mac-sh',
-  },
 ];
 
 export default function Exercise1HubPage() {
