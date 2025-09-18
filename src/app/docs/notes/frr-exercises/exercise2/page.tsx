@@ -13,7 +13,7 @@ const scripts = [
    {
     name: 'capture.sh',
     description: 'Captures network traffic for analysis.',
-    href: '#',
+    href: '/docs/notes/frr-exercises/exercise2/capture-sh',
   },
     {
     name: 'ns-ping.sh',
