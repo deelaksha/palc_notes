@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -60,9 +59,6 @@ echo "h2-\${SUFFIX}: 10.0.0.2/24"`;
             <p className="text-lg text-muted-foreground">
                 This page explains a bash script that sets up a simple, virtual network environment using Linux tools. It's like creating two separate, isolated computers inside your single machine and connecting them with a virtual cable. This is useful for testing network configurations without affecting your real network.
             </p>
-            <div className="mb-6 text-center">
-                <Image src="https://picsum.photos/seed/linux-veth/600/300" alt="Diagram illustrating two network namespaces connected by a veth pair" className="w-full h-auto rounded-lg shadow-md mt-4" width={600} height={300} data-ai-hint="network diagram" />
-            </div>
 
             <h2 className="text-2xl font-bold mt-8 mb-4 border-b-2 text-primary-accent pb-2">
                 Simple, Line-by-Line Explanation
