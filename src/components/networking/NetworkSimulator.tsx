@@ -325,11 +325,13 @@ const NetworkSimulator = () => {
                 <span className="device-icon">💻</span>
                 <span className="device-label">Source Host</span>
                  <span className="device-ip">{deviceData.sourceHost.ip}</span>
+                 <span className="device-ip text-[10px] text-gray-400">{deviceData.sourceHost.mac}</span>
             </div>
             <div ref={deviceRefs.hostA} className="device host-device" style={{ left: '10%', top: '60%' }}>
                 <span className="device-icon">📱</span>
                 <span className="device-label">Host A</span>
                 <span className="device-ip">{deviceData.hostA.ip}</span>
+                <span className="device-ip text-[10px] text-gray-400">{deviceData.hostA.mac}</span>
             </div>
             <div ref={deviceRefs.bridge1} className="device bridge-device" style={{ left: '30%', top: '40%' }}>
                 <span className="device-icon">🌉</span>
@@ -338,14 +340,17 @@ const NetworkSimulator = () => {
             <div ref={deviceRefs.router1} className="device router-device" style={{ left: '50%', top: '20%' }}>
                 <span className="device-icon">🌐</span>
                 <span className="device-label">Router 1</span>
+                <span className="device-ip text-[10px] text-gray-400">{deviceData.router1.mac}</span>
             </div>
              <div ref={deviceRefs.router2} className="device router-device" style={{ left: '50%', top: '80%' }}>
                 <span className="device-icon">🌐</span>
                 <span className="device-label">Router 2</span>
+                <span className="device-ip text-[10px] text-gray-400">{deviceData.router2.mac}</span>
             </div>
             <div ref={deviceRefs.firewall} className="device firewall-device" style={{ left: '70%', top: '50%' }}>
                 <span className="device-icon">🔒</span>
                 <span className="device-label">Firewall</span>
+                <span className="device-ip text-[10px] text-gray-400">{deviceData.firewall.mac}</span>
             </div>
             <div ref={deviceRefs.bridge2} className="device bridge-device" style={{ left: '85%', top: '50%' }}>
                 <span className="device-icon">🌉</span>
@@ -355,11 +360,13 @@ const NetworkSimulator = () => {
                 <span className="device-icon">🖨️</span>
                 <span className="device-label">Host B</span>
                 <span className="device-ip">{deviceData.hostB.ip}</span>
+                <span className="device-ip text-[10px] text-gray-400">{deviceData.hostB.mac}</span>
             </div>
             <div ref={deviceRefs.destinationHost} className="device host-device" style={{ right: '5%', top: '80%' }}>
                 <span className="device-icon">🖥️</span>
                 <span className="device-label">Dest Host</span>
                 <span className="device-ip">{deviceData.destinationHost.ip}</span>
+                <span className="device-ip text-[10px] text-gray-400">{deviceData.destinationHost.mac}</span>
             </div>
 
             {packetState.visible && (
@@ -370,7 +377,7 @@ const NetworkSimulator = () => {
       
       <div className="bg-gray-700 p-4 rounded-xl shadow-md mt-6">
         <h3 className="text-lg font-bold mb-2 text-white">Simulation Log:</h3>
-        <ul id="logList" className="list-decimal list-inside space-y-1 text-gray-300 text-sm">
+        <ul id="logList" className="list-decimal list-inside space-y-1 text-gray-300 text-sm h-32 overflow-y-auto">
             {simulationLog.map((log, index) => (
                 <li key={index}>{log.substring(log.indexOf('.') + 2)}</li>
             ))}
