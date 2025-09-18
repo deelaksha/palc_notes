@@ -28,7 +28,7 @@ const scripts = [
   {
     name: 'r-clean.sh',
     description: 'Cleans up the multi-router topology.',
-    href: '#',
+    href: '/docs/notes/frr-exercises/exercise2/r-clean-sh',
   },
 ];
 
