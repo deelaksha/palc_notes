@@ -7,38 +7,6 @@ import { ArrowLeft } from 'lucide-react';
 import { CodeBlock } from '@/components/markdown/CodeBlock';
 
 export default function NsCreateTheoryPage() {
-    const scriptContent = `#!/bin/bash
-
-# Get suffix from argument or USERNAME env var, default to 'arms'
-SUFFIX="\${1:-\${USERNAME:-arms}}"
-
-# Create namespaces
-echo "Creating namespaces h1-\${SUFFIX} and h2-\${SUFFIX}..."
-sudo ip netns add h1-\${SUFFIX} #creating host1
-sudo ip netns add h2-\${SUFFIX} #creating host2
-
-# Create veth pair and move to namespaces
-echo "Creating veth pair..."
-sudo ip link add v1-\${SUFFIX} type veth peer name v2-\${SUFFIX}
-sudo ip link set v1-\${SUFFIX} netns h1-\${SUFFIX} #attaching v1 - h1
-sudo ip link set v2-\${SUFFIX} netns h2-\${SUFFIX}
-
-# Assign IP addresses
-echo "Assigning IP addresses..."
-sudo ip -n h1-\${SUFFIX} addr add 10.0.0.1/24 dev v1-\${SUFFIX}
-sudo ip -n h2-\${SUFFIX} addr add 10.0.0.2/24 dev v2-\${SUFFIX}
-
-# Bring up loopback and veth interfaces
-echo "Bringing up interfaces..."
-sudo ip -n h1-\${SUFFIX} link set lo up
-sudo ip -n h2-\${SUFFIX} link set lo up
-sudo ip -n h1-\${SUFFIX} link set v1-\${SUFFIX} up
-sudo ip -n h2-\${SUFFIX} link set v2-\${SUFFIX} up
-
-echo "Network namespaces created successfully!"
-echo "h1-\${SUFFIX}: 10.0.0.1/24"
-echo "h2-\${SUFFIX}: 10.0.0.2/24"`;
-
     return (
     <main className="p-6">
       <div className="max-w-4xl mx-auto">
@@ -121,7 +89,33 @@ echo "h2-\${SUFFIX}: 10.0.0.2/24"`;
             <h2 className="text-2xl font-bold mt-8 mb-4 border-b-2 text-secondary-accent pb-2">
                 The Full Script
             </h2>
-            <CodeBlock>{scriptContent}</CodeBlock>
+            <CodeBlock>
+                <span className="text-muted-foreground">#!/bin/bash</span><br/><br/>
+                <span className="text-muted-foreground"># Get suffix from argument or USERNAME env var, default to 'arms'</span><br/>
+                <span className="text-label">SUFFIX</span>=<span className="text-tips">&quot;${'${1:-${USERNAME:-arms}}'}&quot;</span><br/><br/>
+                <span className="text-muted-foreground"># Create namespaces</span><br/>
+                <span className="command-text">echo</span> <span className="text-tips">&quot;Creating namespaces h1-${'${SUFFIX}'} and h2-${'${SUFFIX}'}...&quot;</span><br/>
+                <span className="command-text">sudo</span> <span className="keyword-text">ip netns add</span> h1-${'${SUFFIX}'} <span className="text-muted-foreground">#creating host1</span><br/>
+                <span className="command-text">sudo</span> <span className="keyword-text">ip netns add</span> h2-${'${SUFFIX}'} <span className="text-muted-foreground">#creating host2</span><br/><br/>
+                <span className="text-muted-foreground"># Create veth pair and move to namespaces</span><br/>
+                <span className="command-text">echo</span> <span className="text-tips">&quot;Creating veth pair...&quot;</span><br/>
+                <span className="command-text">sudo</span> <span className="keyword-text">ip link add</span> v1-${'${SUFFIX}'} <span className="keyword-text">type</span> veth <span className="keyword-text">peer name</span> v2-${'${SUFFIX}'}<br/>
+                <span className="command-text">sudo</span> <span className="keyword-text">ip link set</span> v1-${'${SUFFIX}'} <span className="keyword-text">netns</span> h1-${'${SUFFIX}'} <span className="text-muted-foreground">#attaching v1 - h1</span><br/>
+                <span className="command-text">sudo</span> <span className="keyword-text">ip link set</span> v2-${'${SUFFIX}'} <span className="keyword-text">netns</span> h2-${'${SUFFIX}'}<br/><br/>
+                <span className="text-muted-foreground"># Assign IP addresses</span><br/>
+                <span className="command-text">echo</span> <span className="text-tips">&quot;Assigning IP addresses...&quot;</span><br/>
+                <span className="command-text">sudo</span> <span className="keyword-text">ip -n</span> h1-${'${SUFFIX}'} <span className="keyword-text">addr add</span> 10.0.0.1/24 <span className="keyword-text">dev</span> v1-${'${SUFFIX}'}<br/>
+                <span className="command-text">sudo</span> <span className="keyword-text">ip -n</span> h2-${'${SUFFIX}'} <span className="keyword-text">addr add</span> 10.0.0.2/24 <span className="keyword-text">dev</span> v2-${'${SUFFIX}'}<br/><br/>
+                <span className="text-muted-foreground"># Bring up loopback and veth interfaces</span><br/>
+                <span className="command-text">echo</span> <span className="text-tips">&quot;Bringing up interfaces...&quot;</span><br/>
+                <span className="command-text">sudo</span> <span className="keyword-text">ip -n</span> h1-${'${SUFFIX}'} <span className="keyword-text">link set</span> lo <span className="keyword-text">up</span><br/>
+                <span className="command-text">sudo</span> <span className="keyword-text">ip -n</span> h2-${'${SUFFIX}'} <span className="keyword-text">link set</span> lo <span className="keyword-text">up</span><br/>
+                <span className="command-text">sudo</span> <span className="keyword-text">ip -n</span> h1-${'${SUFFIX}'} <span className="keyword-text">link set</span> v1-${'${SUFFIX}'} <span className="keyword-text">up</span><br/>
+                <span className="command-text">sudo</span> <span className="keyword-text">ip -n</span> h2-${'${SUFFIX}'} <span className="keyword-text">link set</span> v2-${'${SUFFIX}'} <span className="keyword-text">up</span><br/><br/>
+                <span className="command-text">echo</span> <span className="text-tips">&quot;Network namespaces created successfully!&quot;</span><br/>
+                <span className="command-text">echo</span> <span className="text-tips">&quot;h1-${'${SUFFIX}'}: 10.0.0.1/24&quot;</span><br/>
+                <span className="command-text">echo</span> <span className="text-tips">&quot;h2-${'${SUFFIX}'}: 10.0.0.2/24&quot;</span>
+            </CodeBlock>
         </div>
       </div>
     </main>
