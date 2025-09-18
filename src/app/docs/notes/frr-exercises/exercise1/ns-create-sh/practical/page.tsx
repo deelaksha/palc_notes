@@ -9,7 +9,7 @@ import Link from 'next/link';
 const NetworkNamespaceVisualizer = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [step, setStep] = useState(0);
-    const [explanation, setExplanation] = useState("Press Start to begin...");
+    const [explanation, setExplanation] = useState("Press 'Start Animation' to see how the bash script works.");
     const [command, setCommand] = useState("");
     const animationFrameId = useRef<number>();
 
@@ -27,103 +27,192 @@ const NetworkNamespaceVisualizer = () => {
         "",
         "sudo ip netns add h1-arms; sudo ip netns add h2-arms",
         "sudo ip link add v1-arms type veth peer name v2-arms",
-        "sudo ip -n h1-arms addr add 10.0.0.1/24 dev v1-arms",
+        "sudo ip -n h1-arms addr add 10.0.0.1/24 dev v1-arms; sudo ip -n h2-arms addr add 10.0.0.2/24 dev v2-arms",
         "ping 10.0.0.2",
         "Received reply from 10.0.0.1",
         ""
     ];
 
-    const drawInitialState = useCallback(() => {
+    // --- Drawing Functions ---
+    const drawBox = (ctx: CanvasRenderingContext2D, x: number, y: number, name: string, color: string, boxWidth: number, boxHeight: number) => {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 4;
+        ctx.strokeRect(x, y, boxWidth, boxHeight);
+        
+        ctx.fillStyle = color;
+        ctx.font = '16px "Press Start 2P"';
+        ctx.textAlign = 'center';
+        ctx.fillText(name, x + boxWidth / 2, y + boxHeight + 25);
+    };
+
+    const drawVeth = (ctx: CanvasRenderingContext2D, x1: number, y1: number, x2: number, y2: number, color: string) => {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+        
+        ctx.fillStyle = color;
+        ctx.font = '12px "Press Start 2P"';
+        ctx.textAlign = 'center';
+        ctx.fillText("veth pair", (x1 + x2) / 2, (y1 + y2) / 2 - 10);
+    };
+
+    const drawIPs = (ctx: CanvasRenderingContext2D, h1X: number, h2X: number, boxY: number, color: string, boxWidth: number, boxHeight: number) => {
+        ctx.fillStyle = color;
+        ctx.font = '14px "Press Start 2P"';
+        ctx.textAlign = 'center';
+        ctx.fillText("10.0.0.1", h1X + boxWidth / 2, boxY + boxHeight / 2);
+        ctx.fillText("10.0.0.2", h2X + boxWidth / 2, boxY + boxHeight / 2);
+    };
+    
+    const drawPing = (ctx: CanvasRenderingContext2D, progress: number, text: string, h1X: number, h2X: number, boxY: number, boxWidth: number, boxHeight: number) => {
+        if (progress === 0) return;
+        
+        const startX = h1X + boxWidth;
+        const endX = h2X;
+        const x = startX + (endX - startX) * progress;
+        const y = boxY + boxHeight / 2;
+
+        ctx.fillStyle = 'white';
+        ctx.beginPath();
+        ctx.arc(x, y, 8, 0, 2 * Math.PI);
+        ctx.fill();
+
+        ctx.font = '12px "Press Start 2P"';
+        ctx.fillText(text, x, y - 20);
+    };
+
+    // --- Animation Loop ---
+    const draw = useCallback(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
-
-        const rect = canvas.getBoundingClientRect();
-        h1X = padding;
-        h2X = rect.width - padding - boxWidth;
-        boxY = (rect.height - boxHeight) / 2;
         
+        const rect = canvas.getBoundingClientRect();
+        const boxWidth = 200;
+        const boxHeight = 150;
+        const padding = 50;
+
+        const h1X = padding;
+        const h2X = rect.width - padding - boxWidth;
+        const boxY = (rect.height - boxHeight) / 2;
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = '#1e1e1e';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#ff00ff';
-        ctx.font = '16px "Press Start 2P"';
-        ctx.textAlign = 'center';
-        ctx.fillText("Click 'Start Animation'", canvas.width / (2 * window.devicePixelRatio), canvas.height / (2* window.devicePixelRatio));
-    }, []);
-
-    // --- Animation Variables ---
-    const padding = 50;
-    const boxWidth = 200;
-    const boxHeight = 150;
-    let h1X: number, h2X: number, boxY: number;
-
-    const animatePing = useCallback((isReply: boolean) => {
-        let pingProgress = 0;
-        const pingInterval = setInterval(() => {
-            pingProgress += 0.01;
-            if (pingProgress >= 1) {
-                clearInterval(pingInterval);
-                if (!isReply) {
-                    setStep(5);
-                } else {
-                    setStep(6);
-                }
-            }
-        }, 10);
-    }, []);
-    
-    useEffect(() => {
-        if(step === 5) {
-            animatePing(true);
+        
+        if (step === 0) {
+            ctx.fillStyle = '#ff00ff';
+            ctx.font = '16px "Press Start 2P"';
+            ctx.textAlign = 'center';
+            ctx.fillText("Click 'Start Animation'", rect.width / 2, rect.height / 2);
         }
-    }, [step, animatePing]);
-
-
+        
+        if (step >= 1) {
+            drawBox(ctx, h1X, boxY, "h1", "#ff00ff", boxWidth, boxHeight);
+            drawBox(ctx, h2X, boxY, "h2", "#ff00ff", boxWidth, boxHeight);
+        }
+        if (step >= 2) {
+            drawVeth(ctx, h1X + boxWidth, boxY + boxHeight / 2, h2X, boxY + boxHeight / 2, "#00ffff");
+        }
+        if (step >= 3) {
+            drawIPs(ctx, h1X, h2X, boxY, "#00ffff", boxWidth, boxHeight);
+        }
+    }, [step]);
+    
+    // --- State Control ---
     useEffect(() => {
         setExplanation(explanationText[step]);
         setCommand(commandText[step]);
     }, [step]);
-    
+
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
-
+        
         const setCanvasSize = () => {
             const rect = canvas.getBoundingClientRect();
             canvas.width = rect.width * window.devicePixelRatio;
             canvas.height = rect.height * window.devicePixelRatio;
-            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-            drawInitialState();
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+                ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+                draw();
+            }
         };
         
         setCanvasSize();
         window.addEventListener('resize', setCanvasSize);
+        draw();
 
         return () => {
             window.removeEventListener('resize', setCanvasSize);
-            if(animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
+             if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
         };
-    }, [drawInitialState]);
+    }, [draw]);
 
     const startAnimation = () => {
-        if(step === 0) {
-            setStep(1);
-        } else if (step > 0 && step < 4) {
+        if (step < 4) {
             setStep(s => s + 1);
         } else if (step === 4) {
-            animatePing(false);
+             let pingProgress = 0;
+             const animatePing = () => {
+                 pingProgress += 0.01;
+                 const canvas = canvasRef.current;
+                 if (canvas) {
+                    const ctx = canvas.getContext('2d');
+                    if (ctx) {
+                       draw(); // Redraw background
+                       const rect = canvas.getBoundingClientRect();
+                        const boxWidth = 200, boxHeight = 150, padding = 50;
+                        const h1X = padding;
+                        const h2X = rect.width - padding - boxWidth;
+                        const boxY = (rect.height - boxHeight) / 2;
+                       drawPing(ctx, pingProgress, "Ping!", h1X, h2X, boxY, boxWidth, boxHeight);
+                    }
+                 }
+                 if (pingProgress < 1) {
+                     requestAnimationFrame(animatePing);
+                 } else {
+                     setStep(5);
+                 }
+             }
+             animatePing();
+        } else if (step === 5) {
+             let pingProgress = 0;
+             const animateReply = () => {
+                 pingProgress += 0.01;
+                  const canvas = canvasRef.current;
+                 if (canvas) {
+                    const ctx = canvas.getContext('2d');
+                    if (ctx) {
+                        draw(); // Redraw background
+                        const rect = canvas.getBoundingClientRect();
+                        const boxWidth = 200, boxHeight = 150, padding = 50;
+                        const h1X = padding;
+                        const h2X = rect.width - padding - boxWidth;
+                        const boxY = (rect.height - boxHeight) / 2;
+                       drawPing(ctx, 1 - pingProgress, "Reply!", h1X, h2X, boxY, boxWidth, boxHeight);
+                    }
+                 }
+                 if (pingProgress < 1) {
+                     requestAnimationFrame(animateReply);
+                 } else {
+                     setStep(6);
+                 }
+             }
+             animateReply();
         }
     };
+    
+    useEffect(draw, [draw]);
+
 
     const resetAnimation = () => {
         setStep(0);
-        if (animationFrameId.current) {
-            cancelAnimationFrame(animationFrameId.current);
-        }
-        drawInitialState();
     };
 
     return (
