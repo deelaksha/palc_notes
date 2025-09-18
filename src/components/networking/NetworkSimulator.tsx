@@ -21,6 +21,7 @@ const NetworkSimulator = () => {
   const [packetType, setPacketType] = useState('http');
   const [status, setStatus] = useState('Enter details and click "Start Simulation".');
   const [isSimulating, setIsSimulating] = useState(false);
+  const [simulationLog, setSimulationLog] = useState<string[]>([]);
   
   const [packetState, setPacketState] = useState({
     visible: false,
@@ -57,7 +58,7 @@ const NetworkSimulator = () => {
   };
 
   const routingTables = {
-    router1: { '10.10.10.0/24': 'router2', '0.0.0.0/0': 'router2' },
+    router1: { '10.0.0.0/8': 'router2', '0.0.0.0/0': 'router2' },
     router2: { '192.168.2.0/24': 'firewall', '0.0.0.0/0': 'firewall' },
   };
 
@@ -73,6 +74,10 @@ const NetworkSimulator = () => {
       y: rect.top - container.top + rect.height / 2,
     };
   };
+  
+  const addLog = (message: string) => {
+    setSimulationLog(prev => [...prev, message]);
+  }
 
   const drawLines = () => {
     const connections = [
@@ -128,6 +133,7 @@ const NetworkSimulator = () => {
     for (let i = 0; i < path.length; i++) {
         const step = path[i];
         setStatus(step.log);
+        addLog(step.log);
         setCurrentRouterId(step.routerId || null);
 
         const currentNode = deviceRefs[step.id as keyof typeof deviceRefs].current;
@@ -154,6 +160,7 @@ const NetworkSimulator = () => {
 
   const resetSimulation = () => {
     setStatus('Enter details and click "Start Simulation"');
+    setSimulationLog([]);
     setIsSimulating(false);
     setPacketState({ visible: false, x: 0, y: 0, sourceMac: '', destMac: '' });
     Object.values(deviceRefs).forEach(ref => ref.current?.classList.remove('pulse-animation'));
@@ -214,23 +221,24 @@ const NetworkSimulator = () => {
             { id: 'bridge1', log: '2. Bridge forwards the frame directly to the destination MAC address.', delay: 2000, duration: 1.5, line: 'conn-hostA-bridge1' },
             { id: destDeviceKey, log: '3. Packet arrives at destination on the same LAN.', delay: 2000 }
         ]
+        await animatePacket(path);
     } else {
         path = [
-            { id: sourceDeviceKey, log: '1. Source Host sends packet to its default gateway (Router 1).', delay: 2000, duration: 1.5, line: 'conn-source-bridge1', sourceMac: deviceData[sourceDeviceKey as keyof typeof deviceData].mac, destMac: deviceData.router1.mac },
-            { id: 'bridge1', log: '2. Bridge forwards the packet towards the router.', delay: 2000, duration: 1.5, line: 'conn-bridge1-router1', sourceMac: deviceData[sourceDeviceKey as keyof typeof deviceData].mac, destMac: deviceData.router1.mac },
-            { id: 'router1', routerId: 'router1', log: '3. Router 1 receives. MAC changes. Forwards to Router 2.', delay: 2500, duration: 1.5, line: 'conn-router1-router2', sourceMac: deviceData.router1.mac2, destMac: deviceData.router2.mac },
-            { id: 'router2', routerId: 'router2', log: '4. Router 2 receives. MAC changes. Forwards to Firewall.', delay: 2500, duration: 1.5, line: 'conn-router2-firewall', sourceMac: deviceData.router2.mac2, destMac: deviceData.firewall.mac },
-            { id: 'firewall', log: `5. Firewall inspects the packet.`, delay: 1500 }
+            { id: sourceDeviceKey, log: `1. Source (${sourceIp}) determines the destination (${destinationIp}) is on a different network.`, delay: 2000, duration: 1.5, line: 'conn-source-bridge1', sourceMac: deviceData[sourceDeviceKey as keyof typeof deviceData].mac, destMac: deviceData.router1.mac },
+            { id: 'bridge1', log: '2. Packet is sent to the default gateway (Router 1) via the local bridge.', delay: 2000, duration: 1.5, line: 'conn-bridge1-router1', sourceMac: deviceData[sourceDeviceKey as keyof typeof deviceData].mac, destMac: deviceData.router1.mac },
+            { id: 'router1', routerId: 'router1', log: '3. Router 1 receives the packet. It strips the old MAC header, consults its routing table, and adds a new MAC header for the next hop (Router 2).', delay: 2500, duration: 1.5, line: 'conn-router1-router2', sourceMac: deviceData.router1.mac2, destMac: deviceData.router2.mac },
+            { id: 'router2', routerId: 'router2', log: '4. Router 2 receives. It repeats the process: checks its routing table and forwards the packet to the next hop (Firewall), updating MAC addresses again.', delay: 2500, duration: 1.5, line: 'conn-router2-firewall', sourceMac: deviceData.router2.mac2, destMac: deviceData.firewall.mac },
+            { id: 'firewall', log: `5. The Firewall inspects the packet to see if it's allowed.`, delay: 1500 }
         ];
 
         if (isBlocked) {
-            path.push({ id: 'firewall', log: `FIREWALL BLOCK: ${packetType.toUpperCase()} traffic is not allowed. Packet dropped.`, delay: 1500 });
+            path.push({ id: 'firewall', log: `6. FIREWALL BLOCK: ${packetType.toUpperCase()} traffic is not allowed. The packet is dropped and cannot continue.`, delay: 1500 });
             await animatePacket(path);
         } else {
              const destDeviceKey = Object.keys(deviceData).find(key => deviceData[key as keyof typeof deviceData].ip === destinationIp) || 'destinationHost';
             path.push(
-                { id: 'firewall', log: `6. Firewall allows packet. Forwards to Bridge 2.`, delay: 1500, duration: 1.5, line: 'conn-firewall-bridge2', sourceMac: deviceData.router2.mac2, destMac: deviceData.bridge2.mac },
-                { id: 'bridge2', log: '7. Bridge 2 forwards packet to the destination host.', delay: 1500, duration: 1.5, line: 'conn-bridge2-dest', sourceMac: deviceData.router2.mac2, destMac: deviceData[destDeviceKey as keyof typeof deviceData].mac },
+                { id: 'firewall', log: `6. Firewall allows the packet through and sends it to Bridge 2.`, delay: 1500, duration: 1.5, line: 'conn-firewall-bridge2', sourceMac: deviceData.firewall.mac, destMac: deviceData.bridge2.mac },
+                { id: 'bridge2', log: '7. Bridge 2 receives the packet on the destination local network and forwards it to the final host.', delay: 1500, duration: 1.5, line: 'conn-bridge2-dest', sourceMac: deviceData.firewall.mac, destMac: deviceData[destDeviceKey as keyof typeof deviceData].mac },
                 { id: destDeviceKey, log: '8. Packet has arrived at the destination!', delay: 2000 }
             );
             await animatePacket(path);
@@ -350,7 +358,7 @@ const NetworkSimulator = () => {
             </div>
             <div ref={deviceRefs.destinationHost} className="device host-device" style={{ right: '5%', top: '80%' }}>
                 <span className="device-icon">🖥️</span>
-                <span className="device-label">Destination Host</span>
+                <span className="device-label">Dest Host</span>
                 <span className="device-ip">{deviceData.destinationHost.ip}</span>
             </div>
 
@@ -359,6 +367,26 @@ const NetworkSimulator = () => {
             )}
         </div>
       </main>
+      
+      <div className="bg-gray-700 p-4 rounded-xl shadow-md mt-6">
+        <h3 className="text-lg font-bold mb-2 text-white">Simulation Log:</h3>
+        <ul id="logList" className="list-decimal list-inside space-y-1 text-gray-300 text-sm">
+            {simulationLog.map((log, index) => (
+                <li key={index}>{log.substring(log.indexOf('.') + 2)}</li>
+            ))}
+        </ul>
+      </div>
+        
+      <div className="bg-gray-700 p-4 rounded-xl shadow-md mt-6">
+          <h3 className="text-lg font-bold mb-2 text-white">Network Device Roles</h3>
+          <ul className="list-disc list-inside space-y-1 text-gray-300 text-sm">
+              <li>**Host:** An end-point device on the network that sends and receives data (e.g., your computer, a server).</li>
+              <li>**Bridge:** A Layer 2 device that forwards data based on hardware MAC addresses. It connects devices on the *same local network*.</li>
+              <li>**Router:** A Layer 3 device that directs data packets *between different networks* based on logical IP addresses. It's the "gateway" to other networks.</li>
+              <li>**Firewall:** A security device that inspects network traffic and blocks or allows it based on a set of security rules.</li>
+          </ul>
+      </div>
+
     </div>
   );
 };
