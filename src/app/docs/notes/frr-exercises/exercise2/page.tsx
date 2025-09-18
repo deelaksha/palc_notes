@@ -11,8 +11,13 @@ const scripts = [
     href: '#',
   },
    {
-    name: 'r-config-ospf.sh',
-    description: 'Configures OSPF routing on the virtual routers.',
+    name: 'capture.sh',
+    description: 'Captures network traffic for analysis.',
+    href: '#',
+  },
+    {
+    name: 'ns-ping.sh',
+    description: 'Pings devices within the network namespaces.',
     href: '#',
   },
   {
