@@ -16,7 +16,7 @@ const NetworkNamespaceVisualizer = () => {
     const explanationText = [
         "Ready to begin! Press 'Start Animation' to see how the bash script works.",
         "Step 1: The script creates two separate virtual computers, called 'network namespaces'. They are isolated from your main network.",
-        "Step 2: A 'veth pair' is created. Think of this as a virtual network cable with two ends. One end is put into each virtual computer.",
+        "Step 2: A 'veth pair' is created. Think of this as a virtual network cable with two ends: v1-arms and v2-arms.",
         "Step 3: Each virtual computer is given its own 'phone number' (IP address) so they can find and talk to each other.",
         "Step 4: Now, one computer sends a 'ping' message to the other to see if the connection works.",
         "Step 5: The other computer gets the message and sends a 'reply'. This shows the connection is a success!",
@@ -55,8 +55,10 @@ const NetworkNamespaceVisualizer = () => {
         
         ctx.fillStyle = color;
         ctx.font = '12px "Press Start 2P"';
-        ctx.textAlign = 'center';
-        ctx.fillText("veth pair", (x1 + x2) / 2, (y1 + y2) / 2 - 10);
+        ctx.textAlign = 'right';
+        ctx.fillText("v1-arms", (x1 + x2) / 2 - 10, (y1 + y2) / 2 - 10);
+        ctx.textAlign = 'left';
+        ctx.fillText("v2-arms", (x1 + x2) / 2 + 10, (y1 + y2) / 2 + 10);
     };
 
     const drawIPs = (ctx: CanvasRenderingContext2D, h1X: number, h2X: number, boxY: number, color: string, boxWidth: number, boxHeight: number) => {
@@ -109,6 +111,7 @@ const NetworkNamespaceVisualizer = () => {
             ctx.font = '16px "Press Start 2P"';
             ctx.textAlign = 'center';
             ctx.fillText("Click 'Start Animation'", rect.width / 2, rect.height / 2);
+            return;
         }
         
         if (step >= 1) {
@@ -135,12 +138,14 @@ const NetworkNamespaceVisualizer = () => {
         
         const setCanvasSize = () => {
             const rect = canvas.getBoundingClientRect();
-            canvas.width = rect.width * window.devicePixelRatio;
-            canvas.height = rect.height * window.devicePixelRatio;
-            const ctx = canvas.getContext('2d');
-            if (ctx) {
-                ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-                draw();
+            if (rect.width > 0 && rect.height > 0) {
+                canvas.width = rect.width * window.devicePixelRatio;
+                canvas.height = rect.height * window.devicePixelRatio;
+                const ctx = canvas.getContext('2d');
+                if (ctx) {
+                    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+                    draw();
+                }
             }
         };
         
@@ -154,7 +159,7 @@ const NetworkNamespaceVisualizer = () => {
         };
     }, [draw]);
 
-    const startAnimation = () => {
+    const runAnimationStep = () => {
         if (step < 4) {
             setStep(s => s + 1);
         } else if (step === 4) {
@@ -175,7 +180,7 @@ const NetworkNamespaceVisualizer = () => {
                     }
                  }
                  if (pingProgress < 1) {
-                     requestAnimationFrame(animatePing);
+                     animationFrameId.current = requestAnimationFrame(animatePing);
                  } else {
                      setStep(5);
                  }
@@ -199,7 +204,7 @@ const NetworkNamespaceVisualizer = () => {
                     }
                  }
                  if (pingProgress < 1) {
-                     requestAnimationFrame(animateReply);
+                     animationFrameId.current = requestAnimationFrame(animateReply);
                  } else {
                      setStep(6);
                  }
@@ -212,6 +217,9 @@ const NetworkNamespaceVisualizer = () => {
 
 
     const resetAnimation = () => {
+        if (animationFrameId.current) {
+            cancelAnimationFrame(animationFrameId.current);
+        }
         setStep(0);
     };
 
@@ -227,7 +235,7 @@ const NetworkNamespaceVisualizer = () => {
                 <h1 className="text-2xl font-bold text-center text-primary font-mono">Network Namespace Visualizer</h1>
                 <canvas ref={canvasRef} id="animationCanvas" className="w-full h-96 bg-[#1e1e1e] border-2 border-primary rounded-lg"></canvas>
                 <div className="flex justify-center gap-4">
-                    {step < 6 && <Button onClick={startAnimation} className="bg-primary hover:bg-primary/90">Start/Next</Button>}
+                    {step < 6 && <Button onClick={runAnimationStep} className="bg-primary hover:bg-primary/90">Start/Next</Button>}
                     <Button onClick={resetAnimation} variant="outline">Reset</Button>
                 </div>
                 <div className="bg-card-nested text-accent font-mono p-4 rounded-lg border border-secondary text-center min-h-[4rem] flex items-center justify-center">
