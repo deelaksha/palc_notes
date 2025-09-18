@@ -87,9 +87,13 @@ const NetworkSimulator = () => {
   };
 
   useEffect(() => {
-    drawLines();
+    // A small delay to ensure DOM is ready for calculations
+    const timeoutId = setTimeout(drawLines, 100);
     window.addEventListener('resize', drawLines);
-    return () => window.removeEventListener('resize', drawLines);
+    return () => {
+        clearTimeout(timeoutId);
+        window.removeEventListener('resize', drawLines);
+    }
   }, []);
 
   const ipToBinary = (ip: string) => {
@@ -209,13 +213,13 @@ const NetworkSimulator = () => {
   return (
     <div className="max-w-5xl mx-auto space-y-8 p-4">
       <header className="text-center">
-        <h1 className="text-4xl font-bold mb-2 text-white">Network & Subnetting Simulator</h1>
-        <p className="text-lg text-gray-400">
+        <h1 className="text-3xl md:text-4xl font-bold mb-2 text-white">Network & Subnetting Simulator</h1>
+        <p className="text-md md:text-lg text-gray-400">
           Watch a data packet travel across a network.
         </p>
       </header>
 
-      <main className="bg-gray-800 p-6 rounded-2xl shadow-xl space-y-6">
+      <main className="bg-gray-800 p-4 md:p-6 rounded-2xl shadow-xl space-y-6">
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="space-y-2">
                 <Label htmlFor="sourceIp" className="text-gray-300">Source IP Address</Label>
@@ -255,45 +259,45 @@ const NetworkSimulator = () => {
           </div>
         </div>
 
-        <div className="network-topology mt-8 rounded-xl shadow-inner">
+        <div className="network-topology mt-8 rounded-xl shadow-inner h-[300px] md:h-[500px]">
            {['conn-source-bridge1', 'conn-hostA-bridge1', 'conn-bridge1-router', 'conn-router-firewall', 'conn-firewall-bridge2', 'conn-bridge2-hostB', 'conn-bridge2-dest'].map(id => (
               <div key={id} ref={el => lineRefs.current[id] = el} className="connection-line" />
            ))}
             <div ref={deviceRefs.sourceHost} id="sourceHost" className="device host-device" style={{ left: '10%', top: '20%' }}>
                 <span className="device-icon">💻</span>
-                <span className="text-xs mt-1">Source Host</span>
-                <span className="text-xs mt-1 text-gray-200">{sourceIp}</span>
+                <span className="device-label">Source Host</span>
+                <span className="device-ip">{sourceIp}</span>
             </div>
             <div ref={deviceRefs.hostA} id="hostA" className="device host-device" style={{ left: '10%', top: '60%' }}>
                 <span className="device-icon">📱</span>
-                <span className="text-xs mt-1">Host A</span>
-                <span className="text-xs mt-1 text-gray-200">192.168.1.20</span>
+                <span className="device-label">Host A</span>
+                <span className="device-ip">192.168.1.20</span>
             </div>
             <div ref={deviceRefs.bridge1} id="bridge1" className="device bridge-device" style={{ left: '30%', top: '40%' }}>
                 <span className="device-icon">🌉</span>
-                <span className="text-xs mt-1">Bridge 1</span>
+                <span className="device-label">Bridge 1</span>
             </div>
             <div ref={deviceRefs.router} id="router" className="device router-device" style={{ left: '50%', top: '20%' }}>
                 <span className="device-icon">🌐</span>
-                <span className="text-xs mt-1">Router</span>
+                <span className="device-label">Router</span>
             </div>
             <div ref={deviceRefs.firewall} id="firewall" className="device firewall-device" style={{ left: '70%', top: '20%' }}>
                 <span className="device-icon">🔒</span>
-                <span className="text-xs mt-1">Firewall</span>
+                <span className="device-label">Firewall</span>
             </div>
             <div ref={deviceRefs.bridge2} id="bridge2" className="device bridge-device" style={{ left: '70%', top: '60%' }}>
                 <span className="device-icon">🌉</span>
-                <span className="text-xs mt-1">Bridge 2</span>
+                <span className="device-label">Bridge 2</span>
             </div>
             <div ref={deviceRefs.hostB} id="hostB" className="device host-device" style={{ right: '10%', top: '50%' }}>
                 <span className="device-icon">🖨️</span>
-                <span className="text-xs mt-1">Host B</span>
-                <span className="text-xs mt-1 text-gray-200">192.168.2.20</span>
+                <span className="device-label">Host B</span>
+                <span className="device-ip">192.168.2.20</span>
             </div>
             <div ref={deviceRefs.destinationHost} id="destinationHost" className="device host-device" style={{ right: '10%', top: '80%' }}>
                 <span className="device-icon">🖥️</span>
-                <span className="text-xs mt-1">Destination</span>
-                <span className="text-xs mt-1 text-gray-200">{destinationIp}</span>
+                <span className="device-label">Destination</span>
+                <span className="device-ip">{destinationIp}</span>
             </div>
 
             <div id="internet" className="absolute inset-0 border-2 border-dashed border-gray-500 rounded-xl" style={{ left: '75%', top: '5%', width: '20%', height: '90%', zIndex: 1 }}>
