@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, Layers, Library, Route, Bot } from 'lucide-react';
+import { ArrowRight, Layers, Library, Route, Bot, Dumbbell } from 'lucide-react';
 import Link from 'next/link';
 
 const topics = [
@@ -34,6 +34,12 @@ const topics = [
     description: 'Learn how routers automatically adapt to network changes.',
     href: '/docs/networking/dynamic-routing',
     icon: <Bot className="size-10" />,
+  },
+  {
+    title: 'Exercises',
+    description: 'Practice your networking knowledge with interactive exercises.',
+    href: '/docs/networking/exercises',
+    icon: <Dumbbell className="size-10" />,
   },
 ];
 
