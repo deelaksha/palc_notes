@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, Book } from 'lucide-react';
+import { ArrowRight, Book, FileCode } from 'lucide-react';
 import Link from 'next/link';
 
 const topics = [
@@ -14,6 +14,12 @@ const topics = [
         description: 'Get started with the fundamentals of the C language.',
         href: '/docs/c-programming/basics',
         icon: <Book className="size-8" />,
+    },
+    {
+        name: 'Core Syntax',
+        description: 'A detailed guide to the fundamental concepts of C programming.',
+        href: '/docs/c-programming/core-syntax',
+        icon: <FileCode className="size-8" />,
     },
 ];
 
