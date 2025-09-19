@@ -128,5 +128,29 @@ export const networkingConceptsData: NetworkingConcept[] = [
             }
         ],
         realWorld: "Routing is what makes the global internet possible. Protocols like BGP (Border Gateway Protocol) allow routers from different internet service providers all over the world to share their routing tables, creating a decentralized and resilient network that can find paths between any two points."
+    },
+    {
+        name: "Time To Live (TTL)",
+        slug: "ttl",
+        description: "Time To Live (TTL) is a mechanism that limits the lifespan of a data packet in a computer network. It prevents data packets from circulating indefinitely.",
+        howItWorks: [
+            "TTL is an 8-bit field in the IP header of a packet, meaning its value can range from 0 to 255.",
+            "The sender of the packet sets an initial TTL value (e.g., 64, 128, or 255).",
+            "Each router that receives the packet decrements the TTL value by one before forwarding it to the next hop.",
+            "If the TTL value reaches zero, the router discards the packet and sends an ICMP 'Time Exceeded' message back to the source.",
+            "This mechanism is crucial for preventing data packets from getting stuck in routing loops and congesting the network."
+        ],
+        analogy: "TTL is like a **passport with a limited number of entry stamps**. Every time you cross a border (a router), the border agent takes one stamp. If you run out of stamps before reaching your destination, you're sent home. This ensures you don't wander the world forever if your travel plans have a loop.",
+        examples: [
+            {
+                title: "Traceroute Command",
+                text: "The `traceroute` (or `tracert`) command cleverly uses TTL to map the path to a destination. It first sends a packet with TTL=1, which is dropped by the first router. It then sends one with TTL=2, which is dropped by the second, and so on, building a map of the hops along the way."
+            },
+            {
+                title: "Preventing Routing Loops",
+                text: "If two routers are misconfigured and send a packet back and forth to each other, the TTL will eventually reach zero. The packet will be dropped, preventing the loop from consuming network resources forever."
+            }
+        ],
+        realWorld: "Every time you use the internet, TTL is working in the background. It's a fundamental part of the Internet Protocol's design to ensure stability and prevent network meltdowns from misconfigured routing."
     }
 ];

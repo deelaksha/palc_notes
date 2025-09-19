@@ -8,6 +8,7 @@ import { MacAddressGame } from '@/components/networking/MacAddressGame';
 import { PortNumberGame } from '@/components/networking/PortNumberGame';
 import { BridgeGame } from '@/components/networking/BridgeGame';
 import { RoutingGame } from '@/components/networking/RoutingGame';
+import { TtlGame } from '@/components/networking/TtlGame';
 
 
 export function generateStaticParams() {
@@ -28,6 +29,8 @@ function renderGameForConcept(conceptName: string | undefined) {
             return <BridgeGame />;
         case 'Routing':
             return <RoutingGame />;
+        case 'Time To Live (TTL)':
+            return <TtlGame />;
         default:
             return (
                 <div className="text-center text-white glass-effect p-12 rounded-2xl">

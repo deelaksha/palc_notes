@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowLeft, ArrowRight, Network, Fingerprint, Anchor, Waypoints, Route } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Network, Fingerprint, Anchor, Waypoints, Route, Timer } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
@@ -27,6 +27,12 @@ const topics = [
     description: 'The apartment number that directs data to the right application.',
     href: '/docs/networking/port-number',
     icon: <Anchor className="size-8" />,
+  },
+    {
+    title: 'Time To Live (TTL)',
+    description: 'A packet\'s lifespan, preventing infinite loops.',
+    href: '/docs/networking/ttl',
+    icon: <Timer className="size-8" />,
   },
   {
     title: 'Network Bridge',
