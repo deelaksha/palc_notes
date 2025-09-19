@@ -56,14 +56,14 @@ export default function COperatorsPage() {
                         <li><b className="text-foreground">`==` (Equal to):</b> Checks if two values are the same. Don't confuse it with `=`, which is for assignment!</li>
                         <li><b className="text-foreground">`!=` (Not equal to):</b> Checks if two values are different.</li>
                         <li><b className="text-foreground">`>` (Greater than):</b> Checks if the left value is bigger than the right.</li>
-                        <li><b className="text-foreground">`{`<` (Less than):</b> Checks if the left value is smaller than the right.</li>
+                        <li><b className="text-foreground">`&lt;` (Less than):</b> Checks if the left value is smaller than the right.</li>
                         <li><b className="text-foreground">`>=` (Greater than or equal to):</b> Checks if the left value is bigger than or the same as the right.</li>
-                        <li><b className="text-foreground">`<=` (Less than or equal to):</b> Checks if the left value is smaller than or the same as the right.</li>
+                        <li><b className="text-foreground">`&lt;=` (Less than or equal to):</b> Checks if the left value is smaller than or the same as the right.</li>
                     </ul>
                     <CodeBlock>
                         <CodeSyntax>
                             <span className="syntax-datatype">int</span> x <span className="syntax-operator">=</span> <span className="syntax-number">5</span>, y <span className="syntax-operator">=</span> <span className="syntax-number">10</span><span className="syntax-semicolon">;</span><br />
-                            <span className="syntax-keyword">if</span> (x <span className="syntax-operator">&lt;=</span> y) {'{'} <span className="syntax-comment">// This condition is true</span><br />
+                            <span className="syntax-keyword">if</span> (x <span className="syntax-operator">&lt;=</span> y) {'{'} <span className="syntax-comment">{'// This condition is true'}</span><br />
                             &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-function">printf</span>(<span className="syntax-string">"x is less than or equal to y\n"</span>)<span className="syntax-semicolon">;</span><br />
                             {'}'}
                         </CodeSyntax>
@@ -82,7 +82,7 @@ export default function COperatorsPage() {
                         <CodeSyntax>
                             <span className="syntax-datatype">int</span> age <span className="syntax-operator">=</span> <span className="syntax-number">20</span><span className="syntax-semicolon">;</span><br />
                             <span className="syntax-datatype">int</span> hasLicense <span className="syntax-operator">=</span> <span className="syntax-number">1</span><span className="syntax-semicolon">;</span> <span className="syntax-comment">// 1 for true</span><br />
-                            <span className="syntax-keyword">if</span> (age <span className="syntax-operator">&gt;=</span> <span className="syntax-number">18</span> <span className="syntax-operator">&&</span> hasLicense) {'{'} <span className="syntax-comment">// Both are true, so this runs</span><br />
+                            <span className="syntax-keyword">if</span> (age <span className="syntax-operator">&gt;=</span> <span className="syntax-number">18</span> <span className="syntax-operator">&&</span> hasLicense) {'{'} <span className="syntax-comment">{'// Both are true, so this runs'}</span><br />
                             &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-function">printf</span>(<span className="syntax-string">"Eligible to drive\n"</span>)<span className="syntax-semicolon">;</span><br />
                             {'}'}
                         </CodeSyntax>
@@ -103,9 +103,9 @@ export default function COperatorsPage() {
                             <span className="syntax-datatype">int</span> count <span className="syntax-operator">=</span> <span className="syntax-number">5</span><span className="syntax-semicolon">;</span><br />
                             count<span className="syntax-operator">++</span><span className="syntax-semicolon">;</span> <span className="syntax-comment">// count is now 6</span><br /><br />
                             <span className="syntax-comment">// Prefix: increment happens first</span><br />
-                            <span className="syntax-datatype">int</span> result <span className="syntax-operator">=</span> <span className="syntax-operator">++</span>count<span className="syntax-semicolon">;</span> <span className="syntax-comment">// count becomes 7, THEN result is set to 7.</span><br /><br />
+                            <span className="syntax-datatype">int</span> result <span className="syntax-operator">=</span> <span className="syntax-operator">++</span>count<span className="syntax-semicolon">;</span> <span className="syntax-comment">{'// count becomes 7, THEN result is set to 7.'}</span><br /><br />
                             <span className="syntax-comment">// Postfix: assignment happens first</span><br />
-                            <span className="syntax-datatype">int</span> another_result <span className="syntax-operator">=</span> count<span className="syntax-operator">++</span><span className="syntax-semicolon">;</span> <span className="syntax-comment">// another_result is set to 7, THEN count becomes 8.</span>
+                            <span className="syntax-datatype">int</span> another_result <span className="syntax-operator">=</span> count<span className="syntax-operator">++</span><span className="syntax-semicolon">;</span> <span className="syntax-comment">{'// another_result is set to 7, THEN count becomes 8.'}</span>
                         </CodeSyntax>
                     </CodeBlock>
                 </Card>
@@ -132,9 +132,9 @@ export default function COperatorsPage() {
                     <CodeBlock>
                         <CodeSyntax>
                             <span className="syntax-comment">{'// Multiplication is done first'}</span><br/>
-                            <span className="syntax-datatype">int</span> result <span className="syntax-operator">=</span> <span className="syntax-number">5</span> <span className="syntax-operator">+</span> <span className="syntax-number">3</span> <span className="syntax-operator">*</span> <span className="syntax-number">2</span><span className="syntax-semicolon">;</span> <span className="syntax-comment">// Evaluates to 5 + 6, so result is 11</span><br /><br/>
+                            <span className="syntax-datatype">int</span> result <span className="syntax-operator">=</span> <span className="syntax-number">5</span> <span className="syntax-operator">+</span> <span className="syntax-number">3</span> <span className="syntax-operator">*</span> <span className="syntax-number">2</span><span className="syntax-semicolon">;</span> <span className="syntax-comment">{'// Evaluates to 5 + 6, so result is 11'}</span><br /><br/>
                             <span className="syntax-comment">{'// Parentheses change the order'}</span><br/>
-                            <span className="syntax-datatype">int</span> new_result <span className="syntax-operator">=</span> (<span className="syntax-number">5</span> <span className="syntax-operator">+</span> <span className="syntax-number">3</span>) <span className="syntax-operator">*</span> <span className="syntax-number">2</span><span className="syntax-semicolon">;</span> <span className="syntax-comment">// Evaluates to 8 * 2, so result is 16</span>
+                            <span className="syntax-datatype">int</span> new_result <span className="syntax-operator">=</span> (<span className="syntax-number">5</span> <span className="syntax-operator">+</span> <span className="syntax-number">3</span>) <span className="syntax-operator">*</span> <span className="syntax-number">2</span><span className="syntax-semicolon">;</span> <span className="syntax-comment">{'// Evaluates to 8 * 2, so result is 16'}</span>
                         </CodeSyntax>
                     </CodeBlock>
                 </Card>
