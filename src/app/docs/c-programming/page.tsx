@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, Book, FileCode, SlidersHorizontal, Share2, Repeat, Workflow, FunctionSquare, Warehouse, Layers, Type } from 'lucide-react';
+import { ArrowRight, Book, FileCode, SlidersHorizontal, Share2, Repeat, Workflow, FunctionSquare, Warehouse, Layers, Type, MousePointer } from 'lucide-react';
 import Link from 'next/link';
 
 const topics = [
@@ -56,6 +56,12 @@ const topics = [
         description: 'Learn how C handles character strings and related library functions.',
         href: '/docs/c-programming/strings',
         icon: <Type className="size-8" />,
+    },
+    {
+        name: 'Pointers',
+        description: 'Master memory addresses, dereferencing, and pointer arithmetic.',
+        href: '/docs/c-programming/pointers',
+        icon: <MousePointer className="size-8" />,
     },
 ];
 
