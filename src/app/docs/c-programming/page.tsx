@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, Book, FileCode, SlidersHorizontal, Share2, Repeat, Workflow } from 'lucide-react';
+import { ArrowRight, Book, FileCode, SlidersHorizontal, Share2, Repeat, Workflow, FunctionSquare } from 'lucide-react';
 import Link from 'next/link';
 
 const topics = [
@@ -32,6 +32,12 @@ const topics = [
         description: 'Manage the execution path of your code with conditionals and loops.',
         href: '/docs/c-programming/control-flow',
         icon: <Workflow className="size-8" />,
+    },
+    {
+        name: 'Functions',
+        description: 'Learn to write modular, reusable code with functions.',
+        href: '/docs/c-programming/functions',
+        icon: <FunctionSquare className="size-8" />,
     },
 ];
 
