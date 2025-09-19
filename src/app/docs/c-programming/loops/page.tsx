@@ -71,11 +71,11 @@ export default function CLoopsPage() {
                             <span className="syntax-comment">{'// Example: Loop until user enters a specific value'}</span><br />
                             <span className="syntax-datatype">int</span> number <span className="syntax-operator">=</span> <span className="syntax-number">0</span><span className="syntax-semicolon">;</span><br />
                             <span className="syntax-function">printf</span>(<span className="syntax-string">"Enter the number 10 to exit the loop: "</span>)<span className="syntax-semicolon">;</span><br />
-                            <span className="syntax-function">scanf</span>(<span className="syntax-string">"%d"</span>, &amp;number)<span className="syntax-semicolon">;</span><br /><br/>
+                            <span className="syntax-function">scanf</span>(<span className="syntax-string">"%d"</span>, &number)<span className="syntax-semicolon">;</span><br /><br/>
                             <span className="syntax-keyword">while</span> (number <span className="syntax-operator">!=</span> <span className="syntax-number">10</span>) {'{'}<br />
                             &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-function">printf</span>(<span className="syntax-string">"You entered %d. Try again.\n"</span>, number)<span className="syntax-semicolon">;</span><br />
                             &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-function">printf</span>(<span className="syntax-string">"Enter 10 to exit: "</span>)<span className="syntax-semicolon">;</span><br />
-                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-function">scanf</span>(<span className="syntax-string">"%d"</span>, &amp;number)<span className="syntax-semicolon">;</span><br />
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-function">scanf</span>(<span className="syntax-string">"%d"</span>, &number)<span className="syntax-semicolon">;</span><br />
                             {'}'}<br /><br/>
                              <span className="syntax-function">printf</span>(<span className="syntax-string">"Correct! Exiting loop.\n"</span>)<span className="syntax-semicolon">;</span>
                         </CodeSyntax>
@@ -93,7 +93,7 @@ export default function CLoopsPage() {
                             <span className="syntax-datatype">int</span> positiveNumber<span className="syntax-semicolon">;</span><br />
                             <span className="syntax-keyword">do</span> {'{'}<br />
                             &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-function">printf</span>(<span className="syntax-string">"Please enter a positive number: "</span>)<span className="syntax-semicolon">;</span><br />
-                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-function">scanf</span>(<span className="syntax-string">"%d"</span>, &amp;positiveNumber)<span className="syntax-semicolon">;</span><br />
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-function">scanf</span>(<span className="syntax-string">"%d"</span>, &positiveNumber)<span className="syntax-semicolon">;</span><br />
                             {'}'} <span className="syntax-keyword">while</span> (positiveNumber <span className="syntax-operator">&lt;=</span> <span className="syntax-number">0</span>)<span className="syntax-semicolon">;</span><br /><br/>
                             <span className="syntax-function">printf</span>(<span className="syntax-string">"You entered: %d\n"</span>, positiveNumber)<span className="syntax-semicolon">;</span>
                         </CodeSyntax>
@@ -103,27 +103,26 @@ export default function CLoopsPage() {
                 <Card className="p-6 shadow-lg border-border">
                     <h2 className="text-3xl font-bold mb-4 text-primary">4. Loop Control Statements</h2>
                     <p className="mb-4 text-muted-foreground">
-                        C provides keywords to manually control the flow of a loop from within its body, allowing you to create more complex logic.
+                        C provides keywords to control the flow of a loop from within its body. This allows you to skip parts of a loop or exit it entirely based on a specific condition.
                     </p>
                     <ul className="list-disc list-inside space-y-2 text-muted-foreground mb-4">
-                        <li><strong>`break`:</strong> Terminates the innermost loop or `switch` statement immediately. Execution resumes at the next statement after the loop.</li>
-                        <li><strong>`continue`:</strong> Skips the rest of the current iteration and jumps directly to the next iteration of the loop, re-evaluating the loop's condition.</li>
+                        <li><strong>`break`:</strong> The `break` keyword terminates the innermost loop immediately, and execution resumes at the statement following the loop. It is often used to exit a loop early when a specific condition is met, preventing unnecessary iterations.</li>
+                        <li><strong>`continue`:</strong> The `continue` keyword skips the rest of the current iteration and jumps to the next iteration of the loop. It is used when you want to bypass certain code within a loop without exiting the loop entirely.</li>
                     </ul>
                     <CodeBlock>
                         <CodeSyntax>
                             <span className="syntax-comment">{'// Example with `break` and `continue`'}</span><br />
                             <span className="syntax-keyword">for</span> (<span className="syntax-datatype">int</span> i <span className="syntax-operator">=</span> <span className="syntax-number">1</span><span className="syntax-semicolon">;</span> i <span className="syntax-operator">&lt;=</span> <span className="syntax-number">10</span><span className="syntax-semicolon">;</span> i<span className="syntax-operator">++</span>) {'{'}<br />
-                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-comment">{'// If i is 5, skip this iteration and go to the next one.'}</span><br />
-                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-keyword">if</span> (i <span className="syntax-operator">==</span> <span className="syntax-number">5</span>) {'{'}<br />
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-comment">{'// Skip even numbers'}</span><br />
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-keyword">if</span> (i <span className="syntax-operator">%</span> <span className="syntax-number">2</span> <span className="syntax-operator">==</span> <span className="syntax-number">0</span>) {'{'}<br />
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-keyword">continue</span><span className="syntax-semicolon">;</span><br />
-                            &nbsp;&nbsp;&nbsp;&nbsp;{'}'}<br /><br />
-                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-comment">{'// Break out of the loop completely if i is greater than 8.'}</span><br />
-                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-keyword">if</span> (i <span className="syntax-operator">&gt;</span> <span className="syntax-number">8</span>) {'{'}<br />
+                            &nbsp;&nbsp;&nbsp;&nbsp;{'}'}<br />
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-function">printf</span>(<span className="syntax-string">"Number: %d\n"</span>, i)<span className="syntax-semicolon">;</span><br />
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-comment">{'// Break out of the loop if i reaches 7'}</span><br />
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-keyword">if</span> (i <span className="syntax-operator">==</span> <span className="syntax-number">7</span>) {'{'}<br />
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-keyword">break</span><span className="syntax-semicolon">;</span><br />
-                            &nbsp;&nbsp;&nbsp;&nbsp;{'}'}<br /><br />
-                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-function">printf</span>(<span className="syntax-string">"Processing number: %d\n"</span>, i)<span className="syntax-semicolon">;</span><br />
-                            {'}'}<br /><br />
-                             <span className="syntax-function">printf</span>(<span className="syntax-string">"Loop finished.\n"</span>)<span className="syntax-semicolon">;</span>
+                            &nbsp;&nbsp;&nbsp;&nbsp;{'}'}<br />
+                            {'}'}
                         </CodeSyntax>
                     </CodeBlock>
                 </Card>
