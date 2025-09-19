@@ -1,10 +1,12 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Laptop, Server, Mail, Route, XCircle } from 'lucide-react';
+import { Laptop, Server, Mail, Route, XCircle, Play, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
+import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 
 const nodes = [
@@ -15,62 +17,101 @@ const nodes = [
     { id: 'server', name: 'Server', ip: '8.8.8.8', x: '90%', y: '50%' },
 ];
 
-const Packet = ({ animate, ttl, isVisible }: { animate: any; ttl: number; isVisible: boolean }) => (
+const Packet = ({ animate, ttl, isDropped, isVisible }: { animate: any; ttl: number; isDropped: boolean; isVisible: boolean }) => (
     <motion.div
         initial={{ left: '10%', top: '50%', opacity: 0 }}
         animate={animate}
         className="absolute z-10"
     >
         {isVisible && (
-            <>
-                <Mail className={`w-8 h-8 ${ttl > 0 ? 'text-neon-pink' : 'text-red-500'}`} />
-                <div className={`absolute top-8 text-center w-24 -ml-8 bg-black/50 p-1 rounded-md text-xs ${ttl === 0 ? 'text-red-500 font-bold' : ''}`}>
-                    <p>TTL: {ttl}</p>
+            <div className="relative">
+                <motion.div
+                    key={ttl}
+                    initial={{ scale: 1.5 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: 'spring', stiffness: 500, damping: 15}}
+                >
+                    <Mail className={`w-8 h-8 ${isDropped ? 'text-red-500' : 'text-neon-pink'}`} />
+                </motion.div>
+                <div className={`absolute -top-6 text-center w-24 -ml-8 bg-black/50 p-1 rounded-md text-xs font-mono ${isDropped ? 'text-red-500 font-bold' : ''}`}>
+                    TTL: {ttl}
                 </div>
-            </>
+            </div>
         )}
     </motion.div>
 );
 
 export function TtlGame() {
     const { toast } = useToast();
-    const [step, setStep] = useState(0);
-    const [ttl, setTtl] = useState(3);
+    const [initialTtl, setInitialTtl] = useState(4);
+    const [currentTtl, setCurrentTtl] = useState(initialTtl);
+    const [step, setStep] = useState(-1);
+    const [isAnimating, setIsAnimating] = useState(false);
     const [isDropped, setIsDropped] = useState(false);
-
-    const path = ['user', 'router1', 'router2', 'router3', 'server'];
-    const currentNode = nodes[step];
-
-    const handleNextHop = () => {
-        if (isDropped || step >= path.length - 1) return;
-
-        const currentRouterName = nodes[step].name;
-        
-        const newTtl = ttl - 1;
-        setTtl(newTtl);
-
-        if (newTtl === 0) {
-            setIsDropped(true);
-            toast({ title: 'Packet Dropped!', description: `${currentRouterName} dropped the packet because TTL reached zero.`, variant: 'destructive'});
-            setStep(step); // Packet stops here
-        } else {
-             toast({ title: `Hop to ${nodes[step + 1].name}!`, description: `${currentRouterName} decremented TTL to ${newTtl} and forwarded the packet.`});
-            setStep(s => s + 1);
-        }
-    };
+    const [logs, setLogs] = useState<string[]>([]);
     
-    const handleReset = () => {
-        setStep(0);
-        setTtl(3);
-        setIsDropped(false);
-        toast({title: 'Reset'});
-    }
+    const path = ['user', 'router1', 'router2', 'router3', 'server'];
 
-    const packetAnimation = {
-        left: currentNode.x,
-        top: currentNode.y,
-        opacity: 1,
-        transition: { type: 'spring', stiffness: 100, damping: 20 },
+    const resetGame = () => {
+        setStep(-1);
+        setCurrentTtl(initialTtl);
+        setIsDropped(false);
+        setIsAnimating(false);
+        setLogs([]);
+    };
+
+    const runAnimation = async () => {
+        resetGame();
+        setIsAnimating(true);
+        
+        let ttl = initialTtl;
+        setLogs([`Packet sent from 'You' with initial TTL of ${ttl}`]);
+        
+        for (let i = 0; i < path.length; i++) {
+            setStep(i);
+            await new Promise(r => setTimeout(r, 1200));
+
+            // Decrement TTL at each router
+            if (i > 0 && i < path.length - 1) { // is a router
+                ttl--;
+                setCurrentTtl(ttl);
+                const currentNode = nodes[i];
+                setLogs(prev => [...prev, `${currentNode.name} received packet, decremented TTL to ${ttl}.`]);
+                await new Promise(r => setTimeout(r, 800));
+
+                if (ttl <= 0) {
+                    setIsDropped(true);
+                    setLogs(prev => [...prev, `TTL is 0! ${currentNode.name} is dropping the packet.`]);
+                    toast({ title: 'Packet Dropped!', description: `TTL reached zero at ${currentNode.name}.`, variant: 'destructive' });
+                    setIsAnimating(false);
+                    return;
+                }
+            }
+        }
+        
+        setLogs(prev => [...prev, "Packet successfully reached the server!"]);
+        toast({ title: 'Success!', description: 'Packet arrived at its destination.' });
+        setIsAnimating(false);
+    };
+
+    const getPacketAnimation = () => {
+        if (step === -1) return { opacity: 0 };
+        const currentNode = nodes[step];
+        const baseAnimation = {
+            left: currentNode.x,
+            top: currentNode.y,
+            opacity: 1,
+            transition: { type: 'spring', stiffness: 100, damping: 20 },
+        };
+        if(isDropped) {
+            return {
+                ...baseAnimation,
+                scale: 0,
+                opacity: 0,
+                transition: { ...baseAnimation.transition, delay: 0.5, duration: 0.5 }
+            }
+        }
+        return baseAnimation;
     };
 
     return (
@@ -83,11 +124,11 @@ export function TtlGame() {
                     </div>
                 ))}
                  <div className="absolute w-[80%] h-0.5 bg-white/20 top-1/2 left-[10%] -translate-y-1/2 -z-10" />
-                 <Packet animate={packetAnimation} ttl={ttl} isVisible={step >= 0} />
+                 <Packet animate={getPacketAnimation()} ttl={currentTtl} isDropped={isDropped} isVisible={step > -1} />
                  {isDropped && 
                     <motion.div 
                         className="absolute text-red-500" 
-                        style={{ left: currentNode.x, top: '20%'}}
+                        style={{ left: nodes[step].x, top: '20%'}}
                         initial={{opacity: 0, y: 10}}
                         animate={{opacity: 1, y: 0}}
                     >
@@ -96,12 +137,30 @@ export function TtlGame() {
                 }
             </div>
 
-            <div className="text-center space-y-2">
-                 <h3 className="text-lg font-bold">Packet Journey</h3>
-                 <p className="text-xs text-gray-400">Initial TTL is 3. Each router hop decrements the TTL by 1. If TTL hits 0, the packet is dropped.</p>
-                <div className="flex justify-center gap-2">
-                    <Button onClick={handleNextHop} disabled={step === path.length - 1 || isDropped}>Next Hop</Button>
-                    <Button onClick={handleReset} variant="outline">Reset</Button>
+            <div className="text-center space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center bg-dark-secondary p-4 rounded-lg">
+                    <div className="space-y-2 text-left">
+                        <Label htmlFor="ttl-slider">Initial TTL: {initialTtl}</Label>
+                        <Slider
+                            id="ttl-slider"
+                            min={1}
+                            max={5}
+                            step={1}
+                            value={[initialTtl]}
+                            onValueChange={(value) => setInitialTtl(value[0])}
+                            disabled={isAnimating}
+                        />
+                    </div>
+                    <div className="flex gap-2">
+                        <Button onClick={runAnimation} disabled={isAnimating} className="w-full bg-neon-green text-black hover:bg-white"><Play className="mr-2"/> Send Packet</Button>
+                        <Button onClick={resetGame} variant="outline" className="w-full"><RefreshCw className="mr-2"/> Reset</Button>
+                    </div>
+                </div>
+
+                <div className="bg-dark-primary p-3 rounded-lg text-xs font-mono text-left h-32 overflow-y-auto">
+                    {logs.map((log, i) => (
+                         <motion.p key={i} initial={{opacity:0}} animate={{opacity:1}} className="whitespace-pre-wrap">{`[${i+1}] ${log}`}</motion.p>
+                    ))}
                 </div>
             </div>
         </div>
