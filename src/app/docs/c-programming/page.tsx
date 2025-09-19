@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, Book, FileCode, SlidersHorizontal, GitBranch, Share2, Repeat } from 'lucide-react';
+import { ArrowRight, Book, FileCode, SlidersHorizontal, Share2, Repeat, Workflow } from 'lucide-react';
 import Link from 'next/link';
 
 const topics = [
@@ -28,22 +28,10 @@ const topics = [
         icon: <SlidersHorizontal className="size-8" />,
     },
     {
-        name: 'Conditional Statements',
-        description: 'Control the flow of your program with if, else, and switch.',
-        href: '/docs/c-programming/conditionals',
-        icon: <GitBranch className="size-8" />,
-    },
-    {
-        name: 'Switch Statement',
-        description: 'A cleaner alternative to long if...else if chains.',
-        href: '/docs/c-programming/switch',
-        icon: <Share2 className="size-8" />,
-    },
-    {
-        name: 'Loops',
-        description: 'Execute code repeatedly with for, while, and do-while loops.',
-        href: '/docs/c-programming/loops',
-        icon: <Repeat className="size-8" />,
+        name: 'Control Flow',
+        description: 'Manage the execution path of your code with conditionals and loops.',
+        href: '/docs/c-programming/control-flow',
+        icon: <Workflow className="size-8" />,
     },
 ];
 
