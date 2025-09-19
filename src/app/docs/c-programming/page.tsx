@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, Book, FileCode } from 'lucide-react';
+import { ArrowRight, Book, FileCode, SlidersHorizontal } from 'lucide-react';
 import Link from 'next/link';
 
 const topics = [
@@ -17,9 +17,15 @@ const topics = [
     },
     {
         name: 'Core Syntax',
-        description: 'A detailed guide to the fundamental concepts of C programming.',
+        description: 'A detailed guide to variables, data types, and keywords.',
         href: '/docs/c-programming/core-syntax',
         icon: <FileCode className="size-8" />,
+    },
+    {
+        name: 'Operators & Expressions',
+        description: 'Learn how to use operators to perform calculations and comparisons.',
+        href: '/docs/c-programming/operators-expressions',
+        icon: <SlidersHorizontal className="size-8" />,
     },
 ];
 
