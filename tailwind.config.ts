@@ -85,6 +85,17 @@ export default {
         'secondary-accent': 'var(--secondary-accent)',
         'tertiary-accent': 'var(--tertiary-accent)',
 
+        // C Syntax Highlighting
+        'syntax-keyword': 'var(--keyword)',
+        'syntax-datatype': 'var(--datatype)',
+        'syntax-function': 'var(--function)',
+        'syntax-string': 'var(--string)',
+        'syntax-number': 'var(--number)',
+        'syntax-comment': 'var(--comment)',
+        'syntax-operator': 'var(--operator)',
+        'syntax-semicolon': 'var(--semicolon)',
+
+
         // Git Game & Regex Theme
         'neon-blue': '#00f3ff',
         'neon-green': '#00ff41',
