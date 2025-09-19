@@ -69,13 +69,13 @@ export default function CArraysPage() {
                     <p className="mb-4 text-muted-foreground">Traversal means visiting every element of the array. This is typically done with a `for` loop.</p>
                      <CodeBlock className="mb-6">
                         <CodeSyntax>
-                            <span className="syntax-keyword">for</span>(<span className="syntax-datatype">int</span> i <span className="syntax-operator">=</span> <span className="syntax-number">0</span>; i <span className="syntax-operator"><</span> <span className="syntax-number">5</span>; i<span className="syntax-operator">++</span>) {'{'}<br/>
+                            <span className="syntax-keyword">for</span>(<span className="syntax-datatype">int</span> i <span className="syntax-operator">=</span> <span className="syntax-number">0</span>; i &lt; <span className="syntax-number">5</span>; i<span className="syntax-operator">++</span>) {'{'}<br/>
                             &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-function">printf</span>(<span className="syntax-string">"%d "</span>, scores[i]);<br/>
                             {'}'}
                         </CodeSyntax>
                     </CodeBlock>
                     
-                     <h3 className="text-2xl font-semibold mb-2 text-secondary-accent">Insertion & Deletion</h3>
+                     <h3 className="text-2xl font-semibold mb-2 text-secondary-accent">Insertion &amp; Deletion</h3>
                      <p className="mb-4 text-muted-foreground">In C, arrays have a fixed size, so you cannot dynamically add or remove elements. "Insertion" and "deletion" mean shifting elements within the array's existing bounds. This is often complex and inefficient. For dynamic collections, linked lists or dynamic memory allocation are better choices.</p>
                 </Card>
                 
@@ -88,9 +88,9 @@ export default function CArraysPage() {
                      <CodeBlock className="mb-6">
                         <CodeSyntax>
                             <span className="syntax-datatype">void</span> <span className="syntax-function">bubbleSort</span>(<span className="syntax-datatype">int</span> arr[], <span className="syntax-datatype">int</span> n) {'{'}<br/>
-                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-keyword">for</span> (<span className="syntax-datatype">int</span> i <span className="syntax-operator">=</span> <span className="syntax-number">0</span>; i <span className="syntax-operator"><</span> n <span className="syntax-operator">-</span> <span className="syntax-number">1</span>; i<span className="syntax-operator">++</span>) {'{'}<br/>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-keyword">for</span> (<span className="syntax-datatype">int</span> j <span className="syntax-operator">=</span> <span className="syntax-number">0</span>; j <span className="syntax-operator"><</span> n <span className="syntax-operator">-</span> i <span className="syntax-operator">-</span> <span className="syntax-number">1</span>; j<span className="syntax-operator">++</span>) {'{'}<br/>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-keyword">if</span> (arr[j] <span className="syntax-operator">></span> arr[j <span className="syntax-operator">+</span> <span className="syntax-number">1</span>]) {'{'}<br/>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-keyword">for</span> (<span className="syntax-datatype">int</span> i <span className="syntax-operator">=</span> <span className="syntax-number">0</span>; i &lt; n <span className="syntax-operator">-</span> <span className="syntax-number">1</span>; i<span className="syntax-operator">++</span>) {'{'}<br/>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-keyword">for</span> (<span className="syntax-datatype">int</span> j <span className="syntax-operator">=</span> <span className="syntax-number">0</span>; j &lt; n <span className="syntax-operator">-</span> i <span className="syntax-operator">-</span> <span className="syntax-number">1</span>; j<span className="syntax-operator">++</span>) {'{'}<br/>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-keyword">if</span> (arr[j] &gt; arr[j <span className="syntax-operator">+</span> <span className="syntax-number">1</span>]) {'{'}<br/>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-comment">{'// swap arr[j] and arr[j+1]'}</span><br/>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{'}'}<br/>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{'}'}<br/>
@@ -105,7 +105,7 @@ export default function CArraysPage() {
                         <CodeSyntax>
                             <span className="syntax-comment">{'// Quicksort is more complex and often implemented using recursion.'}</span><br/>
                              <span className="syntax-datatype">void</span> <span className="syntax-function">quicksort</span>(<span className="syntax-datatype">int</span> arr[], <span className="syntax-datatype">int</span> low, <span className="syntax-datatype">int</span> high) {'{'}<br/>
-                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-keyword">if</span> (low <span className="syntax-operator"><</span> high) {'{'}<br/>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-keyword">if</span> (low &lt; high) {'{'}<br/>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-datatype">int</span> pi <span className="syntax-operator">=</span> <span className="syntax-function">partition</span>(arr, low, high);<br/>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-function">quicksort</span>(arr, low, pi <span className="syntax-operator">-</span> <span className="syntax-number">1</span>);<br/>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-function">quicksort</span>(arr, pi <span className="syntax-operator">+</span> <span className="syntax-number">1</span>, high);<br/>
