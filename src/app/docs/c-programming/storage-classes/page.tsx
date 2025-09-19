@@ -77,7 +77,7 @@ export default function CStorageClassesPage() {
                     <CodeBlock className="mt-4">
                         <CodeSyntax>
                            <span className="syntax-keyword">register</span> <span className="syntax-datatype">int</span> loopCounter; <span className="syntax-comment">{'// Suggesting this for fast loop access'}</span><br/>
-                           <span className="syntax-keyword">for</span> (loopCounter <span className="syntax-operator">=</span> <span className="syntax-number">0</span>; loopCounter <span className="syntax-operator"><</span> <span className="syntax-number">10000</span>; loopCounter<span className="syntax-operator">++</span>) {'{'}<br/>
+                           <span className="syntax-keyword">for</span> (loopCounter <span className="syntax-operator">=</span> <span className="syntax-number">0</span>; loopCounter <span className="syntax-operator">&lt;</span> <span className="syntax-number">10000</span>; loopCounter<span className="syntax-operator">++</span>) {'{'}<br/>
                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-comment">{'// ... some very frequent operation ...'}</span><br/>
                            {'}'}
                         </CodeSyntax>
