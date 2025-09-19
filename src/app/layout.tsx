@@ -44,6 +44,11 @@ const menuItems = [
     label: 'Vim',
   },
   {
+    href: '/docs/c-programming',
+    icon: <FileCode />,
+    label: 'C Programming',
+  },
+  {
     href: '/docs/linux',
     icon: <Terminal />,
     label: 'Linux',

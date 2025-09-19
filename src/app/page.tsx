@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, BookOpen, Code, Github, Regex, Terminal, Network } from 'lucide-react';
+import { ArrowRight, BookOpen, Code, Github, Regex, Terminal, Network, FileCode } from 'lucide-react';
 import Link from 'next/link';
 
 const categories = [
@@ -15,6 +15,12 @@ const categories = [
         description: 'Master the powerful and efficient Vim text editor.',
         href: '/docs/vim',
         icon: <Code className="size-8" />,
+    },
+    {
+        name: 'C Programming',
+        description: 'Learn the fundamentals of the C programming language.',
+        href: '/docs/c-programming',
+        icon: <FileCode className="size-8" />,
     },
     {
         name: 'Linux',
