@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, Book, FileCode, SlidersHorizontal, Share2, Repeat, Workflow, FunctionSquare, Warehouse, Layers } from 'lucide-react';
+import { ArrowRight, Book, FileCode, SlidersHorizontal, Share2, Repeat, Workflow, FunctionSquare, Warehouse, Layers, Type } from 'lucide-react';
 import Link from 'next/link';
 
 const topics = [
@@ -50,6 +50,12 @@ const topics = [
         description: 'Store and manage collections of data using arrays.',
         href: '/docs/c-programming/arrays',
         icon: <Layers className="size-8" />,
+    },
+    {
+        name: 'Strings',
+        description: 'Learn how C handles character strings and related library functions.',
+        href: '/docs/c-programming/strings',
+        icon: <Type className="size-8" />,
     },
 ];
 
