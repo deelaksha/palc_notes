@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, Book, FileCode, SlidersHorizontal, Share2, Repeat, Workflow, FunctionSquare } from 'lucide-react';
+import { ArrowRight, Book, FileCode, SlidersHorizontal, Share2, Repeat, Workflow, FunctionSquare, Warehouse } from 'lucide-react';
 import Link from 'next/link';
 
 const topics = [
@@ -38,6 +38,12 @@ const topics = [
         description: 'Learn to write modular, reusable code with functions.',
         href: '/docs/c-programming/functions',
         icon: <FunctionSquare className="size-8" />,
+    },
+    {
+        name: 'Storage Classes',
+        description: 'Understand variable scope, lifetime, and storage with auto, static, extern, and register.',
+        href: '/docs/c-programming/storage-classes',
+        icon: <Warehouse className="size-8" />,
     },
 ];
 
