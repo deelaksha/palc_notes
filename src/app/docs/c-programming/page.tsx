@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, Book, FileCode, SlidersHorizontal, GitBranch, Share2 } from 'lucide-react';
+import { ArrowRight, Book, FileCode, SlidersHorizontal, GitBranch, Share2, Repeat } from 'lucide-react';
 import Link from 'next/link';
 
 const topics = [
@@ -38,6 +38,12 @@ const topics = [
         description: 'A cleaner alternative to long if...else if chains.',
         href: '/docs/c-programming/switch',
         icon: <Share2 className="size-8" />,
+    },
+    {
+        name: 'Loops',
+        description: 'Execute code repeatedly with for, while, and do-while loops.',
+        href: '/docs/c-programming/loops',
+        icon: <Repeat className="size-8" />,
     },
 ];
 
