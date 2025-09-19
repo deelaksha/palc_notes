@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, Book, FileCode, SlidersHorizontal } from 'lucide-react';
+import { ArrowRight, Book, FileCode, SlidersHorizontal, GitBranch } from 'lucide-react';
 import Link from 'next/link';
 
 const topics = [
@@ -26,6 +26,12 @@ const topics = [
         description: 'Learn how to use operators to perform calculations and comparisons.',
         href: '/docs/c-programming/operators-expressions',
         icon: <SlidersHorizontal className="size-8" />,
+    },
+    {
+        name: 'Conditional Statements',
+        description: 'Control the flow of your program with if, else, and switch.',
+        href: '/docs/c-programming/conditionals',
+        icon: <GitBranch className="size-8" />,
     },
 ];
 
