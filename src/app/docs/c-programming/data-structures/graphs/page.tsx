@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, GitBranch, Waypoints, Weight, CircleDashed, CheckCircle } from 'lucide-react';
+import { ArrowRight, GitBranch, Waypoints, Weight, CircleDashed, CheckCircle, Component } from 'lucide-react';
 import Link from 'next/link';
 
 const topics = [
@@ -16,22 +16,10 @@ const topics = [
         icon: <GitBranch className="size-8" />,
     },
     {
-        name: 'Directed vs. Undirected Graphs',
-        description: 'Understand the difference between one-way and two-way edges.',
-        href: '#',
-        icon: <Waypoints className="size-8" />,
-    },
-    {
-        name: 'Weighted vs. Unweighted Graphs',
-        description: 'Explore graphs where edges have costs or lengths.',
-        href: '#',
-        icon: <Weight className="size-8" />,
-    },
-    {
-        name: 'Cyclic vs. Acyclic Graphs',
-        description: 'Learn about graphs with and without cycles (e.g., DAGs).',
-        href: '#',
-        icon: <CircleDashed className="size-8" />,
+        name: 'Types of Graphs',
+        description: 'Explore Directed, Undirected, Weighted, and Unweighted graphs.',
+        href: '/docs/c-programming/data-structures/graphs/types',
+        icon: <Component className="size-8" />,
     },
     {
         name: 'Graph Traversal Algorithms',
