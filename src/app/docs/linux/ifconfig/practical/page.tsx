@@ -45,6 +45,7 @@ import { UnzipGame } from '@/components/linux-game/UnzipGame';
 import { WhoamiGame } from '@/components/linux-game/WhoamiGame';
 import { IdGame } from '@/components/linux-game/IdGame';
 import { WhoGame } from '@/components/linux-game/WhoGame';
+import { IfconfigGame } from '@/components/linux-game/IfconfigGame';
 
 export function generateStaticParams() {
   return commandsData.map((command) => ({
@@ -110,6 +111,8 @@ function renderGameForCommand(commandName: string | undefined) {
             return <PingGame />;
         case 'ip addr':
             return <IpAddrGame />;
+        case 'ifconfig':
+            return <IfconfigGame />;
         case 'netstat':
             return <NetstatGame />;
         case 'scp':
