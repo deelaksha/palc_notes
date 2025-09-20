@@ -1,8 +1,8 @@
 
 'use client';
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -21,6 +21,66 @@ const edges = [
     { from: 1, to: 3, weight: 8 },
     { from: 2, to: 3, weight: 4 },
 ];
+
+const Edge = ({ edge, isDirected, isWeighted }: { edge: any, isDirected: boolean, isWeighted: boolean }) => {
+    const fromNode = nodes[edge.from];
+    const toNode = nodes[edge.to];
+    const progress = useMotionValue(0);
+
+    useEffect(() => {
+        if (isDirected) {
+            const animation = motion.animate(progress, 1, {
+                duration: 2,
+                repeat: Infinity,
+                ease: "linear"
+            });
+            return () => animation.stop();
+        }
+    }, [isDirected, progress]);
+
+    const cx = useTransform(progress, [0, 1], [fromNode.x, toNode.x]);
+    const cy = useTransform(progress, [0, 1], [fromNode.y, toNode.y]);
+
+    return (
+        <g>
+            <motion.line
+                x1={fromNode.x} y1={fromNode.y}
+                x2={toNode.x} y2={toNode.y}
+                stroke="hsl(var(--muted-foreground))" strokeWidth="2"
+                markerEnd={isDirected ? "url(#arrow)" : ""}
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: 0.5 }}
+            />
+             <AnimatePresence>
+            {isDirected && (
+                <motion.circle
+                    r="4"
+                    fill="hsl(var(--primary))"
+                    style={{ cx, cy }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                 />
+            )}
+            </AnimatePresence>
+            <AnimatePresence>
+                {isWeighted && (
+                    <motion.text
+                        x={(fromNode.x + toNode.x) / 2}
+                        y={(fromNode.y + toNode.y) / 2 - 8}
+                        fill="hsl(var(--primary))" fontSize="14" textAnchor="middle" fontWeight="bold"
+                        initial={{ opacity: 0, y: -5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                    >
+                        {edge.weight}
+                    </motion.text>
+                )}
+            </AnimatePresence>
+        </g>
+    )
+}
 
 const GraphVisualizer = () => {
     const [isDirected, setIsDirected] = useState(false);
@@ -67,40 +127,9 @@ const GraphVisualizer = () => {
                                 </motion.marker>
                             </defs>
                             
-                            <AnimatePresence>
-                                {edges.map((edge, index) => (
-                                    <motion.g 
-                                        key={`edge-${index}`}
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        exit={{ opacity: 0 }}
-                                    >
-                                        <motion.line
-                                            x1={nodes[edge.from].x} y1={nodes[edge.from].y}
-                                            x2={nodes[edge.to].x} y2={nodes[edge.to].y}
-                                            stroke="hsl(var(--muted-foreground))" strokeWidth="2"
-                                            markerEnd={isDirected ? "url(#arrow)" : ""}
-                                            initial={{ pathLength: 0 }}
-                                            animate={{ pathLength: 1 }}
-                                            transition={{ duration: 0.5 }}
-                                        />
-                                        <AnimatePresence>
-                                            {isWeighted && (
-                                                <motion.text
-                                                    x={(nodes[edge.from].x + nodes[edge.to].x) / 2}
-                                                    y={(nodes[edge.from].y + nodes[edge.to].y) / 2 - 8}
-                                                    fill="hsl(var(--primary))" fontSize="14" textAnchor="middle" fontWeight="bold"
-                                                    initial={{ opacity: 0, y: -5 }}
-                                                    animate={{ opacity: 1, y: 0 }}
-                                                    exit={{ opacity: 0 }}
-                                                >
-                                                    {edge.weight}
-                                                </motion.text>
-                                            )}
-                                        </AnimatePresence>
-                                    </motion.g>
-                                ))}
-                            </AnimatePresence>
+                            {edges.map((edge, index) => (
+                               <Edge key={`edge-${index}`} edge={edge} isDirected={isDirected} isWeighted={isWeighted} />
+                            ))}
                             
                             {nodes.map(node => (
                                 <motion.g 
