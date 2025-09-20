@@ -1,47 +1,40 @@
 
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { CodeBlock } from '@/components/markdown/CodeBlock';
-import { Code, GitCommit, RotateCw, HelpCircle } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
+import { Code, GitCommit, RotateCw, HelpCircle, GitBranch, ArrowRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-// AVL Tree Node
+// --- AVL Tree Node Logic (non-React) ---
 class TreeNode {
   value: number;
   left: TreeNode | null;
   right: TreeNode | null;
   height: number;
-  constructor(value: number) {
+  x: number;
+  y: number;
+
+  constructor(value: number, x = 0, y = 0) {
     this.value = value;
     this.left = null;
     this.right = null;
     this.height = 1;
+    this.x = x;
+    this.y = y;
   }
 }
 
-const AVLTreeVisualization = () => {
-  const [tree, setTree] = useState<TreeNode | null>(null);
-  const [inputValue, setInputValue] = useState('');
-  const [explanation, setExplanation] = useState('Build an AVL tree or create a sample one to begin.');
-  const [highlightedNodes, setHighlightedNodes] = useState<number[]>([]);
-  const [highlightedCode, setHighlightedCode] = useState<string>('');
-  
-  const [animationQueue, setAnimationQueue] = useState<(() => Promise<void>)[]>([]);
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-  // --- Core AVL Logic ---
-  const height = (node: TreeNode | null) => node ? node.height : 0;
-  const updateHeight = (node: TreeNode) => {
+const height = (node: TreeNode | null): number => node ? node.height : 0;
+const updateHeight = (node: TreeNode) => {
     node.height = 1 + Math.max(height(node.left), height(node.right));
-  };
-  const getBalance = (node: TreeNode | null) => node ? height(node.left) - height(node.right) : 0;
+};
+const getBalance = (node: TreeNode | null): number => node ? height(node.left) - height(node.right) : 0;
 
-  const rightRotate = (y: TreeNode): TreeNode => {
+const rightRotate = (y: TreeNode): TreeNode => {
     let x = y.left!;
     let T2 = x.right;
     x.right = y;
@@ -49,9 +42,9 @@ const AVLTreeVisualization = () => {
     updateHeight(y);
     updateHeight(x);
     return x;
-  };
+};
 
-  const leftRotate = (x: TreeNode): TreeNode => {
+const leftRotate = (x: TreeNode): TreeNode => {
     let y = x.right!;
     let T2 = y.left;
     y.left = x;
@@ -59,336 +52,426 @@ const AVLTreeVisualization = () => {
     updateHeight(x);
     updateHeight(y);
     return y;
-  };
-  
-  const insertNode = (node: TreeNode | null, value: number, steps: any[]): TreeNode => {
-    if (!node) {
-        steps.push({ type: 'insert', value });
-        return new TreeNode(value);
-    }
-
-    if (value < node.value) {
-        steps.push({ type: 'traverse', from: node.value, to: node.left?.value, direction: 'left'});
-        node.left = insertNode(node.left, value, steps);
-    } else if (value > node.value) {
-        steps.push({ type: 'traverse', from: node.value, to: node.right?.value, direction: 'right'});
-        node.right = insertNode(node.right, value, steps);
-    } else {
-        steps.push({ type: 'info', text: 'Value already exists.' });
-        return node;
-    }
-
-    updateHeight(node);
-    const balance = getBalance(node);
-
-    // Left Left Case
-    if (balance > 1 && value < node.left!.value) {
-        steps.push({ type: 'balance', node: node.value, balance, case: 'Left-Left Imbalance' });
-        steps.push({ type: 'rotate', rotation: 'right', node: node.value });
-        return rightRotate(node);
-    }
-    // Right Right Case
-    if (balance < -1 && value > node.right!.value) {
-        steps.push({ type: 'balance', node: node.value, balance, case: 'Right-Right Imbalance' });
-        steps.push({ type: 'rotate', rotation: 'left', node: node.value });
-        return leftRotate(node);
-    }
-    // Left Right Case
-    if (balance > 1 && value > node.left!.value) {
-        steps.push({ type: 'balance', node: node.value, balance, case: 'Left-Right Imbalance' });
-        steps.push({ type: 'rotate', rotation: 'left', node: node.left!.value });
-        node.left = leftRotate(node.left!);
-        steps.push({ type: 'rotate', rotation: 'right', node: node.value });
-        return rightRotate(node);
-    }
-    // Right Left Case
-    if (balance < -1 && value < node.right!.value) {
-        steps.push({ type: 'balance', node: node.value, balance, case: 'Right-Left Imbalance' });
-        steps.push({ type: 'rotate', rotation: 'right', node: node.right!.value });
-        node.right = rightRotate(node.right!);
-        steps.push({ type: 'rotate', rotation: 'left', node: node.value });
-        return leftRotate(node);
-    }
-    
-    steps.push({type: 'update_height', node: node.value, height: node.height, balance: balance });
-    return node;
 };
 
+// --- React Components ---
 
-  const runInsert = () => {
-    const value = parseInt(inputValue);
-    if (isNaN(value)) return;
+const NodeComponent = ({ node, isHighlighted }: { node: TreeNode, isHighlighted: boolean }) => {
+    const balance = getBalance(node);
+    let balanceColor = 'text-green-400';
+    if (balance > 1 || balance < -1) balanceColor = 'text-red-400';
+    else if (balance !== 0) balanceColor = 'text-yellow-400';
 
-    let tempTree = JSON.parse(JSON.stringify(tree || null));
-    const capturedSteps: any[] = [];
-    const newTreeRoot = insertNode(tempTree, value, capturedSteps);
+    return (
+        <motion.g
+            key={node.value}
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+            style={{ x: node.x, y: node.y }}
+        >
+             <circle cx={0} cy={0} r={22} fill={isHighlighted ? "#10b981" : "#3b82f6"} stroke={isHighlighted ? "#059669" : "#2563eb"} strokeWidth="3" />
+            <text x={0} y={0} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="14" fontWeight="bold">{node.value}</text>
+            <text x={0} y={8} textAnchor="middle" dominantBaseline="hanging" className={balanceColor} fontSize="10">{balance}</text>
+        </motion.g>
+    );
+};
+
+const TreeLines = ({ node }: { node: TreeNode | null }) => {
+    if (!node) return null;
+    const verticalSpacing = 70;
+    const getHorizontalSpacing = (level: number) => Math.max(200 / (level + 1.5), 35);
     
-    const animationSteps = capturedSteps.map(step => async () => {
-        setHighlightedNodes([]);
-        switch(step.type) {
-            case 'traverse':
-                setExplanation(`Inserting ${value}. At node ${step.from}, go ${step.direction}.`);
-                setHighlightedNodes([step.from, step.to].filter(Boolean));
-                setHighlightedCode('if (value < node->value)\n  node->left  = insert(node->left, value);');
-                break;
-            case 'insert':
-                 setExplanation(`Found empty spot. Inserting ${step.value}.`);
-                 setTree(insertNode(JSON.parse(JSON.stringify(tree || null)), value, []));
-                 setHighlightedNodes([step.value]);
-                 setHighlightedCode('// Base case: If the node is null, create a new node\nif (node == NULL) return newNode(value);');
-                 break;
-            case 'update_height':
-                 setExplanation(`Updating height & balance factor for node ${step.node}. Height: ${step.height}, Balance: ${step.balance}. Tree is balanced here.`);
-                 setHighlightedNodes([step.node]);
-                 setHighlightedCode('node->height = 1 + max(height(node->left), height(node->right));\nbalance = getBalance(node);');
-                 break;
-            case 'balance':
-                setExplanation(`Unbalanced at node ${step.node}! Balance factor is ${step.balance}. Case: ${step.case}.`);
-                setHighlightedNodes([step.node]);
-                setHighlightedCode('if (balance > 1 || balance < -1) {\n  // Rebalance the tree\n}');
-                break;
-            case 'rotate':
-                setExplanation(`Performing a ${step.rotation} rotation on node ${step.node}.`);
-                setHighlightedNodes([step.node]);
-                setTree(JSON.parse(JSON.stringify(newTreeRoot))); // Show final state after rotations
-                setHighlightedCode(`// ${step.case}\nreturn ${step.rotation}Rotate(node);`);
-                break;
+    const lines: React.ReactNode[] = [];
+    const traverse = (n: TreeNode, level: number) => {
+        const hSpacing = getHorizontalSpacing(level);
+        if (n.left) {
+            const leftX = n.x - hSpacing;
+            const leftY = n.y + verticalSpacing;
+            lines.push(<line key={`${n.value}-l`} x1={n.x} y1={n.y} x2={leftX} y2={leftY} stroke="#4a5568" strokeWidth="2" />);
+            n.left.x = leftX;
+            n.left.y = leftY;
+            traverse(n.left, level + 1);
         }
-        await wait(800);
-    });
+        if (n.right) {
+            const rightX = n.x + hSpacing;
+            const rightY = n.y + verticalSpacing;
+            lines.push(<line key={`${n.value}-r`} x1={n.x} y1={n.y} x2={rightX} y2={rightY} stroke="#4a5568" strokeWidth="2" />);
+            n.right.x = rightX;
+            n.right.y = rightY;
+            traverse(n.right, level + 1);
+        }
+    }
+    traverse(node, 0);
+    return <g>{lines}</g>;
+};
 
-    animationSteps.push(async () => {
-        setExplanation(`Insertion of ${value} complete. Tree is balanced.`);
-        setHighlightedNodes([]);
-        setHighlightedCode('');
-    });
-    setAnimationQueue(animationSteps);
+const TreeNodes = ({ node, highlightedNode }: { node: TreeNode | null, highlightedNode: number | null }) => {
+    if (!node) return null;
+    const nodes: React.ReactNode[] = [];
+    const traverse = (n: TreeNode) => {
+        nodes.push(<NodeComponent key={n.value} node={n} isHighlighted={n.value === highlightedNode} />);
+        if (n.left) traverse(n.left);
+        if (n.right) traverse(n.right);
+    };
+    traverse(node);
+    return <g>{nodes}</g>;
+};
+
+const AVLTreeVisualizer = () => {
+  const [tree, setTree] = useState<TreeNode | null>(null);
+  const [inputValue, setInputValue] =useState('');
+  const [highlightedNode, setHighlightedNode] = useState<number | null>(null);
+  const [explanation, setExplanation] = useState('Add nodes to the tree to see how it balances itself.');
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  const wait = (ms: number) => new Promise(res => setTimeout(res, ms));
+
+  const insertWithAnimation = async (value: number) => {
+      setIsAnimating(true);
+      
+      const insertAndTrack = async (node: TreeNode | null, val: number): Promise<TreeNode> => {
+          if (!node) {
+              setExplanation(`Inserting new node ${val}.`);
+              setHighlightedNode(val);
+              await wait(800);
+              return new TreeNode(val);
+          }
+          
+          setExplanation(`Comparing ${val} with ${node.value}...`);
+          setHighlightedNode(node.value);
+          await wait(800);
+
+          if (val < node.value) {
+              node.left = await insertAndTrack(node.left, val);
+          } else if (val > node.value) {
+              node.right = await insertAndTrack(node.right, val);
+          } else {
+              setExplanation(`${val} already exists.`);
+              await wait(800);
+              return node; // No duplicates
+          }
+
+          updateHeight(node);
+          const balance = getBalance(node);
+
+          setExplanation(`Updating heights and balance for ${node.value}. Balance: ${balance}`);
+          setTree(prev => ({...prev!})); // Force re-render
+          setHighlightedNode(node.value);
+          await wait(1000);
+
+          // Rebalance logic
+          if (balance > 1 && val < node.left!.value) { // LL
+              setExplanation(`Left-Left imbalance at ${node.value}. Performing right rotation.`);
+              await wait(1500);
+              return rightRotate(node);
+          }
+          if (balance < -1 && val > node.right!.value) { // RR
+              setExplanation(`Right-Right imbalance at ${node.value}. Performing left rotation.`);
+              await wait(1500);
+              return leftRotate(node);
+          }
+          if (balance > 1 && val > node.left!.value) { // LR
+              setExplanation(`Left-Right imbalance at ${node.value}. Rotating left on ${node.left!.value}...`);
+              await wait(1500);
+              node.left = leftRotate(node.left!);
+              setTree(prev => ({...prev!}));
+              await wait(1500);
+              setExplanation(`...then rotating right on ${node.value}.`);
+              await wait(1500);
+              return rightRotate(node);
+          }
+          if (balance < -1 && val < node.right!.value) { // RL
+              setExplanation(`Right-Left imbalance at ${node.value}. Rotating right on ${node.right!.value}...`);
+              await wait(1500);
+              node.right = rightRotate(node.right!);
+              setTree(prev => ({...prev!}));
+              await wait(1500);
+              setExplanation(`...then rotating left on ${node.value}.`);
+              await wait(1500);
+              return leftRotate(node);
+          }
+
+          return node;
+      };
+
+      const newTree = await insertAndTrack(tree, value);
+      setTree(newTree);
+      setHighlightedNode(null);
+      setExplanation('Tree is balanced. Ready for next operation.');
+      setIsAnimating(false);
+      setInputValue('');
+  };
+
+  const handleInsert = () => {
+    const val = parseInt(inputValue, 10);
+    if (!isNaN(val)) insertWithAnimation(val);
   };
   
-  const runNextStep = useCallback(async () => {
-      if (animationQueue.length > 0 && !isAnimating) {
-          setIsAnimating(true);
-          const nextStep = animationQueue[0];
-          await nextStep();
-          setAnimationQueue(prev => prev.slice(1));
-          setIsAnimating(false);
-      }
-  }, [animationQueue, isAnimating]);
-
-  const createSampleTree = () => {
+   const createSampleTree = () => {
     let sampleTree: TreeNode | null = null;
-    const values = [10, 20, 30, 40, 50, 25];
-    values.forEach(value => {
-      sampleTree = insertNode(sampleTree, value, []);
+    const values = [30, 20, 40, 10, 25, 50];
+    values.forEach(v => {
+        let tempTree = JSON.parse(JSON.stringify(sampleTree));
+        sampleTree = insertNode(sampleTree, v);
     });
     setTree(sampleTree);
-    setExplanation('Created sample AVL tree.');
+    setExplanation('Sample tree created.');
   };
   
-  const clearTree = () => {
-    setTree(null);
-    setExplanation('Tree cleared.');
-    setAnimationQueue([]);
-    setHighlightedCode('');
-  };
+    const insertNode = (node: TreeNode | null, value: number): TreeNode => {
+        if (!node) return new TreeNode(value);
+        if (value < node.value) node.left = insertNode(node.left, value);
+        else if (value > node.value) node.right = insertNode(node.right, value);
+        else return node;
+        updateHeight(node);
+        const balance = getBalance(node);
+        if (balance > 1 && value < node.left!.value) return rightRotate(node);
+        if (balance < -1 && value > node.right!.value) return leftRotate(node);
+        if (balance > 1 && value > node.left!.value) {
+            node.left = leftRotate(node.left!);
+            return rightRotate(node);
+        }
+        if (balance < -1 && value < node.right!.value) {
+            node.right = rightRotate(node.right!);
+            return leftRotate(node);
+        }
+        return node;
+    };
 
-  const renderNode = (node: TreeNode | null, x: number, y: number, level: number): React.ReactNode[] => {
-    if (!node) return [];
 
-    const radius = 22;
-    const verticalSpacing = 70;
-    const horizontalSpacing = Math.max(200 / (level + 1), 35);
-    const leftX = x - horizontalSpacing;
-    const leftY = y + verticalSpacing;
-    const rightX = x + horizontalSpacing;
-    const rightY = y + verticalSpacing;
-    const isHighlighted = highlightedNodes.includes(node.value);
-
-    let nodesToRender: React.ReactNode[] = [];
-
-    if (node.left) {
-        nodesToRender.push(<line key={`${node.value}-l-line`} x1={x} y1={y} x2={leftX} y2={leftY} stroke="#4a5568" strokeWidth="2" />);
-        nodesToRender.push(...renderNode(node.left, leftX, leftY, level + 1));
-    }
-     if (node.right) {
-        nodesToRender.push(<line key={`${node.value}-r-line`} x1={x} y1={y} x2={rightX} y2={rightY} stroke="#4a5568" strokeWidth="2" />);
-        nodesToRender.push(...renderNode(node.right, rightX, rightY, level + 1));
-    }
-    
-    nodesToRender.push(
-      <g key={node.value}>
-        <circle cx={x} cy={y} r={radius} fill={isHighlighted ? "#10b981" : "#3b82f6"} stroke={isHighlighted ? "#059669" : "#2563eb"} strokeWidth="3" />
-        <text x={x} y={y} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="14" fontWeight="bold">{node.value}</text>
-        <text x={x} y={y+8} textAnchor="middle" dominantBaseline="hanging" fill="cyan" fontSize="9">{getBalance(node)}</text>
-      </g>
-    );
-
-    return nodesToRender;
-  };
+  const fullTree = useMemo(() => {
+    if (!tree) return null;
+    const newTree = JSON.parse(JSON.stringify(tree));
+    newTree.x = 400; newTree.y = 50;
+    return newTree;
+  }, [tree]);
   
   return (
-    <div className="max-w-7xl mx-auto p-4 bg-gradient-to-br from-gray-900 to-gray-800 min-h-screen">
-      <div className="bg-gray-800 rounded-xl shadow-2xl p-6 border border-gray-700">
-        <h1 className="text-3xl font-bold text-white text-center mb-6">AVL Tree Visualization</h1>
-        
-        <div className="grid lg:grid-cols-3 gap-6">
-          {/* Controls */}
-          <div className="lg:col-span-1 space-y-4">
-             <div className="bg-gray-900 p-4 rounded-lg">
-                <h3 className="font-semibold text-gray-200 mb-2">Operations</h3>
-                 <div className="flex gap-2">
-                    <Input type="number" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Value" className="bg-gray-700 border-gray-600 text-white" />
-                    <Button onClick={runInsert} disabled={isAnimating || animationQueue.length > 0}>Insert</Button>
+    <Card className="bg-gray-800/50">
+        <CardHeader>
+            <CardTitle className="text-center text-3xl font-bold text-white">Interactive Insertion</CardTitle>
+            <CardDescription className="text-center">Enter a number and watch how the AVL tree maintains its balance through rotations.</CardDescription>
+        </CardHeader>
+        <CardContent>
+            <div className="grid lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-1 space-y-4">
+                    <div className="bg-gray-900/70 p-4 rounded-lg">
+                        <h3 className="font-semibold mb-2">Operations</h3>
+                        <div className="flex gap-2">
+                            <Input
+                                type="number"
+                                value={inputValue}
+                                onChange={(e) => setInputValue(e.target.value)}
+                                placeholder="Enter a number..."
+                                className="bg-gray-700 border-gray-600 text-white"
+                                disabled={isAnimating}
+                                onKeyPress={e => e.key === 'Enter' && handleInsert()}
+                            />
+                            <Button onClick={handleInsert} disabled={isAnimating}>Insert</Button>
+                        </div>
+                    </div>
+                     <div className="bg-gray-900/70 p-4 rounded-lg">
+                        <h3 className="font-semibold mb-2">Presets</h3>
+                        <div className="flex gap-2">
+                           <Button onClick={createSampleTree} disabled={isAnimating} className="w-full">Sample Tree</Button>
+                           <Button onClick={() => {setTree(null); setExplanation('Tree cleared.');}} variant="outline" className="w-full">Clear</Button>
+                        </div>
+                    </div>
+                     <div className="bg-gray-700/80 p-4 rounded-lg border-l-4 border-cyan-400 min-h-[80px]">
+                        <h4 className="font-semibold text-cyan-300">Explanation</h4>
+                        <p className="text-cyan-100 text-sm mt-1">{explanation}</p>
+                    </div>
+                </div>
+
+                <div className="lg:col-span-2">
+                    <div className="relative bg-gray-900/50 rounded-lg p-4 min-h-[400px] border border-gray-700">
+                        <svg width="100%" height="450" className="overflow-visible">
+                            <TreeLines node={fullTree} />
+                            <TreeNodes node={fullTree} highlightedNode={highlightedNode} />
+                        </svg>
+                    </div>
                 </div>
             </div>
-             <div className="bg-gray-900 p-4 rounded-lg">
-                <h3 className="font-semibold text-gray-200 mb-2">Animation Control</h3>
-                 <div className="flex gap-2">
-                    <Button onClick={runNextStep} disabled={isAnimating || animationQueue.length === 0} className="w-full">Next Step</Button>
-                    <Button onClick={() => setAnimationQueue([])} disabled={animationQueue.length === 0} variant="outline">Skip</Button>
-                </div>
-            </div>
-             <div className="bg-gray-900 p-4 rounded-lg">
-                <h3 className="font-semibold text-gray-200 mb-2">Presets</h3>
-                 <div className="flex gap-2">
-                    <Button onClick={createSampleTree} disabled={isAnimating || animationQueue.length > 0} className="w-full">Sample Tree</Button>
-                    <Button onClick={clearTree} variant="outline" className="w-full">Clear Tree</Button>
-                 </div>
-            </div>
-            <div className="bg-gray-700 p-4 rounded-lg border-l-4 border-cyan-400 min-h-[80px]">
-                <h4 className="font-semibold text-cyan-300">Explanation:</h4>
-                <p className="text-cyan-100 text-sm mt-1">{explanation}</p>
-            </div>
-             <div className="bg-gray-900 p-4 rounded-lg min-h-[100px]">
-                 <h4 className="font-semibold text-gray-200 mb-2 flex items-center gap-2"><Code className="size-4"/> Code Running:</h4>
-                 {highlightedCode ? (
-                    <CodeBlock className="bg-black/20 border-gray-600 text-sm">
-                        {highlightedCode}
-                    </CodeBlock>
-                 ) : (
-                    <p className="text-gray-500 text-sm">No operation running.</p>
-                 )}
-            </div>
-            <div className="bg-gray-700 p-4 rounded-lg border-l-4 border-yellow-400">
-                <h4 className="font-semibold text-yellow-300 flex items-center gap-2"><HelpCircle size={16}/> Info</h4>
-                <p className="text-yellow-100 text-sm mt-1">The small cyan number on each node is its **balance factor** (left height - right height). An AVL tree is balanced if this factor is -1, 0, or 1 for every node.</p>
-            </div>
-          </div>
-          {/* Visualization */}
-          <div className="lg:col-span-2">
-            <div className="relative bg-gray-700 rounded-lg p-4 min-h-[400px] border border-gray-600">
-              {!tree ? (
-                <div className="flex items-center justify-center h-full text-gray-400">Tree is empty</div>
-              ) : (
-                <svg width="100%" height="450" className="overflow-visible">
-                  {renderNode(tree, 400, 50, 0)}
-                </svg>
-              )}
-            </div>
-          </div>
-        </div>
-        
-        {/* Full Code Implementation Section */}
-        <div className="mt-12 pt-8 border-t border-gray-700">
-          <h2 className="text-3xl font-bold text-white text-center mb-6">Complete C Implementation for AVL Tree</h2>
-          <div className="space-y-8 text-gray-300">
-            <div>
-                <h3 className="text-xl font-semibold text-gray-100 mb-2">1. Node Structure</h3>
-                <p className="text-sm text-gray-400 mb-4">The AVL node includes a `height` field to track the subtree height, which is crucial for determining balance.</p>
-                <CodeBlock>
-<code><span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> {'{'}
-    <span className="syntax-datatype">int</span> key;
-    <span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> <span className="syntax-operator">*</span>left;
-    <span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> <span className="syntax-operator">*</span>right;
-    <span className="syntax-datatype">int</span> height;
-{'};'}</code>
-                </CodeBlock>
-            </div>
-             <div>
-                <h3 className="text-xl font-semibold text-gray-100 mb-2">2. Rotation Functions</h3>
-                <p className="text-sm text-gray-400 mb-4">These are the core operations for rebalancing the tree. A right rotation is used for left-heavy subtrees, and a left rotation for right-heavy ones.</p>
-                <CodeBlock>
-<code><span className="syntax-comment">{'// Function to get height of the node'}</span>
-<span className="syntax-datatype">int</span> <span className="syntax-function">height</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> <span className="syntax-operator">*</span>N) {'{'}
-    <span className="syntax-keyword">if</span> (N <span className="syntax-operator">==</span> <span className="syntax-keyword">NULL</span>) <span className="syntax-keyword">return</span> <span className="syntax-number">0</span>;
-    <span className="syntax-keyword">return</span> N<span className="syntax-operator">-></span>height;
-{'}'}
-
-<span className="syntax-comment">{'// Right rotate subtree rooted with y'}</span>
-<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> <span className="syntax-operator">*</span><span className="syntax-function">rightRotate</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> <span className="syntax-operator">*</span>y) {'{'}
-    <span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> <span className="syntax-operator">*</span>x <span className="syntax-operator">=</span> y<span className="syntax-operator">-></span>left;
-    <span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> <span className="syntax-operator">*</span>T2 <span className="syntax-operator">=</span> x<span className="syntax-operator">-></span>right;
-
-    <span className="syntax-comment">{'// Perform rotation'}</span>
-    x<span className="syntax-operator">-></span>right <span className="syntax-operator">=</span> y;
-    y<span className="syntax-operator">-></span>left <span className="syntax-operator">=</span> T2;
-
-    <span className="syntax-comment">{'// Update heights'}</span>
-    y<span className="syntax-operator">-></span>height <span className="syntax-operator">=</span> <span className="syntax-function">max</span>(<span className="syntax-function">height</span>(y<span className="syntax-operator">-></span>left), <span className="syntax-function">height</span>(y<span className="syntax-operator">-></span>right)) <span className="syntax-operator">+</span> <span className="syntax-number">1</span>;
-    x<span className="syntax-operator">-></span>height <span className="syntax-operator">=</span> <span className="syntax-function">max</span>(<span className="syntax-function">height</span>(x<span className="syntax-operator">-></span>left), <span className="syntax-function">height</span>(x<span className="syntax-operator">-></span>right)) <span className="syntax-operator">+</span> <span className="syntax-number">1</span>;
-
-    <span className="syntax-keyword">return</span> x;
-{'}'}
-
-<span className="syntax-comment">{'// Left rotate subtree rooted with x'}</span>
-<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> <span className="syntax-operator">*</span><span className="syntax-function">leftRotate</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> <span className="syntax-operator">*</span>x) {'{'}
-    <span className="syntax-comment">{'// ... (similar logic to rightRotate)'}</span>
-{'}'}</code>
-                </CodeBlock>
-            </div>
-             <div>
-                <h3 className="text-xl font-semibold text-gray-100 mb-2">3. Insert Function with Rebalancing</h3>
-                <p className="text-sm text-gray-400 mb-4">After a standard BST insertion, the tree walks back up, updating heights and checking the balance factor at each node. If an imbalance is found, the appropriate rotations are performed.</p>
-                <CodeBlock>
-<code><span className="syntax-comment">{'// Get Balance factor of node N'}</span>
-<span className="syntax-datatype">int</span> <span className="syntax-function">getBalance</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> <span className="syntax-operator">*</span>N) {'{'}
-    <span className="syntax-keyword">if</span> (N <span className="syntax-operator">==</span> <span className="syntax-keyword">NULL</span>) <span className="syntax-keyword">return</span> <span className="syntax-number">0</span>;
-    <span className="syntax-keyword">return</span> <span className="syntax-function">height</span>(N<span className="syntax-operator">-></span>left) <span className="syntax-operator">-</span> <span className="syntax-function">height</span>(N<span className="syntax-operator">-></span>right);
-{'}'}
-
-<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span><span className="syntax-operator">*</span> <span className="syntax-function">insert</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span><span className="syntax-operator">*</span> node, <span className="syntax-datatype">int</span> key) {'{'}
-    <span className="syntax-comment">{'/* 1.  Perform the normal BST insertion */'}</span>
-    <span className="syntax-keyword">if</span> (node <span className="syntax-operator">==</span> <span className="syntax-keyword">NULL</span>) <span className="syntax-keyword">return</span>(<span className="syntax-function">newNode</span>(key));
-    <span className="syntax-keyword">if</span> (key <span className="syntax-operator">&lt;</span> node<span className="syntax-operator">-></span>key) node<span className="syntax-operator">-></span>left  <span className="syntax-operator">=</span> <span className="syntax-function">insert</span>(node<span className="syntax-operator">-></span>left, key);
-    <span className="syntax-keyword">else</span> <span className="syntax-keyword">if</span> (key <span className="syntax-operator">></span> node<span className="syntax-operator">-></span>key) node<span className="syntax-operator">-></span>right <span className="syntax-operator">=</span> <span className="syntax-function">insert</span>(node<span className="syntax-operator">-></span>right, key);
-    <span className="syntax-keyword">else</span> <span className="syntax-keyword">return</span> node; <span className="syntax-comment">{'// Duplicate keys not allowed'}</span>
-
-    <span className="syntax-comment">{'/* 2. Update height of this ancestor node */'}</span>
-    node<span className="syntax-operator">-></span>height <span className="syntax-operator">=</span> <span className="syntax-number">1</span> <span className="syntax-operator">+</span> <span className="syntax-function">max</span>(<span className="syntax-function">height</span>(node<span className="syntax-operator">-></span>left), <span className="syntax-function">height</span>(node<span className="syntax-operator">-></span>right));
-
-    <span className="syntax-comment">{'/* 3. Get the balance factor of this ancestor node */'}</span>
-    <span className="syntax-datatype">int</span> balance <span className="syntax-operator">=</span> <span className="syntax-function">getBalance</span>(node);
-
-    <span className="syntax-comment">{'// 4. If the node becomes unbalanced, there are 4 cases'}</span>
-    <span className="syntax-comment">{'// Left Left Case'}</span>
-    <span className="syntax-keyword">if</span> (balance <span className="syntax-operator">></span> <span className="syntax-number">1</span> <span className="syntax-operator">&&</span> key <span className="syntax-operator">&lt;</span> node<span className="syntax-operator">-></span>left<span className="syntax-operator">-></span>key)
-        <span className="syntax-keyword">return</span> <span className="syntax-function">rightRotate</span>(node);
-
-    <span className="syntax-comment">{'// Right Right Case'}</span>
-    <span className="syntax-keyword">if</span> (balance <span className="syntax-operator">&lt;</span> <span className="syntax-operator">-</span><span className="syntax-number">1</span> <span className="syntax-operator">&&</span> key <span className="syntax-operator">></span> node<span className="syntax-operator">-></span>right<span className="syntax-operator">-></span>key)
-        <span className="syntax-keyword">return</span> <span className="syntax-function">leftRotate</span>(node);
-
-    <span className="syntax-comment">{'// Left Right Case'}</span>
-    <span className="syntax-keyword">if</span> (balance <span className="syntax-operator">></span> <span className="syntax-number">1</span> <span className="syntax-operator">&&</span> key <span className="syntax-operator">></span> node<span className="syntax-operator">-></span>left<span className="syntax-operator">-></span>key) {'{'}
-        node<span className="syntax-operator">-></span>left <span className="syntax-operator">=</span>  <span className="syntax-function">leftRotate</span>(node<span className="syntax-operator">-></span>left);
-        <span className="syntax-keyword">return</span> <span className="syntax-function">rightRotate</span>(node);
-    {'}'}
-
-    <span className="syntax-comment">{'// Right Left Case'}</span>
-    <span className="syntax-keyword">if</span> (balance <span className="syntax-operator">&lt;</span> <span className="syntax-operator">-</span><span className="syntax-number">1</span> <span className="syntax-operator">&&</span> key <span className="syntax-operator">&lt;</span> node<span className="syntax-operator">-></span>right<span className="syntax-operator">-></span>key) {'{'}
-        node<span className="syntax-operator">-></span>right <span className="syntax-operator">=</span> <span className="syntax-function">rightRotate</span>(node<span className="syntax-operator">-></span>right);
-        <span className="syntax-keyword">return</span> <span className="syntax-function">leftRotate</span>(node);
-    {'}'}
-
-    <span className="syntax-keyword">return</span> node;
-{'}'}</code>
-                </CodeBlock>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+        </CardContent>
+    </Card>
   );
 };
 
-export default AVLTreeVisualization;
+
+export default function AVLTreePage() {
+    return (
+        <div className="max-w-7xl mx-auto p-4 md:p-8 space-y-12">
+            <header className="text-center">
+                <h1 className="text-4xl md:text-5xl font-extrabold text-primary mb-4 tracking-wide">AVL Trees</h1>
+                <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+                    The original self-balancing binary search tree, ensuring that tree operations remain efficient.
+                </p>
+            </header>
+
+            <Card>
+                <CardHeader><CardTitle>What is an AVL Tree?</CardTitle></CardHeader>
+                <CardContent>
+                    <p className="text-muted-foreground">An AVL tree is a type of Binary Search Tree (BST) that automatically balances itself. In a standard BST, if you insert sorted data, the tree can become lopsided and degenerate into a linked list, making searches slow (O(n)). An AVL tree avoids this by ensuring that for any node, the heights of its two child subtrees differ by at most one. This height difference is called the **Balance Factor**.</p>
+                </CardContent>
+            </Card>
+
+            <Card>
+                 <CardHeader>
+                     <CardTitle>Core Concepts</CardTitle>
+                     <CardDescription>The balance of the tree is maintained using two key ideas: the balance factor and rotations.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                     <div>
+                        <h4 className="font-semibold text-primary-accent">Balance Factor</h4>
+                        <p className="text-muted-foreground">The balance factor of a node is calculated as: <strong>(Height of Left Subtree) - (Height of Right Subtree)</strong>. An AVL tree is balanced if every single node has a balance factor of -1, 0, or 1.</p>
+                    </div>
+                     <div>
+                        <h4 className="font-semibold text-primary-accent">Imbalance and Rotations</h4>
+                        <p className="text-muted-foreground">If a node's balance factor becomes -2 or 2 after an insertion or deletion, the tree is considered "unbalanced" at that point. To fix this, the tree performs one or more **rotations**. There are four main cases of imbalance:</p>
+                        <ul className="list-disc list-inside text-muted-foreground pl-4 mt-2">
+                            <li><strong>Left-Left (LL) Case:</strong> Requires a single Right rotation.</li>
+                            <li><strong>Right-Right (RR) Case:</strong> Requires a single Left rotation.</li>
+                            <li><strong>Left-Right (LR) Case:</strong> Requires a Left rotation followed by a Right rotation.</li>
+                            <li><strong>Right-Left (RL) Case:</strong> Requires a Right rotation followed by a Left rotation.</li>
+                        </ul>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <AVLTreeVisualizer />
+            
+             <Card>
+                <CardHeader>
+                    <CardTitle>C Implementation</CardTitle>
+                    <CardDescription>Here is a complete C implementation demonstrating the node structure, rotation functions, and the insertion logic with rebalancing.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                <h3 className="text-xl font-semibold text-gray-100 mb-2 mt-4">1. Node Structure & Utility Functions</h3>
+                <CodeBlock>
+{`#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int key;
+    struct Node *left;
+    struct Node *right;
+    int height;
+};
+
+// Function to get the height of a node
+int height(struct Node *N) {
+    if (N == NULL)
+        return 0;
+    return N->height;
+}
+
+// Function to get max of two integers
+int max(int a, int b) {
+    return (a > b) ? a : b;
+}
+
+// Function to create a new node
+struct Node* newNode(int key) {
+    struct Node* node = (struct Node*) malloc(sizeof(struct Node));
+    node->key   = key;
+    node->left   = NULL;
+    node->right  = NULL;
+    node->height = 1; // New node is initially added at leaf
+    return(node);
+}`}
+                </CodeBlock>
+                 <h3 className="text-xl font-semibold text-gray-100 mb-2 mt-4">2. Rotation Functions</h3>
+                 <CodeBlock>
+{`// Right rotate subtree rooted with y
+struct Node *rightRotate(struct Node *y) {
+    struct Node *x = y->left;
+    struct Node *T2 = x->right;
+
+    // Perform rotation
+    x->right = y;
+    y->left = T2;
+
+    // Update heights
+    y->height = max(height(y->left), height(y->right)) + 1;
+    x->height = max(height(x->left), height(x->right)) + 1;
+
+    return x;
+}
+
+// Left rotate subtree rooted with x
+struct Node *leftRotate(struct Node *x) {
+    struct Node *y = x->right;
+    struct Node *T2 = y->left;
+
+    // Perform rotation
+    y->left = x;
+    x->right = T2;
+
+    // Update heights
+    x->height = max(height(x->left), height(x->right)) + 1;
+    y->height = max(height(y->left), height(y->right)) + 1;
+
+    return y;
+}`}
+                 </CodeBlock>
+                 <h3 className="text-xl font-semibold text-gray-100 mb-2 mt-4">3. Insertion with Rebalancing</h3>
+                 <CodeBlock>
+{`// Get Balance factor of node N
+int getBalance(struct Node *N) {
+    if (N == NULL)
+        return 0;
+    return height(N->left) - height(N->right);
+}
+
+struct Node* insert(struct Node* node, int key) {
+    /* 1.  Perform the normal BST insertion */
+    if (node == NULL)
+        return(newNode(key));
+
+    if (key < node->key)
+        node->left  = insert(node->left, key);
+    else if (key > node->key)
+        node->right = insert(node->right, key);
+    else // Equal keys are not allowed in BST
+        return node;
+
+    /* 2. Update height of this ancestor node */
+    node->height = 1 + max(height(node->left), height(node->right));
+
+    /* 3. Get the balance factor of this ancestor node to check whether this node became unbalanced */
+    int balance = getBalance(node);
+
+    // If the node becomes unbalanced, then there are 4 cases
+
+    // Left Left Case
+    if (balance > 1 && key < node->left->key)
+        return rightRotate(node);
+
+    // Right Right Case
+    if (balance < -1 && key > node->right->key)
+        return leftRotate(node);
+
+    // Left Right Case
+    if (balance > 1 && key > node.left->key) {
+        node->left =  leftRotate(node->left);
+        return rightRotate(node);
+    }
+
+    // Right Left Case
+    if (balance < -1 && key < node->right->key) {
+        node->right = rightRotate(node->right);
+        return leftRotate(node);
+    }
+
+    /* return the (unchanged) node pointer */
+    return node;
+}`}
+                 </CodeBlock>
+                </CardContent>
+            </Card>
+
+        </div>
+    );
+}
+
