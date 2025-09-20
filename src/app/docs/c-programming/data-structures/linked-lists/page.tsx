@@ -33,7 +33,7 @@ export default function CLinkedListsPage() {
                             {'}'}<span className="semicolon">;</span>
                         </CodeSyntax>
                     </CodeBlock>
-                </section>
+                </Card>
 
                 <Card className="p-6 shadow-lg border-border">
                     <h2 className="text-3xl font-bold mb-4 text-primary">1. Singly Linked List</h2>
