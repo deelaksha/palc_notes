@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, Book, FileCode, SlidersHorizontal, Share2, Repeat, Workflow, FunctionSquare, Warehouse, Layers, Type, MousePointer, Puzzle } from 'lucide-react';
+import { ArrowRight, Book, FileCode, SlidersHorizontal, Share2, Repeat, Workflow, FunctionSquare, Warehouse, Layers, Type, MousePointer, Puzzle, FilePlus } from 'lucide-react';
 import Link from 'next/link';
 
 const topics = [
@@ -74,6 +74,12 @@ const topics = [
         description: 'Understand macros, conditional compilation, and header includes.',
         href: '/docs/c-programming/preprocessor-directives',
         icon: <Puzzle className="size-8" />,
+    },
+    {
+        name: 'File Handling',
+        description: 'Learn to read from and write to files.',
+        href: '/docs/c-programming/file-handling',
+        icon: <FilePlus className="size-8" />,
     },
 ];
 

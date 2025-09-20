@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 
 export default function FileHandlingRedirectPage() {
   useEffect(() => {
-    redirect('/docs/code-navigation');
+    redirect('/docs/c-programming/file-handling');
   }, []);
 
   return null;
