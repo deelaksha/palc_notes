@@ -230,6 +230,26 @@ export const commandsData = [
     },
     {
         category: "File Viewing and Editing",
+        name: "awk",
+        description: "The `awk` spell is a master scribe for text. It reads files line by line and lets you perform complex actions like extracting columns, doing calculations, and reformatting output. It's a programming language in itself!",
+        howItWorks: [
+            "The basic structure is `awk 'pattern { action }' filename`.",
+            "**Action**: The action block `{...}` runs on every line that matches the pattern. If there's no pattern, it runs on every line.",
+            "`$1, $2, ...`: `awk` automatically splits each line into columns (fields). `$1` is the first column, `$2` is the second, and so on. `$0` represents the entire line.",
+            "`-F 'delimiter'`: Specifies the field separator. By default, it's spaces, but you can change it to a comma for CSV files (`-F ','`) or any other character.",
+            "**BEGIN and END**: Special blocks that run once at the very beginning and very end of the process, perfect for adding headers or calculating totals."
+        ],
+        examples: [
+            { code: "ls -l | awk '{print $9}'", text: "Lists files in long format, then `awk` prints only the ninth column, which is the filename." }, 
+            { code: "awk '{print $1}' /etc/hosts", text: "Prints the first column (the IP address) of the hosts file." },
+            { code: "awk -F':' '{print $1}' /etc/passwd", text: "Uses the colon (`:`) as a separator to print just the usernames from the password file." },
+            { code: "awk '$3 > 1000' usage.log", text: "Prints only the lines from `usage.log` where the value in the third column is greater than 1000." },
+            { code: "awk 'BEGIN { print \"Name,Amount\" } { sum += $2 } $1 == \"Alice\" { print $1 \",\" $2 } END { print \"Total,\", sum }' sales.txt", text: "A complex script: it prints a CSV header, adds up the second column, prints lines only for 'Alice', and finally prints the grand total at the end."}
+        ],
+        realWorld: "System administrators and data scientists use `awk` every day to parse log files, extract specific data from CSVs, and generate custom reports from command-line output."
+    },
+    {
+        category: "File Viewing and Editing",
         name: "less",
         description: "The `less` spell is a powerful viewer for huge scrolls (large files). It lets you read them page by page, so you don't get overwhelmed. 'Less is more!'.",
         howItWorks: [
