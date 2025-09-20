@@ -24,7 +24,7 @@ const graphTypes = [
     {
         name: 'Cyclic & Acyclic Graphs',
         description: 'Graphs that contain cycles versus those that are cycle-free.',
-        href: '#', // Placeholder link
+        href: '/docs/c-programming/data-structures/graphs/cyclic-acyclic',
         icon: <Workflow className="size-8" />,
     },
      {
