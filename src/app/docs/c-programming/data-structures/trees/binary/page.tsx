@@ -7,6 +7,18 @@ import { CodeBlock } from '@/components/markdown/CodeBlock';
 import { Code } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
+// Tree Node class defined inside the component or imported
+class TreeNode {
+  value: number;
+  left: TreeNode | null;
+  right: TreeNode | null;
+  constructor(value: number) {
+    this.value = value;
+    this.left = null;
+    this.right = null;
+  }
+}
+
 const BinaryTreeVisualization = () => {
   const [tree, setTree] = useState<TreeNode | null>(null);
   const [inputValue, setInputValue] = useState('');
@@ -14,21 +26,8 @@ const BinaryTreeVisualization = () => {
   const [explanation, setExplanation] = useState('Build a tree or create a sample one to begin.');
   const [traversalResult, setTraversalResult] = useState<number[]>([]);
   const [highlightedCode, setHighlightedCode] = useState<string>('');
-
   const [animationQueue, setAnimationQueue] = useState<(() => Promise<void>)[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
-
-  // Tree Node class
-  class TreeNode {
-    value: number;
-    left: TreeNode | null;
-    right: TreeNode | null;
-    constructor(value: number) {
-      this.value = value;
-      this.left = null;
-      this.right = null;
-    }
-  }
 
   // Insert node into BST
   const insertNode = (root: TreeNode | null, value: number): TreeNode => {
@@ -153,7 +152,6 @@ const BinaryTreeVisualization = () => {
   }, [animationQueue, isAnimating]);
   
   const runDelete = () => {
-    // Simplified for brevity, would be implemented similar to runInsert
     const value = parseInt(inputValue);
     if (isNaN(value) || !searchNode(tree, value)) {
         setExplanation('Value not found or invalid.');
@@ -283,7 +281,7 @@ const BinaryTreeVisualization = () => {
       </g>
     );
   };
-  
+
   return (
     <div className="max-w-7xl mx-auto p-4 bg-gradient-to-br from-gray-900 to-gray-800 min-h-screen">
       <div className="bg-gray-800 rounded-xl shadow-2xl p-6 border border-gray-700">
@@ -366,71 +364,77 @@ const BinaryTreeVisualization = () => {
                 <h3 className="text-xl font-semibold text-gray-100 mb-2">1. Node Structure</h3>
                 <p className="text-sm text-gray-400 mb-4">The basic building block of a tree. Each node contains data, a pointer to a left child, and a pointer to a right child.</p>
                 <CodeBlock>
-<code><span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> {'{'}
-    <span className="syntax-datatype">int</span> <span className="syntax-function">data</span>;
-    <span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> *<span className="syntax-function">left</span>;
-    <span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> *<span className="syntax-function">right</span>;
-{'};'}</span></code>
+                  <code>
+                    <span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> {'{'}{'\n'}
+                    {'    '}<span className="syntax-datatype">int</span> <span className="syntax-function">data</span>;{'\n'}
+                    {'    '}<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> *<span className="syntax-function">left</span>;{'\n'}
+                    {'    '}<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> *<span className="syntax-function">right</span>;{'\n'}
+                    {'};'}
+                  </code>
                 </CodeBlock>
             </div>
              <div>
                 <h3 className="text-xl font-semibold text-gray-100 mb-2">2. Insert Function</h3>
                 <p className="text-sm text-gray-400 mb-4">Recursively finds the correct position in the tree to insert a new node while maintaining the BST property (left &lt; root &lt; right).</p>
                 <CodeBlock>
-<code><span className="syntax-comment">{'// Function to create a new node'}</span>
-<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>* <span className="syntax-function">newNode</span>(<span className="syntax-datatype">int</span> <span className="syntax-function">item</span>) {'{'}
-    <span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>* <span className="syntax-function">temp</span> = (<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>*)<span className="syntax-function">malloc</span>(<span className="syntax-keyword">sizeof</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>));
-    <span className="syntax-function">temp</span><span className="syntax-operator">-></span><span className="syntax-function">data</span> = <span className="syntax-function">item</span>;
-    <span className="syntax-function">temp</span><span className="syntax-operator">-></span><span className="syntax-function">left</span> = <span className="syntax-function">temp</span><span className="syntax-operator">-></span><span className="syntax-function">right</span> = <span className="syntax-keyword">NULL</span>;
-    <span className="syntax-keyword">return</span> <span className="syntax-function">temp</span>;
-{'}'}
+                  <code>
+                    <span className="syntax-comment">{'// Function to create a new node'}</span>{'\n'}
+                    <span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>* <span className="syntax-function">newNode</span>(<span className="syntax-datatype">int</span> <span className="syntax-function">item</span>) {'{'}{'\n'}
+                    {'    '}<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>* <span className="syntax-function">temp</span> = (<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>*)<span className="syntax-function">malloc</span>(<span className="syntax-keyword">sizeof</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>));{'\n'}
+                    {'    '}<span className="syntax-function">temp</span><span className="syntax-operator">-&gt;</span><span className="syntax-function">data</span> = <span className="syntax-function">item</span>;{'\n'}
+                    {'    '}<span className="syntax-function">temp</span><span className="syntax-operator">-&gt;</span><span className="syntax-function">left</span> = <span className="syntax-function">temp</span><span className="syntax-operator">-&gt;</span><span className="syntax-function">right</span> = <span className="syntax-keyword">NULL</span>;{'\n'}
+                    {'    '}<span className="syntax-keyword">return</span> <span className="syntax-function">temp</span>;{'\n'}
+                    {'}'}{'\n'}{'\n'}
 
-<span className="syntax-comment">{'// Function to insert a new node with given data in BST'}</span>
-<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>* <span className="syntax-function">insert</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>* <span className="syntax-function">node</span>, <span className="syntax-datatype">int</span> <span className="syntax-function">data</span>) {'{'}
-    <span className="syntax-comment">{'// If the tree is empty, return a new node'}</span>
-    <span className="syntax-keyword">if</span> (<span className="syntax-function">node</span> == <span className="syntax-keyword">NULL</span>) <span className="syntax-keyword">return</span> <span className="syntax-function">newNode</span>(<span className="syntax-function">data</span>);
+                    <span className="syntax-comment">{'// Function to insert a new node with given data in BST'}</span>{'\n'}
+                    <span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>* <span className="syntax-function">insert</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>* <span className="syntax-function">node</span>, <span className="syntax-datatype">int</span> <span className="syntax-function">data</span>) {'{'}{'\n'}
+                    {'    '}<span className="syntax-comment">{'// If the tree is empty, return a new node'}</span>{'\n'}
+                    {'    '}<span className="syntax-keyword">if</span> (<span className="syntax-function">node</span> == <span className="syntax-keyword">NULL</span>) <span className="syntax-keyword">return</span> <span className="syntax-function">newNode</span>(<span className="syntax-function">data</span>);{'\n'}{'\n'}
 
-    <span className="syntax-comment">{'// Otherwise, recur down the tree'}</span>
-    <span className="syntax-keyword">if</span> (<span className="syntax-function">data</span> < <span className="syntax-function">node</span><span className="syntax-operator">-></span><span className="syntax-function">data</span>)
-        <span className="syntax-function">node</span><span className="syntax-operator">-></span><span className="syntax-function">left</span>  = <span className="syntax-function">insert</span>(<span className="syntax-function">node</span><span className="syntax-operator">-></span><span className="syntax-function">left</span>, <span className="syntax-function">data</span>);
-    <span className="syntax-keyword">else if</span> (<span className="syntax-function">data</span> > <span className="syntax-function">node</span><span className="syntax-operator">-></span><span className="syntax-function">data</span>)
-        <span className="syntax-function">node</span><span className="syntax-operator">-></span><span className="syntax-function">right</span> = <span className="syntax-function">insert</span>(<span className="syntax-function">node</span><span className="syntax-operator">-></span><span className="syntax-function">right</span>, <span className="syntax-function">data</span>);   
+                    {'    '}<span className="syntax-comment">{'// Otherwise, recur down the tree'}</span>{'\n'}
+                    {'    '}<span className="syntax-keyword">if</span> (<span className="syntax-function">data</span> <span className="syntax-operator">&lt;</span> <span className="syntax-function">node</span><span className="syntax-operator">-&gt;</span><span className="syntax-function">data</span>){'\n'}
+                    {'        '}<span className="syntax-function">node</span><span className="syntax-operator">-&gt;</span><span className="syntax-function">left</span>  = <span className="syntax-function">insert</span>(<span className="syntax-function">node</span><span className="syntax-operator">-&gt;</span><span className="syntax-function">left</span>, <span className="syntax-function">data</span>);{'\n'}
+                    {'    '}<span className="syntax-keyword">else if</span> (<span className="syntax-function">data</span> <span className="syntax-operator">&gt;</span> <span className="syntax-function">node</span><span className="syntax-operator">-&gt;</span><span className="syntax-function">data</span>){'\n'}
+                    {'        '}<span className="syntax-function">node</span><span className="syntax-operator">-&gt;</span><span className="syntax-function">right</span> = <span className="syntax-function">insert</span>(<span className="syntax-function">node</span><span className="syntax-operator">-&gt;</span><span className="syntax-function">right</span>, <span className="syntax-function">data</span>);   {'\n'}{'\n'}
 
-    <span className="syntax-comment">{'// return the (unchanged) node pointer'}</span>
-    <span className="syntax-keyword">return</span> <span className="syntax-function">node</span>;
-{'}'}</span></code>
+                    {'    '}<span className="syntax-comment">{'// return the (unchanged) node pointer'}</span>{'\n'}
+                    {'    '}<span className="syntax-keyword">return</span> <span className="syntax-function">node</span>;{'\n'}
+                    {'}'}
+                  </code>
                 </CodeBlock>
             </div>
              <div>
                 <h3 className="text-xl font-semibold text-gray-100 mb-2">3. Traversal Functions</h3>
                 <p className="text-sm text-gray-400 mb-4">Different ways to visit every node in the tree.</p>
                 <CodeBlock>
-<code><span className="syntax-comment">{'// In-Order Traversal (Left, Root, Right) - gives sorted output'}</span>
-<span className="syntax-keyword">void</span> <span className="syntax-function">printInorder</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>* <span className="syntax-function">node</span>) {'{'}
-    <span className="syntax-keyword">if</span> (<span className="syntax-function">node</span> == <span className="syntax-keyword">NULL</span>)
-        <span className="syntax-keyword">return</span>;
-    <span className="syntax-function">printInorder</span>(<span className="syntax-function">node</span><span className="syntax-operator">-></span><span className="syntax-function">left</span>);
-    <span className="syntax-function">printf</span>(<span className="syntax-string">"%d "</span>, <span className="syntax-function">node</span><span className="syntax-operator">-></span><span className="syntax-function">data</span>);  
-    <span className="syntax-function">printInorder</span>(<span className="syntax-function">node</span><span className="syntax-operator">-></span><span className="syntax-function">right</span>);
-{'}'}
+                  <code>
+                    <span className="syntax-comment">{'// In-Order Traversal (Left, Root, Right) - gives sorted output'}</span>{'\n'}
+                    <span className="syntax-keyword">void</span> <span className="syntax-function">printInorder</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>* <span className="syntax-function">node</span>) {'{'}{'\n'}
+                    {'    '}<span className="syntax-keyword">if</span> (<span className="syntax-function">node</span> == <span className="syntax-keyword">NULL</span>){'\n'}
+                    {'        '}<span className="syntax-keyword">return</span>;{'\n'}
+                    {'    '}<span className="syntax-function">printInorder</span>(<span className="syntax-function">node</span><span className="syntax-operator">-&gt;</span><span className="syntax-function">left</span>);{'\n'}
+                    {'    '}<span className="syntax-function">printf</span>(<span className="syntax-string">"%d "</span>, <span className="syntax-function">node</span><span className="syntax-operator">-&gt;</span><span className="syntax-function">data</span>);  {'\n'}
+                    {'    '}<span className="syntax-function">printInorder</span>(<span className="syntax-function">node</span><span className="syntax-operator">-&gt;</span><span className="syntax-function">right</span>);{'\n'}
+                    {'}'}{'\n'}{'\n'}
 
-<span className="syntax-comment">{'// Pre-Order Traversal (Root, Left, Right)'}</span>
-<span className="syntax-keyword">void</span> <span className="syntax-function">printPreorder</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>* <span className="syntax-function">node</span>) {'{'}
-    <span className="syntax-keyword">if</span> (<span className="syntax-function">node</span> == <span className="syntax-keyword">NULL</span>)
-        <span className="syntax-keyword">return</span>;
-    <span className="syntax-function">printf</span>(<span className="syntax-string">"%d "</span>, <span className="syntax-function">node</span><span className="syntax-operator">-></span><span className="syntax-function">data</span>);  
-    <span className="syntax-function">printPreorder</span>(<span className="syntax-function">node</span><span className="syntax-operator">-></span><span className="syntax-function">left</span>);  
-    <span className="syntax-function">printPreorder</span>(<span className="syntax-function">node</span><span className="syntax-operator">-></span><span className="syntax-function">right</span>);
-{'}'}
+                    <span className="syntax-comment">{'// Pre-Order Traversal (Root, Left, Right)'}</span>{'\n'}
+                    <span className="syntax-keyword">void</span> <span className="syntax-function">printPreorder</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>* <span className="syntax-function">node</span>) {'{'}{'\n'}
+                    {'    '}<span className="syntax-keyword">if</span> (<span className="syntax-function">node</span> == <span className="syntax-keyword">NULL</span>){'\n'}
+                    {'        '}<span className="syntax-keyword">return</span>;{'\n'}
+                    {'    '}<span className="syntax-function">printf</span>(<span className="syntax-string">"%d "</span>, <span className="syntax-function">node</span><span className="syntax-operator">-&gt;</span><span className="syntax-function">data</span>);  {'\n'}
+                    {'    '}<span className="syntax-function">printPreorder</span>(<span className="syntax-function">node</span><span className="syntax-operator">-&gt;</span><span className="syntax-function">left</span>);  {'\n'}
+                    {'    '}<span className="syntax-function">printPreorder</span>(<span className="syntax-function">node</span><span className="syntax-operator">-&gt;</span><span className="syntax-function">right</span>);{'\n'}
+                    {'}'}{'\n'}{'\n'}
 
-<span className="syntax-comment">{'// Post-Order Traversal (Left, Right, Root)'}</span>
-<span className="syntax-keyword">void</span> <span className="syntax-function">printPostorder</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>* <span className="syntax-function">node</span>) {'{'}
-    <span className="syntax-keyword">if</span> (<span className="syntax-function">node</span> == <span className="syntax-keyword">NULL</span>)
-        <span className="syntax-keyword">return</span>;
-    <span className="syntax-function">printPostorder</span>(<span className="syntax-function">node</span><span className="syntax-operator">-></span><span className="syntax-function">left</span>);
-    <span className="syntax-function">printPostorder</span>(<span className="syntax-function">node</span><span className="syntax-operator">-></span><span className="syntax-function">right</span>);
-    <span className="syntax-function">printf</span>(<span className="syntax-string">"%d "</span>, <span className="syntax-function">node</span><span className="syntax-operator">-></span><span className="syntax-function">data</span>);
-{'}'}</span></code>
+                    <span className="syntax-comment">{'// Post-Order Traversal (Left, Right, Root)'}</span>{'\n'}
+                    <span className="syntax-keyword">void</span> <span className="syntax-function">printPostorder</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>* <span className="syntax-function">node</span>) {'{'}{'\n'}
+                    {'    '}<span className="syntax-keyword">if</span> (<span className="syntax-function">node</span> == <span className="syntax-keyword">NULL</span>){'\n'}
+                    {'        '}<span className="syntax-keyword">return</span>;{'\n'}
+                    {'    '}<span className="syntax-function">printPostorder</span>(<span className="syntax-function">node</span><span className="syntax-operator">-&gt;</span><span className="syntax-function">left</span>);{'\n'}
+                    {'    '}<span className="syntax-function">printPostorder</span>(<span className="syntax-function">node</span><span className="syntax-operator">-&gt;</span><span className="syntax-function">right</span>);{'\n'}
+                    {'    '}<span className="syntax-function">printf</span>(<span className="syntax-string">"%d "</span>, <span className="syntax-function">node</span><span className="syntax-operator">-&gt;</span><span className="syntax-function">data</span>);{'\n'}
+                    {'}'}
+                  </code>
                 </CodeBlock>
             </div>
           </div>
