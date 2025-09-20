@@ -63,6 +63,12 @@ const topics = [
         href: '/docs/c-programming/pointers',
         icon: <MousePointer className="size-8" />,
     },
+    {
+        name: 'Structures & Unions',
+        description: 'Group different data types into a single custom unit.',
+        href: '/docs/c-programming/structures-unions',
+        icon: <Layers className="size-8" />,
+    },
 ];
 
 export default function CProgrammingHubPage() {
