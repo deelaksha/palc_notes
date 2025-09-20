@@ -12,7 +12,7 @@ const topics = [
     {
         name: 'Graph Representations',
         description: 'Learn about Adjacency Matrices and Adjacency Lists.',
-        href: '#',
+        href: '/docs/c-programming/data-structures/graphs/representations',
         icon: <GitBranch className="size-8" />,
     },
     {
