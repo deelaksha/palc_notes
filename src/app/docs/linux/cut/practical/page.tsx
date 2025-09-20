@@ -6,12 +6,8 @@ import { ArrowLeft } from 'lucide-react';
 import { commandsData } from '@/lib/linux-commands';
 import { CutGame } from '@/components/linux-game/CutGame';
 
-export default function CommandPracticalPage({
-  params,
-}: {
-  params: { command: string };
-}) {
-    const command = commandsData.find((cmd) => cmd.name.replace(' ', '-') === params.command);
+export default function CommandPracticalPage() {
+    const command = commandsData.find((cmd) => cmd.name === 'cut');
 
   return (
     <div className="flex flex-col min-h-screen font-mono bg-gradient-to-br from-dark-primary via-dark-secondary to-blue-900 text-white overflow-x-hidden">
@@ -20,7 +16,7 @@ export default function CommandPracticalPage({
         
         <header className="p-4 md:p-8 z-20">
             <Button asChild variant="ghost" className="text-white hover:bg-gray-800 hover:text-white">
-                <Link href={`/docs/linux/${params.command}`}>
+                <Link href={`/docs/linux/cut`}>
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Back to Command Hub
                 </Link>
