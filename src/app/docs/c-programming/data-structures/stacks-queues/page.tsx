@@ -1,251 +1,70 @@
 
-'use client';
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { ArrowRight, Layers, ChevronsUpDown } from 'lucide-react';
+import Link from 'next/link';
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
-import { CodeBlock } from '@/components/markdown/CodeBlock';
-import { Layers, HelpCircle, CheckCircle, Undo2, ArrowDown, ArrowUp } from 'lucide-react';
+const topics = [
+    {
+        name: 'Stack',
+        description: 'A LIFO (Last-In, First-Out) data structure.',
+        href: '/docs/c-programming/data-structures/stacks-queues/stack',
+        icon: <Layers className="size-8" />,
+    },
+    {
+        name: 'Queue',
+        description: 'A FIFO (First-In, First-Out) data structure.',
+        href: '/docs/c-programming/data-structures/stacks-queues/queue',
+        icon: <ChevronsUpDown className="size-8" />,
+    },
+];
 
-const StackVisualization = () => {
-  const [stack, setStack] = useState<string[]>([]);
-  const [inputValue, setInputValue] = useState('');
-  const [animatingItem, setAnimatingItem] = useState<string | null>(null);
-  const [operation, setOperation] = useState('');
-  const [explanation, setExplanation] = useState('The stack is a "Last-In, First-Out" (LIFO) data structure.');
-
-  const push = () => {
-    if (inputValue.trim() === '' || operation !== '') return;
-    
-    setOperation('push');
-    setAnimatingItem(inputValue);
-    setExplanation(`Pushing "${inputValue}" onto the stack. It becomes the new top element.`);
-    
-    setTimeout(() => {
-      setStack(prev => [...prev, inputValue]);
-      setInputValue('');
-      setAnimatingItem(null);
-      setOperation('');
-    }, 800);
-  };
-
-  const pop = () => {
-    if (stack.length === 0 || operation !== '') {
-      setExplanation('Cannot pop from an empty stack!');
-      return;
-    }
-    
-    const topItem = stack[stack.length - 1];
-    setOperation('pop');
-    setAnimatingItem(topItem);
-    setExplanation(`Popping "${topItem}" from the stack. The element below it will become the new top.`);
-    
-    setTimeout(() => {
-      setStack(prev => prev.slice(0, -1));
-      setAnimatingItem(null);
-      setOperation('');
-    }, 800);
-  };
-
-  const peek = () => {
-    if (stack.length === 0) {
-      setExplanation('Stack is empty - nothing to peek at!');
-      return;
-    }
-    const topItem = stack[stack.length - 1];
-    setExplanation(`Peek: The top element is "${topItem}". Peek doesn't remove the element.`);
-  };
-  
-  const isEmpty = () => {
-    setExplanation(`isEmpty(): ${stack.length === 0 ? 'Yes, the stack is empty.' : `No, the stack has ${stack.length} element(s).`}`);
-  };
-
+export default function StacksAndQueuesHubPage() {
   return (
-    <div className="max-w-6xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-8">
-          {/* Visual Stack */}
-          <Card className="flex flex-col">
-            <CardHeader>
-                <CardTitle className="text-center">Stack Visualization</CardTitle>
-            </CardHeader>
-            <CardContent className="flex-grow flex flex-col gap-4">
-                <div className="flex flex-wrap gap-3 justify-center">
-                  <Input
-                    type="text"
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    placeholder="Enter value"
-                    className="flex-grow"
-                    onKeyPress={(e) => e.key === 'Enter' && push()}
-                    disabled={operation !== ''}
-                  />
-                  <Button
-                    onClick={push}
-                    disabled={inputValue.trim() === '' || operation !== ''}
-                    className="bg-primary hover:bg-primary/90"
-                  >
-                    Push
-                  </Button>
-                  <Button
-                    onClick={pop}
-                    disabled={stack.length === 0 || operation !== ''}
-                    variant="destructive"
-                  >
-                    Pop
-                  </Button>
-                  <Button
-                    onClick={peek}
-                    disabled={stack.length === 0}
-                    variant="secondary"
-                  >
-                    Peek
-                  </Button>
-                </div>
+    <div className="flex flex-col flex-1">
+      <main className="flex-1 p-4 md:p-8 lg:p-12">
+        <header className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-primary font-headline mb-2">
+            Stacks & Queues
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            Explore linear data structures that manage collections of elements.
+          </p>
+        </header>
 
-                <div className="relative bg-card-nested rounded-lg p-6 min-h-96 flex flex-col justify-end items-center">
-                    <div className="absolute top-4 left-4 text-sm text-muted-foreground flex items-center gap-1">Top of Stack <ArrowDown className="size-4"/></div>
-                    
-                    <AnimatePresence>
-                        {operation === 'push' && animatingItem && (
-                            <motion.div 
-                                className="absolute bg-yellow-400 text-gray-800 px-4 py-3 rounded-lg border-2 border-yellow-500 font-semibold z-10"
-                                initial={{ top: 0, opacity: 0 }}
-                                animate={{ top: '40%', opacity: 1, transition: { type: 'spring', stiffness: 100 } }}
-                                exit={{ top: '80%', opacity: 0}}
-                            >
-                            {animatingItem}
-                            </motion.div>
-                        )}
-                        {operation === 'pop' && animatingItem && (
-                             <motion.div 
-                                className="absolute bg-red-500 text-white px-4 py-3 rounded-lg border-2 border-red-600 font-semibold z-10"
-                                style={{ bottom: `${(stack.length - 1) * 3.5 + 4}rem` }}
-                                animate={{ top: '-20%', opacity: 0, transition: { duration: 0.5 } }}
-                            >
-                            {animatingItem}
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                    
-                    <div className="flex flex-col-reverse gap-2 w-full max-w-xs">
-                        {stack.map((item, index) => (
-                          <motion.div
-                            layout
-                            key={`${item}-${index}`}
-                            initial={{ opacity: 0, y: -20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.8 }}
-                            className={`bg-primary text-primary-foreground px-4 py-3 rounded-lg text-center font-semibold transition-all duration-300 ${
-                              index === stack.length - 1 ? 'ring-4 ring-primary/50' : ''
-                            }`}
-                          >
-                            {item}
-                          </motion.div>
-                        ))}
+        <section className="w-full max-w-2xl mx-auto">
+          <div className="grid gap-6 md:grid-cols-1">
+            {topics.map((topic) => (
+              <Link key={topic.name} href={topic.href} className="group">
+                <Card className="h-full transition-all duration-300 ease-in-out group-hover:border-primary group-hover:shadow-lg group-hover:shadow-primary/10 group-hover:-translate-y-1">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="bg-muted p-3 rounded-md text-foreground">
+                          {topic.icon}
+                        </div>
+                        <div>
+                          <CardTitle className="font-headline">
+                            {topic.name}
+                          </CardTitle>
+                          <CardDescription>
+                            {topic.description}
+                          </CardDescription>
+                        </div>
+                      </div>
+                      <ArrowRight className="size-5 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
                     </div>
-                </div>
-
-                 {explanation && (
-                    <div className="bg-blue-900/30 p-4 rounded-lg border-l-4 border-blue-500">
-                        <h4 className="font-semibold text-foreground flex items-center gap-2"><HelpCircle className="size-5"/> What's Happening:</h4>
-                        <p className="text-muted-foreground text-sm">{explanation}</p>
-                    </div>
-                )}
-            </CardContent>
-          </Card>
-
-          {/* Code and Explanations */}
-          <div className="space-y-6">
-            <Card>
-                <CardHeader>
-                    <CardTitle>C Implementation</CardTitle>
-                </CardHeader>
-                <CardContent>
-                <CodeBlock>
-{`#include <stdio.h>
-#include <stdlib.h>
-
-#define MAX_SIZE 10
-
-struct Stack {
-    int items[MAX_SIZE];
-    int top;
-};
-
-// Initialize stack
-void init(struct Stack *s) {
-    s->top = -1;
-}
-
-// Check if stack is full
-int isFull(struct Stack *s) {
-    return s->top == MAX_SIZE - 1;
-}
-
-// Check if stack is empty
-int isEmpty(struct Stack *s) {
-    return s->top == -1;
-}
-
-// Push operation
-void push(struct Stack *s, int value) {
-    if (isFull(s)) {
-        printf("Stack Overflow\\n");
-    } else {
-        s->items[++(s->top)] = value;
-    }
-}
-
-// Pop operation
-int pop(struct Stack *s) {
-    if (isEmpty(s)) {
-        printf("Stack Underflow\\n");
-        return -1;
-    } else {
-        return s->items[(s->top)--];
-    }
-}`}
-                </CodeBlock>
-                </CardContent>
-            </Card>
-
-            <Card>
-                <CardHeader><CardTitle>Common Use Cases</CardTitle></CardHeader>
-                <CardContent>
-                     <ul className="text-sm text-muted-foreground space-y-2 list-disc list-inside">
-                        <li>Function call management (the "call stack")</li>
-                        <li>Undo operations in applications (<Undo2 className="inline-block size-4 mr-1"/>)</li>
-                        <li>Expression evaluation (e.g., converting infix to postfix) and syntax parsing</li>
-                        <li>Browser history navigation</li>
-                        <li>Backtracking algorithms (e.g., solving a maze)</li>
-                    </ul>
-                </CardContent>
-            </Card>
+                  </CardHeader>
+                </Card>
+              </Link>
+            ))}
           </div>
-        </div>
-      </div>
+        </section>
+      </main>
+    </div>
   );
-};
-
-
-export default function StacksAndQueuesPage() {
-    return (
-        <div className="max-w-7xl mx-auto p-4 md:p-8">
-            <header className="text-center mb-12">
-                <div className="inline-block bg-primary/10 p-4 rounded-full mb-4">
-                    <Layers className="size-12 text-primary" />
-                </div>
-                <h1 className="text-4xl md:text-5xl font-bold text-primary font-headline mb-2">
-                    Stacks & Queues
-                </h1>
-                <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-                    Exploring fundamental LIFO (Last-In, First-Out) and FIFO (First-In, First-Out) data structures.
-                </p>
-            </header>
-            <StackVisualization />
-        </div>
-    );
 }
-
