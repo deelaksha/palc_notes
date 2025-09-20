@@ -15,36 +15,69 @@ const regexData = [
         }
     },
     {
-        char: '*',
-        name: 'Asterisk (Zero or More)',
-        description: 'Matches zero or more of the preceding character',
-        demoString: 'a aa aaa baaa ca',
-        pattern: 'a*',
+        char: '\\d',
+        name: 'Digit',
+        description: 'Matches any digit (0-9)',
+        demoString: 'abc123def456ghi',
+        pattern: '\\d',
         examples: {
-            matches: ['a', 'aa', 'aaa', 'baaa (aaa part)', 'ca (a part)', '(empty string)'],
-            noMatches: ['b', 'c']
+            matches: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+            noMatches: ['a', 'b', 'c', '@', '#']
         }
     },
     {
-        char: '+',
-        name: 'Plus (One or More)',
-        description: 'Matches one or more of the preceding character',
-        demoString: 'a aa aaa b ba bbb',
-        pattern: 'a+',
+        char: '\\D',
+        name: 'Non-Digit',
+        description: 'Matches any character that is not a digit',
+        demoString: '123-ABC-456',
+        pattern: '\\D',
         examples: {
-            matches: ['a', 'aa', 'aaa', 'ba (a part)'],
-            noMatches: ['b', '(empty string)']
+            matches: ['-', 'A', 'B', 'C'],
+            noMatches: ['1', '2', '3', '4', '5', '6']
         }
     },
     {
-        char: '?',
-        name: 'Question Mark (Optional)',
-        description: 'Matches zero or one of the preceding character',
-        demoString: 'color colour favor favour',
-        pattern: 'colou?r',
+        char: '\\w',
+        name: 'Word Character',
+        description: 'Matches any word character (letters, digits, underscore)',
+        demoString: 'hello_123 @#$ test-case',
+        pattern: '\\w',
         examples: {
-            matches: ['color', 'colour'],
-            noMatches: ['colouur', 'colr']
+            matches: ['h', 'e', 'l', 'o', '_', '1', '2', '3', 't', 's'],
+            noMatches: ['@', '#', '$', '-', ' ']
+        }
+    },
+    {
+        char: '\\W',
+        name: 'Non-Word Character',
+        description: 'Matches any character that is not a letter, digit, or underscore',
+        demoString: 'hello_123 @#$ test-case',
+        pattern: '\\W',
+        examples: {
+            matches: [' ', '@', '#', '$', '-'],
+            noMatches: ['h', 'e', 'l', 'o', '_', '1', '2', '3']
+        }
+    },
+    {
+        char: '\\s',
+        name: 'Whitespace',
+        description: 'Matches any whitespace character (space, tab, newline)',
+        demoString: 'hello world\\ttest\\nline',
+        pattern: '\\s',
+        examples: {
+            matches: [' (space)', '\\t (tab)', '\\n (newline)'],
+            noMatches: ['a', '1', '@']
+        }
+    },
+     {
+        char: '\\S',
+        name: 'Non-Whitespace',
+        description: 'Matches any character that is not whitespace',
+        demoString: 'hello world',
+        pattern: '\\S',
+        examples: {
+            matches: ['h','e','l','l','o','w','o','r','l','d'],
+            noMatches: [' ']
         }
     },
     {
@@ -70,14 +103,102 @@ const regexData = [
         }
     },
     {
+        char: '\\b',
+        name: 'Word Boundary',
+        description: 'Matches at a word boundary (between \\w and \\W)',
+        demoString: 'cat catch dog doggy',
+        pattern: '\\bcat\\b',
+        examples: {
+            matches: ['cat (as a whole word)'],
+            noMatches: ['catch (cat is part of a word)']
+        }
+    },
+    {
+        char: '\\B',
+        name: 'Not a Word Boundary',
+        description: 'Matches everywhere except at a word boundary',
+        demoString: 'cat catch concatenate',
+        pattern: '\\Bcat\\B',
+        examples: {
+            matches: ['concatenate (cat is inside the word)'],
+            noMatches: ['cat', 'catch']
+        }
+    },
+    {
         char: '[]',
         name: 'Character Class',
-        description: 'Matches any single character within brackets',
+        description: 'Matches any single character within the brackets',
         demoString: 'cat bat rat mat hat sat',
         pattern: '[cbr]at',
         examples: {
             matches: ['cat', 'bat', 'rat'],
             noMatches: ['mat', 'hat', 'sat']
+        }
+    },
+    {
+        char: '[^...]',
+        name: 'Negated Character Class',
+        description: 'Matches any single character NOT within the brackets',
+        demoString: 'cat bat rat mat hat sat',
+        pattern: '[^cbr]at',
+        examples: {
+            matches: ['mat', 'hat', 'sat'],
+            noMatches: ['cat', 'bat', 'rat']
+        }
+    },
+    {
+        char: '*',
+        name: 'Asterisk (Zero or More)',
+        description: 'Matches the preceding character zero or more times',
+        demoString: 'a aa aaa baaa ca',
+        pattern: 'a*',
+        examples: {
+            matches: ['a', 'aa', 'aaa', 'baaa (aaa part)', 'ca (a part)', '(empty string)'],
+            noMatches: ['b', 'c']
+        }
+    },
+    {
+        char: '+',
+        name: 'Plus (One or More)',
+        description: 'Matches the preceding character one or more times',
+        demoString: 'a aa aaa b ba bbb',
+        pattern: 'a+',
+        examples: {
+            matches: ['a', 'aa', 'aaa', 'ba (a part)'],
+            noMatches: ['b', '(empty string)']
+        }
+    },
+    {
+        char: '?',
+        name: 'Question Mark (Optional)',
+        description: 'Matches the preceding character zero or one time',
+        demoString: 'color colour favor favour',
+        pattern: 'colou?r',
+        examples: {
+            matches: ['color', 'colour'],
+            noMatches: ['colouur', 'colr']
+        }
+    },
+    {
+        char: '*?',
+        name: 'Lazy Asterisk',
+        description: 'Matches zero or more times, but as few as possible (lazy)',
+        demoString: '<div>content</div>',
+        pattern: '<.*?>',
+        examples: {
+            matches: ['<div>', '</div>'],
+            noMatches: ['The entire string (which <.*> would match)']
+        }
+    },
+    {
+        char: '+?',
+        name: 'Lazy Plus',
+        description: 'Matches one or more times, but as few as possible (lazy)',
+        demoString: '<h1>Title</h1> <h2>Subtitle</h2>',
+        pattern: '<.+?>',
+        examples: {
+            matches: ['<h1>', '</h1>', '<h2>', '</h2>'],
+            noMatches: ['<h1>Title</h1> <h2>Subtitle</h2>']
         }
     },
     {
@@ -92,20 +213,9 @@ const regexData = [
         }
     },
     {
-        char: '()',
-        name: 'Parentheses (Groups)',
-        description: 'Groups characters together and captures matches',
-        demoString: 'abc abcabc abcabcabc',
-        pattern: '(abc)+',
-        examples: {
-            matches: ['abc', 'abcabc', 'abcabcabc'],
-            noMatches: ['ab', 'bc', 'def']
-        }
-    },
-    {
         char: '|',
         name: 'Pipe (OR)',
-        description: 'Matches either the pattern before OR after',
+        description: 'Acts as an OR operator, matching either the pattern before or after',
         demoString: 'cat dog bird mouse',
         pattern: 'cat|dog',
         examples: {
@@ -114,47 +224,36 @@ const regexData = [
         }
     },
     {
-        char: '\\d',
-        name: 'Digit',
-        description: 'Matches any digit (0-9)',
-        demoString: 'abc123def456ghi',
-        pattern: '\\d',
+        char: '()',
+        name: 'Capturing Group',
+        description: 'Groups characters together and creates a captured group',
+        demoString: 'abc abcabc abcabcabc',
+        pattern: '(abc)+',
         examples: {
-            matches: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
-            noMatches: ['a', 'b', 'c', '@', '#']
+            matches: ['abc', 'abcabc', 'abcabcabc'],
+            noMatches: ['ab', 'bc', 'def']
         }
     },
     {
-        char: '\\w',
-        name: 'Word Character',
-        description: 'Matches any word character (letters, digits, underscore)',
-        demoString: 'hello_123 @#$ test-case',
-        pattern: '\\w',
+        char: '(?:...)',
+        name: 'Non-Capturing Group',
+        description: 'Groups characters together without creating a captured group',
+        demoString: 'cats or dogs',
+        pattern: '(?:cat|dog)s',
         examples: {
-            matches: ['a-z', 'A-Z', '0-9', '_'],
-            noMatches: ['@', '#', '$', '-', ' ']
+            matches: ['cats', 'dogs'],
+            noMatches: ['cat', 'dog']
         }
     },
     {
-        char: '\\s',
-        name: 'Whitespace',
-        description: 'Matches any whitespace character (space, tab, newline)',
-        demoString: 'hello world\\ttest\\nline',
-        pattern: '\\s',
+        char: '(?=...)',
+        name: 'Positive Lookahead',
+        description: 'Matches a group after the main expression without including it in the result',
+        demoString: 'cat1 dog2 bird3',
+        pattern: '\\w+(?=\\d)',
         examples: {
-            matches: [' (space)', '\\t (tab)', '\\n (newline)'],
-            noMatches: ['a', '1', '@']
-        }
-    },
-    {
-        char: '\\b',
-        name: 'Word Boundary',
-        description: 'Matches at word boundaries (between \\w and \\W)',
-        demoString: 'cat catch dog doggy',
-        pattern: '\\bcat\\b',
-        examples: {
-            matches: ['cat (whole word)'],
-            noMatches: ['catch (part of word)']
+            matches: ['cat', 'dog', 'bird'],
+            noMatches: ['cat1', 'dog2', 'bird3']
         }
     }
 ];
@@ -254,7 +353,7 @@ export default function RegexPage() {
                 <div class="try-section">
                     <div class="try-title">🧪 Try It Yourself</div>
                     <div>Test String:</div>
-                    <input type="text" class="try-input" id="testString" placeholder="Enter text to test..." value="${regex.demoString}">
+                    <input type="text" class="try-input" id="testString" placeholder="Enter text to test..." value="${regex.demoString.replace(/\\n/g, '\n')}">
                     <div>Your Regex Pattern:</div>
                     <input type="text" class="try-input" id="testPattern" placeholder="Enter regex pattern..." value="${regex.pattern}">
                     <div class="try-result" id="tryResult">Enter a pattern and test string to see matches highlighted</div>
