@@ -4,6 +4,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { CodeBlock } from '@/components/markdown/CodeBlock';
+import { Code } from 'lucide-react';
 
 const BinaryTreeVisualization = () => {
   const [tree, setTree] = useState<TreeNode | null>(null);
@@ -11,6 +13,7 @@ const BinaryTreeVisualization = () => {
   const [highlightedNodes, setHighlightedNodes] = useState<number[]>([]);
   const [explanation, setExplanation] = useState('Build a tree or create a sample one to begin.');
   const [traversalResult, setTraversalResult] = useState<number[]>([]);
+  const [highlightedCode, setHighlightedCode] = useState<string>('');
 
   const [animationQueue, setAnimationQueue] = useState<(() => Promise<void>)[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -84,6 +87,7 @@ const BinaryTreeVisualization = () => {
 
     steps.push(async () => {
         setExplanation(`Inserting ${value}. Start at the root.`);
+        setHighlightedCode('// Begin insertion\nstruct Node* insert(struct Node* node, int value)');
         setHighlightedNodes(current ? [current.value] : []);
         await wait(500);
     });
@@ -94,6 +98,7 @@ const BinaryTreeVisualization = () => {
             const node = current;
             steps.push(async () => {
                 setExplanation(`${value} < ${node.value}. Go left.`);
+                setHighlightedCode('if (value < node->value)\n    node->left  = insert(node->left, value);');
                 setHighlightedNodes(next ? [next.value] : [node.value]);
                 await wait(500);
             });
@@ -104,6 +109,7 @@ const BinaryTreeVisualization = () => {
             const node = current;
             steps.push(async () => {
                 setExplanation(`${value} > ${node.value}. Go right.`);
+                setHighlightedCode('else if (value > node->value)\n    node->right = insert(node->right, value);');
                 setHighlightedNodes(next ? [next.value] : [node.value]);
                 await wait(500);
             });
@@ -112,6 +118,7 @@ const BinaryTreeVisualization = () => {
         } else {
             steps.push(async () => {
                 setExplanation(`${value} already exists in the tree.`);
+                setHighlightedCode('// Value already exists, return node unchanged\nreturn node;');
                 setHighlightedNodes([value]);
                 await wait(500);
             });
@@ -122,12 +129,14 @@ const BinaryTreeVisualization = () => {
 
     steps.push(async () => {
         setExplanation(`Found an empty spot. Inserting ${value}.`);
+        setHighlightedCode('// Base case: If the node is null, create a new node\nif (node == NULL) return newNode(value);');
         setTree(prev => insertNode(JSON.parse(JSON.stringify(prev || null)), value));
         setHighlightedNodes([value]);
         await wait(500);
     });
      steps.push(async () => {
         setExplanation(`Insertion of ${value} complete.`);
+        setHighlightedCode('');
         setHighlightedNodes([]);
     });
     setAnimationQueue(steps);
@@ -152,6 +161,7 @@ const BinaryTreeVisualization = () => {
     }
     setTree(prev => deleteNode(JSON.parse(JSON.stringify(prev)), value));
     setExplanation(`Deleted ${value}. (Manual step-by-step for delete not implemented in this demo)`);
+    setHighlightedCode('');
   }
 
   const runTraversal = (type: 'inorder' | 'preorder' | 'postorder') => {
@@ -160,29 +170,72 @@ const BinaryTreeVisualization = () => {
     const result: number[] = [];
 
     const buildSteps = (node: TreeNode | null) => {
-        if (!node) return;
+        if (!node) {
+            steps.push(async () => {
+                 setExplanation(`Reached a NULL node, returning.`);
+                 setHighlightedCode('if (node == NULL)\n    return;');
+                 await wait(600);
+            });
+            return;
+        };
 
         const visit = () => {
             steps.push(async () => {
                 setExplanation(`Visiting node ${node.value}`);
+                setHighlightedCode(`printf("%d ", node->data);`);
                 setHighlightedNodes([node.value]);
                 result.push(node.value);
                 setTraversalResult([...result]);
                 await wait(600);
             });
         };
+        
+        const goLeft = () => {
+             steps.push(async () => {
+                setExplanation(`Going left from ${node.value}`);
+                setHighlightedCode(type === 'inorder' ? `printInorder(node->left);` : type === 'preorder' ? 'printPreorder(node->left);' : 'printPostorder(node->left);');
+                setHighlightedNodes(node.left ? [node.left.value] : [node.value]);
+                 await wait(600);
+            });
+        }
+        
+        const goRight = () => {
+             steps.push(async () => {
+                setExplanation(`Going right from ${node.value}`);
+                 setHighlightedCode(type === 'inorder' ? `printInorder(node->right);` : type === 'preorder' ? 'printPreorder(node->right);' : 'printPostorder(node->right);');
+                 setHighlightedNodes(node.right ? [node.right.value] : [node.value]);
+                 await wait(600);
+            });
+        }
 
-        if (type === 'preorder') visit();
-        buildSteps(node.left);
-        if (type === 'inorder') visit();
-        buildSteps(node.right);
-        if (type === 'postorder') visit();
+        if (type === 'preorder') {
+            visit();
+            goLeft();
+            buildSteps(node.left);
+            goRight();
+            buildSteps(node.right);
+        }
+        if (type === 'inorder') {
+            goLeft();
+            buildSteps(node.left);
+            visit();
+            goRight();
+            buildSteps(node.right);
+        }
+        if (type === 'postorder') {
+            goLeft();
+            buildSteps(node.left);
+            goRight();
+            buildSteps(node.right);
+            visit();
+        }
     };
 
     buildSteps(tree);
     steps.push(async () => {
         setExplanation(`${type} traversal complete.`);
         setHighlightedNodes([]);
+        setHighlightedCode('');
     });
     setAnimationQueue(steps);
   };
@@ -193,6 +246,7 @@ const BinaryTreeVisualization = () => {
     setExplanation('Tree cleared');
     setHighlightedNodes([]);
     setAnimationQueue([]);
+    setHighlightedCode('');
   };
 
   const createSampleTree = () => {
@@ -204,6 +258,7 @@ const BinaryTreeVisualization = () => {
     setTree(sampleTree);
     setExplanation('Created sample tree.');
     setAnimationQueue([]);
+    setHighlightedCode('');
   };
   
   const renderNode = (node: TreeNode | null, x: number, y: number, level: number): React.ReactNode => {
@@ -270,6 +325,16 @@ const BinaryTreeVisualization = () => {
              <div className="bg-gray-700 p-4 rounded-lg border-l-4 border-cyan-400 min-h-[80px]">
                 <h4 className="font-semibold text-cyan-300">Explanation:</h4>
                 <p className="text-cyan-100 text-sm mt-1">{explanation}</p>
+            </div>
+             <div className="bg-gray-900 p-4 rounded-lg min-h-[100px]">
+                 <h4 className="font-semibold text-gray-200 mb-2 flex items-center gap-2"><Code className="size-4"/> Code Running:</h4>
+                 {highlightedCode ? (
+                    <CodeBlock className="bg-black/20 border-gray-600 text-sm">
+                        {highlightedCode}
+                    </CodeBlock>
+                 ) : (
+                    <p className="text-gray-500 text-sm">No operation running.</p>
+                 )}
             </div>
           </div>
 
