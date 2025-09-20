@@ -86,14 +86,14 @@ export default {
         'tertiary-accent': 'var(--tertiary-accent)',
 
         // C Syntax Highlighting
-        'syntax-keyword': 'var(--keyword)',
-        'syntax-datatype': 'var(--datatype)',
-        'syntax-function': 'var(--function)',
-        'syntax-string': 'var(--string)',
-        'syntax-number': 'var(--number)',
-        'syntax-comment': 'var(--comment)',
-        'syntax-operator': 'var(--operator)',
-        'syntax-semicolon': 'var(--semicolon)',
+        'syntax-keyword': 'hsl(var(--keyword))',
+        'syntax-datatype': 'hsl(var(--datatype))',
+        'syntax-function': 'hsl(var(--function))',
+        'syntax-string': 'hsl(var(--string))',
+        'syntax-number': 'hsl(var(--number))',
+        'syntax-comment': 'hsl(var(--comment))',
+        'syntax-operator': 'hsl(var(--operator))',
+        'syntax-semicolon': 'hsl(var(--semicolon))',
 
 
         // Git Game & Regex Theme

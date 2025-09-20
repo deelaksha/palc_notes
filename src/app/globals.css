@@ -69,7 +69,7 @@
     --command: hsl(130 87% 63%); /* Green for commands */
     --keyword: hsl(280 80% 70%); /* Purple for keywords */
     --datatype: hsl(206 70% 65%); /* Light Blue for datatypes */
-    --function: hsl(60 62% 76%); /* Yellow for functions */
+    --function: hsl(45 90% 65%); /* Yellow for functions */
     --string: hsl(30 60% 70%); /* Orange for strings */
     --number: hsl(98 38% 70%); /* Pale green for numbers */
     --comment: hsl(100 20% 50%); /* Dim green for comments */
@@ -193,14 +193,14 @@
   }
   
   /* C Syntax Highlighting */
-  .dark .syntax-keyword { color: var(--keyword); }
-  .dark .syntax-datatype { color: var(--datatype); }
-  .dark .syntax-function { color: var(--function); }
-  .dark .syntax-string { color: var(--string); }
-  .dark .syntax-number { color: var(--number); }
-  .dark .syntax-comment { color: var(--comment); }
-  .dark .syntax-operator { color: var(--operator); }
-  .dark .syntax-semicolon { color: var(--semicolon); }
+  .dark .syntax-keyword { color: hsl(var(--keyword)); }
+  .dark .syntax-datatype { color: hsl(var(--datatype)); }
+  .dark .syntax-function { color: hsl(var(--function)); }
+  .dark .syntax-string { color: hsl(var(--string)); }
+  .dark .syntax-number { color: hsl(var(--number)); }
+  .dark .syntax-comment { color: hsl(var(--comment)); }
+  .dark .syntax-operator { color: hsl(var(--operator)); }
+  .dark .syntax-semicolon { color: hsl(var(--semicolon)); }
 
 
   /* Chatbot Markdown Styles */
@@ -424,3 +424,4 @@
     border-color: #f6ad55;
     box-shadow: 0 0 10px #f6ad55;
 }
+
