@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useTransform, animate } from 'framer-motion';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -29,7 +29,7 @@ const Edge = ({ edge, isDirected, isWeighted }: { edge: any, isDirected: boolean
 
     useEffect(() => {
         if (isDirected) {
-            const animation = motion.animate(progress, 1, {
+            const animation = animate(progress, 1, {
                 duration: 2,
                 repeat: Infinity,
                 ease: "linear"
