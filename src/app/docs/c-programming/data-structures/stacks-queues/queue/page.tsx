@@ -8,34 +8,34 @@ import {
 import { ArrowRight, CornerDownRight, RotateCw, ListPriority, ArrowRightLeft } from 'lucide-react';
 import Link from 'next/link';
 
-const topics = [
-    {
-        name: 'Simple Queue',
-        description: 'A basic First-In, First-Out (FIFO) data structure.',
-        href: '/docs/c-programming/data-structures/stacks-queues/queue/simple',
-        icon: <CornerDownRight className="size-8" />,
-    },
-    {
-        name: 'Circular Queue',
-        description: 'An efficient queue implementation that reuses space.',
-        href: '/docs/c-programming/data-structures/stacks-queues/queue/circular',
-        icon: <RotateCw className="size-8" />,
-    },
-    {
-        name: 'Priority Queue',
-        description: 'A queue where elements are processed based on priority.',
-        href: '/docs/c-programming/data-structures/stacks-queues/queue/priority',
-        icon: <ListPriority className="size-8" />,
-    },
-    {
-        name: 'Deque (Double-Ended Queue)',
-        description: 'A queue that allows insertion and deletion from both ends.',
-        href: '/docs/c-programming/data-structures/stacks-queues/queue/deque',
-        icon: <ArrowRightLeft className="size-8" />,
-    },
-];
-
 export default function QueuesHubPage() {
+  const topics = [
+      {
+          name: 'Simple Queue',
+          description: 'A basic First-In, First-Out (FIFO) data structure.',
+          href: '/docs/c-programming/data-structures/stacks-queues/queue/simple',
+          icon: <CornerDownRight className="size-8" />,
+      },
+      {
+          name: 'Circular Queue',
+          description: 'An efficient queue implementation that reuses space.',
+          href: '/docs/c-programming/data-structures/stacks-queues/queue/circular',
+          icon: <RotateCw className="size-8" />,
+      },
+      {
+          name: 'Priority Queue',
+          description: 'A queue where elements are processed based on priority.',
+          href: '/docs/c-programming/data-structures/stacks-queues/queue/priority',
+          icon: <ListPriority className="size-8" />,
+      },
+      {
+          name: 'Deque (Double-Ended Queue)',
+          description: 'A queue that allows insertion and deletion from both ends.',
+          href: '/docs/c-programming/data-structures/stacks-queues/queue/deque',
+          icon: <ArrowRightLeft className="size-8" />,
+      },
+  ];
+
   return (
     <div className="flex flex-col flex-1">
       <main className="flex-1 p-4 md:p-8 lg:p-12">
