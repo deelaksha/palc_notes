@@ -45,6 +45,9 @@ import { UnzipGame } from '@/components/linux-game/UnzipGame';
 import { WhoamiGame } from '@/components/linux-game/WhoamiGame';
 import { IdGame } from '@/components/linux-game/IdGame';
 import { WhoGame } from '@/components/linux-game/WhoGame';
+import { IfconfigGame } from '@/components/linux-game/IfconfigGame';
+import { CutGame } from '@/components/linux-game/CutGame';
+import { AwkGame } from '@/components/linux-game/AwkGame';
 
 export function generateStaticParams() {
   return commandsData.map((command) => ({
@@ -110,6 +113,8 @@ function renderGameForCommand(commandName: string | undefined) {
             return <PingGame />;
         case 'ip addr':
             return <IpAddrGame />;
+        case 'ifconfig':
+            return <IfconfigGame />;
         case 'netstat':
             return <NetstatGame />;
         case 'scp':
@@ -136,6 +141,10 @@ function renderGameForCommand(commandName: string | undefined) {
             return <IdGame />;
         case 'who':
             return <WhoGame />;
+        case 'cut':
+            return <CutGame />;
+        case 'awk':
+            return <AwkGame />;
         default:
             return (
                 <div className="text-center text-white glass-effect p-12 rounded-2xl">
