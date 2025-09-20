@@ -1,6 +1,6 @@
 
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 
 const regexData = [
@@ -314,452 +314,147 @@ const regexData = [
     }
 ];
 
+type RegexItem = typeof regexData[0];
+
 export default function RegexPage() {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedRegex, setSelectedRegex] = useState<RegexItem | null>(null);
+    const [tryString, setTryString] = useState('');
+    const [tryPattern, setTryPattern] = useState('');
+
+    const demoStringRef = useRef<HTMLDivElement>(null);
+    const tryResultRef = useRef<HTMLDivElement>(null);
+
+    const filteredRegexData = regexData.filter(regex =>
+        regex.char.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        regex.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        regex.description.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const selectRegex = (regex: RegexItem) => {
+        setSelectedRegex(regex);
+        setTryString(regex.demoString.replace(/\\n/g, '\n'));
+        setTryPattern(regex.pattern);
+    };
+
+    const animateMatches = () => {
+        if (!selectedRegex || !demoStringRef.current) return;
+        const demoStringEl = demoStringRef.current;
+        const originalText = selectedRegex.demoString.replace(/\\n/g, '\n');
+        demoStringEl.innerHTML = originalText;
+
+        setTimeout(() => {
+            try {
+                const regex = new RegExp(selectedRegex.pattern, 'gi');
+                const highlighted = originalText.replace(regex, '<span class="highlight">$&</span>');
+                demoStringEl.innerHTML = highlighted;
+            } catch (error) {
+                console.error('Regex pattern error:', error);
+            }
+        }, 300);
+    };
+
     useEffect(() => {
-        let currentRegex = null;
-
-        function initializeApp() {
-            renderRegexList();
-            setupSearch();
+        if (selectedRegex) {
+            animateMatches();
         }
+    }, [selectedRegex]);
 
-        function renderRegexList() {
-            const regexList = document.getElementById('regexList');
-            if (!regexList) return;
-            regexList.innerHTML = '';
-            
-            regexData.sort((a, b) => {
-                const order = ".\\dD\\wW\\sS^$\\bB[]*+?{}|()";
-                const aIndex = order.indexOf(a.char[0]);
-                const bIndex = order.indexOf(b.char[0]);
-                if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
-                if (aIndex !== -1) return -1;
-                if (bIndex !== -1) return 1;
-                return a.name.localeCompare(b.name);
-            }).forEach((regex, index) => {
-                const item = document.createElement('div');
-                item.className = 'regex-item';
-                item.innerHTML = `
-                    <div class="regex-char">${regex.char}</div>
-                    <div class="regex-name">${regex.name}</div>
-                `;
-                item.addEventListener('click', () => selectRegex(index));
-                regexList.appendChild(item);
-            });
+    useEffect(() => {
+        if (!tryResultRef.current) return;
+        if (!tryString || !tryPattern) {
+            tryResultRef.current.innerHTML = 'Enter both a pattern and test string';
+            return;
         }
-
-        function setupSearch() {
-            const searchBox = document.getElementById('searchBox');
-            if (!searchBox) return;
-            searchBox.addEventListener('input', (e) => {
-                const query = (e.target as HTMLInputElement).value.toLowerCase();
-                const items = document.querySelectorAll('.regex-item');
-                
-                items.forEach((item) => {
-                    const name = item.querySelector('.regex-name')?.textContent?.toLowerCase() || '';
-                    const char = item.querySelector('.regex-char')?.textContent?.toLowerCase() || '';
-                    const matchesSearch = name.includes(query) || char.includes(query);
-                    (item as HTMLElement).style.display = matchesSearch ? 'block' : 'none';
-                });
-            });
-        }
-
-        function selectRegex(index: number) {
-            document.querySelectorAll('.regex-item').forEach(item => item.classList.remove('active'));
-            const activeItem = document.querySelectorAll('.regex-item')[index];
-            if (activeItem) {
-                activeItem.classList.add('active');
+        try {
+            const regex = new RegExp(tryPattern, 'gi');
+            const matches = tryString.match(regex);
+            if (matches) {
+                const highlighted = tryString.replace(regex, '<span class="highlight">$&</span>');
+                tryResultRef.current.innerHTML = `Found ${matches.length} match(es):<br><br>${highlighted}`;
+            } else {
+                tryResultRef.current.innerHTML = `No matches found:<br><br>${tryString}`;
             }
-            
-            currentRegex = regexData[index];
-            displayRegexContent(currentRegex);
-            
-            const welcomeMessage = document.getElementById('welcomeMessage');
-            if (welcomeMessage) welcomeMessage.style.display = 'none';
-            
-            const contentDisplay = document.getElementById('contentDisplay');
-            if(contentDisplay) {
-                contentDisplay.style.display = 'block';
-                contentDisplay.classList.add('active');
-            }
+        } catch (error: any) {
+            tryResultRef.current.innerHTML = `Invalid regex pattern: ${error.message}`;
         }
+    }, [tryString, tryPattern]);
 
-        function displayRegexContent(regex: any) {
-            const content = document.getElementById('contentDisplay');
-            if (!content) return;
-            
-            content.innerHTML = `
-                <div class="demo-section">
-                    <div class="demo-title">${regex.char} - ${regex.name}</div>
-                    <div class="demo-string" id="demoString">${regex.demoString.replace(/\\n/g, '\n')}</div>
-                    <button id="showMatchesBtn" style="background: linear-gradient(90deg, #00d4aa, #64ffda); color: #1a1a2e; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; margin: 1rem 0;">▶ Show Matches</button>
-                </div>
-                
-                <div class="explanation">
-                    <h3>What does ${regex.char} do?</h3>
-                    <p>${regex.description}</p>
-                </div>
-                
-                <div class="examples">
-                    <div class="example-box matches">
-                        <div class="example-title">✅ Matches:</div>
-                        ${regex.examples.matches.map((match: string) => `<div>• ${match}</div>`).join('')}
-                    </div>
-                    <div class="example-box no-matches">
-                        <div class="example-title">❌ No Match:</div>
-                        ${regex.examples.noMatches.map((match: string) => `<div>• ${match}</div>`).join('')}
-                    </div>
-                </div>
-                
-                <div class="try-section">
-                    <div class="try-title">🧪 Try It Yourself</div>
-                    <div>Test String:</div>
-                    <input type="text" class="try-input" id="testString" placeholder="Enter text to test..." value="${regex.demoString.replace(/\\n/g, '\n')}">
-                    <div>Your Regex Pattern:</div>
-                    <input type="text" class="try-input" id="testPattern" placeholder="Enter regex pattern..." value="${regex.pattern}">
-                    <div class="try-result" id="tryResult">Enter a pattern and test string to see matches highlighted</div>
-                </div>
-            `;
-            
-            document.getElementById('showMatchesBtn')?.addEventListener('click', animateMatches);
-            setupTryItSection();
-            setTimeout(() => animateMatches(), 500);
-        }
-
-        function animateMatches() {
-            if (!currentRegex) return;
-            
-            const demoStringEl = document.getElementById('demoString');
-            if (!demoStringEl) return;
-            const originalText = currentRegex.demoString.replace(/\\n/g, '\n');
-            
-            demoStringEl.innerHTML = originalText;
-            
-            setTimeout(() => {
-                try {
-                    const regex = new RegExp(currentRegex.pattern, 'gi');
-                    const highlighted = originalText.replace(regex, '<span class="highlight">$&</span>');
-                    demoStringEl.innerHTML = highlighted;
-                } catch (error) {
-                    console.log('Regex pattern error:', error);
-                }
-            }, 300);
-        }
-
-        function setupTryItSection() {
-            const testStringEl = document.getElementById('testString') as HTMLInputElement;
-            const testPatternEl = document.getElementById('testPattern') as HTMLInputElement;
-            const tryResultEl = document.getElementById('tryResult');
-
-            function updateTryResult() {
-                if (!tryResultEl || !testStringEl || !testPatternEl) return;
-                const string = testStringEl.value;
-                const pattern = testPatternEl.value;
-                
-                if (!string || !pattern) {
-                    tryResultEl.innerHTML = 'Enter both a pattern and test string';
-                    return;
-                }
-                
-                try {
-                    const regex = new RegExp(pattern, 'gi');
-                    const matches = string.match(regex);
-                    
-                    if (matches) {
-                        const highlighted = string.replace(regex, '<span class="highlight">$&</span>');
-                        tryResultEl.innerHTML = `Found ${matches.length} match(es):<br><br>${highlighted}`;
-                    } else {
-                        tryResultEl.innerHTML = `No matches found:<br><br>${string}`;
-                    }
-                } catch (error: any) {
-                    tryResultEl.innerHTML = `Invalid regex pattern: ${error.message}`;
-                }
-            }
-            
-            testStringEl.addEventListener('input', updateTryResult);
-            testPatternEl.addEventListener('input', updateTryResult);
-            updateTryResult();
-        }
-
-        initializeApp();
-    }, []);
 
     return (
-        <>
-            <style jsx global>{`
-                .container {
-                    display: grid;
-                    grid-template-columns: 300px 1fr;
-                    min-height: calc(100vh - 56px); /* Adjust for header */
-                }
-
-                .header {
-                    grid-column: 1 / -1;
-                    background: linear-gradient(90deg, #0f3460, #16537e);
-                    padding: 1rem;
-                    text-align: center;
-                    border-bottom: 3px solid #00d4aa;
-                    box-shadow: 0 4px 20px rgba(0, 212, 170, 0.3);
-                }
-
-                .header h1 {
-                    font-size: 2.5rem;
-                    font-weight: 700;
-                    color: #00d4aa;
-                    margin-bottom: 0.5rem;
-                    text-shadow: 0 0 20px rgba(0, 212, 170, 0.5);
-                }
-
-                .header p {
-                    font-size: 1.1rem;
-                    color: #a8b2d1;
-                    opacity: 0.9;
-                }
-
-                .sidebar {
-                    background: rgba(15, 52, 96, 0.4);
-                    border-right: 3px solid #00d4aa;
-                    overflow-y: auto;
-                    height: calc(100vh - 170px);
-                }
+        <main>
+            <div className="regex-container">
+                <div className="regex-header">
+                    <h1>Learn Regex Interactively</h1>
+                    <p>Click on a Regex Character to See How It Works</p>
+                </div>
                 
-                 .search-container {
-                    padding: 1rem;
-                    background: rgba(22, 83, 126, 0.3);
-                    border-bottom: 2px solid #00d4aa;
-                }
-
-                .search-box {
-                    width: 100%;
-                    padding: 0.8rem;
-                    background: rgba(15, 52, 96, 0.8);
-                    border: 2px solid #00d4aa;
-                    border-radius: 10px;
-                    color: #e0e6ed;
-                    font-size: 1rem;
-                    outline: none;
-                    transition: all 0.3s ease;
-                }
-
-                .search-box:focus {
-                    border-color: #64ffda;
-                    box-shadow: 0 0 15px rgba(100, 255, 218, 0.3);
-                }
-
-                .regex-list { padding: 1rem; }
-                .regex-item {
-                    background: linear-gradient(135deg, #1e3a8a, #3730a3);
-                    margin: 0.8rem 0;
-                    padding: 1rem;
-                    border-radius: 12px;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                    border: 2px solid transparent;
-                    position: relative;
-                    overflow: hidden;
-                }
-                .regex-item:hover {
-                    transform: translateX(8px) scale(1.02);
-                    border-color: #00d4aa;
-                    box-shadow: 0 8px 25px rgba(0, 212, 170, 0.4);
-                }
-                .regex-item.active {
-                    background: linear-gradient(135deg, #00d4aa, #64ffda);
-                    color: #1a1a2e;
-                    border-color: #64ffda;
-                    transform: translateX(12px) scale(1.05);
-                    box-shadow: 0 10px 30px rgba(0, 212, 170, 0.6);
-                }
-                .regex-char {
-                    font-size: 1.8rem;
-                    font-weight: bold;
-                    font-family: 'Courier New', monospace;
-                    margin-bottom: 0.3rem;
-                }
-                .regex-name {
-                    font-size: 0.9rem;
-                    opacity: 0.8;
-                }
-
-                .main-content {
-                    padding: 2rem;
-                    overflow-y: auto;
-                     height: calc(100vh - 170px);
-                }
-
-                .welcome-message {
-                    text-align: center;
-                    padding: 4rem 2rem;
-                    color: #64ffda;
-                    font-size: 1.5rem;
-                }
-
-                .content-display { display: none; }
-                .content-display.active {
-                    display: block;
-                    animation: slideInRight 0.5s ease-out;
-                }
-
-                @keyframes slideInRight {
-                    from { opacity: 0; transform: translateX(20px); }
-                    to { opacity: 1; transform: translateX(0); }
-                }
-
-                .demo-section {
-                    background: linear-gradient(135deg, rgba(22, 83, 126, 0.3), rgba(15, 52, 96, 0.3));
-                    border-radius: 15px;
-                    padding: 2rem;
-                    margin-bottom: 2rem;
-                    border: 2px solid #00d4aa;
-                    box-shadow: 0 8px 32px rgba(0, 212, 170, 0.2);
-                }
-                .demo-title {
-                    font-size: 2.5rem;
-                    color: #00d4aa;
-                    margin-bottom: 1rem;
-                    font-family: 'Courier New', monospace;
-                    text-shadow: 0 0 10px rgba(0, 212, 170, 0.5);
-                }
-                .demo-string {
-                    background: #1a1a2e;
-                    padding: 1.5rem;
-                    border-radius: 10px;
-                    font-family: 'Courier New', monospace;
-                    font-size: 1.3rem;
-                    margin: 1rem 0;
-                    border: 2px solid #3730a3;
-                    position: relative;
-                    overflow: hidden;
-                    white-space: pre-wrap;
-                }
-
-                .highlight {
-                    background: linear-gradient(90deg, #00d4aa, #64ffda);
-                    color: #1a1a2e;
-                    padding: 0.2rem 0.4rem;
-                    border-radius: 4px;
-                    animation: glow 2s infinite alternate;
-                    font-weight: bold;
-                }
-
-                @keyframes glow {
-                    0% { box-shadow: 0 0 5px rgba(0, 212, 170, 0.5); }
-                    100% { box-shadow: 0 0 20px rgba(0, 212, 170, 0.8), 0 0 30px rgba(0, 212, 170, 0.6); }
-                }
-                .explanation {
-                    background: rgba(15, 52, 96, 0.6);
-                    padding: 2rem;
-                    border-radius: 12px;
-                    margin: 1.5rem 0;
-                    border-left: 5px solid #00d4aa;
-                }
-                .explanation h3 {
-                    font-size: 1.8rem;
-                    color: #64ffda;
-                    margin-bottom: 1rem;
-                }
-                .explanation p {
-                    font-size: 1.1rem;
-                    line-height: 1.7;
-                    margin-bottom: 1rem;
-                }
-                .examples {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    gap: 1rem;
-                    margin: 1.5rem 0;
-                }
-                .example-box {
-                    background: rgba(30, 58, 138, 0.4);
-                    padding: 1.5rem;
-                    border-radius: 10px;
-                    border: 2px solid #3730a3;
-                }
-                .example-box.matches {
-                    border-color: #00d4aa;
-                    background: rgba(0, 212, 170, 0.1);
-                }
-                .example-box.no-matches {
-                    border-color: #ff6b6b;
-                    background: rgba(255, 107, 107, 0.1);
-                }
-                .example-title {
-                    font-size: 1.2rem;
-                    font-weight: bold;
-                    margin-bottom: 0.8rem;
-                }
-                .matches .example-title { color: #00d4aa; }
-                .no-matches .example-title { color: #ff6b6b; }
-                .try-section {
-                    background: linear-gradient(135deg, rgba(30, 58, 138, 0.4), rgba(55, 48, 163, 0.4));
-                    padding: 2rem;
-                    border-radius: 12px;
-                    margin-top: 2rem;
-                    border: 2px solid #64ffda;
-                }
-                .try-title {
-                    font-size: 1.8rem;
-                    color: #64ffda;
-                    margin-bottom: 1rem;
-                }
-                .try-input {
-                    width: 100%;
-                    padding: 1rem;
-                    background: rgba(26, 26, 46, 0.8);
-                    border: 2px solid #00d4aa;
-                    border-radius: 8px;
-                    color: #e0e6ed;
-                    font-size: 1.1rem;
-                    font-family: 'Courier New', monospace;
-                    margin: 0.5rem 0;
-                    outline: none;
-                    transition: all 0.3s ease;
-                }
-                .try-input:focus {
-                    border-color: #64ffda;
-                    box-shadow: 0 0 15px rgba(100, 255, 218, 0.3);
-                }
-                .try-result {
-                    background: #1a1a2e;
-                    padding: 1rem;
-                    border-radius: 8px;
-                    margin-top: 1rem;
-                    border: 2px solid #3730a3;
-                    font-family: 'Courier New', monospace;
-                    min-height: 50px;
-                }
-                @media (max-width: 768px) {
-                    .container { grid-template-columns: 1fr; }
-                    .sidebar, .main-content { height: auto; max-height: none; }
-                }
-            `}</style>
-            <main>
-                <div className="container">
-                    <div className="header">
-                        <h1>Learn Regex Interactively</h1>
-                        <p>Click on a Regex Character to See How It Works</p>
+                <div className="regex-sidebar">
+                    <div className="search-container">
+                        <input
+                            type="text"
+                            className="search-box"
+                            placeholder="Search regex characters..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
                     </div>
-                    
-                    <div className="sidebar">
-                        <div className="search-container">
-                            <input type="text" className="search-box" placeholder="Search regex characters..." id="searchBox" />
-                        </div>
-                        <div className="regex-list" id="regexList">
-                            {/* Regex items will be populated by JavaScript */}
-                        </div>
+                    <div className="regex-list">
+                        {filteredRegexData.map((regex) => (
+                            <div
+                                key={regex.name}
+                                className={`regex-item ${selectedRegex?.name === regex.name ? 'active' : ''}`}
+                                onClick={() => selectRegex(regex)}
+                            >
+                                <div className="regex-char">{regex.char}</div>
+                                <div className="regex-name">{regex.name}</div>
+                            </div>
+                        ))}
                     </div>
-                    
-                    <div className="main-content">
-                        <div className="welcome-message" id="welcomeMessage">
+                </div>
+                
+                <div className="regex-main-content">
+                    {!selectedRegex ? (
+                        <div className="welcome-message">
                             <h2>👈 Choose a regex character from the sidebar to start learning!</h2>
                             <p>Each character has visual examples and interactive demos to help you understand how regex works.</p>
                         </div>
-                        <div className="content-display" id="contentDisplay">
-                            {/* Dynamic content will be loaded here */}
+                    ) : (
+                        <div className={`content-display ${selectedRegex ? 'active' : ''}`}>
+                            <div className="demo-section">
+                                <div className="demo-title">{selectedRegex.char} - {selectedRegex.name}</div>
+                                <div className="demo-string" ref={demoStringRef}></div>
+                                <button onClick={animateMatches} style={{background: 'linear-gradient(90deg, #00d4aa, #64ffda)', color: '#1a1a2e', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '8px', fontSize: '1rem', fontWeight: 'bold', cursor: 'pointer', margin: '1rem 0'}}>▶ Show Matches</button>
+                            </div>
+                            
+                            <div className="explanation">
+                                <h3>What does {selectedRegex.char} do?</h3>
+                                <p>{selectedRegex.description}</p>
+                            </div>
+                            
+                            <div className="examples">
+                                <div className="example-box matches">
+                                    <div className="example-title">✅ Matches:</div>
+                                    {selectedRegex.examples.matches.map(match => <div key={match}>• {match}</div>)}
+                                </div>
+                                <div className="example-box no-matches">
+                                    <div className="example-title">❌ No Match:</div>
+                                    {selectedRegex.examples.noMatches.map(match => <div key={match}>• {match}</div>)}
+                                </div>
+                            </div>
+                            
+                            <div className="try-section">
+                                <div className="try-title">🧪 Try It Yourself</div>
+                                <div>Test String:</div>
+                                <input type="text" className="try-input" placeholder="Enter text to test..." value={tryString} onChange={e => setTryString(e.target.value)} />
+                                <div>Your Regex Pattern:</div>
+                                <input type="text" className="try-input" placeholder="Enter regex pattern..." value={tryPattern} onChange={e => setTryPattern(e.target.value)} />
+                                <div className="try-result" ref={tryResultRef}></div>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
-            </main>
-        </>
+            </div>
+        </main>
     );
 }
