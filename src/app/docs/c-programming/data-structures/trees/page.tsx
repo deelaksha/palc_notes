@@ -1,17 +1,76 @@
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { ArrowRight, Binary, GitFork, ShieldCheck } from 'lucide-react';
+import Link from 'next/link';
 
-export default function PlaceholderPage() {
+const topics = [
+    {
+        name: 'Binary Tree',
+        description: 'The fundamental tree structure where each node has at most two children.',
+        href: '/docs/c-programming/data-structures/trees/binary',
+        icon: <GitFork className="size-8" />,
+    },
+    {
+        name: 'Binary Search Tree (BST)',
+        description: 'A sorted binary tree that allows for fast lookups, insertions, and deletions.',
+        href: '/docs/c-programming/data-structures/trees/bst',
+        icon: <Binary className="size-8" />,
+    },
+    {
+        name: 'AVL Tree',
+        description: 'A self-balancing binary search tree that maintains a balanced height.',
+        href: '/docs/c-programming/data-structures/trees/avl',
+        icon: <ShieldCheck className="size-8" />,
+    },
+];
+
+export default function TreesHubPage() {
   return (
-    <div className="max-w-4xl mx-auto p-4 md:p-8">
-      <Card>
-        <CardHeader>
-          <CardTitle>Coming Soon!</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p>This page is under construction. Check back later for content on Trees!</p>
-        </CardContent>
-      </Card>
+    <div className="flex flex-col flex-1">
+      <main className="flex-1 p-4 md:p-8 lg:p-12">
+        <header className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-primary font-headline mb-2">
+            Trees in C
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            A guide to hierarchical data structures. Choose a topic to learn more.
+          </p>
+        </header>
+
+        <section className="w-full max-w-2xl mx-auto">
+          <div className="grid gap-6 md:grid-cols-1">
+            {topics.map((topic) => (
+              <Link key={topic.name} href={topic.href} className="group">
+                <Card className="h-full transition-all duration-300 ease-in-out group-hover:border-primary group-hover:shadow-lg group-hover:shadow-primary/10 group-hover:-translate-y-1">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="bg-muted p-3 rounded-md text-foreground">
+                          {topic.icon}
+                        </div>
+                        <div>
+                          <CardTitle className="font-headline">
+                            {topic.name}
+                          </CardTitle>
+                          <CardDescription>
+                            {topic.description}
+                          </CardDescription>
+                        </div>
+                      </div>
+                      <ArrowRight className="size-5 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
+                    </div>
+                  </CardHeader>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </section>
+      </main>
     </div>
   );
 }
