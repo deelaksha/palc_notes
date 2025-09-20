@@ -223,7 +223,7 @@ export default function CStructsUnionsPage() {
                             <span className="syntax-comment">{'// EIGHT is 8'}</span>
                         </CodeSyntax>
                     </CodeBlock>
-                </section>
+                </Card>
             </main>
         </div>
     );
