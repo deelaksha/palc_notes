@@ -575,6 +575,23 @@ export const commandsData = [
         ],
         realWorld: "When setting up a home server or troubleshooting a network connection, `ip addr` is the standard command to find your computer's local IP address."
     },
+     {
+        category: "Networking and Connectivity",
+        name: "ifconfig",
+        description: "The `ifconfig` spell is the classic way to configure network interfaces. While often replaced by `ip addr`, it's still found on many systems and is important to recognize.",
+        howItWorks: [
+            "`ifconfig` by itself lists active network interfaces and their details.",
+            "It shows the IP address (`inet`), MAC address (`ether`), and statistics about received (RX) and transmitted (TX) packets.",
+            "You can use it to bring interfaces up or down, or assign addresses, though this is now more commonly done with `ip`."
+        ],
+        examples: [
+            { code: "ifconfig", text: "Shows details for all currently active network interfaces." },
+            { code: "ifconfig eth0", text: "Shows details for only the `eth0` interface." },
+            { code: "sudo ifconfig eth0 up", text: "Activates or 'brings up' the `eth0` interface." },
+            { code: "sudo ifconfig eth0 down", text: "Deactivates the `eth0` interface."}
+        ],
+        realWorld: "On older systems or some network appliances, `ifconfig` is the primary tool for network troubleshooting and configuration. It's the command you'd use to quickly check your IP address."
+    },
     {
         category: "Networking and Connectivity",
         name: "netstat",
