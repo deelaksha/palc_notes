@@ -226,7 +226,6 @@ int pop(struct Stack *s) {
           </div>
         </div>
       </div>
-    </div>
   );
 };
 
