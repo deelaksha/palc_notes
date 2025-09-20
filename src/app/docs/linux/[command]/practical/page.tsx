@@ -48,10 +48,11 @@ import { WhoGame } from '@/components/linux-game/WhoGame';
 import { IfconfigGame } from '@/components/linux-game/IfconfigGame';
 import { CutGame } from '@/components/linux-game/CutGame';
 import { AwkGame } from '@/components/linux-game/AwkGame';
+import { LsbReleaseGame } from '@/components/linux-game/LsbReleaseGame';
 
 export function generateStaticParams() {
   return commandsData.map((command) => ({
-    command: command.name.replace(' ', '-'),
+    command: command.name.replace(/\s+/g, '-'),
   }));
 }
 
@@ -145,6 +146,8 @@ function renderGameForCommand(commandName: string | undefined) {
             return <CutGame />;
         case 'awk':
             return <AwkGame />;
+        case 'lsb_release':
+            return <LsbReleaseGame />;
         default:
             return (
                 <div className="text-center text-white glass-effect p-12 rounded-2xl">
@@ -161,7 +164,7 @@ export default function CommandPracticalPage({
 }: {
   params: { command: string };
 }) {
-    const command = commandsData.find((cmd) => cmd.name.replace(' ', '-') === params.command);
+    const command = commandsData.find((cmd) => cmd.name.replace(/\s+/g, '-') === params.command);
 
   return (
     <div className="flex flex-col min-h-screen font-mono bg-gradient-to-br from-dark-primary via-dark-secondary to-blue-900 text-white overflow-x-hidden">

@@ -540,6 +540,24 @@ export const commandsData = [
         ],
         realWorld: "If your computer is acting slow, you use `free -h` to check if you've run out of available RAM and need to close some applications."
     },
+     {
+        category: "Process and System Management",
+        name: "lsb_release",
+        description: "The `lsb_release` spell reveals your system's identity card. It tells you exactly which Linux distribution you're using (like Ubuntu), its version number, and its codename.",
+        howItWorks: [
+            "This command queries the Linux Standard Base (LSB) information about your distribution.",
+            "**-a (All)**: Shows all available information: Distributor ID, Description, Release number, and Codename.",
+            "**-d (Description)**: Shows just the description line.",
+            "**-c (Codename)**: Shows just the release codename (e.g., 'jammy', 'focal').",
+            "**-r (Release)**: Shows just the release number (e.g., '22.04')."
+        ],
+        examples: [
+            { code: "lsb_release -a", text: "The most common use. It displays a full report of your Linux distribution's identity." },
+            { code: "lsb_release -d", text: "Quickly shows a one-line description, like 'Ubuntu 22.04.3 LTS'." },
+            { code: "lsb_release -c", text: "Just shows the codename of the release."}
+        ],
+        realWorld: "Essential for troubleshooting. When you look for help online, one of the first questions is 'What version of Ubuntu are you running?'. `lsb_release -a` gives you the exact answer. It's also vital for scripts that need to behave differently on different OS versions."
+    },
     {
         category: "Networking and Connectivity",
         name: "ping",
