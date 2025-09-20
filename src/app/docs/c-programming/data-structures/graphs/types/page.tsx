@@ -12,13 +12,13 @@ const graphTypes = [
     {
         name: 'Directed & Undirected Graphs',
         description: 'Graphs where edges have a direction versus those that do not.',
-        href: '#', // Placeholder link
+        href: '/docs/c-programming/data-structures/graphs/directed-undirected',
         icon: <GitCommit className="size-8" />,
     },
     {
         name: 'Weighted & Unweighted Graphs',
         description: 'Graphs where edges have an associated weight or cost.',
-        href: '#', // Placeholder link
+        href: '/docs/c-programming/data-structures/graphs/directed-undirected#weighted-unweighted',
         icon: <Settings className="size-8" />,
     },
     {
