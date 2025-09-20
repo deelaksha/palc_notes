@@ -205,24 +205,24 @@ export const commandsData = [
         ],
         realWorld: "Use `cat` to quickly check a small configuration file or to see the contents of a short script without opening an editor."
     },
-     {
+    {
         category: "File Viewing and Editing",
         name: "cut",
         description: "The `cut` spell is like a precision knife for text. It carves out specific columns or sections from each line of a file, letting you extract just the data you need.",
         howItWorks: [
-            "`cut` works line by line on its input.",
-            "You must tell it how to separate the line into fields using the `-d` (delimiter) flag. A common delimiter is a comma (`,`) for CSV files or a colon (`:`) for system files.",
-            "You use the `-f` (fields) flag to tell it which column(s) you want to keep.",
-            "You can also cut by character position with the `-c` flag.",
-            "It's often used with pipes (`|`) to process the output of other commands."
+            "`cut` works line by line on its input. You have to tell it *how* to cut.",
+            "**`-d 'delimiter'`**: This flag sets the 'delimiter', the character that separates columns. For a CSV, you'd use `-d ','`. For a system file like `/etc/passwd`, you'd use `-d ':'`.",
+            "**`-f <fields>`**: This flag selects which fields (columns) you want to keep. You can select one (`-f 1`), multiple (`-f 1,3`), or a range (`-f 2-4`).",
+            "**`-c <characters>`**: Instead of columns, you can cut by character position. `-c 1-10` would give you the first 10 characters of each line.",
+            "**`--complement`**: This inverts your selection, giving you everything *except* the fields or characters you specified."
         ],
         examples: [
-            { code: "cut -d',' -f1 data.csv", text: "From `data.csv`, use a comma as the delimiter and show me the first field (column)." },
+            { code: "cut -d',' -f1,3 data.csv", text: "From a comma-separated file, show me the first and third columns." },
             { code: "who | cut -d' ' -f1", text: "Show who is logged in, but only display the first column (the usernames)." },
-            { code: "cut -d':' -f1,6 /etc/passwd", text: "From the password file, use a colon as the delimiter and show me the first and sixth fields (username and home directory)." },
-            { code: "cut -c1-10 file.txt", text: "Shows only the first 10 characters from each line of `file.txt`." }
+            { code: "cut -c1-5 server.log", text: "Extracts the first 5 characters from each line of a log file, which might be a timestamp or log level." },
+            { code: "cut -d',' -f2 --complement data.csv", text: "Shows all columns *except* for the second one." }
         ],
-        realWorld: "Essential for processing data from log files or CSVs. For example, extracting just the IP addresses from a web server access log."
+        realWorld: "Essential for processing data from log files or CSVs. For example, extracting just the IP addresses (column 1) and the requested URL (column 7) from a web server access log."
     },
     {
         category: "File Viewing and Editing",
