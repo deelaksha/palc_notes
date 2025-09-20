@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Card } from '@/components/ui/card';
@@ -6,12 +5,6 @@ import { CodeBlock } from '@/components/markdown/CodeBlock';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-
-const CodeSyntax = ({ children }: { children: React.ReactNode }) => (
-    <div className="font-mono text-sm">
-        <code>{children}</code>
-    </div>
-);
 
 const NodeBox = ({ prev, data, next }: { prev: string, data: string, next: string }) => (
     <div className="node-box inline-block align-top mx-2" style={{ backgroundColor: '#2D3748', border: '2px solid #569CD6', borderRadius: '0.5rem', padding: '1rem', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.2)' }}>
@@ -38,7 +31,7 @@ const steps = [
                 <p className="tail-pointer font-bold text-lg text-[#B5CEA8]">tail &rarr; <span className="text-[#DCDCAA]">NULL</span></p>
             </div>
         ),
-        code: `<span class="keyword">struct</span> Node <span class="operator">*</span>head <span class="operator">=</span> <span class="datatype">NULL</span><span class="semicolon">;</span><br /><span class="keyword">struct</span> Node <span class="operator">*</span>tail <span class="operator">=</span> <span class="datatype">NULL</span><span class="semicolon">;</span>`
+        code: `<span class=\"keyword\">struct</span> Node <span class=\"operator\">*</span>head <span class=\"operator\">=</span> <span class=\"datatype\">NULL</span><span class=\"semicolon\">;</span><br /><span class=\"keyword\">struct</span> Node <span class=\"operator\">*</span>tail <span class=\"operator\">=</span> <span class=\"datatype\">NULL</span><span class=\"semicolon\">;</span>`
     },
     {
         title: "Step 2: Adding the First Node (10)",
@@ -50,7 +43,7 @@ const steps = [
                 <div className="tail-pointer font-bold text-lg text-[#B5CEA8]"><UpArrow /> tail</div>
             </div>
         ),
-        code: `<span class="comment">// 1. Allocate memory for new node</span><br><span class="keyword">struct</span> Node <span class="operator">*</span>new_node <span class="operator">=</span> <span class="function">malloc</span>(<span class="function">sizeof</span>(<span class="keyword">struct</span> Node))<span class="semicolon">;</span><br><span class="comment">// 2. Set data and pointers to NULL</span><br>new_node<span class="operator">-></span>data = <span class="number">10</span><span class="semicolon">;</span><br>new_node<span class="operator">-></span>prev = <span class="datatype">NULL</span><span class="semicolon">;</span><br>new_node<span class="operator">-></span>next = <span class="datatype">NULL</span><span class="semicolon">;</span><br><br><span class="comment">// 3. Update head and tail</span><br>head = new_node<span class="semicolon">;</span><br>tail = new_node<span class="semicolon">;</span>`
+        code: `<span class=\"comment\">// 1. Allocate memory for new node</span><br><span class=\"keyword\">struct</span> Node <span class=\"operator\">*</span>new_node <span class=\"operator\">=</span> <span class=\"function\">malloc</span>(<span class=\"function\">sizeof</span>(<span class=\"keyword\">struct</span> Node))<span class=\"semicolon\">;</span><br><span class=\"comment\">// 2. Set data and pointers to NULL</span><br>new_node->data = <span class=\"number\">10</span><span class=\"semicolon\">;</span><br>new_node->prev = <span class=\"datatype\">NULL</span><span class=\"semicolon\">;</span><br>new_node->next = <span class=\"datatype\">NULL</span><span class=\"semicolon\">;</span><br><br><span class=\"comment\">// 3. Update head and tail</span><br>head = new_node<span class=\"semicolon\">;</span><br>tail = new_node<span class=\"semicolon\">;</span>`
     },
     {
         title: "Step 3: Adding a Second Node (20)",
@@ -64,7 +57,7 @@ const steps = [
                 <div className="tail-pointer font-bold text-lg text-[#B5CEA8]"><UpArrow /> tail</div>
             </div>
         ),
-        code: `<span class="comment">// Create new node with data 20</span><br><span class="keyword">struct</span> Node <span class="operator">*</span>new_node <span class="operator">=</span> <span class="function">malloc</span>(<span class="function">sizeof</span>(<span class="keyword">struct</span> Node))<span class="semicolon">;</span><br>new_node<span class="operator">-></span>data = <span class="number">20</span><span class="semicolon">;</span><br>new_node<span class="operator">-></span>next = <span class="datatype">NULL</span><span class="semicolon">;</span><br><br><span class="comment">// 1. Link the old tail (10) to the new node</span><br>tail<span class="operator">-></span>next = new_node<span class="semicolon">;</span><br><span class="comment">// 2. Link the new node back to the old tail</span><br>new_node<span class="operator">-></span>prev = tail<span class="semicolon">;</span><br><span class="comment">// 3. Update the tail pointer to the new node</span><br>tail = new_node<span class="semicolon">;</span>`
+        code: `<span class=\"comment\">// Create new node with data 20</span><br><span class=\"keyword\">struct</span> Node <span class=\"operator\">*</span>new_node <span class=\"operator\">=</span> <span class=\"function\">malloc</span>(<span class=\"function\">sizeof</span>(<span class=\"keyword\">struct</span> Node))<span class=\"semicolon\">;</span><br>new_node->data = <span class=\"number\">20</span><span class=\"semicolon\">;</span><br>new_node->next = <span class=\"datatype\">NULL</span><span class=\"semicolon\">;</span><br><br><span class=\"comment\">// 1. Link the old tail (10) to the new node</span><br>tail->next = new_node<span class=\"semicolon\">;</span><br><span class=\"comment\">// 2. Link the new node back to the old tail</span><br>new_node->prev = tail<span class=\"semicolon\">;</span><br><span class=\"comment\">// 3. Update the tail pointer to the new node</span><br>tail = new_node<span class=\"semicolon\">;</span>`
     },
      {
         title: "Step 4: Adding a Third Node (30)",
@@ -80,7 +73,7 @@ const steps = [
                 <div className="tail-pointer font-bold text-lg text-[#B5CEA8]"><UpArrow /> tail</div>
             </div>
         ),
-        code: `<span class="comment">// Create new node with data 30</span><br><span class="comment">// Link old tail (20) to new node (30)</span><br><span class="comment">// Link new node (30) back to old tail (20)</span><br><span class="comment">// Update tail to be the new node (30)</span>`
+        code: `<span class=\"comment\">// Create new node with data 30</span><br><span class=\"comment\">// Link old tail (20) to new node (30)</span><br><span class=\"comment\">// Link new node (30) back to old tail (20)</span><br><span class=\"comment\">// Update tail to be the new node (30)</span>`
     }
 ];
 
@@ -94,7 +87,6 @@ export default function DoublyLinkedListPage() {
     const handlePrev = () => {
         setCurrentStep(prev => Math.max(prev - 1, 0));
     };
-
     return (
         <div className="max-w-7xl mx-auto px-4 py-8">
             <header className="text-center mb-12">
@@ -116,13 +108,11 @@ export default function DoublyLinkedListPage() {
                         The defining feature of a doubly linked list is the `struct` that represents a node. It includes the data, a pointer to the next node, and a pointer to the previous node.
                     </p>
                     <CodeBlock>
-                        <CodeSyntax>
-                            <span className="syntax-keyword">struct</span> Node {'{'}<br />
-                            &nbsp;&nbsp;<span className="syntax-datatype">int</span> data<span className="syntax-semicolon">;</span><br />
-                            &nbsp;&nbsp;<span className="syntax-keyword">struct</span> Node <span className="syntax-operator">*</span>prev<span className="syntax-semicolon">;</span><br />
-                            &nbsp;&nbsp;<span className="syntax-keyword">struct</span> Node <span className="syntax-operator">*</span>next<span className="syntax-semicolon">;</span><br />
-                            {'};'}
-                        </CodeSyntax>
+{`struct Node {
+    int data;
+    struct Node *prev;
+    struct Node *next;
+};`}
                     </CodeBlock>
                     <ul className="list-disc list-inside space-y-2 text-muted-foreground mt-4">
                         <li><strong>`data`:</strong> The information stored in the node. This can be of any data type.</li>
@@ -153,7 +143,7 @@ export default function DoublyLinkedListPage() {
                                 <h3 className="text-2xl font-bold text-secondary-accent mt-6">{steps[currentStep].title}</h3>
                                 <p className="mb-4 text-muted-foreground">{steps[currentStep].description}</p>
                                 <div className="my-4">{steps[currentStep].visualization}</div>
-                                <CodeBlock><code dangerouslySetInnerHTML={{ __html: steps[currentStep].code }} /></CodeBlock>
+                                <CodeBlock>{steps[currentStep].code}</CodeBlock>
                             </motion.div>
                         </AnimatePresence>
                     </div>
@@ -171,45 +161,41 @@ export default function DoublyLinkedListPage() {
                         <strong>Backward Traversal:</strong> Start at the `tail` and follow the `prev` pointers.
                     </p>
                     <CodeBlock>
-                        <CodeSyntax>
-                            <span className="syntax-comment">{'// Forward Traversal: prints 10 -> 20 -> 30 -> NULL'}</span><br />
-                            <span className="syntax-keyword">void</span> <span className="syntax-function">traverseForward</span>(<span className="syntax-keyword">struct</span> Node <span className="syntax-operator">*</span>n) {'{'}<br />
-                            &nbsp;&nbsp;<span className="syntax-keyword">while</span> (n <span className="syntax-operator">!=</span> <span className="syntax-keyword">NULL</span>) {'{'}<br />
-                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-function">printf</span>(<span className="syntax-string">"%d -> "</span>, n<span className="syntax-operator">{'->'}</span>data)<span className="syntax-semicolon">;</span><br />
-                            &nbsp;&nbsp;&nbsp;&nbsp;n = n<span className="syntax-operator">{'->'}</span>next<span className="syntax-semicolon">;</span><br />
-                            &nbsp;&nbsp;{'}'}<br />
-                            &nbsp;&nbsp;<span className="syntax-function">printf</span>(<span className="syntax-string">"NULL\n"</span>)<span className="syntax-semicolon">;</span><br />
-                            {'}'}<br />
-                            <br />
-                            <span className="syntax-comment">{'// Backward Traversal: prints <- 30 <- 20 <- 10 <- NULL'}</span><br />
-                             <span className="syntax-keyword">void</span> <span className="syntax-function">traverseBackward</span>(<span className="syntax-keyword">struct</span> Node <span className="syntax-operator">*</span>n) {'{'}<br />
-                            &nbsp;&nbsp;<span className="syntax-keyword">while</span> (n <span className="syntax-operator">!=</span> <span className="syntax-keyword">NULL</span>) {'{'}<br />
-                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-function">printf</span>(<span className="syntax-string">"<- %d "</span>, n<span className="syntax-operator">{'->'}</span>data)<span className="syntax-semicolon">;</span><br />
-                            &nbsp;&nbsp;&nbsp;&nbsp;n = n<span className="syntax-operator">{'->'}</span>prev<span className="syntax-semicolon">;</span><br />
-                            &nbsp;&nbsp;{'}'}<br />
-                            &nbsp;&nbsp;<span className="syntax-function">printf</span>(<span className="syntax-string">"<- NULL\n"</span>)<span className="syntax-semicolon">;</span><br />
-                            {'}'}
-                        </CodeSyntax>
+{`// Forward Traversal: prints 10 -> 20 -> 30 -> NULL
+void traverseForward(struct Node *n) {
+    while (n != NULL) {
+        printf("%d -> ", n->data);
+        n = n->next;
+    }
+    printf("NULL\n");
+}
+
+// Backward Traversal: prints <- 30 <- 20 <- 10 <- NULL
+void traverseBackward(struct Node *n) {
+    while (n != NULL) {
+        printf("<- %d ", n->data);
+        n = n->prev;
+    }
+    printf("<- NULL\n");
+}`}
                     </CodeBlock>
                     
-                    <h3 className="text-2xl font-semibold text-secondary-accent mt-6 mb2">3.2 Deletion of a Node</h3>
+                    <h3 className="text-2xl font-semibold text-secondary-accent mt-6 mb-2">3.2 Deletion of a Node</h3>
                     <p className="mb-4 text-muted-foreground">
                         Deleting a node in a doubly linked list is also more straightforward as you don't need to find the previous node first. You can access it directly. The key is to re-link the surrounding nodes to bypass the node being deleted.
                     </p>
                     <CodeBlock>
-                        <CodeSyntax>
-                            <span className="syntax-keyword">void</span> <span className="syntax-function">deleteNode</span>(<span className="syntax-keyword">struct</span> Node<span className="syntax-operator">**</span> head_ref, <span className="syntax-keyword">struct</span> Node<span className="syntax-operator">*</span> del_node) {'{'}<br />
-                            &nbsp;&nbsp;<span className="syntax-keyword">if</span> (*head_ref == <span className="syntax-keyword">NULL</span> || del_node == <span className="syntax-keyword">NULL</span>) <span className="syntax-keyword">return</span><span className="syntax-semicolon">;</span><br />
-                            <br />
-                            &nbsp;&nbsp;<span className="syntax-keyword">if</span> (*head_ref == del_node) *head_ref = del_node<span className="syntax-operator">{'->'}</span>next<span className="syntax-semicolon">;</span><br />
-                            <br />
-                            &nbsp;&nbsp;<span className="syntax-keyword">if</span> (del_node<span className="syntax-operator">{'->'}</span>next != <span className="syntax-keyword">NULL</span>) del_node<span className="syntax-operator">{'->'}</span>next<span className="syntax-operator">{'->'}</span>prev = del_node<span className="syntax-operator">{'->'}</span>prev<span className="syntax-semicolon">;</span><br />
-                            <br />
-                            &nbsp;&nbsp;<span className="syntax-keyword">if</span> (del_node<span className="syntax-operator">{'->'}</span>prev != <span className="syntax-keyword">NULL</span>) del_node<span className="syntax-operator">{'->'}</span>prev<span className="syntax-operator">{'->'}</span>next = del_node<span className="syntax-operator">{'->'}</span>next<span className="syntax-semicolon">;</span><br />
-                            <br />
-                            &nbsp;&nbsp;<span className="syntax-function">free</span>(del_node)<span className="syntax-semicolon">;</span><br />
-                            {'}'}
-                        </CodeSyntax>
+{`void deleteNode(struct Node** head_ref, struct Node* del_node) {
+    if (*head_ref == NULL || del_node == NULL) return;
+
+    if (*head_ref == del_node) *head_ref = del_node->next;
+
+    if (del_node->next != NULL) del_node->next->prev = del_node->prev;
+
+    if (del_node->prev != NULL) del_node->prev->next = del_node->next;
+
+    free(del_node);
+}`}
                     </CodeBlock>
                 </Card>
             </main>
