@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { CodeBlock } from '@/components/markdown/CodeBlock';
@@ -77,14 +77,14 @@ const NodeComponent = ({ node, isHighlighted }: { node: TreeNode, isHighlighted:
     );
 };
 
-const TreeLines = ({ node }: { node: TreeNode | null }) => {
+const TreeLines = ({ node, containerWidth }: { node: TreeNode | null, containerWidth: number }) => {
     if (!node) return null;
     const verticalSpacing = 70;
-    const getHorizontalSpacing = (level: number) => Math.max(200 / (level + 1.5), 35);
+    const getHorizontalSpacing = (level: number) => Math.max(containerWidth / Math.pow(2, level + 2), 40);
     
     const lines: React.ReactNode[] = [];
     const traverse = (n: TreeNode, level: number) => {
-        const hSpacing = getHorizontalSpacing(level);
+        const hSpacing = getHorizontalSpacing(level + 1);
         if (n.left) {
             const leftX = n.x - hSpacing;
             const leftY = n.y + verticalSpacing;
@@ -124,6 +124,21 @@ const AVLTreeVisualizer = () => {
   const [highlightedNode, setHighlightedNode] = useState<number | null>(null);
   const [explanation, setExplanation] = useState('Add nodes to the tree to see how it balances itself.');
   const [isAnimating, setIsAnimating] = useState(false);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(800);
+
+  useEffect(() => {
+    const updateWidth = () => {
+        if (containerRef.current) {
+            setWidth(containerRef.current.offsetWidth);
+        }
+    };
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
+}, []);
+
 
   const wait = (ms: number) => new Promise(res => setTimeout(res, ms));
 
@@ -212,7 +227,6 @@ const AVLTreeVisualizer = () => {
     let sampleTree: TreeNode | null = null;
     const values = [30, 20, 40, 10, 25, 50];
     values.forEach(v => {
-        let tempTree = JSON.parse(JSON.stringify(sampleTree));
         sampleTree = insertNode(sampleTree, v);
     });
     setTree(sampleTree);
@@ -243,9 +257,10 @@ const AVLTreeVisualizer = () => {
   const fullTree = useMemo(() => {
     if (!tree) return null;
     const newTree = JSON.parse(JSON.stringify(tree));
-    newTree.x = 400; newTree.y = 50;
+    newTree.x = width / 2;
+    newTree.y = 50;
     return newTree;
-  }, [tree]);
+  }, [tree, width]);
   
   return (
     <Card className="bg-gray-800/50">
@@ -285,9 +300,9 @@ const AVLTreeVisualizer = () => {
                 </div>
 
                 <div className="lg:col-span-2">
-                    <div className="relative bg-gray-900/50 rounded-lg p-4 min-h-[400px] border border-gray-700">
+                    <div ref={containerRef} className="relative bg-gray-900/50 rounded-lg p-4 min-h-[400px] border border-gray-700">
                         <svg width="100%" height="450" className="overflow-visible">
-                            <TreeLines node={fullTree} />
+                            <TreeLines node={fullTree} containerWidth={width} />
                             <TreeNodes node={fullTree} highlightedNode={highlightedNode} />
                         </svg>
                     </div>
@@ -453,7 +468,7 @@ struct Node* insert(struct Node* node, int key) {
         return leftRotate(node);
 
     // Left Right Case
-    if (balance > 1 && key > node.left->key) {
+    if (balance > 1 && key > node->left->key) {
         node->left =  leftRotate(node->left);
         return rightRotate(node);
     }
