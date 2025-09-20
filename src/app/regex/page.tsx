@@ -235,6 +235,17 @@ const regexData = [
         }
     },
     {
+        char: '\\1',
+        name: 'Backreference',
+        description: 'Matches the text captured by the Nth group. \\1 refers to the first group.',
+        demoString: 'catcat dogdog bird-bird',
+        pattern: '(\\w+)\\1',
+        examples: {
+            matches: ['catcat', 'dogdog'],
+            noMatches: ['bird-bird (it has a hyphen in between)']
+        }
+    },
+    {
         char: '(?:...)',
         name: 'Non-Capturing Group',
         description: 'Groups characters together without creating a captured group',
@@ -248,12 +259,56 @@ const regexData = [
     {
         char: '(?=...)',
         name: 'Positive Lookahead',
-        description: 'Matches a group after the main expression without including it in the result',
+        description: 'Asserts that the following characters match a group, but doesn\'t include those characters in the match',
         demoString: 'cat1 dog2 bird3',
         pattern: '\\w+(?=\\d)',
         examples: {
             matches: ['cat', 'dog', 'bird'],
             noMatches: ['cat1', 'dog2', 'bird3']
+        }
+    },
+    {
+        char: '(?!...)',
+        name: 'Negative Lookahead',
+        description: 'Asserts that the following characters DO NOT match a group',
+        demoString: 'cat1 dog cat2',
+        pattern: 'cat(?!\\d)',
+        examples: {
+            matches: ['cat (not followed by a digit)'],
+            noMatches: ['cat1', 'cat2']
+        }
+    },
+    {
+        char: '(?<=...)',
+        name: 'Positive Lookbehind',
+        description: 'Asserts that the preceding characters match a group, but doesn\'t include them in the match',
+        demoString: '$100 €200 £300',
+        pattern: '(?<=\\€)\\d+',
+        examples: {
+            matches: ['200 (preceded by €)'],
+            noMatches: ['100', '300']
+        }
+    },
+    {
+        char: '(?<!...)',
+        name: 'Negative Lookbehind',
+        description: 'Asserts that the preceding characters DO NOT match a group',
+        demoString: '$100 €200 £300',
+        pattern: '(?<!\\$)\\d+',
+        examples: {
+            matches: ['200', '300'],
+            noMatches: ['100 (preceded by $)']
+        }
+    },
+    {
+        char: 'Flags',
+        name: 'Regex Flags',
+        description: 'Modifiers that change how the pattern is interpreted',
+        demoString: 'Cat cat\nCAT',
+        pattern: 'cat',
+        examples: {
+            matches: ['g: global (find all matches)', 'i: ignore case', 'm: multiline (^ and $ match start/end of lines)'],
+            noMatches: ['Pattern "cat" with no flags finds only the first "cat".', 'Pattern "cat" with /i flag finds "Cat", "cat", "CAT".']
         }
     }
 ];
@@ -272,7 +327,15 @@ export default function RegexPage() {
             if (!regexList) return;
             regexList.innerHTML = '';
             
-            regexData.forEach((regex, index) => {
+            regexData.sort((a, b) => {
+                const order = ".\\dD\\wW\\sS^$\\bB[]*+?{}|()";
+                const aIndex = order.indexOf(a.char[0]);
+                const bIndex = order.indexOf(b.char[0]);
+                if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
+                if (aIndex !== -1) return -1;
+                if (bIndex !== -1) return 1;
+                return a.name.localeCompare(b.name);
+            }).forEach((regex, index) => {
                 const item = document.createElement('div');
                 item.className = 'regex-item';
                 item.innerHTML = `
@@ -291,13 +354,10 @@ export default function RegexPage() {
                 const query = (e.target as HTMLInputElement).value.toLowerCase();
                 const items = document.querySelectorAll('.regex-item');
                 
-                items.forEach((item, index) => {
-                    const regex = regexData[index];
-                    const matchesSearch = 
-                        regex.char.toLowerCase().includes(query) ||
-                        regex.name.toLowerCase().includes(query) ||
-                        regex.description.toLowerCase().includes(query);
-                    
+                items.forEach((item) => {
+                    const name = item.querySelector('.regex-name')?.textContent?.toLowerCase() || '';
+                    const char = item.querySelector('.regex-char')?.textContent?.toLowerCase() || '';
+                    const matchesSearch = name.includes(query) || char.includes(query);
                     (item as HTMLElement).style.display = matchesSearch ? 'block' : 'none';
                 });
             });
@@ -305,9 +365,9 @@ export default function RegexPage() {
 
         function selectRegex(index: number) {
             document.querySelectorAll('.regex-item').forEach(item => item.classList.remove('active'));
-            const selectedElement = document.querySelectorAll('.regex-item')[index];
-            if (selectedElement) {
-                selectedElement.classList.add('active');
+            const activeItem = document.querySelectorAll('.regex-item')[index];
+            if (activeItem) {
+                activeItem.classList.add('active');
             }
             
             currentRegex = regexData[index];
