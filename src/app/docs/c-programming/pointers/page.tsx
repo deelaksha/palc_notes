@@ -43,7 +43,7 @@ export default function CPointersPage() {
                         <CodeSyntax>
                             <span className="syntax-datatype">int</span> age <span className="syntax-operator">=</span> <span className="syntax-number">30</span>; <span className="syntax-comment">{'// A normal integer variable'}</span><br/>
                             <span className="syntax-datatype">int</span> *p_age; <span className="syntax-comment">{'// A pointer to an integer'}</span><br/><br/>
-                            p_age <span className="syntax-operator">=</span> &age; <span className="syntax-comment">{'// Store the address of 'age' in the pointer p_age'}</span><br/><br/>
+                            p_age <span className="syntax-operator">=</span> &age; <span className="syntax-comment">{'// Store the address of \'age\' in the pointer p_age'}</span><br/><br/>
                             <span className="syntax-function">printf</span>(<span className="syntax-string">"Value of age: %d\n"</span>, age); <span className="syntax-comment">{'// Prints 30'}</span><br/>
                             <span className="syntax-function">printf</span>(<span className="syntax-string">"Value via pointer: %d\n"</span>, *p_age); <span className="syntax-comment">{'// Dereference p_age to get the value it points to (prints 30)'}</span>
                         </CodeSyntax>
