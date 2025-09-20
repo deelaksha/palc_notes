@@ -115,46 +115,47 @@ const CircularQueueVisualizer = () => {
                         </CardHeader>
                         <CardContent>
                             <CodeBlock>
-{`#include <stdio.h>
-#define MAX_SIZE 5
+<code><span className="syntax-keyword">#include</span> <span className="syntax-string">&lt;stdio.h&gt;</span>
+<span className="syntax-keyword">#define</span> MAX_SIZE 5
 
-// ... (struct and init function are the same)
+<span className="syntax-comment">{'// ... (struct and init function are the same)'}</span>
 
-int isFull(struct Queue *q) {
-    if ((q->front == 0 && q->rear == MAX_SIZE - 1) || (q->front == q->rear + 1)) {
-        return 1;
+<span className="syntax-datatype">int</span> <span className="syntax-function">isFull</span>(<span className="syntax-keyword">struct</span> Queue *q) {'{'}
+    <span className="syntax-keyword">if</span> ((q-&gt;front <span className="syntax-operator">==</span> <span className="syntax-number">0</span> && q-&gt;rear <span className="syntax-operator">==</span> MAX_SIZE - <span className="syntax-number">1</span>) || (q-&gt;front <span className="syntax-operator">==</span> q-&gt;rear + <span className="syntax-number">1</span>)) {'{'}
+        <span className="syntax-keyword">return</span> <span className="syntax-number">1</span>;
     }
-    return 0;
+    <span className="syntax-keyword">return</span> <span className="syntax-number">0</span>;
 }
 
-int isEmpty(struct Queue *q) {
-    return q->front == -1;
+<span className="syntax-datatype">int</span> <span className="syntax-function">isEmpty</span>(<span className="syntax-keyword">struct</span> Queue *q) {'{'}
+    <span className="syntax-keyword">return</span> q-&gt;front <span className="syntax-operator">==</span> -<span className="syntax-number">1</span>;
 }
 
-void enqueue(struct Queue *q, int value) {
-    if (isFull(q)) {
-        printf("Queue is full\\n");
-    } else {
-        if (q->front == -1) q->front = 0;
-        q->rear = (q->rear + 1) % MAX_SIZE;
-        q->items[q->rear] = value;
+<span className="syntax-keyword">void</span> <span className="syntax-function">enqueue</span>(<span className="syntax-keyword">struct</span> Queue *q, <span className="syntax-datatype">int</span> value) {'{'}
+    <span className="syntax-keyword">if</span> (isFull(q)) {'{'}
+        printf(<span className="syntax-string">"Queue is full\\n"</span>);
+    } <span className="syntax-keyword">else</span> {'{'}
+        <span className="syntax-keyword">if</span> (q-&gt;front <span className="syntax-operator">==</span> -<span className="syntax-number">1</span>) q-&gt;front = <span className="syntax-number">0</span>;
+        q-&gt;rear = (q-&gt;rear + <span className="syntax-number">1</span>) % MAX_SIZE;
+        q-&gt;items[q-&gt;rear] = value;
     }
 }
 
-int dequeue(struct Queue *q) {
-    if (isEmpty(q)) {
-        return -1;
-    } else {
-        int element = q->items[q->front];
-        if (q->front == q->rear) { // last element
-            q->front = -1;
-            q->rear = -1;
-        } else {
-            q->front = (q->front + 1) % MAX_SIZE;
+<span className="syntax-datatype">int</span> <span className="syntax-function">dequeue</span>(<span className="syntax-keyword">struct</span> Queue *q) {'{'}
+    <span className="syntax-keyword">if</span> (isEmpty(q)) {'{'}
+        <span className="syntax-keyword">return</span> -<span className="syntax-number">1</span>;
+    } <span className="syntax-keyword">else</span> {'{'}
+        <span className="syntax-datatype">int</span> element = q-&gt;items[q-&gt;front];
+        <span className="syntax-keyword">if</span> (q-&gt;front <span className="syntax-operator">==</span> q-&gt;rear) {'{'} <span className="syntax-comment">{'// last element'}</span>
+            q-&gt;front = -<span className="syntax-number">1</span>;
+            q-&gt;rear = -<span className="syntax-number">1</span>;
+        } <span className="syntax-keyword">else</span> {'{'}
+            q-&gt;front = (q-&gt;front + <span className="syntax-number">1</span>) % MAX_SIZE;
         }
-        return element;
+        <span className="syntax-keyword">return</span> element;
     }
-}`}
+}
+</code>
                             </CodeBlock>
                         </CardContent>
                     </Card>
