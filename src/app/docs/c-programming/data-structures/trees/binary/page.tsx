@@ -365,71 +365,71 @@ const BinaryTreeVisualization = () => {
                 <h3 className="text-xl font-semibold text-gray-100 mb-2">1. Node Structure</h3>
                 <p className="text-sm text-gray-400 mb-4">The basic building block of a tree. Each node contains data, a pointer to a left child, and a pointer to a right child.</p>
                 <CodeBlock>
-{`struct Node {
-    int data;
-    struct Node *left;
-    struct Node *right;
-};`}
+<code><span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> {'{'}
+    <span className="syntax-datatype">int</span> data;
+    <span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> *left;
+    <span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> *right;
+{'};'}</span></code>
                 </CodeBlock>
             </div>
              <div>
                 <h3 className="text-xl font-semibold text-gray-100 mb-2">2. Insert Function</h3>
                 <p className="text-sm text-gray-400 mb-4">Recursively finds the correct position in the tree to insert a new node while maintaining the BST property (left &lt; root &lt; right).</p>
                 <CodeBlock>
-{`// Function to create a new node
-struct Node* newNode(int item) {
-    struct Node* temp = (struct Node*)malloc(sizeof(struct Node));
-    temp->data = item;
-    temp->left = temp->right = NULL;
-    return temp;
-}
+<code><span className="syntax-comment">{'// Function to create a new node'}</span>
+<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>* <span className="syntax-function">newNode</span>(<span className="syntax-datatype">int</span> item) {'{'}
+    <span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>* temp = (<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>*)<span className="syntax-function">malloc</span>(<span className="syntax-keyword">sizeof</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>));
+    temp<span className="syntax-operator">-></span>data = item;
+    temp<span className="syntax-operator">-></span>left = temp<span className="syntax-operator">-></span>right = <span className="syntax-keyword">NULL</span>;
+    <span className="syntax-keyword">return</span> temp;
+{'}'}
 
-// Function to insert a new node with given data in BST
-struct Node* insert(struct Node* node, int data) {
-    // If the tree is empty, return a new node
-    if (node == NULL) return newNode(data);
+<span className="syntax-comment">{'// Function to insert a new node with given data in BST'}</span>
+<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>* <span className="syntax-function">insert</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>* node, <span className="syntax-datatype">int</span> data) {'{'}
+    <span className="syntax-comment">{'// If the tree is empty, return a new node'}</span>
+    <span className="syntax-keyword">if</span> (node == <span className="syntax-keyword">NULL</span>) <span className="syntax-keyword">return</span> <span className="syntax-function">newNode</span>(data);
 
-    // Otherwise, recur down the tree
-    if (data < node->data)
-        node->left  = insert(node->left, data);
-    else if (data > node->data)
-        node->right = insert(node->right, data);   
+    <span className="syntax-comment">{'// Otherwise, recur down the tree'}</span>
+    <span className="syntax-keyword">if</span> (data < node<span className="syntax-operator">-></span>data)
+        node<span className="syntax-operator">-></span>left  = <span className="syntax-function">insert</span>(node<span className="syntax-operator">-></span>left, data);
+    <span className="syntax-keyword">else if</span> (data > node<span className="syntax-operator">-></span>data)
+        node<span className="syntax-operator">-></span>right = <span className="syntax-function">insert</span>(node<span className="syntax-operator">-></span>right, data);   
 
-    // return the (unchanged) node pointer
-    return node;
-}`}
+    <span className="syntax-comment">{'// return the (unchanged) node pointer'}</span>
+    <span className="syntax-keyword">return</span> node;
+{'}'}</span></code>
                 </CodeBlock>
             </div>
              <div>
                 <h3 className="text-xl font-semibold text-gray-100 mb-2">3. Traversal Functions</h3>
                 <p className="text-sm text-gray-400 mb-4">Different ways to visit every node in the tree.</p>
                 <CodeBlock>
-{`// In-Order Traversal (Left, Root, Right) - gives sorted output
-void printInorder(struct Node* node) {
-    if (node == NULL)
-        return;
-    printInorder(node->left);
-    printf("%d ", node->data);  
-    printInorder(node->right);
-}
+<code><span className="syntax-comment">{'// In-Order Traversal (Left, Root, Right) - gives sorted output'}</span>
+<span className="syntax-keyword">void</span> <span className="syntax-function">printInorder</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>* node) {'{'}
+    <span className="syntax-keyword">if</span> (node == <span className="syntax-keyword">NULL</span>)
+        <span className="syntax-keyword">return</span>;
+    <span className="syntax-function">printInorder</span>(node<span className="syntax-operator">-></span>left);
+    <span className="syntax-function">printf</span>(<span className="syntax-string">"%d "</span>, node<span className="syntax-operator">-></span>data);  
+    <span className="syntax-function">printInorder</span>(node<span className="syntax-operator">-></span>right);
+{'}'}
 
-// Pre-Order Traversal (Root, Left, Right)
-void printPreorder(struct Node* node) {
-    if (node == NULL)
-        return;
-    printf("%d ", node->data);  
-    printPreorder(node->left);  
-    printPreorder(node->right);
-}
+<span className="syntax-comment">{'// Pre-Order Traversal (Root, Left, Right)'}</span>
+<span className="syntax-keyword">void</span> <span className="syntax-function">printPreorder</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>* node) {'{'}
+    <span className="syntax-keyword">if</span> (node == <span className="syntax-keyword">NULL</span>)
+        <span className="syntax-keyword">return</span>;
+    <span className="syntax-function">printf</span>(<span className="syntax-string">"%d "</span>, node<span className="syntax-operator">-></span>data);  
+    <span className="syntax-function">printPreorder</span>(node<span className="syntax-operator">-></span>left);  
+    <span className="syntax-function">printPreorder</span>(node<span className="syntax-operator">-></span>right);
+{'}'}
 
-// Post-Order Traversal (Left, Right, Root)
-void printPostorder(struct Node* node) {
-    if (node == NULL)
-        return;
-    printPostorder(node->left);
-    printPostorder(node->right);
-    printf("%d ", node->data);
-}`}
+<span className="syntax-comment">{'// Post-Order Traversal (Left, Right, Root)'}</span>
+<span className="syntax-keyword">void</span> <span className="syntax-function">printPostorder</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span>* node) {'{'}
+    <span className="syntax-keyword">if</span> (node == <span className="syntax-keyword">NULL</span>)
+        <span className="syntax-keyword">return</span>;
+    <span className="syntax-function">printPostorder</span>(node<span className="syntax-operator">-></span>left);
+    <span className="syntax-function">printPostorder</span>(node<span className="syntax-operator">-></span>right);
+    <span className="syntax-function">printf</span>(<span className="syntax-string">"%d "</span>, node<span className="syntax-operator">-></span>data);
+{'}'}</span></code>
                 </CodeBlock>
             </div>
           </div>
