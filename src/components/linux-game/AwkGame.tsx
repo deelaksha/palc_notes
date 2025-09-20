@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Terminal, FileText, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 const logData = `error   2023-10-27  192.168.1.10  login_failed
 info    2023-10-27  192.168.1.15  user_logged_in
@@ -28,7 +29,7 @@ const AwkGame = () => {
                 const patternBody = pattern.startsWith('/') && pattern.endsWith('/') 
                     ? pattern.slice(1, -1) 
                     : pattern;
-                patternRegex = new RegExp(patternBody);
+                patternRegex = new RegExp(patternBody, 'i'); // Made it case-insensitive for ease of use
             }
         } catch (e) {
             setOutput(['Invalid pattern regex']);
@@ -41,7 +42,11 @@ const AwkGame = () => {
             const fields = line.split(/\s+/);
             try {
                 // A very simplified awk evaluator for demonstration
-                const result = new Function('$0', '$1', '$2', '$3', '$4', `return ${action.slice(1, -1)}`)(line, fields[0], fields[1], fields[2], fields[3]);
+                // It makes columns $1, $2 etc. available
+                const result = new Function('$0', '$1', '$2', '$3', '$4', `
+                    const parts = [${action.slice(1, -1).split(' ').join(',')}];
+                    return parts.join(' ');
+                `)(line, fields[0], fields[1], fields[2], fields[3]);
                 results.push(String(result));
             } catch (e) {
                 results.push('Error in action execution');
@@ -50,6 +55,10 @@ const AwkGame = () => {
         setOutput(results);
     };
 
+    const getCommand = () => {
+        return `awk '${pattern} ${action}' server.log`;
+    }
+
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-6xl mx-auto">
             {/* Controls and File Preview */}
@@ -57,11 +66,11 @@ const AwkGame = () => {
                  <div className="glass-effect rounded-2xl p-6 border-2 border-neon-pink/50 space-y-4">
                     <h2 className="text-xl font-bold text-neon-pink flex items-center gap-2"><Settings /> `awk` Controls</h2>
                      <div>
-                        <label className="text-sm font-mono">Pattern</label>
+                        <Label className="text-sm font-mono">Pattern</Label>
                         <Input value={pattern} onChange={e => setPattern(e.target.value)} placeholder="/pattern/ or condition" className="bg-dark-primary font-mono mt-1"/>
                     </div>
                      <div>
-                        <label className="text-sm font-mono">Action</label>
+                        <Label className="text-sm font-mono">Action</Label>
                         <Input value={action} onChange={e => setAction(e.target.value)} placeholder="{ action }" className="bg-dark-primary font-mono mt-1"/>
                     </div>
                     <Button onClick={handleAwk} className="w-full bg-neon-green text-black hover:bg-white">Run awk</Button>
@@ -79,7 +88,7 @@ const AwkGame = () => {
                     <h2 className="text-xl font-bold">Terminal Output</h2>
                 </div>
                 <div className="bg-dark-primary p-4 rounded-lg min-h-[300px] font-mono text-sm">
-                     <p className="text-gray-400">$ awk '{action}' server.log</p>
+                     <p className="text-gray-400">$ {getCommand()}</p>
                      <div className="mt-2 space-y-1">
                         <AnimatePresence>
                         {output.map((line, index) => (

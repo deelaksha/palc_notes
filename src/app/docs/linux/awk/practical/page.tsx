@@ -35,7 +35,7 @@ export default function CommandPracticalPage({
                     {command?.description}
                 </p>
             </div>
-            <div className="w-full max-w-4xl">
+            <div className="w-full max-w-6xl">
                 <AwkGame />
             </div>
         </main>
