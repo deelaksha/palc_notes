@@ -125,9 +125,9 @@ export default function DoublyLinkedListPage() {
                         </CodeSyntax>
                     </CodeBlock>
                     <ul className="list-disc list-inside space-y-2 text-muted-foreground mt-4">
-                        <li><strong>`data`:** The information stored in the node. This can be of any data type.</li>
-                        <li><strong>`*prev`:** A pointer to the memory address of the **previous** node in the sequence. For the first node, this is always `NULL`.</li>
-                        <li><strong>`*next`:** A pointer to the memory address of the **next** node in the sequence. For the last node, this is always `NULL`.</li>
+                        <li><strong>`data`:</strong> The information stored in the node. This can be of any data type.</li>
+                        <li><strong>`*prev`:</strong> A pointer to the memory address of the <strong>previous</strong> node in the sequence. For the first node, this is always `NULL`.</li>
+                        <li><strong>`*next`:</strong> A pointer to the memory address of the <strong>next</strong> node in the sequence. For the last node, this is always `NULL`.</li>
                     </ul>
                 </Card>
 
@@ -178,7 +178,7 @@ export default function DoublyLinkedListPage() {
                             &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-function">printf</span>(<span className="syntax-string">"%d -> "</span>, n<span className="syntax-operator">{'->'}</span>data)<span className="syntax-semicolon">;</span><br />
                             &nbsp;&nbsp;&nbsp;&nbsp;n = n<span className="syntax-operator">{'->'}</span>next<span className="syntax-semicolon">;</span><br />
                             &nbsp;&nbsp;{'}'}<br />
-                            &nbsp;&nbsp;<span className="syntax-function">printf</span>(<span className="syntax-string">"NULL\\n"</span>)<span className="syntax-semicolon">;</span><br />
+                            &nbsp;&nbsp;<span className="syntax-function">printf</span>(<span className="syntax-string">"NULL\n"</span>)<span className="syntax-semicolon">;</span><br />
                             {'}'}<br />
                             <br />
                             <span className="syntax-comment">{'// Backward Traversal: prints <- 30 <- 20 <- 10 <- NULL'}</span><br />
@@ -187,12 +187,12 @@ export default function DoublyLinkedListPage() {
                             &nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-function">printf</span>(<span className="syntax-string">"<- %d "</span>, n<span className="syntax-operator">{'->'}</span>data)<span className="syntax-semicolon">;</span><br />
                             &nbsp;&nbsp;&nbsp;&nbsp;n = n<span className="syntax-operator">{'->'}</span>prev<span className="syntax-semicolon">;</span><br />
                             &nbsp;&nbsp;{'}'}<br />
-                            &nbsp;&nbsp;<span className="syntax-function">printf</span>(<span className="syntax-string">"<- NULL\\n"</span>)<span className="syntax-semicolon">;</span><br />
+                            &nbsp;&nbsp;<span className="syntax-function">printf</span>(<span className="syntax-string">"<- NULL\n"</span>)<span className="syntax-semicolon">;</span><br />
                             {'}'}
                         </CodeSyntax>
                     </CodeBlock>
                     
-                    <h3 className="text-2xl font-semibold text-secondary-accent mt-6 mb-2">3.2 Deletion of a Node</h3>
+                    <h3 className="text-2xl font-semibold text-secondary-accent mt-6 mb2">3.2 Deletion of a Node</h3>
                     <p className="mb-4 text-muted-foreground">
                         Deleting a node in a doubly linked list is also more straightforward as you don't need to find the previous node first. You can access it directly. The key is to re-link the surrounding nodes to bypass the node being deleted.
                     </p>
