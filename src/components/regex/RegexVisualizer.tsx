@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
@@ -165,7 +166,7 @@ export function RegexVisualizer({
        <div className="animated-text-container">
             {text.split('').map((char, index) => (
                 <span key={index} className="animated-char">
-                    {char === ' ' ? '\\u00A0' : char}
+                    {char === ' ' ? '\u00A0' : char}
                 </span>
             ))}
         </div>
