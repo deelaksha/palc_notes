@@ -3,14 +3,13 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 const BinaryTreeVisualization = () => {
   const [tree, setTree] = useState<TreeNode | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [highlightedNodes, setHighlightedNodes] = useState<number[]>([]);
   const [explanation, setExplanation] = useState('Build a tree or create a sample one to begin.');
-  const [codeExplanation, setCodeExplanation] = useState('');
-  const [currentCodeStep, setCurrentCodeStep] = useState('');
   const [traversalResult, setTraversalResult] = useState<number[]>([]);
 
   const [animationQueue, setAnimationQueue] = useState<(() => Promise<void>)[]>([]);
