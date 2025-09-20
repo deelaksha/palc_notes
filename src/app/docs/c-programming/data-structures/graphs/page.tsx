@@ -24,7 +24,7 @@ const topics = [
     {
         name: 'Graph Traversal Algorithms',
         description: 'Study Breadth-First Search (BFS) and Depth-First Search (DFS).',
-        href: '#',
+        href: '#', // Placeholder link
         icon: <CheckCircle className="size-8" />,
     },
 ];
