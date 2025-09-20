@@ -33,53 +33,53 @@
   }
 
   .dark {
-    --background: 240 10% 4%;
-    --foreground: 210 17% 91%;
-    --card: 240 5% 10%;
+    --background: 224 71% 4%; /* Darker Blue-black */
+    --foreground: 210 17% 81%; /* Lighter gray */
+    --card: 220 40% 7%; /* Darker card */
     --card-foreground: 210 17% 91%;
-    --card-nested: 240 5% 15%;
+    --card-nested: 220 40% 10%;
     --popover: 212 28% 10%;
     --popover-foreground: 210 17% 91%;
-    --primary: 180 100% 50%; /* #00FFFF */
-    --primary-foreground: 210 29% 7%;
+    --primary: 130 87% 53%; /* Bright Green */
+    --primary-foreground: 224 71% 4%;
     --secondary: 210 18% 15%;
     --secondary-foreground: 210 17% 91%;
     --muted: 210 18% 15%;
-    --muted-foreground: 210 17% 60%;
-    --accent: 150 100% 25%;
+    --muted-foreground: 210 17% 55%;
+    --accent: 130 87% 53%;
     --accent-foreground: 210 29% 7%;
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 17% 91%;
-    --border: 240 4% 20%;
-    --input: 210 18% 20%;
-    --ring: 180 100% 50%;
-    --sidebar-background: 210 29% 7%;
+    --border: 240 4% 15%;
+    --input: 210 18% 12%;
+    --ring: 130 87% 53%;
+    --sidebar-background: 224 71% 4%;
     --sidebar-foreground: 210 17% 91%;
-    --sidebar-primary: 150 100% 35%;
+    --sidebar-primary: 130 87% 53%;
     --sidebar-primary-foreground: 210 17% 91%;
-    --sidebar-accent: 212 28% 10%;
+    --sidebar-accent: 220 40% 10%;
     --sidebar-accent-foreground: 210 17% 91%;
-    --sidebar-border: 210 18% 20%;
-    --sidebar-ring: 150 100% 35%;
+    --sidebar-border: 240 4% 15%;
+    --sidebar-ring: 130 87% 53%;
 
     /* Radium/Gaming Theme & C Syntax Colors */
     --radius: 0.5rem;
-    --code-bg: hsl(0 0% 10%);
-    --code-text: hsl(210 17% 91%);
-    --command: hsl(210 100% 70%);
-    --keyword: hsl(301 53% 65%); /* #C586C0 */
-    --datatype: hsl(206 70% 59%); /* #569CD6 */
-    --function: hsl(60 62% 76%); /* #DCDCAA */
-    --string: hsl(19 41% 63%); /* #CE9178 */
-    --number: hsl(98 38% 70%); /* #B5CEA8 */
-    --comment: hsl(93 30% 46%); /* #6A9955 */
-    --operator: hsl(110 87% 53%); /* #39FF14 */
-    --semicolon: hsl(110 87% 53%); /* #39FF14 */
+    --code-bg: hsl(220 40% 5%);
+    --code-text: hsl(210 17% 81%);
+    --command: hsl(130 87% 63%); /* Green for commands */
+    --keyword: hsl(280 80% 70%); /* Purple for keywords */
+    --datatype: hsl(206 70% 65%); /* Light Blue for datatypes */
+    --function: hsl(60 62% 76%); /* Yellow for functions */
+    --string: hsl(30 60% 70%); /* Orange for strings */
+    --number: hsl(98 38% 70%); /* Pale green for numbers */
+    --comment: hsl(100 20% 50%); /* Dim green for comments */
+    --operator: hsl(130 87% 53%); /* Bright Green for operators */
+    --semicolon: hsl(130 87% 53%);
     --label: hsl(40 100% 70%);
     --tips: hsl(200 100% 70%);
-    --primary-accent: hsl(150 100% 35%);
-    --secondary-accent: hsl(171 68% 51%);
-    --tertiary-accent: hsl(27 87% 67%);
+    --primary-accent: hsl(130 87% 53%);
+    --secondary-accent: hsl(206 70% 65%);
+    --tertiary-accent: hsl(280 80% 70%);
   }
 }
 
