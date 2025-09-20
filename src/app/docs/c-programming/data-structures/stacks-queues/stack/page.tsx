@@ -1,13 +1,13 @@
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { CodeBlock } from '@/components/markdown/CodeBlock';
-import { Layers, HelpCircle, CheckCircle, Undo2, ArrowDown, ArrowUp } from 'lucide-react';
+import { Layers, HelpCircle, Undo2, ArrowDown } from 'lucide-react';
 
 const StackVisualization = () => {
   const [stack, setStack] = useState<string[]>([]);
@@ -32,7 +32,7 @@ const StackVisualization = () => {
   };
 
   const pop = () => {
-    if (stack.length === 0 || operation !== '') {
+    if (stack.length === 0) {
       setExplanation('Cannot pop from an empty stack!');
       return;
     }
@@ -58,10 +58,6 @@ const StackVisualization = () => {
     setExplanation(`Peek: The top element is "${topItem}". Peek doesn't remove the element.`);
   };
   
-  const isEmpty = () => {
-    setExplanation(`isEmpty(): ${stack.length === 0 ? 'Yes, the stack is empty.' : `No, the stack has ${stack.length} element(s).`}`);
-  };
-
   return (
     <div className="max-w-6xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-8">
@@ -230,7 +226,7 @@ int pop(struct Stack *s) {
 };
 
 
-export default function StacksAndQueuesPage() {
+export default function StackPage() {
     return (
         <div className="max-w-7xl mx-auto p-4 md:p-8">
             <header className="text-center mb-12">
