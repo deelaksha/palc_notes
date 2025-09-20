@@ -30,7 +30,7 @@ const graphTypes = [
      {
         name: 'Special Graph Types',
         description: 'Explore trees, Directed Acyclic Graphs (DAGs), and Bipartite Graphs.',
-        href: '#', // Placeholder link
+        href: '/docs/c-programming/data-structures/graphs/special-types',
         icon: <Waypoints className="size-8" />,
     },
 ];
