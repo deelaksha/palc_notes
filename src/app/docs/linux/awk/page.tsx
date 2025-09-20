@@ -1,5 +1,4 @@
 
-
 import { commandsData } from '@/lib/linux-commands';
 import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
@@ -8,42 +7,24 @@ import { ArrowRight, BookOpen, Code } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 
-export function generateStaticParams() {
-  return commandsData.map((command) => ({
-    command: command.name.replace(' ', '-'),
-  }));
-}
-
-export default function CommandHubPage({
-  params,
-}: {
-  params: { command: string };
-}) {
-  const command = commandsData.find((cmd) => cmd.name.replace(' ', '-') === params.command);
+export default function CommandHubPage() {
+  const command = commandsData.find((cmd) => cmd.name === 'awk');
 
   if (!command) {
     notFound();
-  }
-
-  // For commands that are too complex for a practical game, redirect to their main doc page.
-  // We will create dedicated doc pages for them.
-  if (command.name === 'vim' || command.name === 'nano') {
-      if (command.name === 'vim') redirect('/docs/vim');
-      if (command.name === 'nano') redirect('/docs/linux/nano');
-      return null;
   }
 
   const options = [
     {
       name: 'Theory',
       description: `Learn how the '${command.name}' command works with examples.`,
-      href: `/docs/linux/${params.command}/theory`,
+      href: `/docs/linux/awk/theory`,
       icon: <BookOpen className="size-8" />,
     },
     {
       name: 'Practical',
       description: 'A blank canvas for hands-on practice.',
-      href: `/docs/linux/${params.command}/practical`,
+      href: `/docs/linux/awk/practical`,
       icon: <Code className="size-8" />,
     },
   ];

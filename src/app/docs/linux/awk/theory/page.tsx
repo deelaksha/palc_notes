@@ -6,18 +6,8 @@ import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
-export function generateStaticParams() {
-  return commandsData.map((command) => ({
-    command: command.name.replace(' ', '-'),
-  }));
-}
-
-export default function CommandTheoryPage({
-  params,
-}: {
-  params: { command: string };
-}) {
-  const command = commandsData.find((cmd) => cmd.name.replace(' ', '-') === params.command);
+export default function CommandTheoryPage() {
+  const command = commandsData.find((cmd) => cmd.name === 'awk');
 
   if (!command) {
     notFound();
@@ -41,7 +31,7 @@ export default function CommandTheoryPage({
     <div className="flex">
     <div className="max-w-4xl mx-auto p-4 md:p-8 space-y-8 flex-1">
       <Button asChild variant="ghost" className="mb-4">
-        <Link href={`/docs/linux/${params.command}`}>
+        <Link href={`/docs/linux/awk`}>
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Command Hub
         </Link>
