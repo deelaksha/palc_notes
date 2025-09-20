@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useCallback } from 'react';
@@ -295,92 +296,92 @@ const AVLTreeVisualization = () => {
                 <h3 className="text-xl font-semibold text-gray-100 mb-2">1. Node Structure</h3>
                 <p className="text-sm text-gray-400 mb-4">The AVL node includes a `height` field to track the subtree height, which is crucial for determining balance.</p>
                 <CodeBlock>
-{`struct Node {
-    int key;
-    struct Node *left;
-    struct Node *right;
-    int height;
-};`}
+<code><span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> {'{'}
+    <span className="syntax-datatype">int</span> key;
+    <span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> <span className="syntax-operator">*</span>left;
+    <span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> <span className="syntax-operator">*</span>right;
+    <span className="syntax-datatype">int</span> height;
+{'};'}</code>
                 </CodeBlock>
             </div>
              <div>
                 <h3 className="text-xl font-semibold text-gray-100 mb-2">2. Rotation Functions</h3>
                 <p className="text-sm text-gray-400 mb-4">These are the core operations for rebalancing the tree. A right rotation is used for left-heavy subtrees, and a left rotation for right-heavy ones.</p>
                 <CodeBlock>
-{`// Function to get height of the node
-int height(struct Node *N) {
-    if (N == NULL) return 0;
-    return N->height;
-}
+<code><span className="syntax-comment">{'// Function to get height of the node'}</span>
+<span className="syntax-datatype">int</span> <span className="syntax-function">height</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> <span className="syntax-operator">*</span>N) {'{'}
+    <span className="syntax-keyword">if</span> (N <span className="syntax-operator">==</span> <span className="syntax-keyword">NULL</span>) <span className="syntax-keyword">return</span> <span className="syntax-number">0</span>;
+    <span className="syntax-keyword">return</span> N<span className="syntax-operator">-></span>height;
+{'}'}
 
-// Right rotate subtree rooted with y
-struct Node *rightRotate(struct Node *y) {
-    struct Node *x = y->left;
-    struct Node *T2 = x->right;
+<span className="syntax-comment">{'// Right rotate subtree rooted with y'}</span>
+<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> <span className="syntax-operator">*</span><span className="syntax-function">rightRotate</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> <span className="syntax-operator">*</span>y) {'{'}
+    <span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> <span className="syntax-operator">*</span>x <span className="syntax-operator">=</span> y<span className="syntax-operator">-></span>left;
+    <span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> <span className="syntax-operator">*</span>T2 <span className="syntax-operator">=</span> x<span className="syntax-operator">-></span>right;
 
-    // Perform rotation
-    x->right = y;
-    y->left = T2;
+    <span className="syntax-comment">{'// Perform rotation'}</span>
+    x<span className="syntax-operator">-></span>right <span className="syntax-operator">=</span> y;
+    y<span className="syntax-operator">-></span>left <span className="syntax-operator">=</span> T2;
 
-    // Update heights
-    y->height = max(height(y->left), height(y->right)) + 1;
-    x->height = max(height(x->left), height(x->right)) + 1;
+    <span className="syntax-comment">{'// Update heights'}</span>
+    y<span className="syntax-operator">-></span>height <span className="syntax-operator">=</span> <span className="syntax-function">max</span>(<span className="syntax-function">height</span>(y<span className="syntax-operator">-></span>left), <span className="syntax-function">height</span>(y<span className="syntax-operator">-></span>right)) <span className="syntax-operator">+</span> <span className="syntax-number">1</span>;
+    x<span className="syntax-operator">-></span>height <span className="syntax-operator">=</span> <span className="syntax-function">max</span>(<span className="syntax-function">height</span>(x<span className="syntax-operator">-></span>left), <span className="syntax-function">height</span>(x<span className="syntax-operator">-></span>right)) <span className="syntax-operator">+</span> <span className="syntax-number">1</span>;
 
-    return x;
-}
+    <span className="syntax-keyword">return</span> x;
+{'}'}
 
-// Left rotate subtree rooted with x
-struct Node *leftRotate(struct Node *x) {
-    // ... (similar logic to rightRotate)
-}`}
+<span className="syntax-comment">{'// Left rotate subtree rooted with x'}</span>
+<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> <span className="syntax-operator">*</span><span className="syntax-function">leftRotate</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> <span className="syntax-operator">*</span>x) {'{'}
+    <span className="syntax-comment">{'// ... (similar logic to rightRotate)'}</span>
+{'}'}</code>
                 </CodeBlock>
             </div>
              <div>
                 <h3 className="text-xl font-semibold text-gray-100 mb-2">3. Insert Function with Rebalancing</h3>
                 <p className="text-sm text-gray-400 mb-4">After a standard BST insertion, the tree walks back up, updating heights and checking the balance factor at each node. If an imbalance is found, the appropriate rotations are performed.</p>
                 <CodeBlock>
-{`// Get Balance factor of node N
-int getBalance(struct Node *N) {
-    if (N == NULL) return 0;
-    return height(N->left) - height(N->right);
-}
+<code><span className="syntax-comment">{'// Get Balance factor of node N'}</span>
+<span className="syntax-datatype">int</span> <span className="syntax-function">getBalance</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span> <span className="syntax-operator">*</span>N) {'{'}
+    <span className="syntax-keyword">if</span> (N <span className="syntax-operator">==</span> <span className="syntax-keyword">NULL</span>) <span className="syntax-keyword">return</span> <span className="syntax-number">0</span>;
+    <span className="syntax-keyword">return</span> <span className="syntax-function">height</span>(N<span className="syntax-operator">-></span>left) <span className="syntax-operator">-</span> <span className="syntax-function">height</span>(N<span className="syntax-operator">-></span>right);
+{'}'}
 
-struct Node* insert(struct Node* node, int key) {
-    // 1.  Perform the normal BST insertion
-    if (node == NULL) return(newNode(key));
-    if (key < node->key) node->left  = insert(node->left, key);
-    else if (key > node->key) node->right = insert(node->right, key);
-    else return node; // Duplicate keys not allowed
+<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span><span className="syntax-operator">*</span> <span className="syntax-function">insert</span>(<span className="syntax-keyword">struct</span> <span className="syntax-datatype">Node</span><span className="syntax-operator">*</span> node, <span className="syntax-datatype">int</span> key) {'{'}
+    <span className="syntax-comment">{'/* 1.  Perform the normal BST insertion */'}</span>
+    <span className="syntax-keyword">if</span> (node <span className="syntax-operator">==</span> <span className="syntax-keyword">NULL</span>) <span className="syntax-keyword">return</span>(<span className="syntax-function">newNode</span>(key));
+    <span className="syntax-keyword">if</span> (key <span className="syntax-operator">&lt;</span> node<span className="syntax-operator">-></span>key) node<span className="syntax-operator">-></span>left  <span className="syntax-operator">=</span> <span className="syntax-function">insert</span>(node<span className="syntax-operator">-></span>left, key);
+    <span className="syntax-keyword">else</span> <span className="syntax-keyword">if</span> (key <span className="syntax-operator">></span> node<span className="syntax-operator">-></span>key) node<span className="syntax-operator">-></span>right <span className="syntax-operator">=</span> <span className="syntax-function">insert</span>(node<span className="syntax-operator">-></span>right, key);
+    <span className="syntax-keyword">else</span> <span className="syntax-keyword">return</span> node; <span className="syntax-comment">{'// Duplicate keys not allowed'}</span>
 
-    // 2. Update height of this ancestor node
-    node->height = 1 + max(height(node->left), height(node->right));
+    <span className="syntax-comment">{'/* 2. Update height of this ancestor node */'}</span>
+    node<span className="syntax-operator">-></span>height <span className="syntax-operator">=</span> <span className="syntax-number">1</span> <span className="syntax-operator">+</span> <span className="syntax-function">max</span>(<span className="syntax-function">height</span>(node<span className="syntax-operator">-></span>left), <span className="syntax-function">height</span>(node<span className="syntax-operator">-></span>right));
 
-    // 3. Get the balance factor of this ancestor node
-    int balance = getBalance(node);
+    <span className="syntax-comment">{'/* 3. Get the balance factor of this ancestor node */'}</span>
+    <span className="syntax-datatype">int</span> balance <span className="syntax-operator">=</span> <span className="syntax-function">getBalance</span>(node);
 
-    // 4. If the node becomes unbalanced, there are 4 cases
-    // Left Left Case
-    if (balance > 1 && key < node->left->key)
-        return rightRotate(node);
+    <span className="syntax-comment">{'// 4. If the node becomes unbalanced, there are 4 cases'}</span>
+    <span className="syntax-comment">{'// Left Left Case'}</span>
+    <span className="syntax-keyword">if</span> (balance <span className="syntax-operator">></span> <span className="syntax-number">1</span> <span className="syntax-operator">&&</span> key <span className="syntax-operator">&lt;</span> node<span className="syntax-operator">-></span>left<span className="syntax-operator">-></span>key)
+        <span className="syntax-keyword">return</span> <span className="syntax-function">rightRotate</span>(node);
 
-    // Right Right Case
-    if (balance < -1 && key > node->right->key)
-        return leftRotate(node);
+    <span className="syntax-comment">{'// Right Right Case'}</span>
+    <span className="syntax-keyword">if</span> (balance <span className="syntax-operator">&lt;</span> <span className="syntax-operator">-</span><span className="syntax-number">1</span> <span className="syntax-operator">&&</span> key <span className="syntax-operator">></span> node<span className="syntax-operator">-></span>right<span className="syntax-operator">-></span>key)
+        <span className="syntax-keyword">return</span> <span className="syntax-function">leftRotate</span>(node);
 
-    // Left Right Case
-    if (balance > 1 && key > node->left->key) {
-        node->left =  leftRotate(node->left);
-        return rightRotate(node);
-    }
+    <span className="syntax-comment">{'// Left Right Case'}</span>
+    <span className="syntax-keyword">if</span> (balance <span className="syntax-operator">></span> <span className="syntax-number">1</span> <span className="syntax-operator">&&</span> key <span className="syntax-operator">></span> node<span className="syntax-operator">-></span>left<span className="syntax-operator">-></span>key) {'{'}
+        node<span className="syntax-operator">-></span>left <span className="syntax-operator">=</span>  <span className="syntax-function">leftRotate</span>(node<span className="syntax-operator">-></span>left);
+        <span className="syntax-keyword">return</span> <span className="syntax-function">rightRotate</span>(node);
+    {'}'}
 
-    // Right Left Case
-    if (balance < -1 && key < node->right->key) {
-        node->right = rightRotate(node->right);
-        return leftRotate(node);
-    }
+    <span className="syntax-comment">{'// Right Left Case'}</span>
+    <span className="syntax-keyword">if</span> (balance <span className="syntax-operator">&lt;</span> <span className="syntax-operator">-</span><span className="syntax-number">1</span> <span className="syntax-operator">&&</span> key <span className="syntax-operator">&lt;</span> node<span className="syntax-operator">-></span>right<span className="syntax-operator">-></span>key) {'{'}
+        node<span className="syntax-operator">-></span>right <span className="syntax-operator">=</span> <span className="syntax-function">rightRotate</span>(node<span className="syntax-operator">-></span>right);
+        <span className="syntax-keyword">return</span> <span className="syntax-function">leftRotate</span>(node);
+    {'}'}
 
-    return node;
-}`}
+    <span className="syntax-keyword">return</span> node;
+{'}'}</code>
                 </CodeBlock>
             </div>
           </div>
@@ -391,5 +392,3 @@ struct Node* insert(struct Node* node, int key) {
 };
 
 export default AVLTreeVisualization;
-
-    
