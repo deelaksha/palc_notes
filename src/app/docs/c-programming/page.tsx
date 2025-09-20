@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, Book, FileCode, SlidersHorizontal, Share2, Repeat, Workflow, FunctionSquare, Warehouse, Layers, Type, MousePointer, Puzzle, FilePlus } from 'lucide-react';
+import { ArrowRight, Book, FileCode, SlidersHorizontal, Share2, Repeat, Workflow, FunctionSquare, Warehouse, Layers, Type, MousePointer, Puzzle, FilePlus, BrainCircuit } from 'lucide-react';
 import Link from 'next/link';
 
 const topics = [
@@ -80,6 +80,12 @@ const topics = [
         description: 'Learn to read from and write to files.',
         href: '/docs/c-programming/file-handling',
         icon: <FilePlus className="size-8" />,
+    },
+    {
+        name: 'Advanced Memory Concepts',
+        description: 'Dive deep into the stack, heap, and common memory errors.',
+        href: '/docs/c-programming/advanced-memory',
+        icon: <BrainCircuit className="size-8" />,
     },
 ];
 
