@@ -3,30 +3,28 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CodeBlock } from '@/components/markdown/CodeBlock';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+
+const nodes = [
+    { id: 0, x: 50, y: 100 },
+    { id: 1, x: 150, y: 50 },
+    { id: 2, x: 150, y: 150 },
+    { id: 3, x: 250, y: 100 },
+];
+
+const edges = [
+    { from: 0, to: 1, weight: 5 },
+    { from: 0, to: 2, weight: 3 },
+    { from: 1, to: 2, weight: 2 },
+    { from: 1, to: 3, weight: 8 },
+    { from: 2, to: 3, weight: 4 },
+];
 
 const GraphVisualizer = () => {
     const [isDirected, setIsDirected] = useState(false);
     const [isWeighted, setIsWeighted] = useState(false);
-
-    const nodes = [
-        { id: 0, x: 50, y: 100 },
-        { id: 1, x: 150, y: 50 },
-        { id: 2, x: 150, y: 150 },
-        { id: 3, x: 250, y: 100 },
-    ];
-    
-    const edges = [
-        { from: 0, to: 1, weight: 5 },
-        { from: 0, to: 2, weight: 3 },
-        { from: 1, to: 2, weight: 2 },
-        { from: 1, to: 3, weight: 8 },
-        { from: 2, to: 3, weight: 4 },
-    ];
 
     const adjacencyMatrix = Array(nodes.length).fill(0).map(() => Array(nodes.length).fill(0));
     edges.forEach(edge => {
@@ -38,95 +36,119 @@ const GraphVisualizer = () => {
     });
 
     return (
-         <div className="grid lg:grid-cols-2 gap-8 items-center">
-            <div className="relative w-full max-w-sm h-64 mx-auto">
-                <svg viewBox="0 0 300 200" className="w-full h-full">
-                    {/* Edges */}
-                    <AnimatePresence>
-                    {edges.map((edge, index) => (
-                        <motion.g key={index}>
-                            <line
-                                x1={nodes[edge.from].x}
-                                y1={nodes[edge.from].y}
-                                x2={nodes[edge.to].x}
-                                y2={nodes[edge.to].y}
-                                stroke="hsl(var(--muted-foreground))"
-                                strokeWidth="2"
-                                markerEnd={isDirected ? "url(#arrow)" : ""}
-                            />
-                            {isWeighted && (
-                                <text
-                                    x={(nodes[edge.from].x + nodes[edge.to].x) / 2}
-                                    y={(nodes[edge.from].y + nodes[edge.to].y) / 2 - 5}
-                                    fill="hsl(var(--primary))"
-                                    fontSize="12"
-                                    textAnchor="middle"
-                                >
-                                    {edge.weight}
-                                </text>
-                            )}
-                        </motion.g>
-                    ))}
-                    </AnimatePresence>
-                    
-                    {/* Nodes */}
-                    {nodes.map(node => (
-                        <g key={node.id}>
-                            <circle cx={node.x} cy={node.y} r="15" fill="hsl(var(--primary))" />
-                            <text x={node.x} y={node.y} dy="5" textAnchor="middle" fill="hsl(var(--primary-foreground))">{node.id}</text>
-                        </g>
-                    ))}
-                    
-                    <defs>
-                        <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                            <path d="M 0 0 L 10 5 L 0 10 z" fill="hsl(var(--muted-foreground))" />
-                        </marker>
-                    </defs>
-                </svg>
-            </div>
-            
-            <div>
-                <h4 className="font-semibold mb-2">Adjacency Matrix</h4>
-                 <div className="p-4 bg-card-nested rounded-lg font-mono text-center text-sm">
-                    {adjacencyMatrix.map((row, i) => (
-                        <div key={i} className="flex justify-around">
-                            {row.map((val, j) => <span key={j} className="w-8">{val}</span>)}
-                        </div>
-                    ))}
+        <Card>
+            <CardHeader>
+                <CardTitle>Interactive Graph Visualizer</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+                <div className="flex flex-wrap items-center justify-center gap-6">
+                    <div className="flex items-center space-x-2">
+                        <Switch id="directed-switch" checked={isDirected} onCheckedChange={setIsDirected} />
+                        <Label htmlFor="directed-switch">Directed</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <Switch id="weighted-switch" checked={isWeighted} onCheckedChange={setIsWeighted} />
+                        <Label htmlFor="weighted-switch">Weighted</Label>
+                    </div>
                 </div>
-            </div>
-        </div>
-    )
-}
+                <div className="grid lg:grid-cols-2 gap-8 items-center pt-4">
+                    <div className="relative w-full max-w-sm h-64 mx-auto">
+                        <svg viewBox="0 0 300 200" className="w-full h-full" aria-labelledby="graph-title">
+                            <title id="graph-title">An animated graph showing nodes and edges.</title>
+                            <defs>
+                                <motion.marker 
+                                    id="arrow" 
+                                    viewBox="0 0 10 10" 
+                                    refX="10" refY="5" 
+                                    markerWidth="6" markerHeight="6" 
+                                    orient="auto-start-reverse"
+                                >
+                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="hsl(var(--muted-foreground))" />
+                                </motion.marker>
+                            </defs>
+                            
+                            <AnimatePresence>
+                                {edges.map((edge, index) => (
+                                    <motion.g 
+                                        key={`edge-${index}`}
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                    >
+                                        <motion.line
+                                            x1={nodes[edge.from].x} y1={nodes[edge.from].y}
+                                            x2={nodes[edge.to].x} y2={nodes[edge.to].y}
+                                            stroke="hsl(var(--muted-foreground))" strokeWidth="2"
+                                            markerEnd={isDirected ? "url(#arrow)" : ""}
+                                            initial={{ pathLength: 0 }}
+                                            animate={{ pathLength: 1 }}
+                                            transition={{ duration: 0.5 }}
+                                        />
+                                        <AnimatePresence>
+                                            {isWeighted && (
+                                                <motion.text
+                                                    x={(nodes[edge.from].x + nodes[edge.to].x) / 2}
+                                                    y={(nodes[edge.from].y + nodes[edge.to].y) / 2 - 8}
+                                                    fill="hsl(var(--primary))" fontSize="14" textAnchor="middle" fontWeight="bold"
+                                                    initial={{ opacity: 0, y: -5 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    exit={{ opacity: 0 }}
+                                                >
+                                                    {edge.weight}
+                                                </motion.text>
+                                            )}
+                                        </AnimatePresence>
+                                    </motion.g>
+                                ))}
+                            </AnimatePresence>
+                            
+                            {nodes.map(node => (
+                                <motion.g 
+                                    key={`node-${node.id}`}
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+                                >
+                                    <circle cx={node.x} cy={node.y} r="15" fill="hsl(var(--primary))" />
+                                    <text x={node.x} y={node.y} dy="5" textAnchor="middle" fill="hsl(var(--primary-foreground))" fontSize="12">{node.id}</text>
+                                </motion.g>
+                            ))}
+                        </svg>
+                    </div>
+                    <div>
+                        <h4 className="font-semibold mb-2 text-center">Adjacency Matrix</h4>
+                        <div className="p-4 bg-card-nested rounded-lg font-mono text-center text-sm">
+                            <AnimatePresence>
+                            {adjacencyMatrix.map((row, i) => (
+                                <motion.div 
+                                    key={`row-${i}`} 
+                                    className="flex justify-around"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: i * 0.1 }}
+                                >
+                                    {row.map((val, j) => (
+                                        <motion.span
+                                            key={`cell-${j}`}
+                                            initial={{ scale: 0 }}
+                                            animate={{ scale: 1 }}
+                                            className="w-8 py-1"
+                                        >
+                                            {val}
+                                        </motion.span>
+                                    ))}
+                                </motion.div>
+                            ))}
+                            </AnimatePresence>
+                        </div>
+                    </div>
+                </div>
+            </CardContent>
+        </Card>
+    );
+};
 
 export default function DirectedUndirectedPage() {
-    const [isDirected, setIsDirected] = useState(false);
-    const [isWeighted, setIsWeighted] = useState(false);
-
-    const nodes = [
-        { id: 0, x: 50, y: 100 },
-        { id: 1, x: 150, y: 50 },
-        { id: 2, x: 150, y: 150 },
-        { id: 3, x: 250, y: 100 },
-    ];
-    
-    const edges = [
-        { from: 0, to: 1, weight: 5 },
-        { from: 0, to: 2, weight: 3 },
-        { from: 1, to: 2, weight: 2 },
-        { from: 1, to: 3, weight: 8 },
-        { from: 2, to: 3, weight: 4 },
-    ];
-
-    const adjacencyMatrix = Array(nodes.length).fill(0).map(() => Array(nodes.length).fill(0));
-    edges.forEach(edge => {
-        const value = isWeighted ? edge.weight : 1;
-        adjacencyMatrix[edge.from][edge.to] = value;
-        if (!isDirected) {
-            adjacencyMatrix[edge.to][edge.from] = value;
-        }
-    });
-
     return (
         <div className="max-w-7xl mx-auto px-4 py-8 space-y-12">
             <header className="text-center">
@@ -136,75 +158,7 @@ export default function DirectedUndirectedPage() {
                 </p>
             </header>
             
-            <Card>
-                <CardHeader>
-                    <CardTitle>Interactive Graph Visualizer</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                    <div className="flex flex-wrap items-center justify-center gap-6">
-                         <div className="flex items-center space-x-2">
-                            <Switch id="directed-switch" checked={isDirected} onCheckedChange={setIsDirected} />
-                            <Label htmlFor="directed-switch">Directed</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <Switch id="weighted-switch" checked={isWeighted} onCheckedChange={setIsWeighted} />
-                            <Label htmlFor="weighted-switch">Weighted</Label>
-                        </div>
-                    </div>
-                    {/* Visualizer Component */}
-                    <div className="grid lg:grid-cols-2 gap-8 items-center pt-4">
-                        <div className="relative w-full max-w-sm h-64 mx-auto">
-                            <svg viewBox="0 0 300 200" className="w-full h-full">
-                                <AnimatePresence>
-                                {edges.map((edge, index) => (
-                                    <motion.g key={`edge-${index}`}>
-                                        <line
-                                            x1={nodes[edge.from].x} y1={nodes[edge.from].y}
-                                            x2={nodes[edge.to].x} y2={nodes[edge.to].y}
-                                            stroke="hsl(var(--muted-foreground))" strokeWidth="2"
-                                            markerEnd={isDirected ? "url(#arrow)" : ""}
-                                        />
-                                        {!isDirected && (
-                                             <line
-                                                x1={nodes[edge.to].x} y1={nodes[edge.to].y}
-                                                x2={nodes[edge.from].x} y2={nodes[edge.from].y}
-                                                stroke="hsl(var(--muted-foreground))" strokeWidth="2"
-                                            />
-                                        )}
-                                        {isWeighted && (
-                                            <text
-                                                x={(nodes[edge.from].x + nodes[edge.to].x) / 2}
-                                                y={(nodes[edge.from].y + nodes[edge.to].y) / 2 - 5}
-                                                fill="hsl(var(--primary))" fontSize="12" textAnchor="middle"
-                                            >
-                                                {edge.weight}
-                                            </text>
-                                        )}
-                                    </motion.g>
-                                ))}
-                                </AnimatePresence>
-                                {nodes.map(node => (
-                                    <g key={`node-${node.id}`}>
-                                        <circle cx={node.x} cy={node.y} r="15" fill="hsl(var(--primary))" />
-                                        <text x={node.x} y={node.y} dy="5" textAnchor="middle" fill="hsl(var(--primary-foreground))">{node.id}</text>
-                                    </g>
-                                ))}
-                                <defs><marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="hsl(var(--muted-foreground))" /></marker></defs>
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 className="font-semibold mb-2 text-center">Adjacency Matrix</h4>
-                            <div className="p-4 bg-card-nested rounded-lg font-mono text-center text-sm">
-                                {adjacencyMatrix.map((row, i) => (
-                                    <div key={`row-${i}`} className="flex justify-around">
-                                        {row.map((val, j) => <span key={`cell-${j}`} className="w-8">{val}</span>)}
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
+            <GraphVisualizer />
 
             <Card>
                 <CardHeader><CardTitle>Directed vs. Undirected Graphs</CardTitle></CardHeader>
@@ -243,4 +197,3 @@ export default function DirectedUndirectedPage() {
         </div>
     );
 }
-
