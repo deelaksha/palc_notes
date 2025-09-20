@@ -1,5 +1,4 @@
 
-
 export const commandsData = [
     {
         category: "File and Directory Management",
@@ -205,6 +204,25 @@ export const commandsData = [
             { code: "cat file.txt | grep 'error'", text: "Displays the file's content, then sends it through a 'grep' filter to only show lines containing the word 'error'."}
         ],
         realWorld: "Use `cat` to quickly check a small configuration file or to see the contents of a short script without opening an editor."
+    },
+     {
+        category: "File Viewing and Editing",
+        name: "cut",
+        description: "The `cut` spell is like a precision knife for text. It carves out specific columns or sections from each line of a file, letting you extract just the data you need.",
+        howItWorks: [
+            "`cut` works line by line on its input.",
+            "You must tell it how to separate the line into fields using the `-d` (delimiter) flag. A common delimiter is a comma (`,`) for CSV files or a colon (`:`) for system files.",
+            "You use the `-f` (fields) flag to tell it which column(s) you want to keep.",
+            "You can also cut by character position with the `-c` flag.",
+            "It's often used with pipes (`|`) to process the output of other commands."
+        ],
+        examples: [
+            { code: "cut -d',' -f1 data.csv", text: "From `data.csv`, use a comma as the delimiter and show me the first field (column)." },
+            { code: "who | cut -d' ' -f1", text: "Show who is logged in, but only display the first column (the usernames)." },
+            { code: "cut -d':' -f1,6 /etc/passwd", text: "From the password file, use a colon as the delimiter and show me the first and sixth fields (username and home directory)." },
+            { code: "cut -c1-10 file.txt", text: "Shows only the first 10 characters from each line of `file.txt`." }
+        ],
+        realWorld: "Essential for processing data from log files or CSVs. For example, extracting just the IP addresses from a web server access log."
     },
     {
         category: "File Viewing and Editing",
