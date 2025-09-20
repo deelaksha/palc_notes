@@ -1,7 +1,6 @@
-
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { CodeBlock } from '@/components/markdown/CodeBlock';
@@ -354,6 +353,84 @@ const BinaryTreeVisualization = () => {
                 <div className="font-mono text-lg text-green-400 p-2 bg-gray-800 rounded min-h-[3rem]">
                     {traversalResult.join(', ')}
                 </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Full Code Implementation Section */}
+        <div className="mt-12 pt-8 border-t border-gray-700">
+          <h2 className="text-3xl font-bold text-white text-center mb-6">Complete C Implementation</h2>
+          <div className="space-y-8 text-gray-300">
+            <div>
+                <h3 className="text-xl font-semibold text-gray-100 mb-2">1. Node Structure</h3>
+                <p className="text-sm text-gray-400 mb-4">The basic building block of a tree. Each node contains data, a pointer to a left child, and a pointer to a right child.</p>
+                <CodeBlock>
+{`struct Node {
+    int data;
+    struct Node *left;
+    struct Node *right;
+};`}
+                </CodeBlock>
+            </div>
+             <div>
+                <h3 className="text-xl font-semibold text-gray-100 mb-2">2. Insert Function</h3>
+                <p className="text-sm text-gray-400 mb-4">Recursively finds the correct position in the tree to insert a new node while maintaining the BST property (left &lt; root &lt; right).</p>
+                <CodeBlock>
+{`// Function to create a new node
+struct Node* newNode(int item) {
+    struct Node* temp = (struct Node*)malloc(sizeof(struct Node));
+    temp->data = item;
+    temp->left = temp->right = NULL;
+    return temp;
+}
+
+// Function to insert a new node with given data in BST
+struct Node* insert(struct Node* node, int data) {
+    // If the tree is empty, return a new node
+    if (node == NULL) return newNode(data);
+
+    // Otherwise, recur down the tree
+    if (data < node->data)
+        node->left  = insert(node->left, data);
+    else if (data > node->data)
+        node->right = insert(node->right, data);   
+
+    // return the (unchanged) node pointer
+    return node;
+}`}
+                </CodeBlock>
+            </div>
+             <div>
+                <h3 className="text-xl font-semibold text-gray-100 mb-2">3. Traversal Functions</h3>
+                <p className="text-sm text-gray-400 mb-4">Different ways to visit every node in the tree.</p>
+                <CodeBlock>
+{`// In-Order Traversal (Left, Root, Right) - gives sorted output
+void printInorder(struct Node* node) {
+    if (node == NULL)
+        return;
+    printInorder(node->left);
+    printf("%d ", node->data);  
+    printInorder(node->right);
+}
+
+// Pre-Order Traversal (Root, Left, Right)
+void printPreorder(struct Node* node) {
+    if (node == NULL)
+        return;
+    printf("%d ", node->data);  
+    printPreorder(node->left);  
+    printPreorder(node->right);
+}
+
+// Post-Order Traversal (Left, Right, Root)
+void printPostorder(struct Node* node) {
+    if (node == NULL)
+        return;
+    printPostorder(node->left);
+    printPostorder(node->right);
+    printf("%d ", node->data);
+}`}
+                </CodeBlock>
             </div>
           </div>
         </div>
