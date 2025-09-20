@@ -1,4 +1,5 @@
 
+'use server';
 /**
  * @fileoverview This file initializes the Genkit AI instance.
  */
