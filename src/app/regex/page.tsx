@@ -1,3 +1,4 @@
+
 'use client';
 import { useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -304,7 +305,7 @@ const regexData = [
         char: 'Flags',
         name: 'Regex Flags',
         description: 'Modifiers that change how the pattern is interpreted',
-        demoString: 'Cat cat\nCAT',
+        demoString: 'Cat cat\\nCAT',
         pattern: 'cat',
         examples: {
             matches: ['g: global (find all matches)', 'i: ignore case', 'm: multiline (^ and $ match start/end of lines)'],
