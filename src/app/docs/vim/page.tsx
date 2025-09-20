@@ -370,6 +370,9 @@ function renderMarkdown(markdown: string) {
     if (block.match(/^\d+\./)) {
         const items = block.split('\n').map((item, i) => {
             const content = item.substring(item.indexOf('.') + 2);
+            if (content.includes('`vim notes.txt`')) {
+                return <li key={i}>Open Vim: <code className="font-code bg-muted text-foreground px-1 py-0.5 rounded-sm text-sm">vim notes.txt</code></li>;
+            }
             return <li key={i} dangerouslySetInnerHTML={{ __html: renderInlines(content) }} />
         });
         return <ol key={index} className="list-decimal pl-6 space-y-1 mb-4">{items}</ol>;
@@ -377,30 +380,28 @@ function renderMarkdown(markdown: string) {
     if (block.startsWith('|')) {
         const rows = block.split('\n');
         const headers = rows[0].split('|').slice(1, -1).map(h => h.trim());
-        if (rows[1] && rows[1].startsWith('|--')) { // Markdown table format check
-          const body = rows.slice(2);
+        const body = rows.slice(2);
 
-          return (
-              <div key={index} className="overflow-x-auto my-4 border rounded-lg">
-                  <table className="w-full">
-                      <thead>
-                          <tr className="bg-muted">
-                              {headers.map((header, i) => <th key={i} className="p-3 text-left font-semibold">{header}</th>)}
-                          </tr>
-                      </thead>
-                      <tbody>
-                          {body.map((row, i) => (
-                              <tr key={i} className="border-t">
-                                  {row.split('|').slice(1, -1).map((cell, j) => (
-                                      <td key={j} className="p-3" dangerouslySetInnerHTML={{ __html: renderInlines(cell.trim()) }} />
-                                  ))}
-                              </tr>
-                          ))}
-                      </tbody>
-                  </table>
-              </div>
-          );
-        }
+        return (
+            <div key={index} className="overflow-x-auto my-4 border rounded-lg">
+                <table className="w-full">
+                    <thead>
+                        <tr className="bg-muted">
+                            {headers.map((header, i) => <th key={i} className="p-3 text-left font-semibold">{header}</th>)}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {body.map((row, i) => (
+                            <tr key={i} className="border-t">
+                                {row.split('|').slice(1, -1).map((cell, j) => (
+                                    <td key={j} className="p-3" dangerouslySetInnerHTML={{ __html: renderInlines(cell.trim()) }} />
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        );
     }
 
     return <p key={index} className="mb-4 leading-relaxed" dangerouslySetInnerHTML={{ __html: renderInlines(block) }} />;
@@ -408,22 +409,63 @@ function renderMarkdown(markdown: string) {
 }
 
 const parseSections = (markdown: string) => {
-    const sections = markdown.split('---').map(s => s.trim());
-    const intro = sections.shift() || '';
-    
-    const structuredSections = sections.map(section => {
-        const lines = section.split('\n');
-        const titleMatch = lines[0].match(/^##\s(.*)$/);
-        const title = titleMatch ? titleMatch[1] : 'More Commands';
-        const content = lines.join('\n');
-        return { title, content };
-    });
+    const lines = markdown.split('\n');
+    const sections: { title: string; content: string }[] = [];
+    let currentContent: string[] = [];
+    let intro = '';
+    let conclusion = '';
+    let isIntro = true;
+    let isConclusion = false;
 
-    return { intro, sections: structuredSections };
+    const mainTitleMatch = lines[0].match(/^#\s.*/);
+    if(mainTitleMatch){
+        intro = mainTitleMatch[0];
+    }
+    
+    for (const line of lines) {
+        if (line.startsWith('---')) {
+            if (isIntro) {
+                isIntro = false;
+            }
+            continue;
+        }
+
+        const titleMatch = line.match(/^##\s.*$/);
+        if (titleMatch) {
+            if (currentContent.length > 0) {
+                const lastSection = sections[sections.length - 1];
+                if(lastSection) {
+                    lastSection.content = currentContent.join('\n');
+                }
+            }
+            currentContent = [];
+            sections.push({ title: titleMatch[0].substring(3).trim(), content: '' });
+        } else if (!isIntro) {
+             if (line.startsWith('✅')) {
+                isConclusion = true;
+            }
+            if (isConclusion) {
+                conclusion += line + '\n';
+            } else {
+                 currentContent.push(line);
+            }
+        }
+    }
+
+    if (currentContent.length > 0 && sections.length > 0) {
+       sections[sections.length -1].content = currentContent.join('\n').trim();
+    }
+    
+    // Handle intro and main title separately
+    const firstSectionSeparator = markdown.indexOf('---');
+    const fullIntro = markdown.substring(0, firstSectionSeparator).trim();
+
+
+    return { intro: fullIntro, sections, conclusion: conclusion.trim() };
 };
 
 export default function VimPage() {
-    const { intro, sections } = parseSections(vimMarkdownContent);
+    const { intro, sections, conclusion } = parseSections(vimMarkdownContent);
 
     return (
         <div className="flex">
@@ -431,7 +473,7 @@ export default function VimPage() {
                 {renderMarkdown(intro)}
                 <hr className="my-6" />
                 
-                <Accordion type="multiple" className="w-full space-y-4">
+                <Accordion type="single" collapsible className="w-full space-y-4">
                     {sections.map(({ title, content }) => (
                         <AccordionItem value={title} key={title} className="border rounded-lg bg-card overflow-hidden">
                             <AccordionTrigger className="px-6 py-4 font-headline text-lg hover:no-underline">
@@ -443,6 +485,11 @@ export default function VimPage() {
                         </AccordionItem>
                     ))}
                 </Accordion>
+
+                <hr className="my-6" />
+                <div className="mt-8">
+                    {renderMarkdown(conclusion)}
+                </div>
             </main>
         </div>
     );
