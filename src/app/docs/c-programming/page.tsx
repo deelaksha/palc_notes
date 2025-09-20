@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, Book, FileCode, SlidersHorizontal, Share2, Repeat, Workflow, FunctionSquare, Warehouse, Layers, Type, MousePointer } from 'lucide-react';
+import { ArrowRight, Book, FileCode, SlidersHorizontal, Share2, Repeat, Workflow, FunctionSquare, Warehouse, Layers, Type, MousePointer, Puzzle } from 'lucide-react';
 import Link from 'next/link';
 
 const topics = [
@@ -68,6 +68,12 @@ const topics = [
         description: 'Group different data types into a single custom unit.',
         href: '/docs/c-programming/structures-unions',
         icon: <Layers className="size-8" />,
+    },
+    {
+        name: 'Preprocessor Directives',
+        description: 'Understand macros, conditional compilation, and header includes.',
+        href: '/docs/c-programming/preprocessor-directives',
+        icon: <Puzzle className="size-8" />,
     },
 ];
 
