@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowRight, GitBranch, Waypoints, Weight, CircleDashed, CheckCircle, Component } from 'lucide-react';
+import { ArrowRight, GitBranch, Waypoints, Component, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 
 const topics = [
@@ -24,7 +24,7 @@ const topics = [
     {
         name: 'Graph Traversal Algorithms',
         description: 'Study Breadth-First Search (BFS) and Depth-First Search (DFS).',
-        href: '#',
+        href: '/docs/c-programming/data-structures/graphs/traversal',
         icon: <CheckCircle className="size-8" />,
     },
 ];
