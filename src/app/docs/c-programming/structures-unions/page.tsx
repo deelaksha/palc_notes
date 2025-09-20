@@ -168,6 +168,62 @@ export default function CStructsUnionsPage() {
                         </CodeSyntax>
                     </CodeBlock>
                 </Card>
+                
+                <Card className="p-6 rounded-xl shadow-lg border" style={{backgroundColor: '#1A1A1A', borderColor: '#333333'}}>
+                    <h2 className="text-3xl font-bold mb-4 text-primary">6. Enumerations (`enum`)</h2>
+                    <p className="mb-4 text-muted-foreground">
+                        An <strong>enumeration</strong> is a user-defined data type that consists of a set of named integer constants. This makes your code more readable and easier to maintain by allowing you to use descriptive names instead of "magic numbers." The keyword used to define an enumeration is `enum`.
+                    </p>
+                    <CodeBlock className="mt-4 mb-4">
+                        <CodeSyntax>
+                            <span className="syntax-comment">{'// Defining an enumeration for colors'}</span><br />
+                            <span className="syntax-keyword">enum</span> colors {'{'}<br />
+                            &nbsp;&nbsp;RED,<br />
+                            &nbsp;&nbsp;GREEN,<br />
+                            &nbsp;&nbsp;BLUE<br />
+                            {'};'}
+                        </CodeSyntax>
+                    </CodeBlock>
+                    <h3 className="text-2xl font-bold text-secondary-accent mt-8 mb-2">Implicit Integer Values</h3>
+                    <p className="mb-4 text-muted-foreground">
+                        By default, the values in an enumeration are assigned integer values starting from `0`. Each subsequent value is incremented by `1`.
+                    </p>
+                    <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+                        <li>`RED` is implicitly `0`</li>
+                        <li>`GREEN` is implicitly `1`</li>
+                        <li>`BLUE` is implicitly `2`</li>
+                    </ul>
+                    <CodeBlock className="mt-4 mb-4">
+                        <CodeSyntax>
+                            <span className="syntax-keyword">enum</span> colors favorite_color <span className="syntax-operator">=</span> BLUE<span className="syntax-semicolon">;</span><br />
+                            <span className="syntax-function">printf</span>(<span className="syntax-string">"The value of BLUE is: %d\\n"</span>, favorite_color)<span className="syntax-semicolon">;</span>
+                        </CodeSyntax>
+                    </CodeBlock>
+                    <p className="mb-4 text-muted-foreground">
+                        This code would output `2`.
+                    </p>
+                    <h3 className="text-2xl font-bold text-secondary-accent mt-8 mb-2">Assigning Custom Values</h3>
+                    <p className="mb-4 text-muted-foreground">
+                        You can also explicitly assign custom integer values to the members of an enumeration. If you assign a value to one member, the subsequent members will automatically increment from that new value.
+                    </p>
+                    <CodeBlock className="mt-4">
+                        <CodeSyntax>
+                            <span className="syntax-comment">{'// Defining an enumeration with custom values'}</span><br />
+                            <span className="syntax-keyword">enum</span> numbers {'{'}<br />
+                            &nbsp;&nbsp;ONE <span className="syntax-operator">=</span> <span className="syntax-number">1</span>,<br />
+                            &nbsp;&nbsp;FIVE <span className="syntax-operator">=</span> <span className="syntax-number">5</span>,<br />
+                            &nbsp;&nbsp;SIX,<br />
+                            &nbsp;&nbsp;EIGHT <span className="syntax-operator">=</span> <span className="syntax-number">8</span><br />
+                            {'};'}<br />
+                            <br />
+                            <span className="syntax-comment">{'// In this enumeration:'}</span><br />
+                            <span className="syntax-comment">{'// ONE is 1'}</span><br />
+                            <span className="syntax-comment">{'// FIVE is 5'}</span><br />
+                            <span className="syntax-comment">{'// SIX is 6 (increments from the previous value)'}</span><br />
+                            <span className="syntax-comment">{'// EIGHT is 8'}</span>
+                        </CodeSyntax>
+                    </CodeBlock>
+                </section>
             </main>
         </div>
     );
