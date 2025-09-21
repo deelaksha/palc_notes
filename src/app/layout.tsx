@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/sidebar';
 import { Header } from '@/components/layout/Header';
 import Link from 'next/link';
-import { BookOpen, Code, Github, FileCode, Regex, Terminal, Network } from 'lucide-react';
+import { BookOpen, Code, Github, FileCode, Regex, Terminal, Network, FileTerminal } from 'lucide-react';
 import { Logo } from '@/components/icons';
 import { Chatbot } from '@/components/chatbot/Chatbot';
 
@@ -47,6 +47,11 @@ const menuItems = [
     href: '/docs/c-programming',
     icon: <FileCode />,
     label: 'C Programming',
+  },
+  {
+    href: '/docs/shell-scripting',
+    icon: <FileTerminal />,
+    label: 'Shell Scripting',
   },
   {
     href: '/docs/linux',
