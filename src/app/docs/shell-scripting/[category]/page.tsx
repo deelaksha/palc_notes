@@ -29,12 +29,12 @@ export default function ShellCategoryPage({ params }: { params: { category: stri
                     Back to Roadmap
                 </Link>
             </Button>
-            <Card>
+            <Card className="shadow-lg">
                 <CardHeader>
-                    <CardTitle className="text-3xl font-headline">{category.title}</CardTitle>
+                    <CardTitle className="font-headline text-3xl text-primary">{category.title}</CardTitle>
                     <CardDescription>{category.description}</CardDescription>
                 </CardHeader>
-                <CardContent className="markdown-content">
+                <CardContent className="markdown-content prose-lg dark:prose-invert max-w-none">
                      <MarkdownRenderer markdown={category.content} />
                 </CardContent>
             </Card>
