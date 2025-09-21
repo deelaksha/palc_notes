@@ -169,10 +169,10 @@ ${resultText}
                         </div>
                     </div>
                      <CodeBlock>
-# Modern, recommended way:
+{`# Modern, recommended way:
 if [[ "$user" == "root" && $count -gt 5 ]]; then
   echo "Root user has run this more than 5 times."
-fi
+fi`}
                     </CodeBlock>
                 </SectionCard>
 
