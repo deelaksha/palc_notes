@@ -37,7 +37,7 @@ const FileSystemViewer = ({ fs }: { fs: any }) => {
 export default function InteractiveBasicsPage() {
     const [command, setCommand] = useState('');
     const [output, setOutput] = useState<string[]>(['Welcome! Try running a command like `ls` or `mkdir new_folder`']);
-    const [fileSystem, setFileSystem] = useState({
+    const [fileSystem, setFileSystem] = useState<{name: string, type: string, children: {[key: string]: any}}>({
         name: 'my-scripts',
         type: 'dir',
         children: {
@@ -49,7 +49,7 @@ export default function InteractiveBasicsPage() {
     const handleCommand = () => {
         const [cmd, ...args] = command.split(' ');
         let newOutput = [`$ ${command}`];
-        let newFs = { ...fileSystem };
+        let newFs = JSON.parse(JSON.stringify(fileSystem));
 
         switch (cmd) {
             case 'ls':
@@ -169,4 +169,3 @@ chmod 444 read_only_file.txt`}
         </main>
     );
 }
-
