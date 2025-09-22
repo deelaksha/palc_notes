@@ -150,8 +150,8 @@ export default function CPointersPage() {
                         <CodeSyntax>
                             <span className="syntax-datatype">int</span> numbers[3] <span className="syntax-operator">=</span> {'{100, 200, 300}'};<br/>
                             <span className="syntax-comment">{'// These three lines all print the value 200'}</span><br/>
-                            <span className="syntax-function">printf</span>(<span className="syntax-string">"%d\n"</span>, numbers[1]);<br/>
-                            <span className="syntax-function">printf</span>(<span className="syntax-string">"%d\n"</span>, *(numbers + 1));<br/>
+                            <span className="syntax-function">printf</span>(<span className="syntax-string">"%d\\n"</span>, numbers[1]);<br/>
+                            <span className="syntax-function">printf</span>(<span className="syntax-string">"%d\\n"</span>, *(numbers + 1));<br/>
                         </CodeSyntax>
                     </CodeBlock>
                 </Card>
@@ -189,7 +189,7 @@ export default function CPointersPage() {
                                     <span className="syntax-datatype">int</span> x <span className="syntax-operator">=</span> <span className="syntax-number">10</span>;<br/>
                                     <span className="syntax-datatype">int</span> *p <span className="syntax-operator">=</span> &x;<br/>
                                     <span className="syntax-datatype">int</span> **pp <span className="syntax-operator">=</span> &p;<br/><br/>
-                                     <span className="syntax-function">printf</span>(<span className="syntax-string">"Value of x = %d\n"</span>, **pp); <span className="syntax-comment">{'// Prints 10'}</span>
+                                     <span className="syntax-function">printf</span>(<span className="syntax-string">"Value of x = %d\\n"</span>, **pp); <span className="syntax-comment">{'// Prints 10'}</span>
                                 </CodeSyntax>
                             </CodeBlock>
                         </div>
