@@ -26,14 +26,9 @@ const PointerVisualizer = () => (
     <div className="space-y-8">
         <h4 className="text-xl font-semibold text-center text-gray-300">Memory Layout</h4>
         <div className="grid grid-cols-4 gap-x-8 gap-y-12 items-center relative">
-            {/* Variable 'age' */}
             <MemoryCell address="0x7ffc..." value="30" label="age" isHighlighted />
-
-            {/* Arrow */}
             <div className="absolute top-1/2 left-1/4 w-1/4 h-0.5 bg-amber-400/50" />
             <div className="absolute top-1/2 left-1/2 w-2 h-2 border-r-2 border-b-2 border-amber-400/50 transform -translate-y-1/2 rotate-[-45deg]" />
-
-            {/* Pointer 'p_age' */}
             <div className="col-start-3">
                 <MemoryCell address="0x7ffd..." value="0x7ffc..." label="p_age" isPointer isHighlighted />
             </div>
