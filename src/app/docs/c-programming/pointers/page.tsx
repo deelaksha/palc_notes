@@ -3,7 +3,7 @@
 import { Card } from '@/components/ui/card';
 import { CodeBlock } from '@/components/markdown/CodeBlock';
 import { Button } from '@/components/ui/button';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Cpu, MemoryStick, MousePointer, Binary, Link as LinkIcon, Lock } from 'lucide-react';
 
