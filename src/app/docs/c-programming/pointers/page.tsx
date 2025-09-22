@@ -3,7 +3,7 @@
 import { Card } from '@/components/ui/card';
 import { CodeBlock } from '@/components/markdown/CodeBlock';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Cpu, MemoryStick, MousePointer, Binary, Link as LinkIcon, Lock } from 'lucide-react';
 
@@ -13,7 +13,7 @@ const CodeSyntax = ({ children }: { children: React.ReactNode }) => (
     </div>
 );
 
-const MemoryCell = ({ address, value, label, isPointer, isHighlighted }: { address: string; value: string; label?: string; isPointer?: boolean; isHighlighted?: boolean; }) => (
+const MemoryCell = ({ address, value, label, isPointer, isHighlighted }: { address: string; value: string; label?: string; isPointer?: boolean; isHighlighted?: boolean }) => (
     <div className={`relative p-2 rounded-md ${isHighlighted ? 'bg-blue-500/30 border-2 border-blue-400' : 'bg-gray-700/50'}`}>
         <div className="text-xs text-gray-400 font-mono absolute -top-5 left-1">{address}</div>
         <div className={`text-lg font-bold font-mono text-center ${isPointer ? 'text-amber-400' : 'text-green-300'}`}>{value}</div>
