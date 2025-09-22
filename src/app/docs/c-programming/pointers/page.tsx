@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Card } from '@/components/ui/card';
@@ -22,20 +21,22 @@ const MemoryCell = ({ address, value, label, isPointer, isHighlighted }: { addre
     </div>
 );
 
-const PointerVisualizer = () => (
-    <div className="space-y-8">
-        <h4 className="text-xl font-semibold text-center text-gray-300">Memory Layout</h4>
-        <div className="grid grid-cols-4 gap-x-8 gap-y-12 items-center relative">
-            <MemoryCell address="0x7ffc..." value="30" label="age" isHighlighted />
-            <div className="absolute top-1/2 left-1/4 w-1/4 h-0.5 bg-amber-400/50" />
-            <div className="absolute top-1/2 left-1/2 w-2 h-2 border-r-2 border-b-2 border-amber-400/50 transform -translate-y-1/2 rotate-[-45deg]" />
-            <div className="col-start-3">
-                <MemoryCell address="0x7ffd..." value="0x7ffc..." label="p_age" isPointer isHighlighted />
+const PointerVisualizer = () => {
+    return (
+        <div className="space-y-8">
+            <h4 className="text-xl font-semibold text-center text-gray-300">Memory Layout</h4>
+            <div className="grid grid-cols-4 gap-x-8 gap-y-12 items-center relative">
+                <MemoryCell address="0x7ffc..." value="30" label="age" isHighlighted />
+                <div className="absolute top-1/2 left-1/4 w-1/4 h-0.5 bg-amber-400/50" />
+                <div className="absolute top-1/2 left-1/2 w-2 h-2 border-r-2 border-b-2 border-amber-400/50 transform -translate-y-1/2 rotate-[-45deg]" />
+                <div className="col-start-3">
+                    <MemoryCell address="0x7ffd..." value="0x7ffc..." label="p_age" isPointer isHighlighted />
+                </div>
             </div>
+            <p className="text-center text-sm text-gray-400 mt-4">The pointer <code className="font-mono text-amber-400">p_age</code> doesn't hold the value <code className="font-mono text-green-300">30</code>. It holds the memory address of the variable <code className="font-mono text-white">age</code>.</p>
         </div>
-        <p className="text-center text-sm text-gray-400 mt-4">The pointer <code className="font-mono text-amber-400">p_age</code> doesn't hold the value <code className="font-mono text-green-300">30</code>. It holds the memory address of the variable <code className="font-mono text-white">age</code>.</p>
-    </div>
-);
+    );
+};
 
 const ArrayPointerVisualizer = () => {
     const [index, setIndex] = useState(0);
